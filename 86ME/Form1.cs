@@ -41,6 +41,7 @@ namespace _86ME_ver1._0
         Boolean new_obj = false;
         String nfilename = "";
         string picture_name;
+        string gotoflag_name;
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
@@ -68,6 +69,7 @@ namespace _86ME_ver1._0
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
         }
+
         private void Update_framelist()  //set framelist
         {
             Framelist.Controls.Clear();
@@ -657,7 +659,7 @@ namespace _86ME_ver1._0
                 }
             }
         }
-        private void actionToolStripMenuItem_Click(object sender, EventArgs e)      //load file
+        private void actionToolStripMenuItem_Click(object sender, EventArgs e)      //load project
         {
             if (Motion != null)
             {
@@ -913,11 +915,13 @@ namespace _86ME_ver1._0
                 }
             }
         }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             MotionTest.Enabled = false;
-        }        
-        private void typecombo_TextChanged(object sender, EventArgs e)
+        }
+
+        private void typecombo_TextChanged(object sender, EventArgs e) // choose a type of action
         {
             Framelist.Controls.Clear();
             if (String.Compare(typecombo.Text, "Frame") == 0)
@@ -943,7 +947,7 @@ namespace _86ME_ver1._0
                 if(Motion.picfilename == null)
                     this.richTextBox1.Text = "Tune the settings of motors\n↓\n↓\n↓\n↓\n↓\n↓";
                 else
-                    this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓\n↓\n↓\n↓\n↓";
+                    this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Delay") == 0)
             {
@@ -994,6 +998,7 @@ namespace _86ME_ver1._0
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Flag());
                     Motionlist.SelectedIndex++;
                 }
+                gotoflag_name = "";
                 delaytext.Text = "";
                 delaytext.Enabled = false;
                 label2.Enabled = false;
@@ -1012,6 +1017,7 @@ namespace _86ME_ver1._0
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Goto());
                     Motionlist.SelectedIndex++;
                 }
+                gotoflag_name = "";
                 delaytext.Text = "";
                 delaytext.Enabled = false;
                 label2.Enabled = false;
@@ -1036,54 +1042,18 @@ namespace _86ME_ver1._0
         }
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (autocheck.Checked == true)
-            {
-                //if(!is_86())
-                    //RoBoIO.rcservo_EnterCaptureMode();
-                autocheck.Checked = false;
-            }
-            groupBox1.Enabled = false;
-            Motionlist.Items.Clear();
-            framecount = 0;
-            for(int i = 0;i < ME_Motionlist.Count; i ++)
-            {
-                ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                if(String.Compare(MotionCombo.SelectedItem.ToString(),m.name.ToString()) == 0){
-                    for(int j = 0; j < m.Events.Count; j++){
-                        if(m.Events[j] is ME_Frame){
-                            Motionlist.Items.Add("[Frame] " + ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name + "-" + framecount);
-                            framecount++;
-                        }else if(m.Events[j] is ME_Delay){
-                            ME_Delay d = (ME_Delay)m.Events[j];
-                            Motionlist.Items.Add("[Delay]");
-                        }
-                        else if (m.Events[j] is ME_Sound){
-                            ME_Sound s = (ME_Sound)m.Events[j];
-                            Motionlist.Items.Add("[Sound] " + s.filename);
-
-                        }else if (m.Events[j] is ME_Goto){
-                            ME_Goto g = (ME_Goto)m.Events[j];
-                            Motionlist.Items.Add("[Goto] " + g.name);
-
-                        }else if (m.Events[j] is ME_Flag){
-                            ME_Flag fl = (ME_Flag)m.Events[j];
-                            Motionlist.Items.Add("[Flag] " + fl.name);
-                        }
-                    }
-                    break;
-                }
-            }
-            MotionTest.Enabled = true;
+            update_motionlist();
         }
 
-        private void gototext(object sender, EventArgs e)
+        private void gototext(object sender, EventArgs e)// set names of Goto & Flag
         {
-            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Flag)
-                ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
-            else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Goto)
-                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
-
+            gotoflag_name = ((MaskedTextBox)sender).Text;
+            //if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Flag)
+            //    ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
+            //else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Goto)
+            //    ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
         }
+
         private void gotobutton(object sender, EventArgs e)
         {
             TriggerSet ts = new TriggerSet(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).key);
@@ -1091,9 +1061,18 @@ namespace _86ME_ver1._0
             if (ts.DialogResult == DialogResult.OK)
             {
                 ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).key = ts.Keyvalue.Text;
+                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = gotoflag_name;
+                update_motionlist();
             }
         }
-        private void Motionlist_SelectedIndexChanged(object sender, EventArgs e)
+
+        private void flagbutton(object sender, EventArgs e)
+        {
+            ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = gotoflag_name;
+            update_motionlist();
+        }
+
+        private void Motionlist_SelectedIndexChanged(object sender, EventArgs e) // select motionlist
         {
             if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
             {
@@ -1168,8 +1147,14 @@ namespace _86ME_ver1._0
                     xtext.Text = ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 45;
+                    Button xbutton = new Button();
+                    xbutton.Text = "set Flag";
+                    xbutton.Click += new EventHandler(flagbutton);
+                    xbutton.Left += 210;
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
+                    Framelist.Controls.Add(xbutton);
+                    Framelist.Enabled = true;
                     draw_background();
                 }
                 else if (String.Compare(datas[0], "[Goto]") == 0)
@@ -1187,12 +1172,13 @@ namespace _86ME_ver1._0
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 45;
                     Button xbutton = new Button();
-                    xbutton.Text = "set keys";
+                    xbutton.Text = "set Hotkey";
                     xbutton.Click += new EventHandler(gotobutton);
                     xbutton.Left += 210;
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xbutton);
+                    Framelist.Enabled = true;
                     draw_background();
                 }
             }
@@ -1235,6 +1221,7 @@ namespace _86ME_ver1._0
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
                     contextMenuStrip1.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                    Framelist.Enabled = false;
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
                 {
@@ -1279,6 +1266,7 @@ namespace _86ME_ver1._0
                             draw_background();
                             break;
                         case 2:
+                            Framelist.Enabled = false;
                             n = Motionlist.SelectedIndex;
                             if (n == 0)
                                 break;
@@ -1288,6 +1276,7 @@ namespace _86ME_ver1._0
                             Motionlist.Items.RemoveAt(n + 1);
                             break;
                         case 3:
+                            Framelist.Enabled = false;
                             n = Motionlist.SelectedIndex;
                             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count <= n+1)
                                 break;
@@ -1297,6 +1286,7 @@ namespace _86ME_ver1._0
                             Motionlist.Items.RemoveAt(n);
                             break;
                         case 4:
+                            Framelist.Enabled = false;
                             Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
                             Array.Copy(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame, ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame,45);
@@ -1401,21 +1391,21 @@ namespace _86ME_ver1._0
                 else if (String.Compare(Motion.fbox[i].Text, "FUTABA_S3003") == 0)
                     captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "SHAYYE_SYS214050") == 0)
-                    captured[i] = true;
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG995") == 0)
-                    captured[i] = true;
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG996") == 0)
-                    captured[i] = true;
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "DMP_RS0263") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "DMP_RS1270") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_S777") == 0)
-                    captured[i] = true;
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_S03T") == 0)
-                    captured[i] = true;
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_MICRO") == 0)
-                    captured[i] = true;
+                    captured[i] = false;
             }
         }
 
@@ -1475,6 +1465,7 @@ namespace _86ME_ver1._0
             if (ME_Motionlist == null)
                 return;
 
+            this.richTextBox1.Text = "\n\n\t\tExecuting Motion Test ... ...\n\t\tIf the test doesn't stop automatically, long press ESC until stop";
             for (int j = 0; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
             {
                 if (string.Compare(motiontestkey, "ESC") == 0)
@@ -1531,6 +1522,12 @@ namespace _86ME_ver1._0
             MotionTest.Enabled = true;
             if (sp != null)
                 sp.Stop();
+            this.richTextBox1.Text =
+                    "   ___   __   ____        _\n" +
+                    "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                    "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                    " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                    "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
         }
 
         private void MotionTest_Click(object sender, EventArgs e)
@@ -1547,12 +1544,6 @@ namespace _86ME_ver1._0
             }
             Update_framelist();
             draw_background();
-            this.richTextBox1.Text =
-                    "   ___   __   ____        _\n" +
-                    "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
-                    "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
-                    " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
-                    "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
         }        
 
         private void autocheck_CheckedChanged(object sender, EventArgs e)
@@ -1915,6 +1906,58 @@ namespace _86ME_ver1._0
                 }
             }
             Framelist.Controls.Add(pictureBox1);
+        }
+
+        private void update_motionlist()
+        {
+            if (autocheck.Checked == true)
+            {
+                //if(!is_86())
+                //RoBoIO.rcservo_EnterCaptureMode();
+                autocheck.Checked = false;
+            }
+            groupBox1.Enabled = false;
+            Motionlist.Items.Clear();
+            framecount = 0;
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (String.Compare(MotionCombo.SelectedItem.ToString(), m.name.ToString()) == 0)
+                {
+                    for (int j = 0; j < m.Events.Count; j++)
+                    {
+                        if (m.Events[j] is ME_Frame)
+                        {
+                            Motionlist.Items.Add("[Frame] " + ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name + "-" + framecount);
+                            framecount++;
+                        }
+                        else if (m.Events[j] is ME_Delay)
+                        {
+                            ME_Delay d = (ME_Delay)m.Events[j];
+                            Motionlist.Items.Add("[Delay]");
+                        }
+                        else if (m.Events[j] is ME_Sound)
+                        {
+                            ME_Sound s = (ME_Sound)m.Events[j];
+                            Motionlist.Items.Add("[Sound] " + s.filename);
+
+                        }
+                        else if (m.Events[j] is ME_Goto)
+                        {
+                            ME_Goto g = (ME_Goto)m.Events[j];
+                            Motionlist.Items.Add("[Goto] " + g.name);
+
+                        }
+                        else if (m.Events[j] is ME_Flag)
+                        {
+                            ME_Flag fl = (ME_Flag)m.Events[j];
+                            Motionlist.Items.Add("[Flag] " + fl.name);
+                        }
+                    }
+                    break;
+                }
+            }
+            MotionTest.Enabled = true;
         }
     }
 }
