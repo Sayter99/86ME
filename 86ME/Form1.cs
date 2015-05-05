@@ -51,6 +51,7 @@ namespace _86ME_ver1._0
         int mdx, mdy;
         bool freshflag;
         bool picmode_move = false;
+        bool[] captured = new bool[45];
         string motiontestkey = "";
         string[] motionevent = {"Add action",
                                 "Delete action",
@@ -70,8 +71,6 @@ namespace _86ME_ver1._0
         private void Update_framelist()  //set framelist
         {
             Framelist.Controls.Clear();
-            if (Motion.picfilename != null)
-                pictureBox1.Image = Image.FromFile(Motion.picfilename);
 
             int count = 0;
             int picmode_count = 1;
@@ -173,7 +172,6 @@ namespace _86ME_ver1._0
                     count++;
                 }
             }
-            Framelist.Controls.Add(pictureBox1);
         }
 
         public void flMouseDown(object sender, MouseEventArgs e)
@@ -390,15 +388,7 @@ namespace _86ME_ver1._0
                 if (nMotion.picfilename != null)
                 {
                     picture_name = nMotion.picfilename;
-                    try
-                    {
-                        pictureBox1.Image = Image.FromFile(nMotion.picfilename);
-                    }
-                    catch
-                    {
-                        nMotion.picfilename = null;
-                        MessageBox.Show("Cannot load the picture. Please check the file");
-                    }
+                    draw_background();
                 }
 
                 this.richTextBox1.Text = "\t\t\t\t    2.press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
@@ -969,7 +959,6 @@ namespace _86ME_ver1._0
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
-                Update_framelist();
                 new_obj = false;
                 this.richTextBox1.Text = "\n\n\n\n<--- Set the delay you want";
             }
@@ -995,7 +984,6 @@ namespace _86ME_ver1._0
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
-                Update_framelist();
                 new_obj = false;
             }
             else if (String.Compare(typecombo.Text, "Flag") == 0)
@@ -1013,7 +1001,6 @@ namespace _86ME_ver1._0
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
-                Update_framelist();
                 new_obj = false;
                 this.richTextBox1.Text = "Set the name of the flag\n↓\n↓\n↓\n↓\n↓\n↓";
             }
@@ -1032,7 +1019,6 @@ namespace _86ME_ver1._0
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
-                Update_framelist();
                 new_obj = false;
                 this.richTextBox1.Text = "Set the target and hotkey of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
             }
@@ -1045,8 +1031,8 @@ namespace _86ME_ver1._0
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
                 Framelist.Enabled = false;
-                Update_framelist();
             }
+            draw_background();
         }
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -1184,7 +1170,7 @@ namespace _86ME_ver1._0
                     xtext.Left += 45;
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
-
+                    draw_background();
                 }
                 else if (String.Compare(datas[0], "[Goto]") == 0)
                 {
@@ -1207,6 +1193,7 @@ namespace _86ME_ver1._0
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xbutton);
+                    draw_background();
                 }
             }
         }
@@ -1289,6 +1276,7 @@ namespace _86ME_ver1._0
                             autocheck.Enabled= false;
                             Framelist.Controls.Clear();
                             Framelist.Enabled = false;
+                            draw_background();
                             break;
                         case 2:
                             n = Motionlist.SelectedIndex;
@@ -1351,6 +1339,7 @@ namespace _86ME_ver1._0
                 ME_Motionlist.Add(m);
                 MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
                 Motionlist.Controls.Clear();
+                draw_background();
                 this.richTextBox1.Text = "\n\n\n\n\n\nRight click in the white region and add an action --->";
             }
             else
@@ -1393,51 +1382,43 @@ namespace _86ME_ver1._0
                     ftext[i].Text = frame[i].ToString();*/
             MessageBox.Show("This function is not prepared.");
         }
-        /*private void set_RCservo()
+        private void servo_captured()
         {
-            uint usepin = 0;
             for (int i = 0; i < 45; i++)
             {
-                if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                {
-                    usepin += (uint)Math.Pow(2, i);
-                }
                 if (String.Compare(Motion.fbox[i].Text, "KONDO_KRS786") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_KONDO_KRS786);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "KONDO_KRS788") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_KONDO_KRS788);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "KONDO_KRS78X") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_KONDO_KRS78X);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "KONDO_KRS4014") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_KONDO_KRS4014);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "KONDO_KRS4024") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_KONDO_KRS4024);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "HITEC_HSR8498") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_HITEC_HSR8498);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "FUTABA_S3003") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_FUTABA_S3003);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "SHAYYE_SYS214050") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_SHAYYE_SYS214050);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG995") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_TOWERPRO_MG995);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG996") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_TOWERPRO_MG996);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "DMP_RS0263") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_DMP_RS0263);
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "DMP_RS1270") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_DMP_RS1270);
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_S777") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_GWS_S777);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_S03T") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_GWS_S03T);
+                    captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_MICRO") == 0)
-                    RoBoIO.rcservo_SetServo(i, RoBoIO.RCSERVO_GWS_MICRO);
-                RoBoIO.rcservo_SetServoParams1(i, 20000, 670, 2230);
+                    captured[i] = true;
             }
-            if(!RoBoIO.rcservo_Init(usepin))
-                MessageBox.Show("RC servo init fail. Error message:" + RoBoIO.roboio_GetErrMsg());
-           
-        }*/
+        }
+
         private void Motionlist_KeyDown(object sender, KeyEventArgs e)
         {
             string a, b;
@@ -1565,6 +1546,7 @@ namespace _86ME_ver1._0
                 t.Start();
             }
             Update_framelist();
+            draw_background();
             this.richTextBox1.Text =
                     "   ___   __   ____        _\n" +
                     "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
@@ -1917,6 +1899,22 @@ namespace _86ME_ver1._0
             }
             writer.Dispose();
             writer.Close();
+        }
+
+        private void draw_background()
+        {
+            if(Motion.picfilename != null)
+            {
+                try
+                {
+                    pictureBox1.Image = Image.FromFile(Motion.picfilename);
+                }
+                catch
+                {
+                    MessageBox.Show("Cannot load background image");
+                }
+            }
+            Framelist.Controls.Add(pictureBox1);
         }
     }
 }
