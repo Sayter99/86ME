@@ -1465,7 +1465,7 @@ namespace _86ME_ver1._0
             if (ME_Motionlist == null)
                 return;
 
-            this.richTextBox1.Text = "\n\n\t\tExecuting Motion Test ... ...\n\t\tIf the test doesn't stop automatically, long press ESC until stop";
+            this.richTextBox1.Text = "\n\nExecuting Motion Test ... ...\n\nIf the test doesn't stop automatically, long press ESC until stop";
             for (int j = 0; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
             {
                 if (string.Compare(motiontestkey, "ESC") == 0)
