@@ -1359,18 +1359,21 @@ namespace _86ME_ver1._0
         }        
         private void capturebutton_Click(object sender, EventArgs e)
         {
-            /*if (autocheck.Checked == true)
-            {
-                RoBoIO.rcservo_EnterCaptureMode();
-                autocheck.Checked = false;
-            }
-            RoBoIO.rcservo_EnterCaptureMode();
+            capturebutton.Enabled = false;
+            autocheck.Checked = false;
+            Thread.Sleep(100);
             uint[] frame = new uint[45];
-            RoBoIO.rcservo_CapAll(frame);
+            servo_captured();
             for (int i = 0; i < 45; i++)
-                if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                    ftext[i].Text = frame[i].ToString();*/
-            MessageBox.Show("This function is not prepared.");
+            {
+                if (captured[i])
+                {
+                    arduino.frame_capture(i);
+                    Thread.Sleep(100);
+                    ftext[i].Text = arduino.captured_data.ToString();
+                }
+            }
+            capturebutton.Enabled = true;
         }
         private void servo_captured()
         {
@@ -1580,14 +1583,12 @@ namespace _86ME_ver1._0
                         MessageBox.Show("Failed to send messages. Please check the connection and restart.");
                     }
                 }
-
                 autocheck.Capture = true;
                 autocheck.Enabled = true;
             }
-            else if (autocheck.Checked == false)
+            else if(autocheck.Checked == false)
             {
-                //if(!is_86())
-                    //RoBoIO.rcservo_EnterCaptureMode();
+                arduino.motor_release();
             }
         }
 
@@ -1912,8 +1913,6 @@ namespace _86ME_ver1._0
         {
             if (autocheck.Checked == true)
             {
-                //if(!is_86())
-                //RoBoIO.rcservo_EnterCaptureMode();
                 autocheck.Checked = false;
             }
             groupBox1.Enabled = false;

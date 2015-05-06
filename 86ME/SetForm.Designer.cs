@@ -50,12 +50,7 @@
             this.ComboBox0.FormattingEnabled = true;
             this.ComboBox0.Items.AddRange(new object[] {
             "--auto--",
-            "COM1",
-            "COM2",
-            "COM3",
-            "COM4",
-            "--offline--",
-            "--write yourself--"});
+            "--offline--"});
             this.ComboBox0.Location = new System.Drawing.Point(26, 29);
             this.ComboBox0.Name = "ComboBox0";
             this.ComboBox0.Size = new System.Drawing.Size(212, 27);

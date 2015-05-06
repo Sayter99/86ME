@@ -68,6 +68,7 @@
             this.comboBox1.Size = new System.Drawing.Size(431, 20);
             this.comboBox1.TabIndex = 3;
             this.comboBox1.DropDownClosed += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            this.comboBox1.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             // 
             // label1
             // 

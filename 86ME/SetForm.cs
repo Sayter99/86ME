@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Text;
 using System.Windows.Forms;
+using System.IO.Ports;
 
 namespace _86ME_ver1._0
 {
@@ -13,6 +14,9 @@ namespace _86ME_ver1._0
         public SetForm()
         {
             InitializeComponent();
+            string[] serialPorts = SerialPort.GetPortNames();
+            foreach (string serialPort in serialPorts)
+                this.ComboBox0.Items.Add(serialPort);
         }
 
         private void SetForm_Load(object sender, EventArgs e)

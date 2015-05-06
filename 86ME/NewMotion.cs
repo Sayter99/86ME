@@ -19,6 +19,7 @@ namespace _86ME_ver1._0
         public MaskedTextBox[] ftext3 = new MaskedTextBox[45];
         public MaskedTextBox[] ftext4 = new MaskedTextBox[45];
         int[] offset = new int[45];
+        int last_index;
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
@@ -91,23 +92,15 @@ namespace _86ME_ver1._0
                 this.DialogResult = DialogResult.OK;
         }
 
+        private void comboBox1_DropDown(object sender, EventArgs e)
+        {
+            last_index = comboBox1.SelectedIndex;
+        }
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (string.Compare(comboBox1.Text, "RB_110") == 0) {
-                for (int i = 16; i < 45; i++ )
-                {
-                    fpanel[i].Enabled = false;
-                    fbox[i].SelectedIndex = 0;
-                }
-            }
-            else if (string.Compare(comboBox1.Text, "unknow") == 0 || string.Compare(comboBox1.Text, "---unset---") == 0)
+            if (last_index == comboBox1.SelectedIndex)
             {
-                for (int i = 0; i < 45; i++)
-                {
-                    if (fpanel[i] != null)
-                        fpanel[i].Controls.Clear();
-                }
-                channelver.Controls.Clear();
             }
             //add 86duino series into the combobox
             else if (string.Compare(comboBox1.Text, "86Duino_One") == 0)
@@ -142,14 +135,6 @@ namespace _86ME_ver1._0
                 create_panel(0, 21, 0);
                 create_panel(31, 33, 21);
                 create_panel(42, 45, 23);
-            }
-            else
-            {
-                for (int i = 0; i < 45; i++)
-                {
-                    fpanel[i].Enabled = false;
-                    fbox[i].SelectedIndex = 0;
-                }
             }
         }
 

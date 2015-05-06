@@ -73,6 +73,7 @@ namespace _86ME_ver1._0
         private int executeMultiByteCommand = 0;
         private int multiByteChannel = 0;
         private int[] storedInputData = new int[MAX_DATA_BYTES];
+        public uint captured_data;
         private bool parsingSysex;
         private int sysexBytesRead;
 
@@ -101,6 +102,9 @@ namespace _86ME_ver1._0
             _serialPort.DataBits = 8;
             _serialPort.Parity = Parity.None;
             _serialPort.StopBits = StopBits.One;
+            _serialPort.Handshake = Handshake.RequestToSend;
+            _serialPort.RtsEnable = true;
+            _serialPort.DtrEnable = true;
 
             if (autoStart)
             {
@@ -111,7 +115,7 @@ namespace _86ME_ver1._0
 
         /// <summary>
         /// Creates an instance of the Arduino object, based on a user-specified serial port.
-        /// Assumes default values for baud rate (115200) and reboot delay (8 seconds)
+        /// Assumes default values for baud rate (115200) and reboot delay (0.1 seconds)
         /// and automatically opens the specified serial connection.
         /// </summary>
         /// <param name="serialPortName">String specifying the name of the serial port. eg COM4</param>
@@ -119,7 +123,7 @@ namespace _86ME_ver1._0
 
         /// <summary>
         /// Creates an instance of the Arduino object, based on user-specified serial port and baud rate.
-        /// Assumes default value for reboot delay (8 seconds).
+        /// Assumes default value for reboot delay (0.1 seconds).
         /// and automatically opens the specified serial connection.
         /// </summary>
         /// <param name="serialPortName">String specifying the name of the serial port. eg COM4</param>
@@ -129,7 +133,7 @@ namespace _86ME_ver1._0
         /// <summary>
         /// Creates an instance of the Arduino object using default arguments.
         /// Assumes the arduino is connected as the HIGHEST serial port on the machine,
-        /// default baud rate (115200), and a reboot delay (8 seconds).
+        /// default baud rate (115200), and a reboot delay (0.1 seconds).
         /// and automatically opens the specified serial connection.
         /// </summary>
         public Arduino() : this(Arduino.list().ElementAt(list().Length - 1), 115200, true, 100) { }
@@ -288,6 +292,15 @@ namespace _86ME_ver1._0
             _serialPort.Write(message, 0, 8);
         }
 
+        public void motor_release()
+        {
+            byte[] message = new byte[3];
+            message[0] = 0xF0;
+            message[1] = 0x70;
+            message[2] = 0xF7;
+            _serialPort.Write(message, 0, 3);
+        }
+
         public void frameWrite(int command, uint[] frame, int delay)
         {
             int msg_index = 2;
@@ -303,6 +316,16 @@ namespace _86ME_ver1._0
             message[msg_index + 1] = (byte)(delay >> 7);
             message[msg_index + 2] = 0xF7;
             _serialPort.Write(message, 0, 95);
+        }
+
+        public void frame_capture(int pin)
+        {
+            byte[] message = new byte[4];
+            message[0] = 0xF0;
+            message[1] = 0x69;
+            message[2] = (byte)(pin);
+            message[3] = 0xF7;
+            _serialPort.Write(message, 0, 4);
         }
 
         private void setDigitalInputs(int portNumber, int portData)
@@ -334,7 +357,6 @@ namespace _86ME_ver1._0
                 {
                     lock (this)
                     {
-
                         int inputData = _serialPort.ReadByte();
                         int command;
 
@@ -343,7 +365,8 @@ namespace _86ME_ver1._0
                             if (inputData == END_SYSEX)
                             {
                                 parsingSysex = false;
-                                //processSysexMessage();
+                                if (storedInputData[0] == 0x6A)
+                                    captured_data = (uint)((storedInputData[2] << 7) + storedInputData[1]);
                             }
                             else
                             {
@@ -393,6 +416,10 @@ namespace _86ME_ver1._0
                                 case REPORT_VERSION:
                                     waitForData = 2;
                                     executeMultiByteCommand = command;
+                                    break;
+                                case START_SYSEX:
+                                    parsingSysex = true;
+                                    sysexBytesRead = 0;
                                     break;
                             }
                         }
