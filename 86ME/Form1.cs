@@ -880,6 +880,7 @@ namespace _86ME_ver1._0
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 MotionCombo.Items.Add(m.name);
             }
+            this.richTextBox1.Text = "\n\n\n\t\t         Choose or New a Motion Name --->";
             if (arduino == null && (string.Compare(com_port, "OFF") != 0))
             {
                 if (!have_86())
@@ -1340,7 +1341,7 @@ namespace _86ME_ver1._0
             bool close = true;
             if (Motion != null)
             {
-                DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -1361,7 +1362,6 @@ namespace _86ME_ver1._0
         {
             capturebutton.Enabled = false;
             autocheck.Checked = false;
-            Thread.Sleep(100);
             uint[] frame = new uint[45];
             servo_captured();
             for (int i = 0; i < 45; i++)
@@ -1589,6 +1589,7 @@ namespace _86ME_ver1._0
             else if(autocheck.Checked == false)
             {
                 arduino.motor_release();
+                Thread.Sleep(100);
             }
         }
 
