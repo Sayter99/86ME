@@ -1360,21 +1360,29 @@ namespace _86ME_ver1._0
         }        
         private void capturebutton_Click(object sender, EventArgs e)
         {
-            capturebutton.Enabled = false;
-            autocheck.Checked = false;
-            uint[] frame = new uint[45];
-            servo_captured();
-            for (int i = 0; i < 45; i++)
+            if (string.Compare(com_port, "OFF") != 0)
             {
-                if (captured[i])
+                bool have_cap = false;
+                capturebutton.Enabled = false;
+                autocheck.Checked = false;
+                uint[] frame = new uint[45];
+                servo_captured();
+                for (int i = 0; i < 45; i++)
                 {
-                    arduino.frame_capture(i);
-                    Thread.Sleep(100);
-                    ftext[i].Text = arduino.captured_data.ToString();
+                    if (captured[i])
+                    {
+                        have_cap = true;
+                        arduino.frame_capture(i);
+                        Thread.Sleep(100);
+                        ftext[i].Text = arduino.captured_data.ToString();
+                    }
                 }
+                capturebutton.Enabled = true;
+                if (have_cap == false)
+                    this.richTextBox1.Text = "\n\n\n\tThe choosed motors don't support Capture";
             }
-            capturebutton.Enabled = true;
         }
+
         private void servo_captured()
         {
             for (int i = 0; i < 45; i++)
@@ -1588,8 +1596,11 @@ namespace _86ME_ver1._0
             }
             else if(autocheck.Checked == false)
             {
-                arduino.motor_release();
-                Thread.Sleep(100);
+                if (string.Compare(com_port, "OFF") != 0)
+                {
+                    arduino.motor_release();
+                    Thread.Sleep(100);
+                }
             }
         }
 
