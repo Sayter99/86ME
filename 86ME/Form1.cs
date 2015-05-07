@@ -1181,7 +1181,7 @@ namespace _86ME_ver1._0
                     xbutton.Text = "set Hotkey";
                     xbutton.Click += new EventHandler(gotobutton);
                     xbutton.Left += 270;
-                    if (xtext.Text == "")
+                    if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).key == "")
                     {
                         this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n\n*HotKey must be set, or the Goto will be functionless*\n↓\n↓\n↓\n↓";
                     }
@@ -1549,6 +1549,7 @@ namespace _86ME_ver1._0
                 }
             }
             MotionTest.Enabled = true;
+            Framelist.Enabled = false;
             if (sp != null)
                 sp.Stop();
             this.richTextBox1.Text =
