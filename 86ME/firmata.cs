@@ -73,7 +73,7 @@ namespace _86ME_ver1._0
         private int executeMultiByteCommand = 0;
         private int multiByteChannel = 0;
         private int[] storedInputData = new int[MAX_DATA_BYTES];
-        public uint captured_data;
+        public int captured_data;
         private bool parsingSysex;
         private int sysexBytesRead;
 
@@ -301,7 +301,7 @@ namespace _86ME_ver1._0
             _serialPort.Write(message, 0, 3);
         }
 
-        public void frameWrite(int command, uint[] frame, int delay)
+        public void frameWrite(int command, int[] frame, int delay)
         {
             int msg_index = 2;
             byte[] message = new byte[95];
@@ -366,7 +366,7 @@ namespace _86ME_ver1._0
                             {
                                 parsingSysex = false;
                                 if (storedInputData[0] == 0x6A)
-                                    captured_data = (uint)((storedInputData[2] << 7) + storedInputData[1]);
+                                    captured_data = (int)((storedInputData[2] << 7) + storedInputData[1]);
                             }
                             else
                             {

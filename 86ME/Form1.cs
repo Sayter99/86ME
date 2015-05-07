@@ -45,7 +45,7 @@ namespace _86ME_ver1._0
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
-        uint[] autoframe = new uint[45];
+        int[] autoframe = new int[45];
         int[] offset = new int[45];
         int board_ver86;
         int[] motor_info = new int[45];
@@ -214,7 +214,7 @@ namespace _86ME_ver1._0
                         {
                             if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                             {
-                                autoframe[i] = uint.Parse(ftext[i].Text);
+                                autoframe[i] = int.Parse(ftext[i].Text);
                             }
                         }
                         if (!freshflag)
@@ -250,7 +250,7 @@ namespace _86ME_ver1._0
                         {
                             if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                             {
-                                autoframe[i] = uint.Parse(ftext[i].Text);
+                                autoframe[i] = int.Parse(ftext[i].Text);
                             }
                         }
                         if (!freshflag)
@@ -1093,7 +1093,7 @@ namespace _86ME_ver1._0
                         {
                             if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                             {
-                                autoframe[i] = (uint)(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] + offset[i]);
+                                autoframe[i] = (int)(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] + offset[i]);
                             }
                         }
                         autocheck.Enabled = false;
@@ -1506,7 +1506,7 @@ namespace _86ME_ver1._0
                     {
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                         {
-                            autoframe[i] = (uint)(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).frame[i] + offset[i]);
+                            autoframe[i] = (((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).frame[i] + offset[i]);
                         }
                     }
                     if (string.Compare(com_port, "OFF") != 0)
@@ -1590,7 +1590,7 @@ namespace _86ME_ver1._0
                 {
                     if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                     {
-                        autoframe[i] = (uint)(int.Parse(ftext[i].Text) + offset[i]);
+                        autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
                     }
                 }
 
