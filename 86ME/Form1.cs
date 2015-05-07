@@ -54,11 +54,12 @@ namespace _86ME_ver1._0
         bool picmode_move = false;
         bool[] captured = new bool[45];
         string motiontestkey = "";
-        string[] motionevent = {"Add action",
+        string[] motionevent = {"Add new action at the next field",
                                 "Delete action",
                                 "Move action UP",
                                 "Move action DOWN",
-                                "Copy frame"};
+                                "Copy frame",
+                                "Add new action at the first field"};
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
         public Form1()
         {
@@ -450,6 +451,7 @@ namespace _86ME_ver1._0
                     }
                 }
                 Update_framelist();
+                draw_background();
                 for (int i = 0; i < 45; i++)
                 {
                     if (Motion.ftext[i].Text == "")
@@ -1027,7 +1029,7 @@ namespace _86ME_ver1._0
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set the target and hotkey of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
+                this.richTextBox1.Text = "Set the target Flag Name and hotkey of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1119,12 +1121,15 @@ namespace _86ME_ver1._0
                     if (!freshflag)
                         Update_framelist();
                     freshflag = false;
+                    Framelist.Enabled = true;
+                    draw_background();
                 }
                 else if (String.Compare(datas[0], "[Delay]") == 0)
                 {
                     typecombo.SelectedIndex = 1;
                     typecombo.Text = "Delay";
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
+                    draw_background();
                 }
                 else if (String.Compare(datas[0], "[Sound]") == 0)
                 {
@@ -1165,17 +1170,17 @@ namespace _86ME_ver1._0
                     typecombo.Text = "Goto";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = "Name: ";
-                    xlabel.Size = new Size(40, 22);
+                    xlabel.Text = "Target Flag Name: ";
+                    xlabel.Size = new Size(95, 22);
                     MaskedTextBox xtext = new MaskedTextBox();
                     xtext.TextChanged += new EventHandler(gototext);
                     xtext.Text = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
                     xtext.Size = new Size(160, 22);
-                    xtext.Left += 45;
+                    xtext.Left += 100;
                     Button xbutton = new Button();
                     xbutton.Text = "set Hotkey";
                     xbutton.Click += new EventHandler(gotobutton);
-                    xbutton.Left += 210;
+                    xbutton.Left += 270;
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xbutton);
@@ -1210,7 +1215,7 @@ namespace _86ME_ver1._0
                 e.Handled = true;
             }
         }
-        private void Motionlist_MouseDown(object sender, MouseEventArgs e)
+        private void Motionlist_MouseDown(object sender, MouseEventArgs e) // right-click for editing motionlist
         {
             
             if (e.Button == MouseButtons.Right && MotionCombo.SelectedItem != null)
@@ -1218,7 +1223,7 @@ namespace _86ME_ver1._0
                 Motionlist.SelectedIndex = Motionlist.IndexFromPoint(e.X, e.Y);
                 if (Motionlist.SelectedItem == null)
                 {
-                    contextMenuStrip1.Items.Add("Add action");
+                    contextMenuStrip1.Items.Add("Add new action at the first field");
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
                     contextMenuStrip1.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
@@ -1226,7 +1231,7 @@ namespace _86ME_ver1._0
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
                 {
-                    for (int i = 0; i < motionevent.Length; i++)
+                    for (int i = 0; i < motionevent.Length - 1; i++)
                         contextMenuStrip1.Items.Add(motionevent[i]);
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -1234,7 +1239,7 @@ namespace _86ME_ver1._0
                 }
                 else if (Motionlist.SelectedItem != null)
                 {
-                    for (int i = 0; i < motionevent.Length - 1; i++)
+                    for (int i = 0; i < motionevent.Length - 2; i++)
                         contextMenuStrip1.Items.Add(motionevent[i]);
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -1293,6 +1298,11 @@ namespace _86ME_ver1._0
                             Array.Copy(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame, ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame,45);
                             ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay;
                             Motionlist.SelectedIndex++;
+                            break;
+                        case 5:
+                            groupBox1.Enabled = true;
+                            typecombo.Text = "Select type";
+                            this.richTextBox1.Text = "\n\n<--- Choose a type of action you want";
                             break;
                     }
         }
@@ -1675,7 +1685,7 @@ namespace _86ME_ver1._0
         {
             if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
             {
-                MessageBox.Show("Cannot find any motion");
+                MessageBox.Show("You should add/select a motion name first");
                 return;
             }
 
@@ -1778,7 +1788,7 @@ namespace _86ME_ver1._0
         {
             if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
             {
-                MessageBox.Show("Cannot find any motion");
+                MessageBox.Show("You should add/select a motion name first");
                 return;
             }
 
@@ -1791,11 +1801,11 @@ namespace _86ME_ver1._0
             List<int> angle = new List<int>();
             int count = 0;
             bool add_channel = true;
-            nfilename = path.SelectedPath + "\\AllinOne Motion Sketch.ino";
-            TextWriter writer = new StreamWriter(nfilename);
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
             {
+                nfilename = path.SelectedPath + "\\AllinOne Motion Sketch.ino";
+                TextWriter writer = new StreamWriter(nfilename);
                 // include and declare
                 writer.WriteLine("#include <Servo86.h>");
                 writer.WriteLine();
@@ -1900,9 +1910,9 @@ namespace _86ME_ver1._0
                 }
                 writer.WriteLine("}");
                 MessageBox.Show("Generate program complete");
+                writer.Dispose();
+                writer.Close();
             }
-            writer.Dispose();
-            writer.Close();
         }
 
         private void draw_background()
