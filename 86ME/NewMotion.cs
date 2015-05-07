@@ -176,77 +176,14 @@ namespace _86ME_ver1._0
             }
         }
 
-        public void load_prereference(string path)
+        public void write_back()
         {
-            if (File.Exists(path + "\\offset.txt"))
-                using (StreamReader reader = new StreamReader(path + "\\offset.txt"))
-                {
-                    string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                    for (int i = 0; i < 45; i++)
-                    {
-                        offset[i] = int.Parse(datas[i]);
-                    }
-                }
-            else
-                for (int i = 0; i < 45; i++)
-                {
-                    offset[i] = 0;
-                }
-            if (File.Exists(path + "\\homeframe.txt"))
-                using (StreamReader reader = new StreamReader(path + "\\homeframe.txt"))
-                {
-                    string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                    for (int i = 0; i < 45; i++)
-                    {
-                        homeframe[i] = uint.Parse(datas[i]);
-                    }
-                }
-            else
-                for (int i = 0; i < 45; i++)
-                {
-                    homeframe[i] = 1500;
-                }
-            if (File.Exists(path + "\\Range.txt"))
-                using (StreamReader reader = new StreamReader(path + "\\Range.txt"))
-                {
-                    string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                    for (int i = 0; i < 45; i++)
-                    {
-                        min[i] = uint.Parse(datas[i]);
-                        Max[i] = uint.Parse(datas[i + 45]);
-                    }
-                }
-            else
-                for (int i = 0; i < 45; i++)
-                {
-                    min[i] = 600;
-                    Max[i] = 2300;
-                }
-            if (File.Exists(path + "\\picmode.txt"))
-                using (StreamReader reader = new StreamReader(path + "\\picmode.txt"))
-                {
-                    string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                    picfilename = datas[0];
-                    for (int i = 0; i < 45; i++)
-                    {
-                        channelx[i] = int.Parse(datas[1 + i]);
-                        channely[i] = int.Parse(datas[46 + i]);
-                    }
-                }
-            else
-                for (int i = 0; i < 45; i++)
-                {
-                    picfilename = null;
-                    channelx[i] = 0;
-                    channely[i] = 0;
-                }
-
             for (int i=0; i<45; i++)
             {
-                ftext[i].Text = offset[i].ToString();
-                ftext2[i].Text = homeframe[i].ToString();
-                ftext3[i].Text = min[i].ToString();
-                ftext4[i].Text = Max[i].ToString();
+                offset[i] = int.Parse(ftext[i].Text);
+                homeframe[i] = uint.Parse(ftext2[i].Text);
+                min[i] = uint.Parse(ftext3[i].Text);
+                Max[i] = uint.Parse(ftext4[i].Text);
             }
         }
 

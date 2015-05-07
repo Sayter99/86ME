@@ -214,7 +214,7 @@ namespace _86ME_ver1._0
                         {
                             if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                             {
-                                autoframe[i] = int.Parse(ftext[i].Text);
+                                autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
                             }
                         }
                         if (!freshflag)
@@ -250,7 +250,7 @@ namespace _86ME_ver1._0
                         {
                             if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                             {
-                                autoframe[i] = int.Parse(ftext[i].Text);
+                                autoframe[i] = int.Parse(ftext[i].Text) + offset[i];
                             }
                         }
                         if (!freshflag)
@@ -506,21 +506,49 @@ namespace _86ME_ver1._0
                 TextWriter writer = new StreamWriter(dialog.OpenFile());
                 string nFilePath = Path.GetDirectoryName(dialog.FileName);
 
-                writer.Write("RoBoardVer ");
+                writer.Write("BoardVer ");
                 writer.Write(Motion.comboBox1.SelectedItem.ToString());
                 writer.Write("\n");
+                writer.Write("Offset ");
+                for (int j = 0; j < 45; j++)
+                {
+                    if (string.Compare(Motion.ftext[j].Text, "") == 0)
+                        Motion.ftext[j].Text = "0";
+                    writer.Write(Motion.ftext[j].Text + " ");
+                }
+                writer.Write("\n");
                 writer.Write("Homeframe ");
-                if(Motion.checkBox1.Checked == true)
-                    writer.Write("Yes");
-                else
-                    writer.Write("No");
+                for (int j = 0; j < 45; j++)
+                {
+                    if (string.Compare(Motion.ftext[j].Text, "") == 0)
+                        Motion.ftext2[j].Text = "1500";
+                    writer.Write(Motion.ftext2[j].Text + " ");
+                }
                 writer.Write("\n");
                 writer.Write("Range ");
-                if (Motion.checkBox2.Checked == true)
-                    writer.Write("Yes");
-                else
-                    writer.Write("No");
+                for (int j = 0; j < 45; j++)
+                {
+                    if (string.Compare(Motion.ftext3[j].Text, "") == 0)
+                        Motion.ftext3[j].Text = "600";
+                    writer.Write(Motion.ftext3[j].Text + " ");
+                }
+                for (int j = 0; j < 45; j++)
+                {
+                    if (string.Compare(Motion.ftext4[j].Text, "") == 0)
+                        Motion.ftext4[j].Text = "2400";
+                    writer.Write(Motion.ftext4[j].Text + " ");
+                }
                 writer.Write("\n");
+                if (Motion.picfilename != null)
+                {
+                    writer.Write("picmode ");
+                    writer.Write(Motion.picfilename + " ");
+                    for (int i = 0; i < 45; i++)
+                        writer.Write(Motion.channelx[i] + " ");
+                    for (int i = 0; i < 45; i++)
+                        writer.Write(Motion.channely[i] + " ");
+                    writer.Write("\n");
+                }
                 writer.Write("Servo ");
                 for (int i = 0; i < 45; i++)
                 {
@@ -582,83 +610,9 @@ namespace _86ME_ver1._0
                     if (i != ME_Motionlist.Count - 1)
                         writer.Write("\n");
                 }
-                
+
                 writer.Dispose();
                 writer.Close();
-
-                for (int i = 0; i < 45; i++)
-                {
-                    if (int.Parse(Motion.ftext[i].Text) != 0)
-                    {
-                        using (writer = new StreamWriter(nFilePath + "\\offset.txt"))
-                        {
-                            for (int j = 0; j < 45; j++)
-                            {
-                                if (string.Compare(Motion.ftext[j].Text, "") == 0)
-                                {
-                                    Motion.ftext[j].Text = "0";
-                                }
-                                writer.Write(Motion.ftext[j].Text + " ");
-                            }
-                        }
-                        break;
-                    }
-                }
-                for (int i = 0; i < 45; i++)
-                {
-                    if (uint.Parse(Motion.ftext2[i].Text) != 1500)
-                    {
-                        using (writer = new StreamWriter(nFilePath + "\\homeframe.txt"))
-                        {
-                            for (int j = 0; j < 45; j++)
-                            {
-                                if (string.Compare(Motion.ftext[j].Text, "") == 0)
-                                {
-                                    Motion.ftext2[j].Text = "1500";
-                                }
-                                writer.Write(Motion.ftext2[j].Text + " ");
-                            }
-                        }
-                        break;
-                    }
-                }
-                for (int i = 0; i < 45; i++)
-                {
-                    if (uint.Parse(Motion.ftext3[i].Text) != 600 || uint.Parse(Motion.ftext4[i].Text) != 2300)
-                    {
-                        using (writer = new StreamWriter(nFilePath + "\\Range.txt"))
-                        {
-                            for (int j = 0; j < 45; j++)
-                            {
-                                if (string.Compare(Motion.ftext3[j].Text, "") == 0)
-                                {
-                                    Motion.ftext3[j].Text = "600";
-                                }
-                                writer.Write(Motion.ftext3[j].Text + " ");
-                            }
-                            for (int j = 0; j < 45; j++)
-                            {
-                                if (string.Compare(Motion.ftext4[j].Text, "") == 0)
-                                {
-                                    Motion.ftext4[j].Text = "2400";
-                                }
-                                writer.Write(Motion.ftext4[j].Text + " ");
-                            }
-                        }
-                        break;
-                    }
-                }
-                if (Motion.picfilename != null)
-                {
-                    using (writer = new StreamWriter(nFilePath + "\\picmode.txt"))
-                    {
-                        writer.Write(Motion.picfilename + " ");
-                        for (int i = 0; i < 45; i++)
-                            writer.Write(Motion.channelx[i] + " ");
-                        for (int i = 0; i < 45; i++)
-                            writer.Write(Motion.channely[i] + " ");
-                    }
-                }
             }
         }
         private void actionToolStripMenuItem_Click(object sender, EventArgs e)      //load project
@@ -671,6 +625,7 @@ namespace _86ME_ver1._0
                     saveFileToolStripMenuItem_Click(sender, e);
                 }
             }
+            bool picmode = false;
             NewMotion nMotion = new NewMotion();
             //ME_Triggerlist = new ArrayList();
             ME_Motionlist = new ArrayList();
@@ -722,7 +677,7 @@ namespace _86ME_ver1._0
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
                 for (int i = 0; i < datas.Length; i++)
                 {
-                    if (String.Compare(datas[i], "RoBoardVer") == 0)
+                    if (String.Compare(datas[i], "BoardVer") == 0)
                     {
                         i++;
                         for (int j = 0; j < rbver.Length; j++)
@@ -733,25 +688,57 @@ namespace _86ME_ver1._0
                                 board_ver86 = j - 7;
                             }
                     }
+                    else if (String.Compare(datas[i], "Offset") == 0)
+                    {
+                        for (int k = 0; k < 45; k++)
+                        {
+                            i++;
+                            nMotion.ftext[k].Text = datas[i];
+                            offset[k] = int.Parse(datas[i]);
+                        }
+                    }
                     else if (String.Compare(datas[i], "Homeframe") == 0)
                     {
-                        i++;
-                        if (String.Compare(datas[i], "Yes") == 0)
-                            nMotion.checkBox1.Checked = true;
-                        else
-                            nMotion.checkBox1.Checked = false;
+                        for (int k = 0; k < 45; k++)
+                        {
+                            i++;
+                            nMotion.ftext2[k].Text = datas[i];
+                            homeframe[k] = uint.Parse(datas[i]);
+                        }
                     }
                     else if (String.Compare(datas[i], "Range") == 0)
                     {
+                        for (int k = 0; k < 45; k++)
+                        {
+                            i++;
+                            nMotion.ftext3[k].Text = datas[i];
+                            min[k] = uint.Parse(datas[i]);
+                        }
+                        for (int k = 0; k < 45; k++)
+                        {
+                            i++;
+                            nMotion.ftext4[k].Text = datas[i];
+                            Max[k] = uint.Parse(datas[i]);
+                        }
+                    }
+                    else if (String.Compare(datas[i], "picmode") == 0)
+                    {
+                        picmode = true;
                         i++;
-                        if (String.Compare(datas[i], "Yes") == 0)
-                            nMotion.checkBox2.Checked = true;
-                        else
-                            nMotion.checkBox2.Checked = false;
+                        nMotion.picfilename = datas[i];
+                        for (int k = 0; k < 45; k++)
+                        {
+                            i++;
+                            nMotion.channelx[k] = int.Parse(datas[i]);
+                        }
+                        for (int k = 0; k < 45; k++)
+                        {
+                            i++;
+                            nMotion.channely[k] = int.Parse(datas[i]);
+                        }
                     }
                     else if (String.Compare(datas[i], "Servo") == 0)
                     {
-
                         for (int k = 0; k < 45; k++)
                         {
                             i++;
@@ -848,9 +835,9 @@ namespace _86ME_ver1._0
                 }
             }
 
-            string project_path = Path.GetDirectoryName(dialog.FileName);
-            nMotion.load_prereference(project_path);
-            if (nMotion.picfilename != null)
+            nMotion.write_back();
+
+            if (nMotion.picfilename != null && picmode == true)
             {
                 picture_name = nMotion.picfilename;
                 try
@@ -863,6 +850,11 @@ namespace _86ME_ver1._0
                     MessageBox.Show("Cannot load the picture. Please check the file");
                 }
             }
+            else
+            {
+                nMotion.picfilename = null;
+                pictureBox1.Image = null;
+            }
             
             groupBox2.Enabled = true;
             groupBox3.Enabled = true;
@@ -870,18 +862,13 @@ namespace _86ME_ver1._0
             saveFileToolStripMenuItem.Enabled = true;
             NewMotion.Enabled = false;
             Motion = nMotion;
-            for (int i = 0; i < 45; i++)
-            {
-                offset[i] = int.Parse(nMotion.ftext[i].Text);
-                homeframe[i] = uint.Parse(nMotion.ftext2[i].Text);
-                min[i] = uint.Parse(nMotion.ftext3[i].Text);
-                Max[i] = uint.Parse(nMotion.ftext4[i].Text);
-            }
+
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 MotionCombo.Items.Add(m.name);
             }
+
             this.richTextBox1.Text = "\n\n\n\t\t         Choose or New a Motion Name --->";
             if (arduino == null && (string.Compare(com_port, "OFF") != 0))
             {
