@@ -394,7 +394,7 @@ namespace _86ME_ver1._0
                     draw_background();
                 }
 
-                this.richTextBox1.Text = "\t\t\t\t    2.press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
+                this.richTextBox1.Text = "\t\t\t\t    2.Press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
             }
         }
         private void optionToolStripMenuItem_Click(object sender, EventArgs e)  //option
@@ -1336,7 +1336,7 @@ namespace _86ME_ver1._0
             Motionlist.Items.Clear();
             MotionTest.Enabled = false;
             groupBox1.Enabled = false;
-            this.richTextBox1.Text = "\t\t\t\t    2.press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
+            this.richTextBox1.Text = "\t\t\t\t    2.Press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
         }
         private void NewMotion_Click(object sender, EventArgs e)
         {
@@ -1359,7 +1359,7 @@ namespace _86ME_ver1._0
             bool close = true;
             if (Motion != null)
             {
-                DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -1988,6 +1988,11 @@ namespace _86ME_ver1._0
                 }
             }
             MotionTest.Enabled = true;
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 }
