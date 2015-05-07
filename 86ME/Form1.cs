@@ -1029,7 +1029,7 @@ namespace _86ME_ver1._0
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set the target Flag Name and hotkey of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
+                this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n\n*HotKey must be set, or the Goto will be functionless*\n↓\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1181,6 +1181,14 @@ namespace _86ME_ver1._0
                     xbutton.Text = "set Hotkey";
                     xbutton.Click += new EventHandler(gotobutton);
                     xbutton.Left += 270;
+                    if (xtext.Text == "")
+                    {
+                        this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n\n*HotKey must be set, or the Goto will be functionless*\n↓\n↓\n↓\n↓";
+                    }
+                    else
+                    {
+                        this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
+                    }
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xbutton);
@@ -1527,7 +1535,7 @@ namespace _86ME_ver1._0
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
                 {
-                    if (string.Compare(motiontestkey, ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).key) == 0)
+                    if (string.Compare(motiontestkey, ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).key) == 0 && motiontestkey != "")
                         for (int k = 0; k < j; k++)
                         {
                             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[k] is ME_Flag)
