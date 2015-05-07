@@ -588,7 +588,7 @@ namespace _86ME_ver1._0
 
                 for (int i = 0; i < 45; i++)
                 {
-                    if (uint.Parse(Motion.ftext[i].Text) != 0)
+                    if (int.Parse(Motion.ftext[i].Text) != 0)
                     {
                         using (writer = new StreamWriter(nFilePath + "\\offset.txt"))
                         {
