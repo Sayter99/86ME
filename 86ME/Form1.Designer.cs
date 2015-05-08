@@ -226,18 +226,18 @@
             // 
             // motorRelease
             // 
-            this.motorRelease.Location = new System.Drawing.Point(8, 91);
+            this.motorRelease.Location = new System.Drawing.Point(99, 76);
             this.motorRelease.Name = "motorRelease";
-            this.motorRelease.Size = new System.Drawing.Size(101, 23);
+            this.motorRelease.Size = new System.Drawing.Size(76, 23);
             this.motorRelease.TabIndex = 10;
-            this.motorRelease.Text = "Release Motors";
+            this.motorRelease.Text = "Free Motors";
             this.motorRelease.UseVisualStyleBackColor = true;
             this.motorRelease.Click += new System.EventHandler(this.motorRelease_Click);
             // 
             // autocheck
             // 
             this.autocheck.AutoSize = true;
-            this.autocheck.Location = new System.Drawing.Point(226, 67);
+            this.autocheck.Location = new System.Drawing.Point(16, 80);
             this.autocheck.Name = "autocheck";
             this.autocheck.Size = new System.Drawing.Size(70, 16);
             this.autocheck.TabIndex = 9;
@@ -247,7 +247,7 @@
             // 
             // capturebutton
             // 
-            this.capturebutton.Location = new System.Drawing.Point(221, 28);
+            this.capturebutton.Location = new System.Drawing.Point(192, 76);
             this.capturebutton.Name = "capturebutton";
             this.capturebutton.Size = new System.Drawing.Size(75, 23);
             this.capturebutton.TabIndex = 7;
@@ -258,9 +258,9 @@
             // 
             // delaytext
             // 
-            this.delaytext.Location = new System.Drawing.Point(80, 63);
+            this.delaytext.Location = new System.Drawing.Point(84, 42);
             this.delaytext.Name = "delaytext";
-            this.delaytext.Size = new System.Drawing.Size(135, 22);
+            this.delaytext.Size = new System.Drawing.Size(91, 22);
             this.delaytext.TabIndex = 6;
             this.delaytext.Text = "0";
             this.delaytext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -270,7 +270,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(9, 67);
+            this.label2.Location = new System.Drawing.Point(13, 46);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(59, 12);
             this.label2.TabIndex = 5;
@@ -284,16 +284,16 @@
             "Delay",
             "Goto",
             "Flag"});
-            this.typecombo.Location = new System.Drawing.Point(80, 31);
+            this.typecombo.Location = new System.Drawing.Point(84, 10);
             this.typecombo.Name = "typecombo";
-            this.typecombo.Size = new System.Drawing.Size(135, 20);
+            this.typecombo.Size = new System.Drawing.Size(91, 20);
             this.typecombo.TabIndex = 0;
             this.typecombo.TextChanged += new System.EventHandler(this.typecombo_TextChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(9, 35);
+            this.label1.Location = new System.Drawing.Point(13, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(66, 12);
             this.label1.TabIndex = 3;

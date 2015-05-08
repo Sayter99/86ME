@@ -954,7 +954,7 @@ namespace _86ME_ver1._0
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "\n\n\n\n<--- Set the delay you want";
+                this.richTextBox1.Text = "\n\n\n<--- Set the delay you want";
             }
             else if (String.Compare(typecombo.Text, "Sound") == 0)
             {
@@ -1251,7 +1251,7 @@ namespace _86ME_ver1._0
                         case 0:
                             groupBox1.Enabled = true;
                             typecombo.Text = "Select type";
-                            this.richTextBox1.Text = "\n\n<--- Choose a type of action you want";
+                            this.richTextBox1.Text = "\n<--- Choose a type of action you want";
                             break;
                         case 1:
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(Motionlist.SelectedIndex);
@@ -1297,7 +1297,7 @@ namespace _86ME_ver1._0
                         case 5:
                             groupBox1.Enabled = true;
                             typecombo.Text = "Select type";
-                            this.richTextBox1.Text = "\n\n<--- Choose a type of action you want";
+                            this.richTextBox1.Text = "\n<--- Choose a type of action you want";
                             break;
                     }
         }
