@@ -323,7 +323,7 @@ namespace _86ME_ver1._0
             byte[] message = new byte[4];
             message[0] = 0xF0;
             message[1] = 0x69;
-            message[2] = (byte)(pin);
+            message[2] = (byte)(pin & 0x7F);
             message[3] = 0xF7;
             _serialPort.Write(message, 0, 4);
         }

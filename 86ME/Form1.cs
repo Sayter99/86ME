@@ -1367,29 +1367,34 @@ namespace _86ME_ver1._0
         {
             if (string.Compare(com_port, "OFF") != 0)
             {
-                bool have_cap = false;
                 capturebutton.Enabled = false;
                 autocheck.Checked = false;
                 uint[] frame = new uint[45];
-                servo_captured();
-                for (int i = 0; i < 45; i++)
+                if (servo_captured() == false)
                 {
-                    if (captured[i])
+                    this.richTextBox1.Text = "\n\n\n\tThe used motors don't support Capture";
+                }
+                else
+                {
+                    arduino.motor_release();
+                    Thread.Sleep(100);
+                    for (int i = 0; i < 45; i++)
                     {
-                        have_cap = true;
-                        arduino.frame_capture(i);
-                        Thread.Sleep(100);
-                        ftext[i].Text = arduino.captured_data.ToString();
+                        if (captured[i])
+                        {
+                            arduino.frame_capture(i);
+                            Thread.Sleep(100);
+                            ftext[i].Text = arduino.captured_data.ToString();
+                        }
                     }
                 }
                 capturebutton.Enabled = true;
-                if (have_cap == false)
-                    this.richTextBox1.Text = "\n\n\n\tThe choosed motors don't support Capture";
             }
         }
 
-        private void servo_captured()
+        private bool servo_captured()
         {
+            bool can_cap = false;
             for (int i = 0; i < 45; i++)
             {
                 if (String.Compare(Motion.fbox[i].Text, "KONDO_KRS786") == 0)
@@ -1422,7 +1427,11 @@ namespace _86ME_ver1._0
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_MICRO") == 0)
                     captured[i] = false;
+
+                if (captured[i] == true)
+                    can_cap = true;
             }
+            return can_cap;
         }
 
         private void Motionlist_KeyDown(object sender, KeyEventArgs e)
@@ -1599,14 +1608,6 @@ namespace _86ME_ver1._0
                 }
                 autocheck.Capture = true;
                 autocheck.Enabled = true;
-            }
-            else if(autocheck.Checked == false)
-            {
-                if (string.Compare(com_port, "OFF") != 0)
-                {
-                    arduino.motor_release();
-                    Thread.Sleep(100);
-                }
             }
         }
 
@@ -1980,6 +1981,16 @@ namespace _86ME_ver1._0
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void motorRelease_Click(object sender, EventArgs e)
+        {
+            if (string.Compare(com_port, "OFF") != 0)
+            {
+                arduino.motor_release();
+                autocheck.Checked = false;
+                Thread.Sleep(100);
+            }
         }
     }
 }
