@@ -675,6 +675,24 @@ namespace _86ME_ver1._0
                 delaytext.Text = "0";
                 typecombo.Text = "";
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
+                if (datas[188] == "picmode")
+                {
+                    if (datas[0] != "BoardVer" || datas[2] != "Offset" || datas[49] != "Homeframe" ||
+                       datas[96] != "Range" || datas[281] != "Servo")
+                    {
+                        MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
+                        return;
+                    }
+                }
+                else
+                {
+                    if (datas[0] != "BoardVer" || datas[2] != "Offset" || datas[49] != "Homeframe" ||
+                       datas[96] != "Range" || datas[188] != "Servo")
+                    {
+                        MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
+                        return;
+                    }
+                }
                 for (int i = 0; i < datas.Length; i++)
                 {
                     if (String.Compare(datas[i], "BoardVer") == 0)
@@ -694,7 +712,16 @@ namespace _86ME_ver1._0
                         {
                             i++;
                             nMotion.ftext[k].Text = datas[i];
-                            offset[k] = int.Parse(datas[i]);
+                            try
+                            {
+                                offset[k] = int.Parse(datas[i]);
+                            }
+                            catch
+                            {
+                                nMotion.ftext[k].Text = "0";
+                                offset[k] = 0;
+                                MessageBox.Show("The loaded file is corrupt. Please check the format of Offset.");
+                            }
                         }
                     }
                     else if (String.Compare(datas[i], "Homeframe") == 0)
@@ -703,7 +730,16 @@ namespace _86ME_ver1._0
                         {
                             i++;
                             nMotion.ftext2[k].Text = datas[i];
-                            homeframe[k] = uint.Parse(datas[i]);
+                            try
+                            {
+                                homeframe[k] = uint.Parse(datas[i]);
+                            }
+                            catch
+                            {
+                                nMotion.ftext2[k].Text = "1500";
+                                homeframe[k] = 1500;
+                                MessageBox.Show("The loaded file is corrupt. Please check the format of Homeframe.");
+                            }
                         }
                     }
                     else if (String.Compare(datas[i], "Range") == 0)
@@ -712,13 +748,31 @@ namespace _86ME_ver1._0
                         {
                             i++;
                             nMotion.ftext3[k].Text = datas[i];
-                            min[k] = uint.Parse(datas[i]);
+                            try
+                            {
+                                min[k] = uint.Parse(datas[i]);
+                            }
+                            catch
+                            {
+                                nMotion.ftext3[k].Text = "600";
+                                min[k] = 600;
+                                MessageBox.Show("The loaded file is corrupt. Please check the format of Range.");
+                            }
                         }
                         for (int k = 0; k < 45; k++)
                         {
                             i++;
                             nMotion.ftext4[k].Text = datas[i];
-                            Max[k] = uint.Parse(datas[i]);
+                            try
+                            {
+                                Max[k] = uint.Parse(datas[i]);
+                            }
+                            catch
+                            {
+                                nMotion.ftext4[k].Text = "2300";
+                                Max[k] = 2300;
+                                MessageBox.Show("The loaded file is corrupt. Please check the format of Range.");
+                            }
                         }
                     }
                     else if (String.Compare(datas[i], "picmode") == 0)
@@ -742,13 +796,23 @@ namespace _86ME_ver1._0
                         for (int k = 0; k < 45; k++)
                         {
                             i++;
+                            bool servo_fine = false;
                             for (int j = 0; j < servo.Length; j++)
                             {
                                 if (String.Compare(datas[i], servo[j]) == 0)
                                 {
+                                    servo_fine = true;
                                     nMotion.fbox[k].SelectedIndex = j;
                                     motor_info[k] = j;
                                 }
+                            }
+                            if(servo_fine == false)
+                            {
+                                nMotion.fbox[k].SelectedIndex = 0;
+                                motor_info[k] = 0;
+                                MessageBox.Show("The loaded file is corrupt. Please check the format of Servo.");
+                                i--;
+                                break;
                             }
                         }
                     }
@@ -783,14 +847,30 @@ namespace _86ME_ver1._0
 
                         ME_Frame nframe = new ME_Frame();
                         i++;
-                        nframe.delay = int.Parse(datas[i]);
+                        try
+                        {
+                            nframe.delay = int.Parse(datas[i]);
+                        }
+                        catch
+                        {
+                            nframe.delay = 0;
+                            MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                        }
                         int j = 0;
                         while (j < 45)
                         {
                             if (String.Compare(nMotion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
                             {
                                 i++;
-                                nframe.frame[j] = int.Parse(datas[i]);
+                                try
+                                {
+                                    nframe.frame[j] = int.Parse(datas[i]);
+                                }
+                                catch
+                                {
+                                    nframe.frame[j] = 0;
+                                    MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                                }
                             }
                             else
                             {
@@ -804,7 +884,15 @@ namespace _86ME_ver1._0
                     {
                         ME_Delay ndelay = new ME_Delay();
                         i++;
-                        ndelay.delay = int.Parse(datas[i]);
+                        try
+                        {
+                            ndelay.delay = int.Parse(datas[i]);
+                        }
+                        catch
+                        {
+                            ndelay.delay = 0;
+                            MessageBox.Show("The loaded file is corrupt. Please check the format of delay.");
+                        }
                         motiontag.Events.Add(ndelay);
                     }
                     else if (String.Compare(datas[i], "sound") == 0)
