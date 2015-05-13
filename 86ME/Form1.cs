@@ -627,8 +627,6 @@ namespace _86ME_ver1._0
             }
             bool picmode = false;
             NewMotion nMotion = new NewMotion();
-            //ME_Triggerlist = new ArrayList();
-            ME_Motionlist = new ArrayList();
             string[] rbver = new string[] { "---unset---",
                                             "RB_100b1",
                                             "RB_100b2",
@@ -656,7 +654,6 @@ namespace _86ME_ver1._0
                                             "GWS_S777",           
                                             "GWS_S03T",           
                                             "GWS_MICRO"};
-            ME_Motion motiontag = null;
 
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "rbm files (*.rbm)|*.rbm";
@@ -669,13 +666,9 @@ namespace _86ME_ver1._0
             using (StreamReader reader = new StreamReader(filename))
             {
                 nfilename = Path.GetFileName(dialog.FileName);
-                MotionCombo.Items.Clear();
-                MotionCombo.Text = "";
-                Motionlist.Items.Clear();
-                delaytext.Text = "0";
-                typecombo.Text = "";
+
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                if(datas.Length < 233)
+                if (datas.Length < 233)
                 {
                     MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
                     return;
@@ -698,6 +691,15 @@ namespace _86ME_ver1._0
                         return;
                     }
                 }
+
+                ME_Motionlist = new ArrayList();
+                ME_Motion motiontag = null;
+                MotionCombo.Items.Clear();
+                MotionCombo.Text = "";
+                Motionlist.Items.Clear();
+                delaytext.Text = "0";
+                typecombo.Text = "";
+                
                 for (int i = 0; i < datas.Length; i++)
                 {
                     if (String.Compare(datas[i], "BoardVer") == 0)
