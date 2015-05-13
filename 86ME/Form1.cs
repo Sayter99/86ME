@@ -405,8 +405,7 @@ namespace _86ME_ver1._0
                         MessageBox.Show("Cannot load the picture. Please check the file");
                     }
                 }
-                Update_framelist();
-                draw_background();
+                //
                 for (int i = 0; i < 45; i++)
                 {
                     if (Motion.ftext[i].Text == "")
@@ -433,6 +432,8 @@ namespace _86ME_ver1._0
                         MessageBox.Show(error_msg);
                     }
                 }
+                Update_framelist();
+                draw_background();
                 board_ver86 = Motion.comboBox1.SelectedIndex;
             }
             else if (Motion.DialogResult == DialogResult.Cancel)
