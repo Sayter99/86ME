@@ -50,7 +50,7 @@ namespace _86ME_ver1._0
             {
                 offset[i] = 0;
                 min[i] = 600;
-                Max[i] = 2300;
+                Max[i] = 2400;
                 homeframe[i] = 1500;
                 channelx[i] = 0;
                 channely[i] = 0;
@@ -245,8 +245,10 @@ namespace _86ME_ver1._0
                                                       "DMP_RS1270",         
                                                       "GWS_S777",           
                                                       "GWS_S03T",           
-                                                      "GWS_MICRO"});
+                                                      "GWS_MICRO",
+                                                      "OtherServos"});
                 fbox[i].SelectedIndex = 0;
+                fbox[i].TextChanged += new EventHandler(this.motors_TextIndexChanged);
                 if (i < 10)
                     flabel[i].Text = "SetServo " + i.ToString() + ":";
                 else
@@ -277,7 +279,87 @@ namespace _86ME_ver1._0
             else
             {
                 picfilename = null;
+            }
+        }
 
+        private void motors_TextIndexChanged(object sender, EventArgs e)
+        {
+            for (int i = 0; i < 45; i++)
+            {
+                if (sender.Equals(fbox[i]))
+                {
+                    switch(fbox[i].Text)
+                    {
+                        case "---noServo---":
+                            ftext3[i].Text = "600";
+                            ftext4[i].Text = "2400";
+                            break;
+                        case "KONDO_KRS786":
+                            ftext3[i].Text = "500";
+                            ftext4[i].Text = "2500";
+                            break;
+                        case "KONDO_KRS788":
+                            ftext3[i].Text = "500";
+                            ftext4[i].Text = "2500";
+                            break;
+                        case "KONDO_KRS78X":
+                            ftext3[i].Text = "500";
+                            ftext4[i].Text = "2500";
+                            break;
+                        case "KONDO_KRS4014":
+                            ftext3[i].Text = "450";
+                            ftext4[i].Text = "2500";
+                            break;
+                        case "KONDO_KRS4024":
+                            ftext3[i].Text = "630";
+                            ftext4[i].Text = "2380";
+                            break;
+                        case "HITEC_HSR8498":
+                            ftext3[i].Text = "550";
+                            ftext4[i].Text = "2450";
+                            break;
+                        case "FUTABA_S3003":
+                            ftext3[i].Text = "450";
+                            ftext4[i].Text = "2350";
+                            break;
+                        case "SHAYYE_SYS214050":
+                            ftext3[i].Text = "600";
+                            ftext4[i].Text = "2350";
+                            break;
+                        case "TOWERPRO_MG995":
+                            ftext3[i].Text = "800";
+                            ftext4[i].Text = "2200";
+                            break;
+                        case "TOWERPRO_MG996":
+                            ftext3[i].Text = "800";
+                            ftext4[i].Text = "2200";
+                            break;
+                        case "DMP_RS0263":
+                            ftext3[i].Text = "700";
+                            ftext4[i].Text = "2280";
+                            break;
+                        case "DMP_RS1270":
+                            ftext3[i].Text = "670";
+                            ftext4[i].Text = "2230";
+                            break;
+                        case "GWS_S777":
+                            ftext3[i].Text = "600";
+                            ftext4[i].Text = "2350";
+                            break;
+                        case "GWS_S03T":
+                            ftext3[i].Text = "580";
+                            ftext4[i].Text = "2540";
+                            break;
+                        case "GWS_MICRO":
+                            ftext3[i].Text = "580";
+                            ftext4[i].Text = "2540";
+                            break;
+                        case "OtherServos":
+                            ftext3[i].Text = "350";
+                            ftext4[i].Text = "4000";
+                            break;
+                    }
+                }
             }
         }
     }

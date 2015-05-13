@@ -127,15 +127,10 @@ namespace _86ME_ver1._0
                     ftext[i].KeyPress += new KeyPressEventHandler(numbercheck);
                     fbar[i].Size = new Size(160, 22);
                     fbar[i].Left += 95;
-                    if (Motion.checkBox2.Checked == true)
-                    {
-                        fbar[i].Maximum = (int)(Max[i] + 9);
-                        fbar[i].Minimum = (int)min[i];
-                    }
-                    else {
-                        fbar[i].Maximum = 2409;
-                        fbar[i].Minimum = 600;
-                    }
+
+                    fbar[i].Maximum = (int)(Max[i] + 9);
+                    fbar[i].Minimum = (int)min[i];
+
                     fbar[i].Name = i.ToString();
                     fbar[i].Scroll += new ScrollEventHandler(scroll_event);
                     if (Motionlist.SelectedItem != null)
@@ -146,16 +141,8 @@ namespace _86ME_ver1._0
                             ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
                             ME_Frame f =(ME_Frame)m.Events[Motionlist.SelectedIndex];
                             ftext[i].Text = f.frame[i].ToString();
-                            if (Motion.checkBox2.Checked == true)
-                            {
-                                if (int.Parse(ftext[i].Text) <= Max[i] && int.Parse(ftext[i].Text) >= min[i])
-                                    fbar[i].Value = int.Parse(ftext[i].Text);
-                            }
-                            else
-                            {
-                                if (int.Parse(ftext[i].Text) <= 2400 && int.Parse(ftext[i].Text) >= 600)
-                                    fbar[i].Value = int.Parse(ftext[i].Text);
-                            }
+                            if (int.Parse(ftext[i].Text) <= Max[i] && int.Parse(ftext[i].Text) >= min[i])
+                                fbar[i].Value = int.Parse(ftext[i].Text);
                         }
                     }
                     else
@@ -203,74 +190,42 @@ namespace _86ME_ver1._0
         public void Text_Changed(object sender, EventArgs e) //Text event
         {
             int n;
-            if (Motion.checkBox2.Checked == true)
+
+            if (int.Parse(((MaskedTextBox)sender).Text) <= Max[int.Parse(((MaskedTextBox)sender).Name)] && int.Parse(((MaskedTextBox)sender).Text) >= min[int.Parse(((MaskedTextBox)sender).Name)])
             {
-                if (int.Parse(((MaskedTextBox)sender).Text) <= Max[int.Parse(((MaskedTextBox)sender).Name)] && int.Parse(((MaskedTextBox)sender).Text) >= min[int.Parse(((MaskedTextBox)sender).Name)])
+                this.fbar[int.Parse(((MaskedTextBox)sender).Name)].Value = int.Parse(((MaskedTextBox)sender).Text);
+                if (autocheck.Checked == true)
                 {
-                    this.fbar[int.Parse(((MaskedTextBox)sender).Name)].Value = int.Parse(((MaskedTextBox)sender).Text);
-                    if (autocheck.Checked == true)
+                    for (int i = 0; i < 45; i++)
                     {
-                        for (int i = 0; i < 45; i++)
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            {
-                                autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                            }
+                            autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
                         }
-                        if (!freshflag)
+                    }
+                    if (!freshflag)
+                    {
+                        if (string.Compare(com_port, "OFF") != 0)
                         {
-                            if (string.Compare(com_port, "OFF") != 0)
+                            try
                             {
-                                try
-                                {
-                                    arduino.frameWrite(0x6F, autoframe, 0);
-                                }
-                                catch
-                                {
-                                    com_port = "OFF";
-                                    MessageBox.Show("Failed to send messages. Please check the connection and restart.");
-                                }
+                                arduino.frameWrite(0x6F, autoframe, 0);
+                            }
+                            catch
+                            {
+                                com_port = "OFF";
+                                MessageBox.Show("Failed to send messages. Please check the connection and restart.");
                             }
                         }
                     }
                 }
             }
+
             else if((((MaskedTextBox)sender).Text) == "")
             {
                 (((MaskedTextBox)sender).Text) = "0";
             }
-            else
-            {
-                if (int.Parse(((MaskedTextBox)sender).Text) <= 2400 && int.Parse(((MaskedTextBox)sender).Text) >= 900)
-                {
-                    this.fbar[int.Parse(((MaskedTextBox)sender).Name)].Value = int.Parse(((MaskedTextBox)sender).Text);
-                    if (autocheck.Checked == true)
-                    {
-                        for (int i = 0; i < 45; i++)
-                        {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            {
-                                autoframe[i] = int.Parse(ftext[i].Text) + offset[i];
-                            }
-                        }
-                        if (!freshflag)
-                        {
-                            if (string.Compare(com_port, "OFF") != 0)
-                            {
-                                try
-                                {
-                                    arduino.frameWrite(0x6F, autoframe, 0);
-                                }
-                                catch
-                                {
-                                    com_port = "OFF";
-                                    MessageBox.Show("Failed to send messages. Please check the connection and restart.");
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+
             if (int.TryParse(((MaskedTextBox)sender).Text,out n))
             {
                 if (Motionlist.SelectedItem != null)
@@ -333,7 +288,7 @@ namespace _86ME_ver1._0
                     if (nMotion.ftext3[i].Text == "")
                         nMotion.ftext3[i].Text = "600";
                     if (nMotion.ftext4[i].Text == "")
-                        nMotion.ftext4[i].Text = "2300";
+                        nMotion.ftext4[i].Text = "2400";
                     motor_info[i] = Motion.fbox[i].SelectedIndex;
                     homeframe[i] = uint.Parse(nMotion.ftext2[i].Text);
                     min[i] = uint.Parse(nMotion.ftext3[i].Text);
@@ -461,7 +416,7 @@ namespace _86ME_ver1._0
                     if (Motion.ftext3[i].Text == "")
                         Motion.ftext3[i].Text = "600";
                     if (Motion.ftext4[i].Text == "")
-                        Motion.ftext4[i].Text = "2300";
+                        Motion.ftext4[i].Text = "2400";
                     homeframe[i] = uint.Parse(Motion.ftext2[i].Text);
                     min[i] = uint.Parse(Motion.ftext3[i].Text);
                     Max[i] = uint.Parse(Motion.ftext4[i].Text);
@@ -509,6 +464,15 @@ namespace _86ME_ver1._0
                 writer.Write("BoardVer ");
                 writer.Write(Motion.comboBox1.SelectedItem.ToString());
                 writer.Write("\n");
+                writer.Write("Servo ");
+                for (int i = 0; i < 45; i++)
+                {
+                    ComboBox cb = Motion.fbox[i];
+                    writer.Write(cb.Text);
+                    if (i != 44)
+                        writer.Write(" ");
+                }
+                writer.Write("\n");
                 writer.Write("Offset ");
                 for (int j = 0; j < 45; j++)
                 {
@@ -549,15 +513,6 @@ namespace _86ME_ver1._0
                         writer.Write(Motion.channely[i] + " ");
                     writer.Write("\n");
                 }
-                writer.Write("Servo ");
-                for (int i = 0; i < 45; i++)
-                {
-                    ComboBox cb = Motion.fbox[i];
-                    writer.Write(cb.Text);
-                    if (i != 44)
-                        writer.Write(" ");
-                }
-                writer.Write("\n");
 
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
@@ -653,7 +608,8 @@ namespace _86ME_ver1._0
                                             "DMP_RS1270",         
                                             "GWS_S777",           
                                             "GWS_S03T",           
-                                            "GWS_MICRO"};
+                                            "GWS_MICRO",
+                                            "OtherServos"};
 
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "rbm files (*.rbm)|*.rbm";
@@ -668,15 +624,15 @@ namespace _86ME_ver1._0
                 nfilename = Path.GetFileName(dialog.FileName);
 
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                if (datas.Length < 233)
+                if (datas.Length < 235)
                 {
                     MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
                     return;
                 }
-                if (datas[188] == "picmode")
+                if (datas[234] == "picmode")
                 {
-                    if (datas[0] != "BoardVer" || datas[2] != "Offset" || datas[49] != "Homeframe" ||
-                       datas[96] != "Range" || datas[281] != "Servo")
+                    if (datas[0] != "BoardVer" || datas[2] != "Servo" || datas[48] != "Offset" ||
+                       datas[95] != "Homeframe" || datas[142] != "Range")
                     {
                         MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
                         return;
@@ -684,8 +640,8 @@ namespace _86ME_ver1._0
                 }
                 else
                 {
-                    if (datas[0] != "BoardVer" || datas[2] != "Offset" || datas[49] != "Homeframe" ||
-                       datas[96] != "Range" || datas[188] != "Servo")
+                    if (datas[0] != "BoardVer" || datas[2] != "Servo" || datas[48] != "Offset" ||
+                       datas[95] != "Homeframe" || datas[142] != "Range")
                     {
                         MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
                         return;
@@ -776,8 +732,8 @@ namespace _86ME_ver1._0
                             }
                             catch
                             {
-                                nMotion.ftext4[k].Text = "2300";
-                                Max[k] = 2300;
+                                nMotion.ftext4[k].Text = "2400";
+                                Max[k] = 2400;
                                 MessageBox.Show("The loaded file is corrupt. Please check the format of Range.");
                             }
                         }
@@ -1015,11 +971,11 @@ namespace _86ME_ver1._0
                     Motionlist.Items.Insert(Motionlist.SelectedIndex+1,"[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
 
-                    Motionlist.SelectedIndex++;
-
                     for (int i = 0; i < 45; i++)
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] = (int)homeframe[i];
+                            ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame[i] = (int)homeframe[i];
+
+                    Motionlist.SelectedIndex++;
                 }
                 delaytext.Enabled = true;
                 label2.Enabled = true;
@@ -1351,6 +1307,7 @@ namespace _86ME_ver1._0
                         case 1:
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(Motionlist.SelectedIndex);
                             Motionlist.Items.Remove(Motionlist.SelectedItem);
+                            autocheck.Checked = false;
                             typecombo.Enabled = false;
                             typecombo.Text="";
                             delaytext.Enabled = false;
@@ -1521,6 +1478,8 @@ namespace _86ME_ver1._0
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_S03T") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_MICRO") == 0)
+                    captured[i] = false;
+                else if (String.Compare(Motion.fbox[i].Text, "OtherServos") == 0)
                     captured[i] = false;
 
                 if (captured[i] == true)
