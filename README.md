@@ -14,8 +14,11 @@ forum: http://www.86duino.com/?page_id=85.
 
 #### INSTALLATION ####
 
-Please refer to the 86ME tutorial page for installation instructions 
-on Windows : http://www.86duino.com/?p=11544
+1. System reqirement: Windows XP/Vista/7/8/8.1 with MicroSoft .NET framework
+2. Download 86ME from: http://www.roboard.com/Files/86Duino/86ME.zip
+3. Unzip 86ME and execute 86ME.exe to start
+
+The 86ME tutorial page for installation instructions and usage: http://www.86duino.com/?p=11544
 
 #### CREDITS ####
 

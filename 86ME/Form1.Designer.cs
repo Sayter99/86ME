@@ -255,6 +255,7 @@
             this.capturebutton.UseMnemonic = false;
             this.capturebutton.UseVisualStyleBackColor = true;
             this.capturebutton.Click += new System.EventHandler(this.capturebutton_Click);
+            this.capturebutton.Visible = false;//1.0
             // 
             // delaytext
             // 
