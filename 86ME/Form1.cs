@@ -675,6 +675,11 @@ namespace _86ME_ver1._0
                 delaytext.Text = "0";
                 typecombo.Text = "";
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
+                if(datas.Length < 233)
+                {
+                    MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
+                    return;
+                }
                 if (datas[188] == "picmode")
                 {
                     if (datas[0] != "BoardVer" || datas[2] != "Offset" || datas[49] != "Homeframe" ||
