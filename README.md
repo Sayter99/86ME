@@ -24,8 +24,8 @@ The 86ME tutorial page for installation instructions and usage: http://www.86dui
 
 86ME is an open source project. The prototype of 86ME is RoboME developed
 by RoboardGod at https://github.com/RoBoardGod/RoBoME.
-And the 86ME is  developed by Sayter. All of them are members of the 
-RoBoard team in DMP Electronic Inc.
+And the 86ME is  developed by Sayter ( sayter@dmp.com.tw ).
+All of them are members of the RoBoard team in DMP Electronic Inc.
 
 ---------------------------------------
 
