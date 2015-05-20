@@ -28,6 +28,8 @@ namespace _86ME_ver1._0
 {
     public partial class Form1 : Form
     {
+        int default_delay = 1000;
+        int current_motionlist_idx = -1;
         public string com_port;
         Arduino arduino;
         private Panel[] fpanel = new Panel[45];
@@ -35,7 +37,6 @@ namespace _86ME_ver1._0
         MaskedTextBox[] ftext = new MaskedTextBox[45];
         HScrollBar[] fbar = new HScrollBar[45];
         NewMotion Motion;
-        //public ArrayList ME_Triggerlist;
         public ArrayList ME_Motionlist;
         int framecount = 0;
         Boolean new_obj = false;
@@ -58,7 +59,7 @@ namespace _86ME_ver1._0
                                 "Delete action",
                                 "Move action UP",
                                 "Move action DOWN",
-                                "Copy frame",
+                                "Duplicate frame",
                                 "Add new action at the first field"};
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
         public Form1()
@@ -275,7 +276,7 @@ namespace _86ME_ver1._0
                 MotionCombo.Items.Clear();
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
-                delaytext.Text = "0";
+                delaytext.Text = default_delay.ToString();
                 typecombo.Text = "";
                 board_ver86 = Motion.comboBox1.SelectedIndex;
 
@@ -654,7 +655,7 @@ namespace _86ME_ver1._0
                 MotionCombo.Items.Clear();
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
-                delaytext.Text = "0";
+                delaytext.Text = default_delay.ToString();
                 typecombo.Text = "";
                 
                 for (int i = 0; i < datas.Length; i++)
@@ -817,7 +818,7 @@ namespace _86ME_ver1._0
                         }
                         catch
                         {
-                            nframe.delay = 0;
+                            nframe.delay = default_delay;
                             MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
                         }
                         int j = 0;
@@ -854,7 +855,7 @@ namespace _86ME_ver1._0
                         }
                         catch
                         {
-                            ndelay.delay = 0;
+                            ndelay.delay = default_delay;
                             MessageBox.Show("The loaded file is corrupt. Please check the format of delay.");
                         }
                         motiontag.Events.Add(ndelay);
@@ -968,14 +969,15 @@ namespace _86ME_ver1._0
             Framelist.Controls.Clear();
             if (String.Compare(typecombo.Text, "Frame") == 0)
             {
-                if (new_obj) {
+                if (new_obj)
+                {
                     Motionlist.Items.Insert(Motionlist.SelectedIndex+1,"[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
 
                     for (int i = 0; i < 45; i++)
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                             ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame[i] = (int)homeframe[i];
-
+                    ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
                     Motionlist.SelectedIndex++;
                 }
                 delaytext.Enabled = true;
@@ -997,6 +999,7 @@ namespace _86ME_ver1._0
                 {
                     Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Delay]");
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Delay());
+                    ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
                     Motionlist.SelectedIndex++;
                 }
                 delaytext.Enabled = true;
@@ -1010,7 +1013,8 @@ namespace _86ME_ver1._0
             }
             else if (String.Compare(typecombo.Text, "Sound") == 0)
             {
-                if (new_obj){
+                if (new_obj)
+                {
                     OpenFileDialog dialog = new OpenFileDialog();
                     dialog.Filter = "wav files (*.wav)|*.wav";
                     dialog.Title = "Link Sound";
@@ -1021,6 +1025,7 @@ namespace _86ME_ver1._0
                             s.filename = Path.GetFileName(filename);
                             Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Sound] " + Path.GetFileName(filename));
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, s);
+                            ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
                             Motionlist.SelectedIndex++;
                     }
                 }
@@ -1085,6 +1090,9 @@ namespace _86ME_ver1._0
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             update_motionlist();
+            button1.Enabled = false;
+            button2.Enabled = false;
+            current_motionlist_idx = -1;
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1116,16 +1124,25 @@ namespace _86ME_ver1._0
 
         private void Motionlist_SelectedIndexChanged(object sender, EventArgs e) // select motionlist
         {
+            if (Motionlist.SelectedIndex == -1)
+            {
+                button1.Enabled = false;
+                button2.Enabled = false;
+                this.label2.Text = "Delay:";
+            }
             if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
             {
+                button1.Enabled = true;
+                button2.Enabled = true;
+                current_motionlist_idx = Motionlist.SelectedIndex;
                 groupBox1.Enabled = true;
                 string[] datas = Motionlist.SelectedItem.ToString().Split(' ');
                 if (String.Compare(datas[0], "[Frame]") == 0)
                 {
+                    this.label2.Text = "Play Time:";
                     typecombo.SelectedIndex = 0;
                     typecombo.Text = "Frame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
-                    
                     if (autocheck.Checked == true)
                     {
                         for (int i = 0; i < 45; i++)
@@ -1165,6 +1182,7 @@ namespace _86ME_ver1._0
                 }
                 else if (String.Compare(datas[0], "[Delay]") == 0)
                 {
+                    this.label2.Text = "Delay:";
                     typecombo.SelectedIndex = 1;
                     typecombo.Text = "Delay";
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1172,15 +1190,16 @@ namespace _86ME_ver1._0
                 }
                 else if (String.Compare(datas[0], "[Sound]") == 0)
                 {
+                    this.label2.Text = "Play Time:";
                     typecombo.SelectedIndex = 2;
                     typecombo.Text = "Sound";
                     delaytext.Text = ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
-
                 }
                 else if (String.Compare(datas[0], "[Flag]") == 0)
                 {
                     //typecombo.SelectedIndex = 4;
                     typecombo.SelectedIndex = 3;
+                    this.label2.Text = "Delay:";
                     typecombo.Text = "Flag";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
@@ -1206,6 +1225,7 @@ namespace _86ME_ver1._0
                 {
                     //typecombo.SelectedIndex = 3;
                     typecombo.SelectedIndex = 2;
+                    this.label2.Text = "Delay:";
                     typecombo.Text = "Goto";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
@@ -1264,7 +1284,6 @@ namespace _86ME_ver1._0
         }
         private void Motionlist_MouseDown(object sender, MouseEventArgs e) // right-click for editing motionlist
         {
-            
             if (e.Button == MouseButtons.Right && MotionCombo.SelectedItem != null)
             {
                 Motionlist.SelectedIndex = Motionlist.IndexFromPoint(e.X, e.Y);
@@ -1294,6 +1313,7 @@ namespace _86ME_ver1._0
                 }
             }
         }
+
         private void Motionlistevent(object sender, ToolStripItemClickedEventArgs e)
         {
             int n;
@@ -1308,13 +1328,13 @@ namespace _86ME_ver1._0
                         case 1:
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(Motionlist.SelectedIndex);
                             Motionlist.Items.Remove(Motionlist.SelectedItem);
-                            autocheck.Checked = false;
                             typecombo.Enabled = false;
                             typecombo.Text="";
                             delaytext.Enabled = false;
                             delaytext.Text = "";
                             capturebutton.Enabled = false;
                             autocheck.Enabled= false;
+                            autocheck.Checked = false;
                             Framelist.Controls.Clear();
                             Framelist.Enabled = false;
                             draw_background();
@@ -1354,6 +1374,7 @@ namespace _86ME_ver1._0
                             break;
                     }
         }
+
         private void Motionlistcloseevent(object sender, EventArgs e)
         {
             contextMenuStrip1.Items.Clear();
@@ -1363,6 +1384,9 @@ namespace _86ME_ver1._0
 
         private void MotionCombo_TextChanged(object sender, EventArgs e)
         {
+            current_motionlist_idx = -1;
+            button1.Enabled = false;
+            button2.Enabled = false;
             Boolean new_mot = true;
             NewMotion.Enabled = false;
             if (String.Compare(MotionCombo.Text, "") == 0)
@@ -1389,6 +1413,9 @@ namespace _86ME_ver1._0
                 MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
                 Motionlist.Controls.Clear();
                 draw_background();
+                current_motionlist_idx = -1;
+                button1.Enabled = false;
+                button2.Enabled = false;
                 this.richTextBox1.Text = "\n\n\n\n\n\nRight click in the white region and add an action --->";
             }
             else
@@ -1535,10 +1562,10 @@ namespace _86ME_ver1._0
 
         public void MotionOnTest()
         {
-            if (autocheck.Checked == true)
-            {
-                autocheck.Checked = false;
-            }
+            //if (autocheck.Checked == true)
+            //{
+            //    autocheck.Checked = false;
+            //}
 
             MotionTest.Enabled = false;
             SoundPlayer sp = null;
@@ -1629,40 +1656,51 @@ namespace _86ME_ver1._0
 
         private void autocheck_CheckedChanged(object sender, EventArgs e)
         {
+            bool active_autocheck = false;
+            if (MotionCombo.SelectedItem != null)
+                if (ME_Motionlist != null)
+                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Capacity - 1 >= Motionlist.SelectedIndex && Motionlist.SelectedIndex >= 0)
+                        if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
+                            active_autocheck = true;
 
-            if (autocheck.Checked == true && int.Parse(delaytext.Text) < 0)
+            if (String.Compare(delaytext.Text, "") == 0)
+                delaytext.Text = default_delay.ToString();
+            if (active_autocheck)
             {
-                MessageBox.Show("Please set the correct delay time.");
-                autocheck.Checked = false;
-            }
-            else if (autocheck.Checked == true)
-            {
-                for (int i = 0; i < 45; i++)
+                if (autocheck.Checked == true && int.Parse(delaytext.Text) < 0)
                 {
-                    if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                    {
-                        autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                    }
+                    MessageBox.Show("Please set the correct delay time.");
+                    autocheck.Checked = false;
                 }
-
-                autocheck.Enabled = false;
-                autocheck.Capture = false;
-
-                if (string.Compare(com_port, "OFF") != 0)
+                else if (autocheck.Checked == true)
                 {
-                    try
+                    for (int i = 0; i < 45; i++)
                     {
-                        arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
-                        Thread.Sleep(int.Parse(delaytext.Text));
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        {
+                            autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
+                        }
                     }
-                    catch
+
+                    autocheck.Enabled = false;
+                    autocheck.Capture = false;
+
+                    if (string.Compare(com_port, "OFF") != 0)
                     {
-                        com_port = "OFF";
-                        MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                        try
+                        {
+                            arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
+                            Thread.Sleep(int.Parse(delaytext.Text));
+                        }
+                        catch
+                        {
+                            com_port = "OFF";
+                            MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                        }
                     }
+                    autocheck.Capture = true;
+                    autocheck.Enabled = true;
                 }
-                autocheck.Capture = true;
-                autocheck.Enabled = true;
             }
         }
 
@@ -2046,6 +2084,32 @@ namespace _86ME_ver1._0
                 autocheck.Checked = false;
                 Thread.Sleep(100);
             }
+        }
+
+        private void motionlist_up(object sender, EventArgs e)
+        {
+            int n = current_motionlist_idx;
+            Motionlist.SelectedIndex = n;
+            if (n == 0 || n == -1)
+                return;
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(n - 1, ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[n]);
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(n + 1);
+            Motionlist.Items.Insert(n - 1, Motionlist.SelectedItem);
+            Motionlist.Items.RemoveAt(n + 1);
+            Motionlist.SelectedIndex = current_motionlist_idx - 1;
+        }
+
+        private void motionlist_down(object sender, EventArgs e)
+        {
+            int n = current_motionlist_idx;
+            Motionlist.SelectedIndex = n;
+            if ((((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count <= n + 1) || n == -1)
+                return;
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(n + 2, ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[n]);
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(n);
+            Motionlist.Items.Insert(n + 2, Motionlist.SelectedItem);
+            Motionlist.Items.RemoveAt(n);
+            Motionlist.SelectedIndex = current_motionlist_idx + 1;
         }
     }
 }

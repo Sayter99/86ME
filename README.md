@@ -22,6 +22,6 @@ The 86ME tutorial page for installation instructions and usage: http://www.86dui
 
 #### CREDITS ####
 
-86ME is an open source project. 86ME is derived from RoboME of RoboardGod (https://github.com/RoBoardGod/RoBoME) and
+86ME is an open source project. 86ME is derived from RoboME of RBgod (https://github.com/RoBoardGod/RoBoME) and
 is developed by Sayter (sayter@dmp.com.tw).
 All of them are members of the RoBoard team in DMP Electronic Inc.

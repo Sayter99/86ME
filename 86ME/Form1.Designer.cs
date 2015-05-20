@@ -57,6 +57,8 @@
             this.Framelist = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.MotionTest = new System.Windows.Forms.Button();
@@ -66,6 +68,7 @@
             this.Generate = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.GenerateAllInOne = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -212,6 +215,7 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.motorRelease);
             this.panel1.Controls.Add(this.autocheck);
             this.panel1.Controls.Add(this.capturebutton);
@@ -272,9 +276,9 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(13, 46);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(59, 12);
+            this.label2.Size = new System.Drawing.Size(35, 12);
             this.label2.TabIndex = 5;
-            this.label2.Text = "Delay (ms):";
+            this.label2.Text = "Delay:";
             // 
             // typecombo
             // 
@@ -333,6 +337,8 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.button2);
+            this.groupBox3.Controls.Add(this.button1);
             this.groupBox3.Controls.Add(this.textBox2);
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.MotionTest);
@@ -341,10 +347,32 @@
             this.groupBox3.Controls.Add(this.MotionCombo);
             this.groupBox3.Location = new System.Drawing.Point(739, 28);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(273, 604);
+            this.groupBox3.Size = new System.Drawing.Size(273, 601);
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Motion";
+            // 
+            // button2
+            // 
+            this.button2.Enabled = false;
+            this.button2.Image = global::_86ME.Properties.Resources.down_arrow;
+            this.button2.Location = new System.Drawing.Point(142, 560);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(45, 35);
+            this.button2.TabIndex = 7;
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.motionlist_down);
+            // 
+            // button1
+            // 
+            this.button1.Enabled = false;
+            this.button1.Image = global::_86ME.Properties.Resources.up_arrow;
+            this.button1.Location = new System.Drawing.Point(86, 559);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(45, 35);
+            this.button1.TabIndex = 6;
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.motionlist_up);
             // 
             // textBox2
             // 
@@ -396,7 +424,7 @@
             this.Motionlist.Location = new System.Drawing.Point(7, 113);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
-            this.Motionlist.Size = new System.Drawing.Size(261, 484);
+            this.Motionlist.Size = new System.Drawing.Size(261, 441);
             this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Motionlist_KeyDown);
@@ -437,6 +465,15 @@
             this.GenerateAllInOne.Text = "Generate All In One Program for 86Duino";
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(184, 46);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(18, 12);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "ms";
             // 
             // Form1
             // 
@@ -512,6 +549,9 @@
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Button motorRelease;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label3;
     }
 }
 

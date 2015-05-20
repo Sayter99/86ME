@@ -118,11 +118,9 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="richTextBox1.Text" xml:space="preserve">
-    <value>Authors:
-  Roboard God
-    Github:
-    https://github.com/RoBoardGod
+    <value>86ME is an open source project and it is derived from RoboME of RBgod. (https://github.com/RoBoardGod/RoBoME)
 
+Author:
   Sayter
     Github:
     https://github.com/Sayter99

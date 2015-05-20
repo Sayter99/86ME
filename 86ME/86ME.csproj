@@ -171,6 +171,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="1357303350_44947.ico" />
+    <None Include="icons\up_arrow.png" />
+    <None Include="icons\down_arrow.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
