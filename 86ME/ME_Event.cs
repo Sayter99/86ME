@@ -36,10 +36,14 @@ namespace _86ME_ver1._0
     {
         public string name;
         public bool is_goto;
+        public string loops;
+        public int current_loop;
         public ME_Goto()
         {
             this.name = null;
             this.is_goto = false;
+            this.loops = "0";
+            this.current_loop = 0;
         }
     }
     public class ME_Flag

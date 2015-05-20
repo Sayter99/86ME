@@ -28,6 +28,7 @@ namespace _86ME_ver1._0
 {
     public partial class Form1 : Form
     {
+        List<int> mtest_flag_goto = new List<int>();
         int mtest_start_pos = 0;
         int motiontest_state;
         enum mtest_states { start, pause, stop };
@@ -187,10 +188,21 @@ namespace _86ME_ver1._0
                 picmode_move = true;
             }
         }
+
         public void scroll_event(object sender, ScrollEventArgs e){   //Scroll event
              //if (e.Type == ScrollEventType.EndScroll)
                 this.ftext[int.Parse(((HScrollBar)sender).Name)].Text = ((HScrollBar)sender).Value.ToString();            
         }
+
+        public void loops_TextChanged(object sender, EventArgs e)
+        {
+            ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops = ((MaskedTextBox)sender).Text;
+            if(String.Compare(((MaskedTextBox)sender).Text, "") == 0)
+                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops = "0";
+            int loop_num = int.Parse(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops);
+            ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).current_loop = loop_num;
+        }
+
         public void Text_Changed(object sender, EventArgs e) //Text event
         {
             int n;
@@ -553,7 +565,7 @@ namespace _86ME_ver1._0
                         else if (m.Events[j] is ME_Goto)
                         {
                             ME_Goto g = (ME_Goto)m.Events[j];
-                            writer.Write("goto " + g.name + " " + g.is_goto.ToString() + "\n");
+                            writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + "\n");
 
                         }
                         else if (m.Events[j] is ME_Flag)
@@ -886,6 +898,8 @@ namespace _86ME_ver1._0
                             ngoto.is_goto = true;
                         else
                             ngoto.is_goto = false;
+                        i++;
+                        ngoto.loops = datas[i];
                         motiontag.Events.Add(ngoto);
                     }
                 }
@@ -1241,11 +1255,24 @@ namespace _86ME_ver1._0
                     xcheckbox.CheckedChanged += new EventHandler(enable_goto);
                     xcheckbox.Top += 27;
                     xcheckbox.Left += 65;
+                    Label xlabel3 = new Label();
+                    xlabel3.Text = "Number of loops: ";
+                    xlabel3.Size = new Size(95, 22);
+                    xlabel3.Top += 62;
+                    MaskedTextBox xtext2 = new MaskedTextBox();
+                    xtext2.Text = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops;
+                    xtext2.KeyPress += new KeyPressEventHandler(numbercheck);
+                    xtext2.TextChanged += new EventHandler(loops_TextChanged);
+                    xtext2.Size = new Size(160, 22);
+                    xtext2.Left += 100;
+                    xtext2.Top += 62;
                     this.richTextBox1.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xlabel2);
                     Framelist.Controls.Add(xcheckbox);
+                    Framelist.Controls.Add(xlabel3);
+                    Framelist.Controls.Add(xtext2);
                     Framelist.Enabled = true;
                     draw_background();
                     xtext.SelectionStart = xtext.Text.Length;
@@ -1536,6 +1563,7 @@ namespace _86ME_ver1._0
                     motion_pause.Enabled = false;
                     motion_stop.Enabled = true;
                     Framelist.Enabled = false;
+                    Motionlist.Enabled = false;
                     if (sp != null)
                         sp.Stop();
                     this.richTextBox1.Text =
@@ -1581,7 +1609,10 @@ namespace _86ME_ver1._0
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
                 {
-                    if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).is_goto)
+                    if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).is_goto &&
+                        ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop > 0)
+                    {
+                        ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop--;
                         for (int k = 0; k < j; k++)
                         {
                             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[k] is ME_Flag)
@@ -1590,8 +1621,8 @@ namespace _86ME_ver1._0
                                                 ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[k]).name) == 0)
                                     j = k;
                             }
-
                         }
+                    }
                 }
             }
             mtest_start_pos = 0;
@@ -1599,6 +1630,15 @@ namespace _86ME_ver1._0
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
             Framelist.Enabled = false;
+            Motionlist.Enabled = true;
+            for (int j = 0; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
+            {
+                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
+                {
+                    int loops = int.Parse(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).loops);
+                    ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop = loops;
+                }
+            }
             if (sp != null)
                 sp.Stop();
             this.richTextBox1.Text =
@@ -1640,6 +1680,7 @@ namespace _86ME_ver1._0
                 motion_pause.Enabled = false;
                 motion_stop.Enabled = false;
                 Framelist.Enabled = false;
+                Motionlist.Enabled = true;
                 this.richTextBox1.Text =
                         "   ___   __   ____        _\n" +
                         "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
@@ -1908,7 +1949,6 @@ namespace _86ME_ver1._0
                         {
                             if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
                             {
-                                //f.frame[k];
                                 angle.Add(f.frame[k]);
                                 if (add_channel)
                                     channels.Add(k);
