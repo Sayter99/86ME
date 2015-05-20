@@ -35,11 +35,11 @@ namespace _86ME_ver1._0
     public class ME_Goto
     {
         public string name;
-        public string key;
+        public bool is_goto;
         public ME_Goto()
         {
             this.name = null;
-            this.key = null;
+            this.is_goto = false;
         }
     }
     public class ME_Flag

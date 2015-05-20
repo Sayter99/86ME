@@ -28,6 +28,9 @@ namespace _86ME_ver1._0
 {
     public partial class Form1 : Form
     {
+        int mtest_start_pos = 0;
+        int motiontest_state;
+        enum mtest_states { start, pause, stop };
         int default_delay = 1000;
         int current_motionlist_idx = -1;
         public string com_port;
@@ -42,7 +45,6 @@ namespace _86ME_ver1._0
         Boolean new_obj = false;
         String nfilename = "";
         string picture_name;
-        string gotoflag_name;
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
@@ -54,7 +56,6 @@ namespace _86ME_ver1._0
         bool freshflag;
         bool picmode_move = false;
         bool[] captured = new bool[45];
-        string motiontestkey = "";
         string[] motionevent = {"Add new action at the next field",
                                 "Delete action",
                                 "Move action UP",
@@ -124,7 +125,6 @@ namespace _86ME_ver1._0
                         flabel[i].MouseDown += new MouseEventHandler(flMouseDown);
                         flabel[i].MouseMove += new MouseEventHandler(flMouseMove);
                     }
-                    ftext[i].TextChanged += new EventHandler(Text_Changed);
                     ftext[i].KeyPress += new KeyPressEventHandler(numbercheck);
                     fbar[i].Size = new Size(160, 22);
                     fbar[i].Left += 95;
@@ -148,8 +148,11 @@ namespace _86ME_ver1._0
                     }
                     else
                     {
-                        ftext[i].Text = "0";
+                        ftext[i].Text = "1500";
                     }
+
+                    ftext[i].TextChanged += new EventHandler(Text_Changed);
+
                     if (i < 10)
                         flabel[i].Text = "CH " + i.ToString() + ":";
                     else
@@ -270,9 +273,7 @@ namespace _86ME_ver1._0
                 saveFileToolStripMenuItem.Enabled = true;
                 editToolStripMenuItem.Enabled = true;
                 NewMotion.Enabled = false;
-                //ME_Triggerlist = new ArrayList();
                 ME_Motionlist = new ArrayList();
-                //triggerlist.Items.Clear();
                 MotionCombo.Items.Clear();
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
@@ -406,7 +407,6 @@ namespace _86ME_ver1._0
                         MessageBox.Show("Cannot load the picture. Please check the file");
                     }
                 }
-                //
                 for (int i = 0; i < 45; i++)
                 {
                     if (Motion.ftext[i].Text == "")
@@ -553,7 +553,7 @@ namespace _86ME_ver1._0
                         else if (m.Events[j] is ME_Goto)
                         {
                             ME_Goto g = (ME_Goto)m.Events[j];
-                            writer.Write("goto " + g.name + " " + g.key + "\n");
+                            writer.Write("goto " + g.name + " " + g.is_goto.ToString() + "\n");
 
                         }
                         else if (m.Events[j] is ME_Flag)
@@ -882,7 +882,10 @@ namespace _86ME_ver1._0
                         i++;
                         ngoto.name = datas[i];
                         i++;
-                        ngoto.key = datas[i];
+                        if (String.Compare(datas[i], "True") == 0)
+                            ngoto.is_goto = true;
+                        else
+                            ngoto.is_goto = false;
                         motiontag.Events.Add(ngoto);
                     }
                 }
@@ -962,6 +965,8 @@ namespace _86ME_ver1._0
         private void Form1_Load(object sender, EventArgs e)
         {
             MotionTest.Enabled = false;
+            motion_pause.Enabled = false;
+            motion_stop.Enabled = false;
         }
 
         private void typecombo_TextChanged(object sender, EventArgs e) // choose a type of action
@@ -1045,7 +1050,6 @@ namespace _86ME_ver1._0
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Flag());
                     Motionlist.SelectedIndex++;
                 }
-                gotoflag_name = "";
                 delaytext.Text = "";
                 delaytext.Enabled = false;
                 label2.Enabled = false;
@@ -1064,7 +1068,6 @@ namespace _86ME_ver1._0
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Goto());
                     Motionlist.SelectedIndex++;
                 }
-                gotoflag_name = "";
                 delaytext.Text = "";
                 delaytext.Enabled = false;
                 label2.Enabled = false;
@@ -1090,50 +1093,45 @@ namespace _86ME_ver1._0
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             update_motionlist();
-            button1.Enabled = false;
-            button2.Enabled = false;
+            move_up.Enabled = false;
+            move_down.Enabled = false;
             current_motionlist_idx = -1;
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
         {
-            gotoflag_name = ((MaskedTextBox)sender).Text;
-            //if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Flag)
-            //    ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
-            //else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Goto)
-            //    ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
-        }
-
-        private void gotobutton(object sender, EventArgs e)
-        {
-            TriggerSet ts = new TriggerSet(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).key);
-            ts.ShowDialog();
-            if (ts.DialogResult == DialogResult.OK)
+            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Flag)
             {
-                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).key = ts.Keyvalue.Text;
-                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = gotoflag_name;
-                update_motionlist();
+                ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
+                Motionlist.Items[current_motionlist_idx] = "[Flag] " + ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+            }
+            else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Goto)
+            {
+                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
+                Motionlist.Items[current_motionlist_idx] = "[Goto] " + ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
             }
         }
 
-        private void flagbutton(object sender, EventArgs e)
+        private void enable_goto(object sender, EventArgs e)
         {
-            ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = gotoflag_name;
-            update_motionlist();
+            if (((CheckBox)sender).Checked == true)
+                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).is_goto = true;
+            else
+                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).is_goto = false;
         }
 
         private void Motionlist_SelectedIndexChanged(object sender, EventArgs e) // select motionlist
         {
             if (Motionlist.SelectedIndex == -1)
             {
-                button1.Enabled = false;
-                button2.Enabled = false;
+                move_up.Enabled = false;
+                move_down.Enabled = false;
                 this.label2.Text = "Delay:";
             }
             if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
             {
-                button1.Enabled = true;
-                button2.Enabled = true;
+                move_up.Enabled = true;
+                move_down.Enabled = true;
                 current_motionlist_idx = Motionlist.SelectedIndex;
                 groupBox1.Enabled = true;
                 string[] datas = Motionlist.SelectedItem.ToString().Split(' ');
@@ -1207,19 +1205,17 @@ namespace _86ME_ver1._0
                     xlabel.Size = new Size(40, 22);
 
                     MaskedTextBox xtext = new MaskedTextBox();
-                    xtext.TextChanged += new EventHandler(gototext);
+                    
                     xtext.Text = ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+                    xtext.TextChanged += new EventHandler(gototext);
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 45;
-                    Button xbutton = new Button();
-                    xbutton.Text = "set Flag";
-                    xbutton.Click += new EventHandler(flagbutton);
-                    xbutton.Left += 210;
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
-                    Framelist.Controls.Add(xbutton);
                     Framelist.Enabled = true;
                     draw_background();
+                    xtext.SelectionStart = xtext.Text.Length;
+                    xtext.Focus();
                 }
                 else if (String.Compare(datas[0], "[Goto]") == 0)
                 {
@@ -1232,30 +1228,32 @@ namespace _86ME_ver1._0
                     xlabel.Text = "Target Flag Name: ";
                     xlabel.Size = new Size(95, 22);
                     MaskedTextBox xtext = new MaskedTextBox();
-                    xtext.TextChanged += new EventHandler(gototext);
                     xtext.Text = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+                    xtext.TextChanged += new EventHandler(gototext);
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 100;
-                    Button xbutton = new Button();
-                    xbutton.Text = "set Hotkey";
-                    xbutton.Click += new EventHandler(gotobutton);
-                    xbutton.Left += 270;
-                    if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).key == "")
-                    {
-                        this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n\n*HotKey must be set, or the Goto will be functionless*\n↓\n↓\n↓\n↓";
-                    }
-                    else
-                    {
-                        this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
-                    }
+                    Label xlabel2 = new Label();
+                    xlabel2.Text = "Enable Goto ";
+                    xlabel2.Size = new Size(65, 22);
+                    xlabel2.Top += 32;
+                    CheckBox xcheckbox = new CheckBox();
+                    xcheckbox.Checked = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).is_goto;
+                    xcheckbox.CheckedChanged += new EventHandler(enable_goto);
+                    xcheckbox.Top += 27;
+                    xcheckbox.Left += 65;
+                    this.richTextBox1.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
-                    Framelist.Controls.Add(xbutton);
+                    Framelist.Controls.Add(xlabel2);
+                    Framelist.Controls.Add(xcheckbox);
                     Framelist.Enabled = true;
                     draw_background();
+                    xtext.SelectionStart = xtext.Text.Length;
+                    xtext.Focus();
                 }
             }
         }
+
         private void delaytext_TextChanged(object sender, EventArgs e)
         {
             if (Motionlist.SelectedItem != null && String.Compare(delaytext.Text,"") != 0)
@@ -1334,7 +1332,6 @@ namespace _86ME_ver1._0
                             delaytext.Text = "";
                             capturebutton.Enabled = false;
                             autocheck.Enabled= false;
-                            autocheck.Checked = false;
                             Framelist.Controls.Clear();
                             Framelist.Enabled = false;
                             draw_background();
@@ -1385,8 +1382,8 @@ namespace _86ME_ver1._0
         private void MotionCombo_TextChanged(object sender, EventArgs e)
         {
             current_motionlist_idx = -1;
-            button1.Enabled = false;
-            button2.Enabled = false;
+            move_up.Enabled = false;
+            move_down.Enabled = false;
             Boolean new_mot = true;
             NewMotion.Enabled = false;
             if (String.Compare(MotionCombo.Text, "") == 0)
@@ -1399,6 +1396,8 @@ namespace _86ME_ver1._0
             }
             Motionlist.Items.Clear();
             MotionTest.Enabled = false;
+            motion_pause.Enabled = false;
+            motion_stop.Enabled = false;
             groupBox1.Enabled = false;
             this.richTextBox1.Text = "\t\t\t\t    2.Press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
         }
@@ -1414,8 +1413,8 @@ namespace _86ME_ver1._0
                 Motionlist.Controls.Clear();
                 draw_background();
                 current_motionlist_idx = -1;
-                button1.Enabled = false;
-                button2.Enabled = false;
+                move_up.Enabled = false;
+                move_down.Enabled = false;
                 this.richTextBox1.Text = "\n\n\n\n\n\nRight click in the white region and add an action --->";
             }
             else
@@ -1516,68 +1515,37 @@ namespace _86ME_ver1._0
             return can_cap;
         }
 
-        private void Motionlist_KeyDown(object sender, KeyEventArgs e)
-        {
-            string a, b;
-            if (e.Modifiers == Keys.Control)
-                a = "ctrl";
-            else if (e.Modifiers == Keys.Alt)
-                a = "alt";
-            else if (e.Modifiers == Keys.Shift)
-                a = "shift";
-            else
-                a = "";
-            if (e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z)
-                b = ((char)e.KeyCode).ToString();
-            else if (e.KeyCode >= Keys.D0 && e.KeyCode <= Keys.D9)
-                b = ((char)e.KeyCode).ToString();
-            else if (e.KeyCode >= Keys.F1 && e.KeyCode <= Keys.F12)
-                b = "F" + ((int)(e.KeyCode - Keys.F1 + 1)).ToString();
-            else if (e.KeyCode == Keys.Up)
-                b = "Up";
-            else if (e.KeyCode == Keys.Down)
-                b = "Down";
-            else if (e.KeyCode == Keys.Left)
-                b = "Left";
-            else if (e.KeyCode == Keys.Right)
-                b = "Right";
-            else if (e.KeyCode == Keys.Escape)
-                b = "ESC";
-            else
-                b = "";
-
-            if (String.Compare(a, "") != 0 && String.Compare(b, "") != 0)
-                motiontestkey = (a + "+" + b);
-            else if (String.Compare(b, "") != 0)
-                motiontestkey = (b);
-            else if (String.Compare(b, "") == 0)
-                motiontestkey = (a);
-            else
-                motiontestkey = "";
-        }
-        private void Motionlist_KeyUp(object sender, KeyEventArgs e)
-        {
-            motiontestkey = "";
-        }
-
         public void MotionOnTest()
         {
-            //if (autocheck.Checked == true)
-            //{
-            //    autocheck.Checked = false;
-            //}
-
             MotionTest.Enabled = false;
+            motion_pause.Enabled = true;
+            motion_stop.Enabled = true;
             SoundPlayer sp = null;
             if (ME_Motionlist == null)
                 return;
 
-            this.richTextBox1.Text = "\n\nExecuting Motion Test ... ...\n\nIf the test doesn't stop automatically, long press ESC until stop";
-            for (int j = 0; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
+            for (int j = mtest_start_pos; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
             {
-                if (string.Compare(motiontestkey, "ESC") == 0)
-                    break;
                 Motionlist.SelectedIndex = j;
+                if (motiontest_state == (int)mtest_states.stop)
+                    break;
+                else if(motiontest_state == (int)mtest_states.pause)
+                {
+                    mtest_start_pos = j;
+                    MotionTest.Enabled = true;
+                    motion_pause.Enabled = false;
+                    motion_stop.Enabled = true;
+                    Framelist.Enabled = false;
+                    if (sp != null)
+                        sp.Stop();
+                    this.richTextBox1.Text =
+                            "   ___   __   ____        _\n" +
+                            "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                            "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                            " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                            "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
+                    return;
+                }
                 if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Frame)
                 {
                     for (int i = 0; i < 45; i++)
@@ -1613,7 +1581,7 @@ namespace _86ME_ver1._0
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
                 {
-                    if (string.Compare(motiontestkey, ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).key) == 0 && motiontestkey != "")
+                    if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).is_goto)
                         for (int k = 0; k < j; k++)
                         {
                             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[k] is ME_Flag)
@@ -1626,7 +1594,10 @@ namespace _86ME_ver1._0
                         }
                 }
             }
+            mtest_start_pos = 0;
             MotionTest.Enabled = true;
+            motion_pause.Enabled = false;
+            motion_stop.Enabled = false;
             Framelist.Enabled = false;
             if (sp != null)
                 sp.Stop();
@@ -1643,6 +1614,7 @@ namespace _86ME_ver1._0
             // TODO: Using Thread to control UI
             Motionlist.Focus();
             Framelist.Controls.Clear();
+            motiontest_state = (int)mtest_states.start;
             Thread t;
             if (MotionCombo.SelectedItem != null)
             {
@@ -1652,7 +1624,32 @@ namespace _86ME_ver1._0
             }
             Update_framelist();
             draw_background();
-        }        
+        }
+
+        private void motion_pause_Click(object sender, EventArgs e)
+        {
+            motiontest_state = (int)mtest_states.pause;
+        }
+
+        private void motion_stop_Click(object sender, EventArgs e)
+        {
+            if (motiontest_state == (int)mtest_states.pause)
+            {
+                mtest_start_pos = 0;
+                MotionTest.Enabled = true;
+                motion_pause.Enabled = false;
+                motion_stop.Enabled = false;
+                Framelist.Enabled = false;
+                this.richTextBox1.Text =
+                        "   ___   __   ____        _\n" +
+                        "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                        "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                        " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                        "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
+            }
+            else
+                motiontest_state = (int)mtest_states.stop;
+        }
 
         private void autocheck_CheckedChanged(object sender, EventArgs e)
         {
@@ -2069,6 +2066,8 @@ namespace _86ME_ver1._0
                 }
             }
             MotionTest.Enabled = true;
+            motion_pause.Enabled = false;
+            motion_stop.Enabled = false;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
