@@ -367,7 +367,7 @@
             // 
             // motion_stop
             // 
-            this.motion_stop.Image = global::_86ME.Properties.Resources.stop;
+            this.motion_stop.Image = global::_86ME_ver1.Properties.Resources.stop;
             this.motion_stop.Location = new System.Drawing.Point(223, 12);
             this.motion_stop.Name = "motion_stop";
             this.motion_stop.Size = new System.Drawing.Size(43, 35);
@@ -377,7 +377,7 @@
             // 
             // motion_pause
             // 
-            this.motion_pause.Image = global::_86ME.Properties.Resources.pause;
+            this.motion_pause.Image = global::_86ME_ver1.Properties.Resources.pause;
             this.motion_pause.Location = new System.Drawing.Point(174, 12);
             this.motion_pause.Name = "motion_pause";
             this.motion_pause.Size = new System.Drawing.Size(43, 35);
@@ -388,7 +388,7 @@
             // move_down
             // 
             this.move_down.Enabled = false;
-            this.move_down.Image = global::_86ME.Properties.Resources.down_arrow;
+            this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
             this.move_down.Location = new System.Drawing.Point(142, 560);
             this.move_down.Name = "move_down";
             this.move_down.Size = new System.Drawing.Size(45, 35);
@@ -399,7 +399,7 @@
             // move_up
             // 
             this.move_up.Enabled = false;
-            this.move_up.Image = global::_86ME.Properties.Resources.up_arrow;
+            this.move_up.Image = global::_86ME_ver1.Properties.Resources.up_arrow;
             this.move_up.Location = new System.Drawing.Point(86, 559);
             this.move_up.Name = "move_up";
             this.move_up.Size = new System.Drawing.Size(45, 35);
@@ -429,7 +429,7 @@
             // 
             // MotionTest
             // 
-            this.MotionTest.Image = global::_86ME.Properties.Resources.play;
+            this.MotionTest.Image = global::_86ME_ver1.Properties.Resources.play;
             this.MotionTest.Location = new System.Drawing.Point(125, 12);
             this.MotionTest.Name = "MotionTest";
             this.MotionTest.Size = new System.Drawing.Size(43, 35);

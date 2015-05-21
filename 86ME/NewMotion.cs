@@ -130,24 +130,6 @@ namespace _86ME_ver1._0
             }
         }
 
-        private void checkBox1_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox1.Checked == true)
-            {
-                for (int i = 0; i < 45; i++)
-                {
-                    ftext2[i].Enabled = true;
-                }
-            }
-            else
-            {
-                for (int i = 0; i < 45; i++)
-                {
-                    ftext2[i].Enabled = false;
-                }
-            }
-        }
-
         private void checkBox2_CheckedChanged(object sender, EventArgs e)
         {
             if (checkBox2.Checked == true)
@@ -201,13 +183,12 @@ namespace _86ME_ver1._0
                 ftext[i].TextAlign = HorizontalAlignment.Right;
                 ftext[i].KeyPress += new KeyPressEventHandler(numbercheck_offset);
                 ftext[i].Size = new Size(50, 22);
-                ftext[i].Left += 270;
+                ftext[i].Left += 265;
                 ftext2[i].Text = homeframe[i].ToString();
                 ftext2[i].TextAlign = HorizontalAlignment.Right;
                 ftext2[i].KeyPress += new KeyPressEventHandler(numbercheck);
-                ftext2[i].Size = new Size(50, 22);
-                ftext2[i].Left += 350;
-                ftext2[i].Enabled = false;
+                ftext2[i].Size = new Size(60, 22);
+                ftext2[i].Left += 335;
 
                 ftext3[i].Text = min[i].ToString();
                 ftext3[i].TextAlign = HorizontalAlignment.Right;

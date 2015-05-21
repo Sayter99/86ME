@@ -8,7 +8,7 @@
     <ProjectGuid>{B45AB7DF-49AC-4320-A2F1-9744235BEE4D}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>_86ME</RootNamespace>
+    <RootNamespace>_86ME_ver1</RootNamespace>
     <AssemblyName>86ME</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
