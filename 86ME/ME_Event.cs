@@ -8,6 +8,7 @@ namespace _86ME_ver1._0
     {
         public int[] frame;
         public int delay;
+        public int num;
         public ME_Frame()
         {
             this.frame = new int[45];
@@ -38,12 +39,14 @@ namespace _86ME_ver1._0
         public bool is_goto;
         public string loops;
         public int current_loop;
+        public bool parsed;
         public ME_Goto()
         {
             this.name = null;
             this.is_goto = false;
             this.loops = "0";
             this.current_loop = 0;
+            this.parsed = false;
         }
     }
     public class ME_Flag

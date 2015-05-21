@@ -1747,7 +1747,7 @@ namespace _86ME_ver1._0
             System.Diagnostics.Process.Start("http://www.86duino.com/?p=11544");
         }
 
-        public void generate_ino(string path, List<int> channels, int frame_count, List<int> frame_delay, List<int> total_event)
+        public void generate_ino(string path, List<int> channels, int frame_count)
         {
             nfilename = path + "\\86Duino Motion Sketch" + ".ino";
             TextWriter writer = new StreamWriter(nfilename);
@@ -1778,29 +1778,68 @@ namespace _86ME_ver1._0
             writer.WriteLine("}");
             writer.WriteLine();
 
-            //void loop{}
+            //void loop {}
+            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
             writer.WriteLine("void loop()");
             writer.WriteLine("{");
-
-            for (int i = 0, j = 0; i < total_event.Count; i++)
+            int space_num = 2;
+            string space = set_space(space_num);
+            int loop_end = 0;
+            bool goto_flag = false;
+            for (int i = 0, j = 0, flag_count = 0; i < m.Events.Count; i++)
             {
-                if (total_event[i] == 0)
+                if (m.Events[i] is ME_Frame)
                 {
-                    string fc = j.ToString();
-                    writer.WriteLine("  frm" + fc + ".playPositions(" + frame_delay[j].ToString() + ");");
-                    writer.WriteLine("  while(isServoMultiMoving() == true);");
-                    if(i != total_event.Count-1)
+                    ME_Frame f = (ME_Frame)m.Events[i];
+                    writer.WriteLine(space + "frm" + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
+                    writer.WriteLine(space + "while(isServoMultiMoving() == true);");
+                    if (i != m.Events.Count - 1)
                         writer.WriteLine();
                     j++;
                 }
-                else
+                else if (m.Events[i] is ME_Delay)
                 {
-                    if(total_event[i] == -1)
-                        writer.WriteLine("  delay(0);");
-                    else
-                        writer.WriteLine("  delay(" + total_event[i] + ");");
-                    if (i != total_event.Count - 1)
+                    ME_Delay d = (ME_Delay)m.Events[i];
+                    writer.WriteLine(space + "delay(" + d.delay.ToString() + ");");
+                    if (i != m.Events.Count - 1)
                         writer.WriteLine();
+                }
+                else if (m.Events[i] is ME_Goto)
+                {
+                    if (goto_flag == true && i == loop_end)
+                    {
+                        space_num -= 2;
+                        space = set_space(space_num);
+                        writer.WriteLine(space + "}");
+                        loop_end = 0;
+                        goto_flag = false;
+                    }
+
+                    if (((ME_Goto)m.Events[i]).parsed == true)
+                        continue;
+
+                    ((ME_Goto)m.Events[i]).parsed = true;
+                    ME_Goto g = (ME_Goto)m.Events[i];
+                    loop_end = i;
+                    if (g.is_goto)
+                    {
+                        for (int k = 0; k < i; k++)
+                        {
+                            if (m.Events[k] is ME_Flag)
+                            {
+                                if (String.Compare(((ME_Goto)m.Events[i]).name, ((ME_Flag)m.Events[k]).name) == 0)
+                                {
+                                    i = k;
+                                    goto_flag = true;
+                                    writer.Write(space + "for(int " + g.name + flag_count.ToString() +
+                                                 " = 0;" + " i < " + g.loops + "; i++)\n" + space + "{\n");
+                                    space_num += 2;
+                                    space = set_space(space_num);
+                                    flag_count++;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             writer.WriteLine("}");
@@ -1821,8 +1860,6 @@ namespace _86ME_ver1._0
             var dialogResult = path.ShowDialog();
             string txtPath = path.SelectedPath;
             List<int> channels = new List<int>();
-            List<int> frame_delay = new List<int>();
-            List<int> total_event = new List<int>();
             int count = 0;
             bool add_channel = true;
             TextWriter writer;
@@ -1835,7 +1872,6 @@ namespace _86ME_ver1._0
                     if (m.Events[j] is ME_Frame)
                     {
                         int ch_count = 0;
-                        total_event.Add(0);
                         nfilename = txtPath + "\\86frame_" + count.ToString() + ".txt";
                         writer = new StreamWriter(nfilename);
                         ME_Frame f = (ME_Frame)m.Events[j];
@@ -1851,23 +1887,11 @@ namespace _86ME_ver1._0
                                 ch_count++;
                             }
                         }
+                        ((ME_Frame)m.Events[j]).num = count;
                         add_channel = false;
-                        frame_delay.Add(f.delay);
                         writer.Dispose();
                         writer.Close();
                         count++;
-                    }
-                    else if (m.Events[j] is ME_Delay)
-                    {
-                        ME_Delay d = (ME_Delay)m.Events[j];
-                        if (d.delay == 0)
-                            total_event.Add(-1);
-                        else
-                            total_event.Add(d.delay);
-                    }
-                    else
-                    {
-                        ;
                     }
                 }
                 nfilename = txtPath + "\\86offset" + ".txt";
@@ -1883,8 +1907,9 @@ namespace _86ME_ver1._0
 
                 writer.Dispose();
                 writer.Close();
-                generate_ino(txtPath, channels, count, frame_delay, total_event);
+                generate_ino(txtPath, channels, count);
                 MessageBox.Show("Generate program complete");
+                reset_goto_parsed();
             }
         }
 
@@ -1924,8 +1949,6 @@ namespace _86ME_ver1._0
             var dialogResult = path.ShowDialog();
             string txtPath = path.SelectedPath;
             List<int> channels = new List<int>();
-            List<int> frame_delay = new List<int>();
-            List<int> total_event = new List<int>();
             List<int> angle = new List<int>();
             int count = 0;
             bool add_channel = true;
@@ -1943,7 +1966,6 @@ namespace _86ME_ver1._0
                 {
                     if (m.Events[j] is ME_Frame)
                     {
-                        total_event.Add(0);
                         ME_Frame f = (ME_Frame)m.Events[j];
                         for (int k = 0; k < 45; k++)
                         {
@@ -1955,16 +1977,8 @@ namespace _86ME_ver1._0
                             }
                         }
                         add_channel = false;
-                        frame_delay.Add(f.delay);
+                        ((ME_Frame)m.Events[j]).num = count;
                         count++;
-                    }
-                    else if (m.Events[j] is ME_Delay)
-                    {
-                        ME_Delay d = (ME_Delay)m.Events[j];
-                        if (d.delay == 0)
-                            total_event.Add(-1);
-                        else
-                            total_event.Add(d.delay);
                     }
                 }
 
@@ -2014,32 +2028,88 @@ namespace _86ME_ver1._0
                 // loop
                 writer.WriteLine("void loop()");
                 writer.WriteLine("{");
-                for (int i = 0, j = 0; i < total_event.Count; i++)
+                int space_num = 2;
+                string space = set_space(space_num);
+                int loop_end = 0;
+                bool goto_flag = false;
+                for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
                 {
-                    if (total_event[i] == 0)
+                    if (m.Events[i] is ME_Frame)
                     {
-                        string fc = j.ToString();
-                        writer.WriteLine("  frm" + fc + ".playPositions(" + frame_delay[j].ToString() + ");");
-                        writer.WriteLine("  while(isServoMultiMoving() == true);");
-                        if (i != total_event.Count - 1)
+                        ME_Frame f = (ME_Frame)m.Events[i];
+                        writer.WriteLine(space + "frm" + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
+                        writer.WriteLine(space + "while(isServoMultiMoving() == true);");
+                        if (i != m.Events.Count - 1)
                             writer.WriteLine();
-                        j++;
                     }
-                    else
+                    else if (m.Events[i] is ME_Delay)
                     {
-                        if (total_event[i] == -1)
-                            writer.WriteLine("  delay(0);");
-                        else
-                            writer.WriteLine("  delay(" + total_event[i] + ");");
-                        if (i != total_event.Count - 1)
+                        ME_Delay d = (ME_Delay)m.Events[i];
+                        writer.WriteLine(space + "delay(" + d.delay.ToString() + ");");
+                        if (i != m.Events.Count - 1)
                             writer.WriteLine();
+                    }
+                    else if (m.Events[i] is ME_Goto)
+                    {
+                        if(goto_flag == true && i == loop_end)
+                        {
+                            space_num -= 2;
+                            space = set_space(space_num);
+                            writer.WriteLine(space + "}");
+                            loop_end = 0;
+                            goto_flag = false;
+                        }
+
+                        if (((ME_Goto)m.Events[i]).parsed == true)
+                            continue;
+
+                        ((ME_Goto)m.Events[i]).parsed = true;
+                        ME_Goto g = (ME_Goto)m.Events[i];
+                        loop_end = i;
+                        if (g.is_goto)
+                        {
+                            for (int k = 0; k < i; k++)
+                            {
+                                if (m.Events[k] is ME_Flag)
+                                {
+                                    if (String.Compare(((ME_Goto)m.Events[i]).name, ((ME_Flag)m.Events[k]).name) == 0)
+                                    {
+                                        i = k;
+                                        goto_flag = true;
+                                        writer.Write(space + "for(int " + g.name + flag_count.ToString() +
+                                                     " = 0;" + " i < " + g.loops + "; i++)\n" + space + "{\n");
+                                        space_num += 2;
+                                        space = set_space(space_num);
+                                        flag_count++;
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
                 writer.WriteLine("}");
+
                 MessageBox.Show("Generate program complete");
                 writer.Dispose();
                 writer.Close();
+                reset_goto_parsed();
             }
+        }
+
+        private void reset_goto_parsed()
+        {
+            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
+            for (int i = 0; i < m.Events.Count; i++)
+                if (m.Events[i] is ME_Goto)
+                    ((ME_Goto)m.Events[i]).parsed = false;
+        }
+
+        private string set_space(int n)
+        {
+            string ret_str = "";
+            for (int i = 0; i < n; i++)
+                ret_str += " ";
+            return ret_str;
         }
 
         private void draw_background()
