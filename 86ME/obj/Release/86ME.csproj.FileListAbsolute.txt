@@ -33,8 +33,7 @@ C:\Users\Sayter\Dropbox\work\86ME\86ME\obj\Release\_86ME_ver1._0.SetForm.resourc
 C:\Users\Sayter\Dropbox\work\86ME\86ME\obj\Release\_86ME_ver1._0.TriggerSet.resources
 C:\Users\Sayter\Dropbox\work\86ME\86ME\obj\Release\86ME.csproj.GenerateResource.Cache
 C:\Users\T440\Dropbox\work\86ME\86ME\obj\Release\86ME.csprojResolveAssemblyReference.cache
-C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.exe
-C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.pdb
+C:\Users\T440\Documents\GitHub\86ME\86ME\bin\Release\86ME.exe.config
 C:\Users\T440\Documents\GitHub\86ME\86ME\bin\Release\86ME.exe
 C:\Users\T440\Documents\GitHub\86ME\86ME\bin\Release\86ME.pdb
 C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\_86ME_ver1._0.about.resources
@@ -43,4 +42,5 @@ C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\_86ME_ver1._0.NewMotion.res
 C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\_86ME.Properties.Resources.resources
 C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\_86ME_ver1._0.SetForm.resources
 C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.csproj.GenerateResource.Cache
-C:\Users\T440\Documents\GitHub\86ME\86ME\bin\Release\86ME.exe.config
+C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.exe
+C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.pdb

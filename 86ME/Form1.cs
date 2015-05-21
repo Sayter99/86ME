@@ -1008,9 +1008,9 @@ namespace _86ME_ver1._0
                 Update_framelist();
                 new_obj = false;
                 if(Motion.picfilename == null)
-                    this.richTextBox1.Text = "Tune the settings of motors\n↓\n↓\n↓\n↓\n↓\n↓";
+                    this.richTextBox1.Text = "Tune the settings of motors\n↓\n↓\n↓\n↓\n↓";
                 else
-                    this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓\n↓\n↓\n↓";
+                    this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Delay") == 0)
             {
@@ -1072,7 +1072,7 @@ namespace _86ME_ver1._0
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set the name of the flag\n↓\n↓\n↓\n↓\n↓\n↓";
+                this.richTextBox1.Text = "Set the name of the flag\n↓\n↓\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Goto") == 0)
             {
@@ -1090,7 +1090,7 @@ namespace _86ME_ver1._0
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n\n*HotKey must be set, or the Goto will be functionless*\n↓\n↓\n↓\n↓";
+                this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n\n*HotKey must be set, or the Goto will be functionless*\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1266,7 +1266,7 @@ namespace _86ME_ver1._0
                     xtext2.Size = new Size(160, 22);
                     xtext2.Left += 100;
                     xtext2.Top += 62;
-                    this.richTextBox1.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
+                    this.richTextBox1.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓\n↓\n↓";
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xlabel2);
@@ -1344,7 +1344,8 @@ namespace _86ME_ver1._0
             int n;
             for (int i = 0; i < motionevent.Length; i++)
                 if (String.Compare(e.ClickedItem.Text, motionevent[i]) == 0)
-                    switch (i) {
+                    switch (i)
+                    {
                         case 0:
                             groupBox1.Enabled = true;
                             typecombo.Text = "Select type";

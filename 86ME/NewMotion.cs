@@ -32,17 +32,9 @@ namespace _86ME_ver1._0
         {
             InitializeComponent();
 
-            comboBox1.Items.AddRange(new object[] { //"---unset---",
-                                                    //"RB_100b1",
-                                                    //"RB_100b2",
-                                                    //"RB_100b3",
-                                                    //"RB_100",
-                                                    //"RB_100RD",
-                                                    //"RB_110",
-                                                    "86Duino_One",
+            comboBox1.Items.AddRange(new object[] { "86Duino_One",
                                                     "86Duino_Zero",
                                                     "86Duino_EduCake",
-                                                    //"unknow"
                                                     });
             comboBox1.SelectedIndex = 0;
 

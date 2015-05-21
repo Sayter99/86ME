@@ -56,29 +56,29 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Framelist = new System.Windows.Forms.Panel();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.motion_stop = new System.Windows.Forms.Button();
             this.motion_pause = new System.Windows.Forms.Button();
+            this.move_down = new System.Windows.Forms.Button();
+            this.move_up = new System.Windows.Forms.Button();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
+            this.MotionTest = new System.Windows.Forms.Button();
             this.NewMotion = new System.Windows.Forms.Button();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionCombo = new System.Windows.Forms.ComboBox();
             this.Generate = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.GenerateAllInOne = new System.Windows.Forms.Button();
-            this.move_down = new System.Windows.Forms.Button();
-            this.move_up = new System.Windows.Forms.Button();
-            this.MotionTest = new System.Windows.Forms.Button();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.Framelist.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -336,6 +336,16 @@
             this.Framelist.Size = new System.Drawing.Size(694, 488);
             this.Framelist.TabIndex = 5;
             // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(694, 488);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.motion_stop);
@@ -375,6 +385,28 @@
             this.motion_pause.UseVisualStyleBackColor = true;
             this.motion_pause.Click += new System.EventHandler(this.motion_pause_Click);
             // 
+            // move_down
+            // 
+            this.move_down.Enabled = false;
+            this.move_down.Image = global::_86ME.Properties.Resources.down_arrow;
+            this.move_down.Location = new System.Drawing.Point(142, 560);
+            this.move_down.Name = "move_down";
+            this.move_down.Size = new System.Drawing.Size(45, 35);
+            this.move_down.TabIndex = 7;
+            this.move_down.UseVisualStyleBackColor = true;
+            this.move_down.Click += new System.EventHandler(this.motionlist_down);
+            // 
+            // move_up
+            // 
+            this.move_up.Enabled = false;
+            this.move_up.Image = global::_86ME.Properties.Resources.up_arrow;
+            this.move_up.Location = new System.Drawing.Point(86, 559);
+            this.move_up.Name = "move_up";
+            this.move_up.Size = new System.Drawing.Size(45, 35);
+            this.move_up.TabIndex = 6;
+            this.move_up.UseVisualStyleBackColor = true;
+            this.move_up.Click += new System.EventHandler(this.motionlist_up);
+            // 
             // textBox2
             // 
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -394,6 +426,16 @@
             this.textBox1.Size = new System.Drawing.Size(100, 15);
             this.textBox1.TabIndex = 4;
             this.textBox1.Text = "Motion Name:";
+            // 
+            // MotionTest
+            // 
+            this.MotionTest.Image = global::_86ME.Properties.Resources.play;
+            this.MotionTest.Location = new System.Drawing.Point(125, 12);
+            this.MotionTest.Name = "MotionTest";
+            this.MotionTest.Size = new System.Drawing.Size(43, 35);
+            this.MotionTest.TabIndex = 3;
+            this.MotionTest.UseVisualStyleBackColor = true;
+            this.MotionTest.Click += new System.EventHandler(this.MotionTest_Click);
             // 
             // NewMotion
             // 
@@ -455,48 +497,6 @@
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
             // 
-            // move_down
-            // 
-            this.move_down.Enabled = false;
-            this.move_down.Image = global::_86ME.Properties.Resources.down_arrow;
-            this.move_down.Location = new System.Drawing.Point(142, 560);
-            this.move_down.Name = "move_down";
-            this.move_down.Size = new System.Drawing.Size(45, 35);
-            this.move_down.TabIndex = 7;
-            this.move_down.UseVisualStyleBackColor = true;
-            this.move_down.Click += new System.EventHandler(this.motionlist_down);
-            // 
-            // move_up
-            // 
-            this.move_up.Enabled = false;
-            this.move_up.Image = global::_86ME.Properties.Resources.up_arrow;
-            this.move_up.Location = new System.Drawing.Point(86, 559);
-            this.move_up.Name = "move_up";
-            this.move_up.Size = new System.Drawing.Size(45, 35);
-            this.move_up.TabIndex = 6;
-            this.move_up.UseVisualStyleBackColor = true;
-            this.move_up.Click += new System.EventHandler(this.motionlist_up);
-            // 
-            // MotionTest
-            // 
-            this.MotionTest.Image = global::_86ME.Properties.Resources.play;
-            this.MotionTest.Location = new System.Drawing.Point(125, 12);
-            this.MotionTest.Name = "MotionTest";
-            this.MotionTest.Size = new System.Drawing.Size(43, 35);
-            this.MotionTest.TabIndex = 3;
-            this.MotionTest.UseVisualStyleBackColor = true;
-            this.MotionTest.Click += new System.EventHandler(this.MotionTest_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(694, 488);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -525,9 +525,9 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.Framelist.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
