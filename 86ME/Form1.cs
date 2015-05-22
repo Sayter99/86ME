@@ -60,6 +60,7 @@ namespace _86ME_ver1._0
         bool picmode_move = false;
         bool[] captured = new bool[45];
         string[] motionevent = {"Add new action at the next field",
+                                "Add homeframe",
                                 "Delete action",
                                 "Move action UP",
                                 "Move action DOWN",
@@ -1408,6 +1409,7 @@ namespace _86ME_ver1._0
                 if (Motionlist.SelectedItem == null)
                 {
                     contextMenuStrip1.Items.Add("Add new action at the first field");
+                    contextMenuStrip1.Items.Add("Add homeframe");
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
                     contextMenuStrip1.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
@@ -1445,6 +1447,16 @@ namespace _86ME_ver1._0
                             this.richTextBox1.Text = "\n<--- Choose a type of action you want";
                             break;
                         case 1:
+                            ME_Frame h = new ME_Frame();
+                            h.type = 0;
+                            for (int j = 0; j < 45; j++)
+                                h.frame[i] = (int)homeframe[i];
+                            h.delay = default_delay;
+                            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home]");
+                            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, h);
+                            Motionlist.SelectedIndex++;
+                            break;
+                        case 2:
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(Motionlist.SelectedIndex);
                             Motionlist.Items.Remove(Motionlist.SelectedItem);
                             typecombo.Enabled = false;
@@ -1457,7 +1469,7 @@ namespace _86ME_ver1._0
                             Framelist.Enabled = false;
                             draw_background();
                             break;
-                        case 2:
+                        case 3:
                             Framelist.Enabled = false;
                             n = Motionlist.SelectedIndex;
                             if (n == 0)
@@ -1467,7 +1479,7 @@ namespace _86ME_ver1._0
                             Motionlist.Items.Insert(n - 1,Motionlist.SelectedItem);
                             Motionlist.Items.RemoveAt(n + 1);
                             break;
-                        case 3:
+                        case 4:
                             Framelist.Enabled = false;
                             n = Motionlist.SelectedIndex;
                             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count <= n+1)
@@ -1477,15 +1489,28 @@ namespace _86ME_ver1._0
                             Motionlist.Items.Insert(n + 2, Motionlist.SelectedItem);
                             Motionlist.Items.RemoveAt(n);
                             break;
-                        case 4:
-                            Framelist.Enabled = false;
-                            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
-                            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
-                            Array.Copy(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame, ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame,45);
-                            ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay;
-                            Motionlist.SelectedIndex++;
-                            break;
                         case 5:
+                            Framelist.Enabled = false;
+                            ME_Frame f = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
+                            if (f.type == 1)
+                            {
+                                Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
+                                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
+                                Array.Copy(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame, ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame, 45);
+                                ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay;
+                                Motionlist.SelectedIndex++;
+                            }
+                            else if (f.type == 0)
+                            {
+                                Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home]");
+                                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
+                                ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).type = 0;
+                                Array.Copy(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame, ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame, 45);
+                                ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay;
+                                Motionlist.SelectedIndex++;
+                            }
+                            break;
+                        case 6:
                             groupBox1.Enabled = true;
                             typecombo.Text = "Select type";
                             this.richTextBox1.Text = "\n<--- Choose a type of action you want";
