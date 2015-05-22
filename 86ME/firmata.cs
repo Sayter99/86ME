@@ -38,7 +38,6 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
-
 namespace _86ME_ver1._0
 {
     /*
@@ -47,7 +46,7 @@ namespace _86ME_ver1._0
      * Processing: reading from and writing to the digital pins and reading the
      * analog inputs.
      */
-    class Arduino
+    public class Arduino
     {
         public static int INPUT = 0;
         public static int OUTPUT = 1;

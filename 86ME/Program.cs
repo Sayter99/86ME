@@ -19,6 +19,7 @@ namespace _86ME_ver1._0
             Form1 f1 = new Form1();
             sform.ShowDialog();
             f1.com_port = sform.com_port;
+            f1.connect_comport();
             Application.Run(f1);
         }
     }

@@ -11,6 +11,7 @@ namespace _86ME_ver1._0
 {
     public partial class NewMotion : Form
     {
+        public Arduino arduino = null;
         public Panel[] fpanel = new Panel[45];
         public Label[] flabel = new Label[45];
         public ComboBox[] fbox = new ComboBox[45];
@@ -18,6 +19,9 @@ namespace _86ME_ver1._0
         public MaskedTextBox[] ftext2 = new MaskedTextBox[45];
         public MaskedTextBox[] ftext3 = new MaskedTextBox[45];
         public MaskedTextBox[] ftext4 = new MaskedTextBox[45];
+        public CheckBox[] fcheck = new CheckBox[45];
+        public HScrollBar[] fbar_off = new HScrollBar[45];
+        public HScrollBar[] fbar_home = new HScrollBar[45];
         int[] offset = new int[45];
         int last_index;
         uint[] homeframe = new uint[45];
@@ -47,7 +51,6 @@ namespace _86ME_ver1._0
                 channelx[i] = 0;
                 channely[i] = 0;
             }
-
             create_panel(0, 45, 0);
         }
 
@@ -172,37 +175,81 @@ namespace _86ME_ver1._0
                 ftext2[i] = new MaskedTextBox();
                 ftext3[i] = new MaskedTextBox();
                 ftext4[i] = new MaskedTextBox();
-                fpanel[i].Size = new Size(520, 30);
-                fpanel[i].Top += start_pos * 30;
+                fcheck[i] = new CheckBox();
+                fbar_off[i] = new HScrollBar();
+                fbar_home[i] = new HScrollBar();
+
+                fpanel[i].Size = new Size(520, 50);
+                fpanel[i].Top += start_pos * 50;
+
                 flabel[i].Size = new Size(65, 18);
                 flabel[i].Top += 5;
                 flabel[i].Left += 5;
-                fbox[i].Size = new Size(185, 22);
+
+                fbox[i].Size = new Size(135, 22);
                 fbox[i].Left += 70;
+
+                fcheck[i].Top += 24;
+                fcheck[i].Left += 120;
+                fcheck[i].Size = new Size(80, 22);
+                fcheck[i].Text = "Auto Check";
+                fcheck[i].Name = i.ToString();
+                fcheck[i].Checked = false;
+                fcheck[i].Enabled = false;
+                fcheck[i].CheckedChanged += new EventHandler(autocheck_changed);
+
+                ftext[i].Name = i.ToString();
                 ftext[i].Text = offset[i].ToString();
                 ftext[i].TextAlign = HorizontalAlignment.Right;
                 ftext[i].KeyPress += new KeyPressEventHandler(numbercheck_offset);
-                ftext[i].Size = new Size(50, 22);
-                ftext[i].Left += 265;
+                ftext[i].TextChanged += new EventHandler(check_offset);
+                ftext[i].Size = new Size(90, 22);
+                ftext[i].Left += 210;
+
+                ftext2[i].Name = i.ToString();
                 ftext2[i].Text = homeframe[i].ToString();
                 ftext2[i].TextAlign = HorizontalAlignment.Right;
                 ftext2[i].KeyPress += new KeyPressEventHandler(numbercheck);
-                ftext2[i].Size = new Size(60, 22);
-                ftext2[i].Left += 335;
+                ftext2[i].TextChanged += new EventHandler(check_homeframe);
+                ftext2[i].Size = new Size(120, 22);
+                ftext2[i].Left += 305;
 
+                ftext3[i].Name = i.ToString();
                 ftext3[i].Text = min[i].ToString();
                 ftext3[i].TextAlign = HorizontalAlignment.Right;
                 ftext3[i].KeyPress += new KeyPressEventHandler(numbercheck);
+                ftext3[i].TextChanged += new EventHandler(check_range);
                 ftext3[i].Size = new Size(40, 22);
-                ftext3[i].Left += 410;
+                ftext3[i].Left += 430;
                 ftext3[i].Enabled = false;
 
+                ftext4[i].Name = i.ToString();
                 ftext4[i].Text = Max[i].ToString();
                 ftext4[i].TextAlign = HorizontalAlignment.Right;
                 ftext4[i].KeyPress += new KeyPressEventHandler(numbercheck);
+                ftext4[i].TextChanged += new EventHandler(check_range);
                 ftext4[i].Size = new Size(40, 22);
-                ftext4[i].Left += 460;
+                ftext4[i].Left += 475;
                 ftext4[i].Enabled = false;
+
+                fbar_off[i].Name = i.ToString();
+                fbar_off[i].Top += 24;
+                fbar_off[i].Left += 210;
+                fbar_off[i].Size = new Size(90, 22);
+                fbar_off[i].Minimum = -256;
+                fbar_off[i].Maximum = 255 + 9;
+                fbar_off[i].Value = int.Parse(ftext[i].Text);
+                fbar_off[i].Scroll += new ScrollEventHandler(scroll_off);
+
+                fbar_home[i].Name = i.ToString();
+                fbar_home[i].Top += 24;
+                fbar_home[i].Left += 305;
+                fbar_home[i].Size = new Size(120, 22);
+                fbar_home[i].Minimum = int.Parse(ftext3[i].Text);
+                fbar_home[i].Maximum = int.Parse(ftext4[i].Text) + 9;
+                fbar_home[i].Value = int.Parse(ftext2[i].Text);
+                fbar_home[i].Scroll += new ScrollEventHandler(scroll_home);
+
                 fbox[i].Items.AddRange(new object[] { "---noServo---",
                                                       "KONDO_KRS786",       
                                                       "KONDO_KRS788",       
@@ -233,8 +280,21 @@ namespace _86ME_ver1._0
                 fpanel[i].Controls.Add(ftext2[i]);
                 fpanel[i].Controls.Add(ftext3[i]);
                 fpanel[i].Controls.Add(ftext4[i]);
+                fpanel[i].Controls.Add(fcheck[i]);
+                fpanel[i].Controls.Add(fbar_off[i]);
+                fpanel[i].Controls.Add(fbar_home[i]);
                 channelver.Controls.Add(fpanel[i]);
             }
+        }
+
+        public void scroll_off(object sender, ScrollEventArgs e)
+        {
+            this.ftext[int.Parse(((HScrollBar)sender).Name)].Text = ((HScrollBar)sender).Value.ToString();
+        }
+
+        public void scroll_home(object sender, ScrollEventArgs e)
+        {
+            this.ftext2[int.Parse(((HScrollBar)sender).Name)].Text = ((HScrollBar)sender).Value.ToString();
         }
 
         private void button3_Click(object sender, EventArgs e)
@@ -264,70 +324,88 @@ namespace _86ME_ver1._0
                     switch(fbox[i].Text)
                     {
                         case "---noServo---":
+                            fcheck[i].Enabled = false;
+                            fcheck[i].Checked = false;
                             ftext3[i].Text = "600";
                             ftext4[i].Text = "2400";
                             break;
                         case "KONDO_KRS786":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "500";
                             ftext4[i].Text = "2500";
                             break;
                         case "KONDO_KRS788":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "500";
                             ftext4[i].Text = "2500";
                             break;
                         case "KONDO_KRS78X":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "500";
                             ftext4[i].Text = "2500";
                             break;
                         case "KONDO_KRS4014":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "450";
                             ftext4[i].Text = "2500";
                             break;
                         case "KONDO_KRS4024":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "630";
                             ftext4[i].Text = "2380";
                             break;
                         case "HITEC_HSR8498":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "550";
                             ftext4[i].Text = "2450";
                             break;
                         case "FUTABA_S3003":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "450";
                             ftext4[i].Text = "2350";
                             break;
                         case "SHAYYE_SYS214050":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "600";
                             ftext4[i].Text = "2350";
                             break;
                         case "TOWERPRO_MG995":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "800";
                             ftext4[i].Text = "2200";
                             break;
                         case "TOWERPRO_MG996":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "800";
                             ftext4[i].Text = "2200";
                             break;
                         case "DMP_RS0263":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "700";
                             ftext4[i].Text = "2280";
                             break;
                         case "DMP_RS1270":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "670";
                             ftext4[i].Text = "2230";
                             break;
                         case "GWS_S777":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "600";
                             ftext4[i].Text = "2350";
                             break;
                         case "GWS_S03T":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "580";
                             ftext4[i].Text = "2540";
                             break;
                         case "GWS_MICRO":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "580";
                             ftext4[i].Text = "2540";
                             break;
                         case "OtherServos":
+                            fcheck[i].Enabled = true;
                             ftext3[i].Text = "350";
                             ftext4[i].Text = "4000";
                             break;
@@ -335,5 +413,99 @@ namespace _86ME_ver1._0
                 }
             }
         }
+
+        private void check_offset(object sender, EventArgs e)
+        {
+            int n;
+            int i = int.Parse(((MaskedTextBox)sender).Name);
+            if (int.TryParse(((MaskedTextBox)sender).Text, out n))
+            {
+                if (n < -256)
+                    ((MaskedTextBox)sender).Text = "-256";
+                else if (n > 255)
+                    ((MaskedTextBox)sender).Text = "255";
+                else
+                    fbar_off[i].Value = n;
+                if(arduino != null && fcheck[i].Checked == true)
+                {
+                    try
+                    {
+                        int[] autoframe = new int[45];
+                        autoframe[i] = n + (int)(uint.Parse(ftext2[i].Text));
+                        arduino.frameWrite(0x6F, autoframe, 0);
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                    }
+                }
+            }
+        }
+
+        private void check_homeframe(object sender, EventArgs e)
+        {
+            uint n;
+            int i = int.Parse(((MaskedTextBox)sender).Name);
+
+            if (uint.TryParse(((MaskedTextBox)sender).Text, out n))
+            {
+                if (n >= uint.Parse(ftext3[i].Text) && n <= uint.Parse(ftext4[i].Text))
+                {
+                    fbar_home[i].Value = (int)n;
+                    if (arduino != null && fcheck[i].Checked == true)
+                    {
+                        try
+                        {
+                            {
+                                int[] autoframe = new int[45];
+                                autoframe[i] = (int)n + (int.Parse(ftext[i].Text));
+                                arduino.frameWrite(0x6F, autoframe, 0);
+                            }
+                        }
+                        catch
+                        {
+                            MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                        }
+                    }
+                }
+            }
+            else
+            {
+                ((MaskedTextBox)sender).Text = "1500";
+            }
+        }
+
+        private void check_range(object sender, EventArgs e)
+        {
+            int i = int.Parse(((MaskedTextBox)sender).Name);
+            fbar_home[i].Minimum = int.Parse(ftext3[i].Text);
+            fbar_home[i].Maximum = int.Parse(ftext4[i].Text) + 9;
+        }
+
+        private void autocheck_changed(object sender, EventArgs e)
+        {
+            uint n;
+            int i = int.Parse(((CheckBox)sender).Name);
+            if(fcheck[i].Checked == true && arduino != null)
+            {
+                if (uint.TryParse(ftext2[i].Text, out n))
+                {
+                    try
+                    {
+                        if (n >= uint.Parse(ftext3[i].Text) && n <= uint.Parse(ftext4[i].Text))
+                        {
+                            int[] autoframe = new int[45];
+                            autoframe[i] = (int)n + (int.Parse(ftext[i].Text));
+                            arduino.frameWrite(0x6F, autoframe, 0);
+                        }
+                    }
+                    catch
+                    {
+                        MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                    }
+                }
+            }
+        }
+
     }
 }

@@ -28,6 +28,8 @@ namespace _86ME_ver1._0
 {
     public partial class Form1 : Form
     {
+        int offset_Max = 255;
+        int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
         int mtest_start_pos = 0;
         int motiontest_state;
@@ -145,6 +147,12 @@ namespace _86ME_ver1._0
                             ftext[i].Text = f.frame[i].ToString();
                             if (int.Parse(ftext[i].Text) <= Max[i] && int.Parse(ftext[i].Text) >= min[i])
                                 fbar[i].Value = int.Parse(ftext[i].Text);
+                            else if(String.Compare( ftext[i].Text, "0") == 0 )
+                            {
+                                ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] = (int)homeframe[i];
+                                ftext[i].Text = homeframe[i].ToString();
+                                fbar[i].Value = (int)homeframe[i];
+                            }
                         }
                     }
                     else
@@ -197,8 +205,13 @@ namespace _86ME_ver1._0
         public void loops_TextChanged(object sender, EventArgs e)
         {
             ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops = ((MaskedTextBox)sender).Text;
-            if(String.Compare(((MaskedTextBox)sender).Text, "") == 0)
+            if (String.Compare(((MaskedTextBox)sender).Text, "") == 0)
+            {
+                ((MaskedTextBox)sender).Text = "0";
                 ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops = "0";
+            }
+            else if (int.Parse(((MaskedTextBox)sender).Text) > 10000000)
+                ((MaskedTextBox)sender).Text = "10000000";
             int loop_num = int.Parse(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops);
             ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).current_loop = loop_num;
         }
@@ -207,7 +220,11 @@ namespace _86ME_ver1._0
         {
             int n;
 
-            if (int.Parse(((MaskedTextBox)sender).Text) <= Max[int.Parse(((MaskedTextBox)sender).Name)] && int.Parse(((MaskedTextBox)sender).Text) >= min[int.Parse(((MaskedTextBox)sender).Name)])
+            if ((((MaskedTextBox)sender).Text) == "")
+            {
+                (((MaskedTextBox)sender).Text) = "0";
+            }
+            else if (int.Parse(((MaskedTextBox)sender).Text) <= Max[int.Parse(((MaskedTextBox)sender).Name)] && int.Parse(((MaskedTextBox)sender).Text) >= min[int.Parse(((MaskedTextBox)sender).Name)])
             {
                 this.fbar[int.Parse(((MaskedTextBox)sender).Name)].Value = int.Parse(((MaskedTextBox)sender).Text);
                 if (autocheck.Checked == true)
@@ -235,11 +252,6 @@ namespace _86ME_ver1._0
                         }
                     }
                 }
-            }
-
-            else if((((MaskedTextBox)sender).Text) == "")
-            {
-                (((MaskedTextBox)sender).Text) = "0";
             }
 
             if (int.TryParse(((MaskedTextBox)sender).Text,out n))
@@ -276,6 +288,8 @@ namespace _86ME_ver1._0
                 }
             }
             NewMotion nMotion = new NewMotion();
+            if (string.Compare(com_port, "OFF") != 0)
+                nMotion.arduino = arduino;
             nMotion.ShowDialog();
             if (nMotion.DialogResult == DialogResult.OK)
             {
@@ -320,41 +334,6 @@ namespace _86ME_ver1._0
                     }
                 }
 
-                if (arduino == null && (string.Compare(com_port, "OFF") != 0))
-                {
-                    if (!have_86())
-                    {
-                        ;
-                    }
-                    else
-                    {
-                        if (string.Compare(com_port, "AUTO") == 0)
-                        {
-                            try
-                            {
-                                arduino = new Arduino();
-                            }
-                            catch
-                            {
-                                com_port = "OFF";
-                                MessageBox.Show("Cannot open 86Duino, entering offline mode");
-                            }
-                        }
-                        else
-                        {
-                            try
-                            {
-                                arduino = new Arduino(com_port);
-                            }
-                            catch
-                            {
-                                com_port = "OFF";
-                                MessageBox.Show("Cannot open 86Duino, entering offline mode");
-                            }
-                        }
-                    }
-                }
-
                 if(pictureBox1.Image != null)
                     pictureBox1.Image = null;
                 if (nMotion.picfilename != null)
@@ -366,46 +345,55 @@ namespace _86ME_ver1._0
                 this.richTextBox1.Text = "\t\t\t\t    2.Press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
             }
         }
-        private void optionToolStripMenuItem_Click(object sender, EventArgs e)  //option
+
+        public void connect_comport()
         {
-            autocheck.Checked = false;
-            Motion.ShowDialog();
-            if (Motion.DialogResult == DialogResult.OK)
+            if (arduino == null && (string.Compare(com_port, "OFF") != 0))
             {
-                if (arduino == null && (string.Compare(com_port, "OFF") != 0))
+                if (!have_86())
                 {
-                    if (!have_86())
+                    ;
+                }
+                else
+                {
+                    if (string.Compare(com_port, "AUTO") == 0)
                     {
-                        ;
+                        try
+                        {
+                            arduino = new Arduino();
+                        }
+                        catch
+                        {
+                            com_port = "OFF";
+                            MessageBox.Show("Cannot open 86Duino, entering offline mode");
+                        }
                     }
                     else
                     {
-                        if (string.Compare(com_port, "AUTO") == 0)
+                        try
                         {
-                            try
-                            {
-                                arduino = new Arduino();
-                            }
-                            catch
-                            {
-                                com_port = "OFF";
-                                MessageBox.Show("Cannot open 86Duino, entering offline mode");
-                            }
+                            arduino = new Arduino(com_port);
                         }
-                        else
+                        catch
                         {
-                            try
-                            {
-                                arduino = new Arduino(com_port);
-                            }
-                            catch
-                            {
-                                com_port = "OFF";
-                                MessageBox.Show("Cannot open 86Duino, entering offline mode");
-                            }
+                            com_port = "OFF";
+                            MessageBox.Show("Cannot open 86Duino, entering offline mode");
                         }
                     }
                 }
+            }
+        }
+
+        private void optionToolStripMenuItem_Click(object sender, EventArgs e)  //option
+        {
+            for (int i = 0; i < 45; i++)
+                Motion.fcheck[i].Checked = false;
+            autocheck.Checked = false;
+            if (string.Compare(com_port, "OFF") != 0)
+                Motion.arduino = arduino;
+            Motion.ShowDialog();
+            if (Motion.DialogResult == DialogResult.OK)
+            {
                 if (Motion.picfilename != null)
                 {
                     picture_name = Motion.picfilename;
@@ -433,9 +421,19 @@ namespace _86ME_ver1._0
                     min[i] = uint.Parse(Motion.ftext3[i].Text);
                     Max[i] = uint.Parse(Motion.ftext4[i].Text);
                     motor_info[i] = Motion.fbox[i].SelectedIndex;
+                    if (homeframe[i] > Max[i] || homeframe[i] < min[i])
+                    {
+                        homeframe[i] = 1500;
+                        Motion.ftext2[i].Text = "1500";
+                    }
                     try
                     {
                         offset[i] = int.Parse(Motion.ftext[i].Text);
+                        if (offset[i] > offset_Max || offset[i] < offset_min)
+                        {
+                            offset[i] = 0;
+                            Motion.ftext[i].Text = "0";
+                        }
                     }
                     catch
                     {
@@ -532,7 +530,8 @@ namespace _86ME_ver1._0
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
                     writer.Write("Motion " + m.name + "\n");
-                    for (int j = 0; j < m.Events.Count; j++) {
+                    for (int j = 0; j < m.Events.Count; j++)
+                    {
                         if (m.Events[j] is ME_Frame) 
                         {
                             ME_Frame f=(ME_Frame)m.Events[j];
@@ -938,42 +937,7 @@ namespace _86ME_ver1._0
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 MotionCombo.Items.Add(m.name);
             }
-
             this.richTextBox1.Text = "\n\n\n\t\t         Choose or New a Motion Name --->";
-            if (arduino == null && (string.Compare(com_port, "OFF") != 0))
-            {
-                if (!have_86())
-                {
-                    ;
-                }
-                else
-                {
-                    if (string.Compare(com_port, "AUTO") == 0)
-                    {
-                        try
-                        {
-                            arduino = new Arduino();
-                        }
-                        catch
-                        {
-                            com_port = "OFF";
-                            MessageBox.Show("Cannot open 86Duino, entering offline mode");
-                        }
-                    }
-                    else
-                    {
-                        try
-                        {
-                            arduino = new Arduino(com_port);
-                        }
-                        catch
-                        {
-                            com_port = "OFF";
-                            MessageBox.Show("Cannot open 86Duino, entering offline mode");
-                        }
-                    }
-                }
-            }
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1181,11 +1145,20 @@ namespace _86ME_ver1._0
                     }
                     freshflag = false;
                     for (int i = 0; i < 45; i++)
+                    {
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && fpanel[i] != null)
                         {
                             freshflag = true;
-                            ftext[i].Text = ((uint)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i]).ToString();// + offset[i]).ToString();
+                            uint frame_value = ((uint)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i]);
+                            if(frame_value <= Max[i] && frame_value >= min[i])
+                                ftext[i].Text = frame_value.ToString();
+                            else
+                            {
+                                ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] = (int)homeframe[i];
+                                ftext[i].Text = homeframe[i].ToString();
+                            }
                         }
+                    }
                     if (!freshflag)
                         Update_framelist();
                     freshflag = false;
@@ -1469,6 +1442,8 @@ namespace _86ME_ver1._0
                 if (arduino != null)
                     arduino.Close();
             }
+            if (arduino != null)
+                arduino.Close();
         }        
         private void capturebutton_Click(object sender, EventArgs e)
         {
