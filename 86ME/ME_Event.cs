@@ -9,10 +9,12 @@ namespace _86ME_ver1._0
         public int[] frame;
         public int delay;
         public int num;
+        public byte type;
         public ME_Frame()
         {
             this.frame = new int[45];
-            this.delay = 0;
+            this.delay = 1000;
+            this.type = 1;
         }
     }
     public class ME_Delay 
@@ -55,16 +57,6 @@ namespace _86ME_ver1._0
         public ME_Flag()
         {
             this.name = null;
-        }
-    }
-    public class ME_COM
-    {
-        public int port;
-        public string com;
-        public ME_COM()
-        {
-            this.port = 0;
-            com = null;
         }
     }
 }

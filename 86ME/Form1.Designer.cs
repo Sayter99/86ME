@@ -298,7 +298,8 @@
             "Frame",
             "Delay",
             "Goto",
-            "Flag"});
+            "Flag",
+            "HomeFrame"});
             this.typecombo.Location = new System.Drawing.Point(84, 10);
             this.typecombo.Name = "typecombo";
             this.typecombo.Size = new System.Drawing.Size(91, 20);

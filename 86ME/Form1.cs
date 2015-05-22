@@ -154,10 +154,13 @@ namespace _86ME_ver1._0
                                 fbar[i].Value = (int)homeframe[i];
                             }
                         }
-                    }
-                    else
-                    {
-                        ftext[i].Text = "1500";
+                        else if (String.Compare(datas[0], "[Home]") == 0)
+                        {
+                            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
+                            ME_Frame f = (ME_Frame)m.Events[Motionlist.SelectedIndex];
+                            ftext[i].Text = homeframe[i].ToString();
+                            fbar[i].Value = (int)homeframe[i];
+                        }
                     }
 
                     ftext[i].TextChanged += new EventHandler(Text_Changed);
@@ -444,6 +447,7 @@ namespace _86ME_ver1._0
                     }
                 }
                 Update_framelist();
+                update_motionlist();
                 draw_background();
                 board_ver86 = Motion.comboBox1.SelectedIndex;
             }
@@ -461,7 +465,7 @@ namespace _86ME_ver1._0
                 }
             }
         }
-        private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)    //save file
+        private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)    //save project
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "rbm files (*.rbm)|*.rbm";
@@ -532,10 +536,13 @@ namespace _86ME_ver1._0
                     writer.Write("Motion " + m.name + "\n");
                     for (int j = 0; j < m.Events.Count; j++)
                     {
-                        if (m.Events[j] is ME_Frame) 
+                        if (m.Events[j] is ME_Frame)
                         {
                             ME_Frame f=(ME_Frame)m.Events[j];
-                            writer.Write("frame " + f.delay.ToString() + " ");
+                            if(f.type == 1)
+                                writer.Write("frame " + f.delay.ToString() + " ");
+                            else if(f.type == 0)
+                                writer.Write("home " + f.delay.ToString() + " ");
                             int count = 0;
                             for(int k = 0; k < 45; k++)
                                 if (String.Compare(Motion.fbox[k].Text,"---noServo---") != 0) {
@@ -820,8 +827,46 @@ namespace _86ME_ver1._0
                     }
                     else if (String.Compare(datas[i], "frame") == 0)
                     {
-
                         ME_Frame nframe = new ME_Frame();
+                        nframe.type = 1;
+                        i++;
+                        try
+                        {
+                            nframe.delay = int.Parse(datas[i]);
+                        }
+                        catch
+                        {
+                            nframe.delay = default_delay;
+                            MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                        }
+                        int j = 0;
+                        while (j < 45)
+                        {
+                            if (String.Compare(nMotion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
+                            {
+                                i++;
+                                try
+                                {
+                                    nframe.frame[j] = int.Parse(datas[i]);
+                                }
+                                catch
+                                {
+                                    nframe.frame[j] = 0;
+                                    MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                                }
+                            }
+                            else
+                            {
+                                nframe.frame[j] = 0;
+                            }
+                            j++;
+                        }
+                        motiontag.Events.Add(nframe);
+                    }
+                    else if (String.Compare(datas[i], "home") == 0)
+                    {
+                        ME_Frame nframe = new ME_Frame();
+                        nframe.type = 0;
                         i++;
                         try
                         {
@@ -975,6 +1020,31 @@ namespace _86ME_ver1._0
                     this.richTextBox1.Text = "Tune the settings of motors\n↓\n↓\n↓\n↓\n↓";
                 else
                     this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓\n↓\n↓";
+            }
+            else if (String.Compare(typecombo.Text, "HomeFrame") == 0)
+            {
+                if (new_obj)
+                {
+                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home]");
+                    ME_Frame h = new ME_Frame();
+                    h.type = 0;
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, h);
+
+                    for (int i = 0; i < 45; i++)
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                            ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame[i] = (int)homeframe[i];
+                    ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
+                    Motionlist.SelectedIndex++;
+                }
+                delaytext.Enabled = true;
+                label2.Enabled = true;
+                capturebutton.Enabled = true;
+                autocheck.Enabled = true;
+                typecombo.Enabled = false;
+                Update_framelist();
+                Framelist.Enabled = false;
+                new_obj = false;
+                this.richTextBox1.Text = "Homeframe just can be modified by\nOptions -> Robot Configuration";
             }
             else if (String.Compare(typecombo.Text, "Delay") == 0)
             {
@@ -1165,6 +1235,58 @@ namespace _86ME_ver1._0
                     Framelist.Enabled = true;
                     draw_background();
                 }
+                else if (String.Compare(datas[0], "[Home]") == 0)
+                {
+                    this.label2.Text = "Play Time:";
+                    typecombo.SelectedIndex = 4;
+                    typecombo.Text = "HomeFrame";
+                    delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
+                    if (autocheck.Checked == true)
+                    {
+                        for (int i = 0; i < 45; i++)
+                        {
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                            {
+                                autoframe[i] = (int)homeframe[i] + offset[i];
+                            }
+                        }
+                        autocheck.Enabled = false;
+                        if (string.Compare(com_port, "OFF") != 0)
+                        {
+                            try
+                            {
+                                arduino.frameWrite(0x6F, autoframe, (int)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay);
+                            }
+                            catch
+                            {
+                                com_port = "OFF";
+                                MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                            }
+                        }
+                        autocheck.Enabled = true;
+                    }
+                    freshflag = false;
+                    for (int i = 0; i < 45; i++)
+                    {
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && fpanel[i] != null)
+                        {
+                            freshflag = true;
+                            uint frame_value = homeframe[i];
+                            if (frame_value <= Max[i] && frame_value >= min[i])
+                                ftext[i].Text = frame_value.ToString();
+                            else
+                            {
+                                ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] = (int)homeframe[i];
+                                ftext[i].Text = homeframe[i].ToString();
+                            }
+                        }
+                    }
+                    if (!freshflag)
+                        Update_framelist();
+                    freshflag = false;
+                    Framelist.Enabled = false;
+                    draw_background();
+                }
                 else if (String.Compare(datas[0], "[Delay]") == 0)
                 {
                     this.label2.Text = "Delay:";
@@ -1182,7 +1304,6 @@ namespace _86ME_ver1._0
                 }
                 else if (String.Compare(datas[0], "[Flag]") == 0)
                 {
-                    //typecombo.SelectedIndex = 4;
                     typecombo.SelectedIndex = 3;
                     this.label2.Text = "Delay:";
                     typecombo.Text = "Flag";
@@ -1206,7 +1327,6 @@ namespace _86ME_ver1._0
                 }
                 else if (String.Compare(datas[0], "[Goto]") == 0)
                 {
-                    //typecombo.SelectedIndex = 3;
                     typecombo.SelectedIndex = 2;
                     this.label2.Text = "Delay:";
                     typecombo.Text = "Goto";
@@ -2122,8 +2242,22 @@ namespace _86ME_ver1._0
                     {
                         if (m.Events[j] is ME_Frame)
                         {
-                            Motionlist.Items.Add("[Frame] " + ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name + "-" + framecount);
-                            framecount++;
+                            if (((ME_Frame)m.Events[j]).type == 1)
+                            {
+                                Motionlist.Items.Add("[Frame] " + ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name + "-" + framecount);
+                                framecount++;
+                            }
+                            else if (((ME_Frame)m.Events[j]).type == 0)
+                            {
+                                Motionlist.Items.Add("[Home]");
+                                for (int k = 0; k < 45; k++)
+                                {
+                                    if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                                    {
+                                        ((ME_Frame)m.Events[j]).frame[k] = (int)homeframe[k];
+                                    }
+                                }
+                            }
                         }
                         else if (m.Events[j] is ME_Delay)
                         {
