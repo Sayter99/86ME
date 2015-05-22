@@ -45,6 +45,7 @@ namespace _86ME_ver1._0
         NewMotion Motion;
         public ArrayList ME_Motionlist;
         int framecount = 0;
+        int homecount = 0;
         Boolean new_obj = false;
         String nfilename = "";
         string picture_name;
@@ -1026,7 +1027,7 @@ namespace _86ME_ver1._0
             {
                 if (new_obj)
                 {
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home]");
+                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home] " + homecount++.ToString());
                     ME_Frame h = new ME_Frame();
                     h.type = 0;
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, h);
@@ -1450,9 +1451,9 @@ namespace _86ME_ver1._0
                             ME_Frame h = new ME_Frame();
                             h.type = 0;
                             for (int j = 0; j < 45; j++)
-                                h.frame[i] = (int)homeframe[i];
+                                h.frame[j] = (int)homeframe[j];
                             h.delay = default_delay;
-                            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home]");
+                            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home] " + homecount++);
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, h);
                             Motionlist.SelectedIndex++;
                             break;
@@ -1502,7 +1503,7 @@ namespace _86ME_ver1._0
                             }
                             else if (f.type == 0)
                             {
-                                Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home]");
+                                Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home] " + homecount++.ToString());
                                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
                                 ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).type = 0;
                                 Array.Copy(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame, ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame, 45);
@@ -2258,6 +2259,7 @@ namespace _86ME_ver1._0
             groupBox1.Enabled = false;
             Motionlist.Items.Clear();
             framecount = 0;
+            homecount = 0;
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -2274,7 +2276,8 @@ namespace _86ME_ver1._0
                             }
                             else if (((ME_Frame)m.Events[j]).type == 0)
                             {
-                                Motionlist.Items.Add("[Home]");
+                                Motionlist.Items.Add("[Home] " + homecount);
+                                homecount++;
                                 for (int k = 0; k < 45; k++)
                                 {
                                     if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
