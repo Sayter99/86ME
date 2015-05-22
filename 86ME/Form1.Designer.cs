@@ -479,7 +479,7 @@
             this.Generate.Name = "Generate";
             this.Generate.Size = new System.Drawing.Size(267, 23);
             this.Generate.TabIndex = 4;
-            this.Generate.Text = "Generate Program for 86Duino";
+            this.Generate.Text = "Generate 86Duino Sketch (with Frame Files)";
             this.Generate.UseVisualStyleBackColor = true;
             this.Generate.Click += new System.EventHandler(this.Generate_Click);
             // 
@@ -494,7 +494,7 @@
             this.GenerateAllInOne.Name = "GenerateAllInOne";
             this.GenerateAllInOne.Size = new System.Drawing.Size(267, 23);
             this.GenerateAllInOne.TabIndex = 5;
-            this.GenerateAllInOne.Text = "Generate All In One Program for 86Duino";
+            this.GenerateAllInOne.Text = "Generate 86Duino Sketch (All in One)";
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
             // 
