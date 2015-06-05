@@ -451,10 +451,10 @@
             // 
             // Motionlist
             // 
-            this.Motionlist.Font = new System.Drawing.Font("PMingLiU", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.Motionlist.Font = new System.Drawing.Font( this.textBox1.Font.Name, 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Motionlist.FormattingEnabled = true;
             this.Motionlist.IntegralHeight = false;
-            this.Motionlist.ItemHeight = 24;
+            this.Motionlist.ItemHeight = 22;
             this.Motionlist.Location = new System.Drawing.Point(7, 113);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
@@ -502,6 +502,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            //this.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1024, 698);
             this.Controls.Add(this.GenerateAllInOne);

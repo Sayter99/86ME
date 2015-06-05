@@ -46,7 +46,7 @@
             // 
             // ComboBox0
             // 
-            this.ComboBox0.Font = new System.Drawing.Font("PMingLiU", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.ComboBox0.Font = new System.Drawing.Font( this.textBox1.Font.Name, 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.ComboBox0.FormattingEnabled = true;
             this.ComboBox0.Items.AddRange(new object[] {
             "--auto--",
