@@ -1583,14 +1583,13 @@ namespace _86ME_ver1._0
                     e.Cancel = true;
                 }
             }
-            if (Motion != null && close)
+            if (close)
             {
                 if (arduino != null)
                     arduino.Close();
             }
-            if (arduino != null)
-                arduino.Close();
-        }        
+        }
+
         private void capturebutton_Click(object sender, EventArgs e)
         {
             if (string.Compare(com_port, "OFF") != 0)
@@ -1686,6 +1685,7 @@ namespace _86ME_ver1._0
                     motion_stop.Enabled = true;
                     Framelist.Enabled = false;
                     Motionlist.Enabled = false;
+                    MotionCombo.Enabled = false;
                     if (sp != null)
                         sp.Stop();
                     this.richTextBox1.Text =
@@ -1753,6 +1753,7 @@ namespace _86ME_ver1._0
             motion_stop.Enabled = false;
             Framelist.Enabled = false;
             Motionlist.Enabled = true;
+            MotionCombo.Enabled = true;
             for (int j = 0; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
             {
                 if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
@@ -1803,6 +1804,7 @@ namespace _86ME_ver1._0
                 motion_stop.Enabled = false;
                 Framelist.Enabled = false;
                 Motionlist.Enabled = true;
+                MotionCombo.Enabled = true;
                 this.richTextBox1.Text =
                         "   ___   __   ____        _\n" +
                         "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
