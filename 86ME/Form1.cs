@@ -1956,8 +1956,9 @@ namespace _86ME_ver1._0
                                 {
                                     i = k;
                                     goto_flag = true;
-                                    writer.Write(space + "for(int " + g.name + flag_count.ToString() +
-                                                 " = 0;" + " i < " + g.loops + "; i++)\n" + space + "{\n");
+                                    string for_var = g.name + "_" + flag_count.ToString();
+                                    writer.Write(space + "for(int " + for_var + " = 0; " + for_var +
+                                                 " < " + g.loops + "; " + for_var + "++)\n" + space + "{\n");
                                     space_num += 2;
                                     space = set_space(space_num);
                                     flag_count++;
@@ -2201,8 +2202,9 @@ namespace _86ME_ver1._0
                                     {
                                         i = k;
                                         goto_flag = true;
-                                        writer.Write(space + "for(int " + g.name + flag_count.ToString() +
-                                                     " = 0;" + " i < " + g.loops + "; i++)\n" + space + "{\n");
+                                        string for_var = g.name + "_" + flag_count.ToString();
+                                        writer.Write(space + "for(int " + for_var + " = 0; " + for_var + 
+                                                     " < " + g.loops + "; " + for_var + "++)\n" + space + "{\n");
                                         space_num += 2;
                                         space = set_space(space_num);
                                         flag_count++;
