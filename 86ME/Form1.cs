@@ -946,6 +946,7 @@ namespace _86ME_ver1._0
                             ngoto.is_goto = false;
                         i++;
                         ngoto.loops = datas[i];
+                        ngoto.current_loop = int.Parse(ngoto.loops);
                         motiontag.Events.Add(ngoto);
                     }
                 }

@@ -1,10 +1,11 @@
-### 86ME_v1.1 - 2015.. ###
+### 86ME_v1.1 - 2015.06.08 ###
 
-* Refine UIs of "Robot Configuration", "Motion List".
-* Replace the MotionTest button to Play, Pause, Stop buttons.
-* Generate loop functions while generating 86Duino programs if there are loops in the motionlist.
+* Refine UIs of "Robot Configuration", "Motion List", "Motion Test".
+* Replace the button "MotionTest" to Play, Pause, Stop buttons.
+* Generate loop functions while generating 86Duino programs if there are flag-goto objects in the motionlist.
 * Add a new action type "HomeFrame".
-* Update information of about.
+* Update information of Help->About.
+* Update the tutorial of 86ME(http://www.86duino.com/index.php?p=11544&lang=TW).
 
 ### 86ME_v1.0 - 2015.05.18 ###
 
