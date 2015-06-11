@@ -234,15 +234,15 @@ namespace _86ME_ver1._0
                 this.fbar[int.Parse(((MaskedTextBox)sender).Name)].Value = int.Parse(((MaskedTextBox)sender).Text);
                 if (autocheck.Checked == true)
                 {
-                    for (int i = 0; i < 45; i++)
-                    {
-                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                        {
-                            autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                        }
-                    }
                     if (!freshflag)
                     {
+                        for (int i = 0; i < 45; i++)
+                        {
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                            {
+                                autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
+                            }
+                        }
                         if (string.Compare(com_port, "OFF") != 0)
                         {
                             try
