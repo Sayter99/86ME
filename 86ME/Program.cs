@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Threading;
 
-namespace _86ME_ver1._0
+namespace _86ME_ver1
 {
     static class Program
     {

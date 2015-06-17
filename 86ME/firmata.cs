@@ -38,7 +38,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Windows.Forms;
 
-namespace _86ME_ver1._0
+namespace _86ME_ver1
 {
     /*
      * Together with the Firmata 2 firmware (an Arduino sketch uploaded to the

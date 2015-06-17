@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 
-namespace _86ME_ver1._0
+namespace _86ME_ver1
 {
     public partial class NewMotion : Form
     {
@@ -192,7 +192,7 @@ namespace _86ME_ver1._0
                 fcheck[i].Top += 24;
                 fcheck[i].Left += 120;
                 fcheck[i].Size = new Size(80, 22);
-                fcheck[i].Text = "Auto Check";
+                fcheck[i].Text = "Sync";
                 fcheck[i].Name = i.ToString();
                 fcheck[i].Checked = false;
                 fcheck[i].Enabled = false;

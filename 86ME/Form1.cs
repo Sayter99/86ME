@@ -24,7 +24,7 @@ using System.Threading;
 using System.Media;
 using System.Management;
 
-namespace _86ME_ver1._0
+namespace _86ME_ver1
 {
     public partial class Form1 : Form
     {
@@ -1564,6 +1564,7 @@ namespace _86ME_ver1._0
                 move_up.Enabled = false;
                 move_down.Enabled = false;
                 this.richTextBox1.Text = "\n\n\n\n\n\nRight click in the white region and add an action --->";
+                Motionlist.Focus();
             }
             else
                 MessageBox.Show("Motion name should without space.");

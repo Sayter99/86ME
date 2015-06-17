@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-namespace _86ME_ver1._0
+namespace _86ME_ver1
 {
     public partial class about : Form
     {

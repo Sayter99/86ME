@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO.Ports;
 
-namespace _86ME_ver1._0
+namespace _86ME_ver1
 {
     public partial class SetForm : Form
     {
