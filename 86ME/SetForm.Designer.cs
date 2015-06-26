@@ -82,8 +82,8 @@
             this.MaximumSize = new System.Drawing.Size(275, 135);
             this.MinimumSize = new System.Drawing.Size(275, 135);
             this.Name = "SetForm";
-            this.ShowIcon = false;
-            this.ShowInTaskbar = false;
+            this.ShowIcon = true;
+            this.ShowInTaskbar = true;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "86ME";
             this.Load += new System.EventHandler(this.SetForm_Load);

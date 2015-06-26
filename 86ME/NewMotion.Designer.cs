@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.comboBox1 = new System.Windows.Forms.ComboBox();
@@ -37,6 +38,8 @@
             this.button3 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
+            this.ttp = new System.Windows.Forms.ToolTip(this.components);
+            this.pic_loaded = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // button1
@@ -95,16 +98,18 @@
             this.checkBox2.Size = new System.Drawing.Size(81, 16);
             this.checkBox2.TabIndex = 9;
             this.checkBox2.Text = "min      Max";
+            this.ttp.SetToolTip(this.checkBox2, "Enable or disable to modify ranges of motors.");
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(81, 514);
+            this.button3.Location = new System.Drawing.Point(64, 514);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(125, 23);
             this.button3.TabIndex = 10;
             this.button3.Text = "Load Robot Picture";
+            this.ttp.SetToolTip(this.button3, "Load a picture for mapping motors while editing frames.");
             this.button3.UseVisualStyleBackColor = true;
             this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
@@ -126,11 +131,30 @@
             this.label3.TabIndex = 12;
             this.label3.Text = "homeframe";
             // 
+            // ttp
+            // 
+            this.ttp.AutoPopDelay = 10000;
+            this.ttp.InitialDelay = 300;
+            this.ttp.ReshowDelay = 300;
+            this.ttp.ShowAlways = true;
+            this.ttp.UseFading = false;
+            // 
+            // pic_loaded
+            // 
+            this.pic_loaded.AutoSize = true;
+            this.pic_loaded.Location = new System.Drawing.Point(195, 519);
+            this.pic_loaded.Name = "pic_loaded";
+            this.pic_loaded.Size = new System.Drawing.Size(84, 12);
+            this.pic_loaded.TabIndex = 13;
+            this.pic_loaded.Text = "";
+            this.Visible = false;
+            // 
             // NewMotion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(564, 542);
+            this.Controls.Add(this.pic_loaded);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button3);
@@ -164,5 +188,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.ToolTip ttp;
+        private System.Windows.Forms.Label pic_loaded;
     }
 }

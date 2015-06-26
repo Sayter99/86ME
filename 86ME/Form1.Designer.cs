@@ -71,6 +71,10 @@
             this.Generate = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.GenerateAllInOne = new System.Windows.Forms.Button();
+            this.sync_speed = new System.Windows.Forms.TrackBar();
+            this.slow = new System.Windows.Forms.Label();
+            this.fast = new System.Windows.Forms.Label();
+            this.ttp = new System.Windows.Forms.ToolTip();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -79,6 +83,7 @@
             this.Framelist.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.groupBox3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -217,6 +222,9 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.fast);
+            this.panel1.Controls.Add(this.slow);
+            this.panel1.Controls.Add(this.sync_speed);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.motorRelease);
             this.panel1.Controls.Add(this.autocheck);
@@ -241,7 +249,7 @@
             // 
             // motorRelease
             // 
-            this.motorRelease.Location = new System.Drawing.Point(99, 76);
+            this.motorRelease.Location = new System.Drawing.Point(224, 66);
             this.motorRelease.Name = "motorRelease";
             this.motorRelease.Size = new System.Drawing.Size(76, 23);
             this.motorRelease.TabIndex = 10;
@@ -254,17 +262,17 @@
             this.autocheck.AutoSize = true;
             this.autocheck.Location = new System.Drawing.Point(16, 80);
             this.autocheck.Name = "autocheck";
-            this.autocheck.Size = new System.Drawing.Size(70, 16);
+            this.autocheck.Size = new System.Drawing.Size(47, 16);
             this.autocheck.TabIndex = 9;
-            this.autocheck.Text = "Auto Play";
+            this.autocheck.Text = "Sync";
             this.autocheck.UseVisualStyleBackColor = true;
             this.autocheck.CheckedChanged += new System.EventHandler(this.autocheck_CheckedChanged);
             // 
             // capturebutton
             // 
-            this.capturebutton.Location = new System.Drawing.Point(192, 76);
+            this.capturebutton.Location = new System.Drawing.Point(224, 92);
             this.capturebutton.Name = "capturebutton";
-            this.capturebutton.Size = new System.Drawing.Size(75, 23);
+            this.capturebutton.Size = new System.Drawing.Size(76, 23);
             this.capturebutton.TabIndex = 7;
             this.capturebutton.Text = "Capture";
             this.capturebutton.UseMnemonic = false;
@@ -451,10 +459,10 @@
             // 
             // Motionlist
             // 
-            this.Motionlist.Font = new System.Drawing.Font( this.textBox1.Font.Name, 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Motionlist.Font = new System.Drawing.Font("PMingLiU", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Motionlist.FormattingEnabled = true;
             this.Motionlist.IntegralHeight = false;
-            this.Motionlist.ItemHeight = 22;
+            this.Motionlist.ItemHeight = 19;
             this.Motionlist.Location = new System.Drawing.Point(7, 113);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
@@ -498,11 +506,61 @@
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
             // 
+            // sync_speed
+            // 
+            this.sync_speed.LargeChange = 1;
+            this.sync_speed.Location = new System.Drawing.Point(77, 70);
+            this.sync_speed.Maximum = 5;
+            this.sync_speed.Minimum = 1;
+            this.sync_speed.Name = "sync_speed";
+            this.sync_speed.Size = new System.Drawing.Size(104, 45);
+            this.sync_speed.TabIndex = 12;
+            this.sync_speed.Value = 3;
+            this.sync_speed.ValueChanged += new System.EventHandler(this.SyncSpeed);
+            // 
+            // slow
+            // 
+            this.slow.AutoSize = true;
+            this.slow.Location = new System.Drawing.Point(81, 103);
+            this.slow.Name = "slow";
+            this.slow.Size = new System.Drawing.Size(26, 12);
+            this.slow.TabIndex = 13;
+            this.slow.Text = "slow";
+            // 
+            // fast
+            // 
+            this.fast.AutoSize = true;
+            this.fast.Location = new System.Drawing.Point(158, 103);
+            this.fast.Name = "fast";
+            this.fast.Size = new System.Drawing.Size(21, 12);
+            this.fast.TabIndex = 14;
+            this.fast.Text = "fast";
+            //
+            // ttp
+            //
+            this.ttp.InitialDelay = 300;
+            this.ttp.AutoPopDelay = 10000;
+            this.ttp.ReshowDelay = 300;
+            this.ttp.UseFading = false;
+            this.ttp.ShowAlways = true;
+            this.ttp.IsBalloon = false;
+            this.ttp.SetToolTip(this.autocheck, "Synchronize the current frame to motors.");
+            this.ttp.SetToolTip(this.sync_speed, "Set the speed of sychronizing motors.\nThe motors will act faster when the setting is closer to fast, and vice versa.");
+            this.ttp.SetToolTip(this.motorRelease, "Caution! It will release all motors.");
+            this.ttp.SetToolTip(this.capturebutton, "Caution! It will release all motors first and get the positions of motors to current frame.\nThis function only support Kondo, Hitec, Futaba motors.");
+            this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
+            this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
+            this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
+            this.ttp.SetToolTip(this.MotionTest, "Play the current motion list from the first item to the end.");
+            this.ttp.SetToolTip(this.motion_pause, "Pause the process of playing frames,\nthe paused process can be continue by clicking \"Play\" again.");
+            this.ttp.SetToolTip(this.motion_stop, "Stop the process of playing frames.\nThis operation cannot be recovered, so the next play will start from the first item.");
+            this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will be stored in files out of the sketch.");
+            this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in the generated sketch.");
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            //this.Font = new System.Drawing.Font("Arial", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1024, 698);
             this.Controls.Add(this.GenerateAllInOne);
@@ -530,6 +588,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -578,6 +637,10 @@
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Button motion_stop;
         private System.Windows.Forms.Button motion_pause;
+        private System.Windows.Forms.TrackBar sync_speed;
+        private System.Windows.Forms.Label fast;
+        private System.Windows.Forms.Label slow;
+        private System.Windows.Forms.ToolTip ttp;
     }
 }
 

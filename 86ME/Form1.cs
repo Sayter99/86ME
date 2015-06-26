@@ -202,9 +202,16 @@ namespace _86ME_ver1
             }
         }
 
-        public void scroll_event(object sender, ScrollEventArgs e){   //Scroll event
+        public void scroll_event(object sender, ScrollEventArgs e) //Scroll event
+        {
              //if (e.Type == ScrollEventType.EndScroll)
                 this.ftext[int.Parse(((HScrollBar)sender).Name)].Text = ((HScrollBar)sender).Value.ToString();            
+        }
+
+        public void SyncSpeed(object sender, EventArgs e)
+        {
+            if (string.Compare(com_port, "OFF") != 0)
+                arduino.setSyncSpeed( sync_speed.Value );
         }
 
         public void loops_TextChanged(object sender, EventArgs e)
@@ -366,11 +373,13 @@ namespace _86ME_ver1
                         try
                         {
                             arduino = new Arduino();
+                            arduino.setSyncSpeed(3);
                         }
                         catch
                         {
                             com_port = "OFF";
-                            MessageBox.Show("Cannot open 86Duino, entering offline mode");
+                            MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
+                                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
                     else
@@ -378,11 +387,13 @@ namespace _86ME_ver1
                         try
                         {
                             arduino = new Arduino(com_port);
+                            arduino.setSyncSpeed(3);
                         }
                         catch
                         {
                             com_port = "OFF";
-                            MessageBox.Show("Cannot open 86Duino, entering offline mode");
+                            MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
+                                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
                         }
                     }
                 }
@@ -2054,7 +2065,8 @@ namespace _86ME_ver1
                 }
             }
             com_port = "OFF";
-            MessageBox.Show("Cannot find 86Duino, entering offline mode");
+            MessageBox.Show("Cannot find 86Duino, entering offline mode", "",
+                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
 

@@ -317,6 +317,19 @@ namespace _86ME_ver1
             _serialPort.Write(message, 0, 95);
         }
 
+        public void setSyncSpeed(int speed)
+        {
+            byte[] message = new byte[7];
+            message[0] = 0xF0;
+            message[1] = 0x6F;
+            message[2] = 0x01;
+            message[3] = 0x00;
+            message[4] = (byte)(speed & 0x7F);
+            message[5] = (byte)(speed >> 7);
+            message[6] = 0xF7;
+            _serialPort.Write(message, 0, 7);
+        }
+
         public void frame_capture(int pin)
         {
             byte[] message = new byte[4];

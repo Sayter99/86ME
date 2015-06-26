@@ -32,6 +32,7 @@ namespace _86ME_ver1
         public int[] channelx = new int[45];
         public int[] channely = new int[45];
         public bool newflag = false;
+        string last_picfilename = null;
         public NewMotion()
         {
             InitializeComponent();
@@ -76,6 +77,7 @@ namespace _86ME_ver1
 
         private void button2_Click(object sender, EventArgs e)
         {
+            pic_loaded.Text = last_picfilename;
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -190,13 +192,14 @@ namespace _86ME_ver1
                 fbox[i].Left += 70;
 
                 fcheck[i].Top += 24;
-                fcheck[i].Left += 120;
-                fcheck[i].Size = new Size(80, 22);
+                fcheck[i].Left += 125;
+                fcheck[i].Size = new Size(75, 22);
                 fcheck[i].Text = "Sync";
                 fcheck[i].Name = i.ToString();
                 fcheck[i].Checked = false;
                 fcheck[i].Enabled = false;
                 fcheck[i].CheckedChanged += new EventHandler(autocheck_changed);
+                ttp.SetToolTip(fcheck[i], "Synchronize the choosed motor with following values.");
 
                 ftext[i].Name = i.ToString();
                 ftext[i].Text = offset[i].ToString();
@@ -307,6 +310,12 @@ namespace _86ME_ver1
             if (ofdPic.ShowDialog() == DialogResult.OK)
             {
                 picfilename = Path.GetFullPath(ofdPic.FileName);
+                last_picfilename = pic_loaded.Text;
+                string short_picfilename = Path.GetFileName(ofdPic.FileName);
+                if (short_picfilename.Length < 16)
+                    pic_loaded.Text = short_picfilename;
+                else
+                    pic_loaded.Text = short_picfilename.Substring(0, 13) + "...";
                 newflag = true;
             }
             else
