@@ -74,6 +74,7 @@ namespace _86ME_ver1
             groupBox1.Enabled = false;
             groupBox2.Enabled = false;
             groupBox3.Enabled = false;
+            groupBox4.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
         }
@@ -354,7 +355,7 @@ namespace _86ME_ver1
                     draw_background();
                 }
 
-                this.richTextBox1.Text = "\t\t\t\t    2.Press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
+                this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
             }
         }
 
@@ -996,7 +997,7 @@ namespace _86ME_ver1
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 MotionCombo.Items.Add(m.name);
             }
-            this.richTextBox1.Text = "\n\n\n\t\t         Choose or New a Motion Name --->";
+            this.richTextBox1.Text = "\t\t         Choose or New a Motion Name --->";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1031,9 +1032,9 @@ namespace _86ME_ver1
                 Update_framelist();
                 new_obj = false;
                 if(Motion.picfilename == null)
-                    this.richTextBox1.Text = "Tune the settings of motors\n↓\n↓\n↓\n↓\n↓\n↓";
+                    this.richTextBox1.Text = "Tune the settings of motors\n↓\n↓\n↓";
                 else
-                    this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓\n↓\n↓\n↓";
+                    this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "HomeFrame") == 0)
             {
@@ -1052,7 +1053,7 @@ namespace _86ME_ver1
                 }
                 delaytext.Enabled = true;
                 label2.Enabled = true;
-                capturebutton.Enabled = true;
+                capturebutton.Enabled = false;
                 autocheck.Enabled = true;
                 typecombo.Enabled = false;
                 Update_framelist();
@@ -1120,7 +1121,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set the name of the flag\n↓\n↓\n↓\n↓\n↓\n↓";
+                this.richTextBox1.Text = "Set the name of the flag\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Goto") == 0)
             {
@@ -1138,7 +1139,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set target Flag Name and hotkey of the Goto\n\n*HotKey must be set, or the Goto will be functionless*\n↓\n↓\n↓\n↓";
+                this.richTextBox1.Text = "Set target Flag Name and the number of loops\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1196,6 +1197,7 @@ namespace _86ME_ver1
                 move_down.Enabled = true;
                 current_motionlist_idx = Motionlist.SelectedIndex;
                 groupBox1.Enabled = true;
+                groupBox4.Enabled = true;
                 string[] datas = Motionlist.SelectedItem.ToString().Split(' ');
                 if (String.Compare(datas[0], "[Frame]") == 0)
                 {
@@ -1373,7 +1375,7 @@ namespace _86ME_ver1
                     xtext2.Size = new Size(160, 22);
                     xtext2.Left += 100;
                     xtext2.Top += 62;
-                    this.richTextBox1.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓\n↓\n↓\n↓";
+                    this.richTextBox1.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓";
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xlabel2);
@@ -1456,6 +1458,7 @@ namespace _86ME_ver1
                     {
                         case 0:
                             groupBox1.Enabled = true;
+                            groupBox4.Enabled = true;
                             typecombo.Text = "Select type";
                             this.richTextBox1.Text = "\n<--- Choose a type of action you want";
                             break;
@@ -1525,6 +1528,7 @@ namespace _86ME_ver1
                             break;
                         case 6:
                             groupBox1.Enabled = true;
+                            groupBox4.Enabled = true;
                             typecombo.Text = "Select type";
                             this.richTextBox1.Text = "\n<--- Choose a type of action you want";
                             break;
@@ -1558,7 +1562,8 @@ namespace _86ME_ver1
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
             groupBox1.Enabled = false;
-            this.richTextBox1.Text = "\t\t\t\t    2.Press Add Motion --->\n\n\n\t\t\t\t 1.Enter a Motion Name --->";
+            groupBox4.Enabled = false;
+            this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->"; ;
         }
         private void NewMotion_Click(object sender, EventArgs e)
         {
@@ -1574,7 +1579,7 @@ namespace _86ME_ver1
                 current_motionlist_idx = -1;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
-                this.richTextBox1.Text = "\n\n\n\n\n\nRight click in the white region and add an action --->";
+                this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
                 Motionlist.Focus();
             }
             else
@@ -2275,12 +2280,15 @@ namespace _86ME_ver1
                 autocheck.Checked = false;
             }
             groupBox1.Enabled = false;
+            groupBox4.Enabled = false;
             Motionlist.Items.Clear();
             framecount = 0;
             homecount = 0;
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (MotionCombo.SelectedItem == null)
+                    break;
                 if (String.Compare(MotionCombo.SelectedItem.ToString(), m.name.ToString()) == 0)
                 {
                     for (int j = 0; j < m.Events.Count; j++)

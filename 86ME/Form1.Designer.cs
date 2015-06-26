@@ -47,9 +47,6 @@
             this.richTextBox1 = new System.Windows.Forms.RichTextBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label3 = new System.Windows.Forms.Label();
-            this.motorRelease = new System.Windows.Forms.Button();
-            this.autocheck = new System.Windows.Forms.CheckBox();
-            this.capturebutton = new System.Windows.Forms.Button();
             this.delaytext = new System.Windows.Forms.MaskedTextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.typecombo = new System.Windows.Forms.ComboBox();
@@ -57,6 +54,12 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.Framelist = new System.Windows.Forms.Panel();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.fast = new System.Windows.Forms.Label();
+            this.slow = new System.Windows.Forms.Label();
+            this.sync_speed = new System.Windows.Forms.TrackBar();
+            this.motorRelease = new System.Windows.Forms.Button();
+            this.autocheck = new System.Windows.Forms.CheckBox();
+            this.capturebutton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.motion_stop = new System.Windows.Forms.Button();
             this.motion_pause = new System.Windows.Forms.Button();
@@ -71,10 +74,8 @@
             this.Generate = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.GenerateAllInOne = new System.Windows.Forms.Button();
-            this.sync_speed = new System.Windows.Forms.TrackBar();
-            this.slow = new System.Windows.Forms.Label();
-            this.fast = new System.Windows.Forms.Label();
-            this.ttp = new System.Windows.Forms.ToolTip();
+            this.ttp = new System.Windows.Forms.ToolTip(this.components);
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -82,8 +83,9 @@
             this.panel2.SuspendLayout();
             this.Framelist.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            this.groupBox3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).BeginInit();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -189,9 +191,9 @@
             this.groupBox1.Controls.Add(this.groupBox2);
             this.groupBox1.Controls.Add(this.panel1);
             this.groupBox1.Controls.Add(this.panel2);
-            this.groupBox1.Location = new System.Drawing.Point(13, 28);
+            this.groupBox1.Location = new System.Drawing.Point(13, 94);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(720, 663);
+            this.groupBox1.Size = new System.Drawing.Size(720, 594);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Action";
@@ -201,7 +203,7 @@
             this.groupBox2.Controls.Add(this.richTextBox1);
             this.groupBox2.Location = new System.Drawing.Point(321, 0);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(399, 144);
+            this.groupBox2.Size = new System.Drawing.Size(399, 106);
             this.groupBox2.TabIndex = 2;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Hint";
@@ -214,7 +216,7 @@
             this.richTextBox1.Location = new System.Drawing.Point(3, 18);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(393, 123);
+            this.richTextBox1.Size = new System.Drawing.Size(393, 85);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "   ___   __   ____        _\n  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n  / _ \\| \'_ \\|" +
     " | | | | | | | \'_ \\ / _ \\\n | (_) | (_) | |_| | |_| | | | | | (_) |\n  \\___/ \\___/" +
@@ -222,20 +224,14 @@
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.fast);
-            this.panel1.Controls.Add(this.slow);
-            this.panel1.Controls.Add(this.sync_speed);
             this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.motorRelease);
-            this.panel1.Controls.Add(this.autocheck);
-            this.panel1.Controls.Add(this.capturebutton);
             this.panel1.Controls.Add(this.delaytext);
             this.panel1.Controls.Add(this.label2);
             this.panel1.Controls.Add(this.typecombo);
             this.panel1.Controls.Add(this.label1);
             this.panel1.Location = new System.Drawing.Point(12, 21);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(303, 120);
+            this.panel1.Size = new System.Drawing.Size(303, 85);
             this.panel1.TabIndex = 4;
             // 
             // label3
@@ -246,38 +242,6 @@
             this.label3.Size = new System.Drawing.Size(18, 12);
             this.label3.TabIndex = 11;
             this.label3.Text = "ms";
-            // 
-            // motorRelease
-            // 
-            this.motorRelease.Location = new System.Drawing.Point(224, 66);
-            this.motorRelease.Name = "motorRelease";
-            this.motorRelease.Size = new System.Drawing.Size(76, 23);
-            this.motorRelease.TabIndex = 10;
-            this.motorRelease.Text = "Free Motors";
-            this.motorRelease.UseVisualStyleBackColor = true;
-            this.motorRelease.Click += new System.EventHandler(this.motorRelease_Click);
-            // 
-            // autocheck
-            // 
-            this.autocheck.AutoSize = true;
-            this.autocheck.Location = new System.Drawing.Point(16, 80);
-            this.autocheck.Name = "autocheck";
-            this.autocheck.Size = new System.Drawing.Size(47, 16);
-            this.autocheck.TabIndex = 9;
-            this.autocheck.Text = "Sync";
-            this.autocheck.UseVisualStyleBackColor = true;
-            this.autocheck.CheckedChanged += new System.EventHandler(this.autocheck_CheckedChanged);
-            // 
-            // capturebutton
-            // 
-            this.capturebutton.Location = new System.Drawing.Point(224, 92);
-            this.capturebutton.Name = "capturebutton";
-            this.capturebutton.Size = new System.Drawing.Size(76, 23);
-            this.capturebutton.TabIndex = 7;
-            this.capturebutton.Text = "Capture";
-            this.capturebutton.UseMnemonic = false;
-            this.capturebutton.UseVisualStyleBackColor = true;
-            this.capturebutton.Click += new System.EventHandler(this.capturebutton_Click);
             // 
             // delaytext
             // 
@@ -329,9 +293,9 @@
             this.panel2.BackColor = System.Drawing.SystemColors.Window;
             this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel2.Controls.Add(this.Framelist);
-            this.panel2.Location = new System.Drawing.Point(12, 150);
+            this.panel2.Location = new System.Drawing.Point(12, 112);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(700, 494);
+            this.panel2.Size = new System.Drawing.Size(700, 476);
             this.panel2.TabIndex = 6;
             // 
             // Framelist
@@ -342,7 +306,7 @@
             this.Framelist.Controls.Add(this.pictureBox1);
             this.Framelist.Location = new System.Drawing.Point(3, 3);
             this.Framelist.Name = "Framelist";
-            this.Framelist.Size = new System.Drawing.Size(694, 488);
+            this.Framelist.Size = new System.Drawing.Size(694, 470);
             this.Framelist.TabIndex = 5;
             // 
             // pictureBox1
@@ -350,10 +314,78 @@
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(694, 488);
+            this.pictureBox1.Size = new System.Drawing.Size(694, 470);
             this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
+            // 
+            // fast
+            // 
+            this.fast.AutoSize = true;
+            this.fast.Location = new System.Drawing.Point(193, 36);
+            this.fast.Name = "fast";
+            this.fast.Size = new System.Drawing.Size(21, 12);
+            this.fast.TabIndex = 14;
+            this.fast.Text = "fast";
+            // 
+            // slow
+            // 
+            this.slow.AutoSize = true;
+            this.slow.Location = new System.Drawing.Point(108, 36);
+            this.slow.Name = "slow";
+            this.slow.Size = new System.Drawing.Size(26, 12);
+            this.slow.TabIndex = 13;
+            this.slow.Text = "slow";
+            // 
+            // sync_speed
+            // 
+            this.sync_speed.LargeChange = 1;
+            this.sync_speed.Location = new System.Drawing.Point(110, 11);
+            this.sync_speed.Maximum = 5;
+            this.sync_speed.Minimum = 1;
+            this.sync_speed.Name = "sync_speed";
+            this.sync_speed.Size = new System.Drawing.Size(104, 45);
+            this.sync_speed.TabIndex = 12;
+            this.ttp.SetToolTip(this.sync_speed, "Set the speed of sychronizing motors.\nThe motors will act faster when the setting" +
+        " is closer to fast, and vice versa.");
+            this.sync_speed.Value = 3;
+            this.sync_speed.ValueChanged += new System.EventHandler(this.SyncSpeed);
+            // 
+            // motorRelease
+            // 
+            this.motorRelease.Location = new System.Drawing.Point(239, 18);
+            this.motorRelease.Name = "motorRelease";
+            this.motorRelease.Size = new System.Drawing.Size(76, 23);
+            this.motorRelease.TabIndex = 10;
+            this.motorRelease.Text = "Free Motors";
+            this.ttp.SetToolTip(this.motorRelease, "Caution! It will release all motors.");
+            this.motorRelease.UseVisualStyleBackColor = true;
+            this.motorRelease.Click += new System.EventHandler(this.motorRelease_Click);
+            // 
+            // autocheck
+            // 
+            this.autocheck.AutoSize = true;
+            this.autocheck.Location = new System.Drawing.Point(30, 22);
+            this.autocheck.Name = "autocheck";
+            this.autocheck.Size = new System.Drawing.Size(47, 16);
+            this.autocheck.TabIndex = 9;
+            this.autocheck.Text = "Sync";
+            this.ttp.SetToolTip(this.autocheck, "Synchronize the current frame to motors.");
+            this.autocheck.UseVisualStyleBackColor = true;
+            this.autocheck.CheckedChanged += new System.EventHandler(this.autocheck_CheckedChanged);
+            // 
+            // capturebutton
+            // 
+            this.capturebutton.Location = new System.Drawing.Point(324, 18);
+            this.capturebutton.Name = "capturebutton";
+            this.capturebutton.Size = new System.Drawing.Size(76, 23);
+            this.capturebutton.TabIndex = 7;
+            this.capturebutton.Text = "Capture";
+            this.ttp.SetToolTip(this.capturebutton, "Caution! It will release all motors first and get the positions of motors to curr" +
+        "ent frame.\nThis function only support Kondo, Hitec, Futaba motors.");
+            this.capturebutton.UseMnemonic = false;
+            this.capturebutton.UseVisualStyleBackColor = true;
+            this.capturebutton.Click += new System.EventHandler(this.capturebutton_Click);
             // 
             // groupBox3
             // 
@@ -377,20 +409,24 @@
             // motion_stop
             // 
             this.motion_stop.Image = global::_86ME_ver1.Properties.Resources.stop;
-            this.motion_stop.Location = new System.Drawing.Point(223, 12);
+            this.motion_stop.Location = new System.Drawing.Point(220, 21);
             this.motion_stop.Name = "motion_stop";
             this.motion_stop.Size = new System.Drawing.Size(43, 35);
             this.motion_stop.TabIndex = 9;
+            this.ttp.SetToolTip(this.motion_stop, "Stop the process of playing frames.\nThis operation cannot be recovered, so the ne" +
+        "xt play will start from the first item.");
             this.motion_stop.UseVisualStyleBackColor = true;
             this.motion_stop.Click += new System.EventHandler(this.motion_stop_Click);
             // 
             // motion_pause
             // 
             this.motion_pause.Image = global::_86ME_ver1.Properties.Resources.pause;
-            this.motion_pause.Location = new System.Drawing.Point(174, 12);
+            this.motion_pause.Location = new System.Drawing.Point(171, 21);
             this.motion_pause.Name = "motion_pause";
             this.motion_pause.Size = new System.Drawing.Size(43, 35);
             this.motion_pause.TabIndex = 8;
+            this.ttp.SetToolTip(this.motion_pause, "Pause the process of playing frames,\nthe paused process can be continue by clicki" +
+        "ng \"Play\" again.");
             this.motion_pause.UseVisualStyleBackColor = true;
             this.motion_pause.Click += new System.EventHandler(this.motion_pause_Click);
             // 
@@ -402,6 +438,7 @@
             this.move_down.Name = "move_down";
             this.move_down.Size = new System.Drawing.Size(45, 35);
             this.move_down.TabIndex = 7;
+            this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
             this.move_down.UseVisualStyleBackColor = true;
             this.move_down.Click += new System.EventHandler(this.motionlist_down);
             // 
@@ -413,13 +450,14 @@
             this.move_up.Name = "move_up";
             this.move_up.Size = new System.Drawing.Size(45, 35);
             this.move_up.TabIndex = 6;
+            this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
             this.move_up.UseVisualStyleBackColor = true;
             this.move_up.Click += new System.EventHandler(this.motionlist_up);
             // 
             // textBox2
             // 
             this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(7, 92);
+            this.textBox2.Location = new System.Drawing.Point(7, 110);
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
             this.textBox2.Size = new System.Drawing.Size(100, 15);
@@ -429,7 +467,7 @@
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(7, 47);
+            this.textBox1.Location = new System.Drawing.Point(7, 62);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(100, 15);
@@ -439,21 +477,23 @@
             // MotionTest
             // 
             this.MotionTest.Image = global::_86ME_ver1.Properties.Resources.play;
-            this.MotionTest.Location = new System.Drawing.Point(125, 12);
+            this.MotionTest.Location = new System.Drawing.Point(122, 21);
             this.MotionTest.Name = "MotionTest";
             this.MotionTest.Size = new System.Drawing.Size(43, 35);
             this.MotionTest.TabIndex = 3;
+            this.ttp.SetToolTip(this.MotionTest, "Play the current motion list from the first item to the end.");
             this.MotionTest.UseVisualStyleBackColor = true;
             this.MotionTest.Click += new System.EventHandler(this.MotionTest_Click);
             // 
             // NewMotion
             // 
             this.NewMotion.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.NewMotion.Location = new System.Drawing.Point(18, 18);
+            this.NewMotion.Location = new System.Drawing.Point(15, 28);
             this.NewMotion.Name = "NewMotion";
             this.NewMotion.Size = new System.Drawing.Size(101, 23);
             this.NewMotion.TabIndex = 2;
             this.NewMotion.Text = "Add Motion";
+            this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
             this.NewMotion.UseVisualStyleBackColor = true;
             this.NewMotion.Click += new System.EventHandler(this.NewMotion_Click);
             // 
@@ -463,10 +503,10 @@
             this.Motionlist.FormattingEnabled = true;
             this.Motionlist.IntegralHeight = false;
             this.Motionlist.ItemHeight = 19;
-            this.Motionlist.Location = new System.Drawing.Point(7, 113);
+            this.Motionlist.Location = new System.Drawing.Point(7, 129);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
-            this.Motionlist.Size = new System.Drawing.Size(261, 441);
+            this.Motionlist.Size = new System.Drawing.Size(261, 425);
             this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Motionlist_MouseDown);
@@ -474,7 +514,7 @@
             // MotionCombo
             // 
             this.MotionCombo.FormattingEnabled = true;
-            this.MotionCombo.Location = new System.Drawing.Point(7, 66);
+            this.MotionCombo.Location = new System.Drawing.Point(7, 83);
             this.MotionCombo.Name = "MotionCombo";
             this.MotionCombo.Size = new System.Drawing.Size(260, 20);
             this.MotionCombo.TabIndex = 0;
@@ -488,6 +528,8 @@
             this.Generate.Size = new System.Drawing.Size(267, 23);
             this.Generate.TabIndex = 4;
             this.Generate.Text = "Generate 86Duino Sketch (with Frame Files)";
+            this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will b" +
+        "e stored in files out of the sketch.");
             this.Generate.UseVisualStyleBackColor = true;
             this.Generate.Click += new System.EventHandler(this.Generate_Click);
             // 
@@ -503,59 +545,33 @@
             this.GenerateAllInOne.Size = new System.Drawing.Size(267, 23);
             this.GenerateAllInOne.TabIndex = 5;
             this.GenerateAllInOne.Text = "Generate 86Duino Sketch (All in One)";
+            this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in " +
+        "the generated sketch.");
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
             // 
-            // sync_speed
-            // 
-            this.sync_speed.LargeChange = 1;
-            this.sync_speed.Location = new System.Drawing.Point(77, 70);
-            this.sync_speed.Maximum = 5;
-            this.sync_speed.Minimum = 1;
-            this.sync_speed.Name = "sync_speed";
-            this.sync_speed.Size = new System.Drawing.Size(104, 45);
-            this.sync_speed.TabIndex = 12;
-            this.sync_speed.Value = 3;
-            this.sync_speed.ValueChanged += new System.EventHandler(this.SyncSpeed);
-            // 
-            // slow
-            // 
-            this.slow.AutoSize = true;
-            this.slow.Location = new System.Drawing.Point(81, 103);
-            this.slow.Name = "slow";
-            this.slow.Size = new System.Drawing.Size(26, 12);
-            this.slow.TabIndex = 13;
-            this.slow.Text = "slow";
-            // 
-            // fast
-            // 
-            this.fast.AutoSize = true;
-            this.fast.Location = new System.Drawing.Point(158, 103);
-            this.fast.Name = "fast";
-            this.fast.Size = new System.Drawing.Size(21, 12);
-            this.fast.TabIndex = 14;
-            this.fast.Text = "fast";
-            //
             // ttp
-            //
-            this.ttp.InitialDelay = 300;
+            // 
             this.ttp.AutoPopDelay = 10000;
+            this.ttp.InitialDelay = 300;
             this.ttp.ReshowDelay = 300;
-            this.ttp.UseFading = false;
             this.ttp.ShowAlways = true;
-            this.ttp.IsBalloon = false;
-            this.ttp.SetToolTip(this.autocheck, "Synchronize the current frame to motors.");
-            this.ttp.SetToolTip(this.sync_speed, "Set the speed of sychronizing motors.\nThe motors will act faster when the setting is closer to fast, and vice versa.");
-            this.ttp.SetToolTip(this.motorRelease, "Caution! It will release all motors.");
-            this.ttp.SetToolTip(this.capturebutton, "Caution! It will release all motors first and get the positions of motors to current frame.\nThis function only support Kondo, Hitec, Futaba motors.");
-            this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
-            this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
-            this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
-            this.ttp.SetToolTip(this.MotionTest, "Play the current motion list from the first item to the end.");
-            this.ttp.SetToolTip(this.motion_pause, "Pause the process of playing frames,\nthe paused process can be continue by clicking \"Play\" again.");
-            this.ttp.SetToolTip(this.motion_stop, "Stop the process of playing frames.\nThis operation cannot be recovered, so the next play will start from the first item.");
-            this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will be stored in files out of the sketch.");
-            this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in the generated sketch.");
+            this.ttp.UseFading = false;
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.fast);
+            this.groupBox4.Controls.Add(this.motorRelease);
+            this.groupBox4.Controls.Add(this.slow);
+            this.groupBox4.Controls.Add(this.capturebutton);
+            this.groupBox4.Controls.Add(this.sync_speed);
+            this.groupBox4.Controls.Add(this.autocheck);
+            this.groupBox4.Location = new System.Drawing.Point(13, 28);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(720, 60);
+            this.groupBox4.TabIndex = 15;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "Global Settings";
             // 
             // Form1
             // 
@@ -568,6 +584,7 @@
             this.Controls.Add(this.menuStrip1);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.groupBox1);
+            this.Controls.Add(this.groupBox4);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximumSize = new System.Drawing.Size(1040, 980);
@@ -586,9 +603,11 @@
             this.panel2.ResumeLayout(false);
             this.Framelist.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).EndInit();
+            this.groupBox4.ResumeLayout(false);
+            this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -641,6 +660,7 @@
         private System.Windows.Forms.Label fast;
         private System.Windows.Forms.Label slow;
         private System.Windows.Forms.ToolTip ttp;
+        private System.Windows.Forms.GroupBox groupBox4;
     }
 }
 
