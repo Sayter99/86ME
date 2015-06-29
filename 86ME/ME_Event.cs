@@ -42,12 +42,14 @@ namespace _86ME_ver1
         public string loops;
         public int current_loop;
         public bool parsed;
+        public bool infinite;
         public ME_Goto()
         {
             this.name = null;
             this.is_goto = false;
             this.loops = "0";
             this.current_loop = 0;
+            this.infinite = false;
             this.parsed = false;
         }
     }

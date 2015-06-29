@@ -1,3 +1,8 @@
+### 86ME_v1.1b - 2015.06.29 ###
+
+* Fix bugs that the generated files contain space in their names.
+* Fix bugs that 86ME cannot load pictures containing space in file names. 
+
 ### 86ME_v1.1 - 2015.06.08 ###
 
 * Refine UIs of "Robot Configuration", "Motion List", "Motion Test".

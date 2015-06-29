@@ -41,6 +41,8 @@ namespace _86ME_ver1
         private Panel[] fpanel = new Panel[45];
         Label[] flabel = new Label[45];
         MaskedTextBox[] ftext = new MaskedTextBox[45];
+        CheckBox[] fcheck = new CheckBox[45];
+        private bool[] sync_list = new bool[45];
         HScrollBar[] fbar = new HScrollBar[45];
         NewMotion Motion;
         public ArrayList ME_Motionlist;
@@ -91,11 +93,12 @@ namespace _86ME_ver1
             {
                 if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                 {
+                    fcheck[i] = new CheckBox();
                     fpanel[i] = new Panel();
                     flabel[i] = new Label();
                     ftext[i] = new MaskedTextBox();
                     fbar[i] = new HScrollBar();
-                    fpanel[i].Size = new Size(260, 30);
+                    fpanel[i].Size = new Size(275, 30);
                     fpanel[i].BackColor = Color.Transparent;
                     if (Motion.picfilename == null || Motion.newflag == true)
                     {
@@ -115,12 +118,17 @@ namespace _86ME_ver1
                         }
                         fpanel[i].Left = Motion.channelx[i];
                     }
+                    fcheck[i].Size = new Size(15, 15);
+                    fcheck[i].Top += 3;
+                    fcheck[i].Left += 5;
+                    fcheck[i].Checked = sync_list[i];
+                    fcheck[i].CheckedChanged += new EventHandler(sync_CheckedChanged);
                     flabel[i].Size = new Size(40, 18);
                     flabel[i].BackColor = Color.White;
                     flabel[i].Top += 3;
-                    flabel[i].Left += 5;
+                    flabel[i].Left += 20;
                     ftext[i].Size = new Size(45, 22);
-                    ftext[i].Left += 45;
+                    ftext[i].Left += 60;
                     ftext[i].TextAlign = HorizontalAlignment.Right;
 
                     flabel[i].Name = i.ToString();
@@ -133,7 +141,7 @@ namespace _86ME_ver1
                     }
                     ftext[i].KeyPress += new KeyPressEventHandler(numbercheck);
                     fbar[i].Size = new Size(160, 22);
-                    fbar[i].Left += 95;
+                    fbar[i].Left += 110;
 
                     fbar[i].Maximum = (int)(Max[i] + 9);
                     fbar[i].Minimum = (int)min[i];
@@ -173,6 +181,8 @@ namespace _86ME_ver1
                     else
                         flabel[i].Text = "CH" + i.ToString() + ":";
 
+                    ttp.SetToolTip(fcheck[i], "Sychronize the selected motor.");
+                    fpanel[i].Controls.Add(fcheck[i]);
                     fpanel[i].Controls.Add(flabel[i]);
                     fpanel[i].Controls.Add(ftext[i]);
                     fpanel[i].Controls.Add(fbar[i]);
@@ -180,6 +190,16 @@ namespace _86ME_ver1
                     
                     count++;
                 }
+            }
+        }
+
+        public void sync_CheckedChanged(object sender, EventArgs e) //TODO
+        {
+            if (((CheckBox)sender).Checked == true && autocheck.Checked == false)
+                autocheck.Checked = true;
+            if (((CheckBox)sender).Checked == false)
+            {
+                ;
             }
         }
 
@@ -212,7 +232,12 @@ namespace _86ME_ver1
         public void SyncSpeed(object sender, EventArgs e)
         {
             if (string.Compare(com_port, "OFF") != 0)
-                arduino.setSyncSpeed( sync_speed.Value );
+            {
+                if(sync_speed.Value == 5)
+                    arduino.setSyncSpeed(0);
+                else
+                    arduino.setSyncSpeed(sync_speed.Value);
+            }
         }
 
         public void loops_TextChanged(object sender, EventArgs e)
@@ -585,8 +610,7 @@ namespace _86ME_ver1
                         else if (m.Events[j] is ME_Goto)
                         {
                             ME_Goto g = (ME_Goto)m.Events[j];
-                            writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + "\n");
-
+                            writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + " " + g.infinite + "\n");
                         }
                         else if (m.Events[j] is ME_Flag)
                         {
@@ -777,6 +801,11 @@ namespace _86ME_ver1
                         picmode = true;
                         i++;
                         nMotion.picfilename = datas[i];
+                        while( String.Compare(Path.GetExtension(datas[i]), "") == 0)
+                        {
+                            i++;
+                            nMotion.picfilename += " " + datas[i];
+                        }
                         for (int k = 0; k < 45; k++)
                         {
                             i++;
@@ -959,6 +988,11 @@ namespace _86ME_ver1
                         i++;
                         ngoto.loops = datas[i];
                         ngoto.current_loop = int.Parse(ngoto.loops);
+                        i++;
+                        if (String.Compare(datas[i], "True") == 0)
+                            ngoto.infinite = true;
+                        else
+                            ngoto.infinite = false;
                         motiontag.Events.Add(ngoto);
                     }
                 }
@@ -997,7 +1031,15 @@ namespace _86ME_ver1
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 MotionCombo.Items.Add(m.name);
             }
-            this.richTextBox1.Text = "\t\t         Choose or New a Motion Name --->";
+
+            if(MotionCombo.Items.Count > 0)
+                MotionCombo.SelectedIndex = 0;
+            this.richTextBox1.Text =
+                            "   ___   __   ____        _\n" +
+                            "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                            "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                            " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                            "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1178,9 +1220,33 @@ namespace _86ME_ver1
         private void enable_goto(object sender, EventArgs e)
         {
             if (((CheckBox)sender).Checked == true)
+            {
                 ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).is_goto = true;
+                ((CheckBox)Framelist.Controls.Find("loop_inf", true)[0]).Enabled = true;
+                ((MaskedTextBox)Framelist.Controls.Find("loop_num", true)[0]).Enabled = true;
+                ((Label)Framelist.Controls.Find("loop_inf_l", true)[0]).Enabled = true;
+            }
             else
+            {
                 ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).is_goto = false;
+                ((CheckBox)Framelist.Controls.Find("loop_inf", true)[0]).Enabled = false;
+                ((MaskedTextBox)Framelist.Controls.Find("loop_num", true)[0]).Enabled = false;
+                ((Label)Framelist.Controls.Find("loop_inf_l", true)[0]).Enabled = false;
+            }
+        }
+
+        private void enable_infinite(object sender, EventArgs e)
+        {
+            if (((CheckBox)sender).Checked == true)
+            {
+                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).infinite = true;
+                ((MaskedTextBox)Framelist.Controls.Find("loop_num", true)[0]).Enabled = false;
+            }
+            else
+            {
+                ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).infinite = false;
+                ((MaskedTextBox)Framelist.Controls.Find("loop_num", true)[0]).Enabled = true;
+            }
         }
 
         private void Motionlist_SelectedIndexChanged(object sender, EventArgs e) // select motionlist
@@ -1362,13 +1428,34 @@ namespace _86ME_ver1
                     CheckBox xcheckbox = new CheckBox();
                     xcheckbox.Checked = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).is_goto;
                     xcheckbox.CheckedChanged += new EventHandler(enable_goto);
-                    xcheckbox.Top += 27;
+                    xcheckbox.Size = new Size(15, 15);
+                    xcheckbox.Top += 32;
                     xcheckbox.Left += 65;
+                    Label xlabel4 = new Label();
+                    xlabel4.Name = "loop_inf_l";
+                    xlabel4.Enabled = xcheckbox.Checked;
+                    xlabel4.Text = "Loop Infinitely ";
+                    xlabel4.Size = new Size(80, 22);
+                    xlabel4.Top += 32;
+                    xlabel4.Left += 85;
+                    CheckBox xcheckbox2 = new CheckBox();
+                    xcheckbox2.Enabled = xcheckbox.Checked;
+                    xcheckbox2.Name = "loop_inf";
+                    xcheckbox2.Size = new Size(15, 15);
+                    xcheckbox2.Checked = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).infinite;
+                    xcheckbox2.CheckedChanged += new EventHandler(enable_infinite);
+                    xcheckbox2.Top += 32;
+                    xcheckbox2.Left += 165;
                     Label xlabel3 = new Label();
                     xlabel3.Text = "Number of loops: ";
                     xlabel3.Size = new Size(95, 22);
                     xlabel3.Top += 62;
                     MaskedTextBox xtext2 = new MaskedTextBox();
+                    if (xcheckbox.Checked == false)
+                        xtext2.Enabled = false;
+                    else if (xcheckbox2.Checked == true)
+                        xtext2.Enabled = false;
+                    xtext2.Name = "loop_num";
                     xtext2.Text = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).loops;
                     xtext2.KeyPress += new KeyPressEventHandler(numbercheck);
                     xtext2.TextChanged += new EventHandler(loops_TextChanged);
@@ -1382,6 +1469,8 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(xcheckbox);
                     Framelist.Controls.Add(xlabel3);
                     Framelist.Controls.Add(xtext2);
+                    Framelist.Controls.Add(xlabel4);
+                    Framelist.Controls.Add(xcheckbox2);
                     Framelist.Enabled = true;
                     draw_background();
                     xtext.SelectionStart = xtext.Text.Length;
@@ -1423,8 +1512,8 @@ namespace _86ME_ver1
                 Motionlist.SelectedIndex = Motionlist.IndexFromPoint(e.X, e.Y);
                 if (Motionlist.SelectedItem == null)
                 {
-                    contextMenuStrip1.Items.Add("Add new action at the first field");
-                    contextMenuStrip1.Items.Add("Add homeframe");
+                    motionToolStripMenuItem.Text = "Add new action at the first field";
+                    contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
                     contextMenuStrip1.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
@@ -1432,7 +1521,9 @@ namespace _86ME_ver1
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
                 {
-                    for (int i = 0; i < motionevent.Length - 1; i++)
+                    motionToolStripMenuItem.Text = "Add new action at the next field";
+                    contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
+                    for (int i = 2; i < motionevent.Length - 1; i++)
                         contextMenuStrip1.Items.Add(motionevent[i]);
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -1440,7 +1531,9 @@ namespace _86ME_ver1
                 }
                 else if (Motionlist.SelectedItem != null)
                 {
-                    for (int i = 0; i < motionevent.Length - 2; i++)
+                    motionToolStripMenuItem.Text = "Add new action at the next field";
+                    contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
+                    for (int i = 2; i < motionevent.Length - 2; i++)
                         contextMenuStrip1.Items.Add(motionevent[i]);
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -1457,10 +1550,6 @@ namespace _86ME_ver1
                     switch (i)
                     {
                         case 0:
-                            groupBox1.Enabled = true;
-                            groupBox4.Enabled = true;
-                            typecombo.Text = "Select type";
-                            this.richTextBox1.Text = "\n<--- Choose a type of action you want";
                             break;
                         case 1:
                             ME_Frame h = new ME_Frame();
@@ -1527,10 +1616,6 @@ namespace _86ME_ver1
                             }
                             break;
                         case 6:
-                            groupBox1.Enabled = true;
-                            groupBox4.Enabled = true;
-                            typecombo.Text = "Select type";
-                            this.richTextBox1.Text = "\n<--- Choose a type of action you want";
                             break;
                     }
         }
@@ -1540,6 +1625,55 @@ namespace _86ME_ver1
             contextMenuStrip1.Items.Clear();
             contextMenuStrip1.ItemClicked -= Motionlistevent;
             contextMenuStrip1.Closed -= Motionlistcloseevent;
+        }
+
+        private void frameToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ME_Frame f = new ME_Frame();
+            f.type = 1;
+            for (int j = 0; j < 45; j++)
+                f.frame[j] = (int)homeframe[j];
+            f.delay = default_delay;
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Frame] " + ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name + "-" + framecount++);
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, f);
+            Motionlist.SelectedIndex++;
+        }
+
+        private void flagToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ME_Flag f = new ME_Flag();
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Flag]");
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, f);
+            Motionlist.SelectedIndex++;
+        }
+
+        private void gotoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ME_Goto g = new ME_Goto();
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Goto]");
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, g);
+            Motionlist.SelectedIndex++;
+        }
+
+        private void homeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ME_Frame h = new ME_Frame();
+            h.type = 0;
+            for (int j = 0; j < 45; j++)
+                h.frame[j] = (int)homeframe[j];
+            h.delay = default_delay;
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home] " + homecount++);
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, h);
+            Motionlist.SelectedIndex++;
+        }
+
+        private void delayToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ME_Delay d = new ME_Delay();
+            d.delay = default_delay;
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Delay]");
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, d);
+            Motionlist.SelectedIndex++;
         }
 
         private void MotionCombo_TextChanged(object sender, EventArgs e)
@@ -1750,9 +1884,11 @@ namespace _86ME_ver1
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
                 {
                     if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).is_goto &&
-                        ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop > 0)
+                        (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop > 0 ||
+                        ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).infinite))
                     {
-                        ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop--;
+                        if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).infinite == false)
+                            ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop--;
                         for (int k = 0; k < j; k++)
                         {
                             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[k] is ME_Flag)
@@ -1891,7 +2027,7 @@ namespace _86ME_ver1
 
         public void generate_ino(string path, List<int> channels, int frame_count)
         {
-            nfilename = path + "\\86Duino Motion Sketch" + ".ino";
+            nfilename = path + "\\86Duino_Motion_Sketch" + ".ino";
             TextWriter writer = new StreamWriter(nfilename);
 
             // include and declare
@@ -2099,7 +2235,7 @@ namespace _86ME_ver1
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
             {
-                nfilename = path.SelectedPath + "\\AllinOne Motion Sketch.ino";
+                nfilename = path.SelectedPath + "\\AllinOne_Motion_Sketch.ino";
                 TextWriter writer = new StreamWriter(nfilename);
                 // include and declare
                 writer.WriteLine("#include <Servo86.h>");

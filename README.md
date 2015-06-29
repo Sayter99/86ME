@@ -1,5 +1,13 @@
 86ME (86Duino Motion Editor)
 ---------
+_VERSION_: v1.1b
+
+* Fix bugs that the generated files contain space in their names.
+* Fix bugs that 86ME cannot load pictures containing space in file names. 
+
+If you find any bug, or want to provide software patches or 
+to request enhancements about 86ME, please report to the 86Duino 
+forum: http://www.86duino.com/?page_id=85.
 
 _VERSION_: v1.1
 
@@ -28,7 +36,7 @@ forum: http://www.86duino.com/?page_id=85.
 #### INSTALLATION ####
 
 1. System reqirement: Windows XP/Vista/7/8/8.1 with .NET framework 3.5
-2. Download 86ME from: https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.1.zip
+2. Download 86ME from: https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.1b.zip
 3. Unzip 86ME and execute 86ME.exe to start
 
 The 86ME tutorial page for installation instructions and usage: http://www.86duino.com/index.php?p=11544&lang=TW
