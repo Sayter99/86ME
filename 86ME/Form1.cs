@@ -28,6 +28,7 @@ namespace _86ME_ver1
 {
     public partial class Form1 : Form
     {
+        string init_load_file = "";
         int offset_Max = 255;
         int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
@@ -79,6 +80,29 @@ namespace _86ME_ver1
             groupBox4.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
+        }
+
+        public Form1(string filename)
+        {
+            InitializeComponent();
+            groupBox1.Enabled = false;
+            groupBox2.Enabled = false;
+            groupBox3.Enabled = false;
+            groupBox4.Enabled = false;
+            saveFileToolStripMenuItem.Enabled = false;
+            editToolStripMenuItem.Enabled = false;
+            init_load_file = filename;
+            Application.Idle += new EventHandler(init_load);
+        }
+
+        private void init_load(object sender, EventArgs e)
+        {
+            if (String.Compare(init_load_file, "") != 0 && File.Exists(init_load_file))
+            {
+                MessageBox.Show("Loding Complete");
+                load_project(init_load_file);
+                Application.Idle -= new EventHandler(init_load);
+            }
         }
 
         private void Update_framelist()  //set framelist
@@ -638,6 +662,19 @@ namespace _86ME_ver1
                     saveFileToolStripMenuItem_Click(sender, e);
                 }
             }
+
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "rbm files (*.rbm)|*.rbm";
+            dialog.Title = "Open File";
+            String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
+            if (filename == null)
+                return;
+            load_project(filename);
+            MessageBox.Show("Loding Complete");
+        }
+
+        public void load_project(string filename)
+        {
             bool picmode = false;
             NewMotion nMotion = new NewMotion();
             string[] rbver = new string[] { "---unset---",
@@ -669,17 +706,9 @@ namespace _86ME_ver1
                                             "GWS_MICRO",
                                             "OtherServos"};
 
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "rbm files (*.rbm)|*.rbm";
-            dialog.Title = "Open File";
-            String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
-            if (filename == null)
-            {
-                return;
-            }
             using (StreamReader reader = new StreamReader(filename))
             {
-                nfilename = Path.GetFileName(dialog.FileName);
+                nfilename = Path.GetFileName(filename);
 
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
                 if (datas.Length < 235)
@@ -713,7 +742,7 @@ namespace _86ME_ver1
                 Motionlist.Items.Clear();
                 delaytext.Text = default_delay.ToString();
                 typecombo.Text = "";
-                
+
                 for (int i = 0; i < datas.Length; i++)
                 {
                     if (String.Compare(datas[i], "BoardVer") == 0)
@@ -801,10 +830,18 @@ namespace _86ME_ver1
                         picmode = true;
                         i++;
                         nMotion.picfilename = datas[i];
-                        while( String.Compare(Path.GetExtension(datas[i]), "") == 0)
+                        while (String.Compare(Path.GetExtension(datas[i]), "") == 0 || !File.Exists(nMotion.picfilename))
                         {
                             i++;
-                            nMotion.picfilename += " " + datas[i];
+                            int value;
+                            bool success = int.TryParse(datas[i], out value);
+                            if (!success)
+                                nMotion.picfilename += " " + datas[i];
+                            else
+                            {
+                                i--;
+                                break;
+                            }
                         }
                         for (int k = 0; k < 45; k++)
                         {
@@ -832,7 +869,7 @@ namespace _86ME_ver1
                                     motor_info[k] = j;
                                 }
                             }
-                            if(servo_fine == false)
+                            if (servo_fine == false)
                             {
                                 nMotion.fbox[k].SelectedIndex = 0;
                                 motor_info[k] = 0;
@@ -1018,7 +1055,7 @@ namespace _86ME_ver1
                 nMotion.picfilename = null;
                 pictureBox1.Image = null;
             }
-            
+
             groupBox2.Enabled = true;
             groupBox3.Enabled = true;
             editToolStripMenuItem.Enabled = true;
@@ -1032,7 +1069,7 @@ namespace _86ME_ver1
                 MotionCombo.Items.Add(m.name);
             }
 
-            if(MotionCombo.Items.Count > 0)
+            if (MotionCombo.Items.Count > 0)
                 MotionCombo.SelectedIndex = 0;
             this.richTextBox1.Text =
                             "   ___   __   ____        _\n" +

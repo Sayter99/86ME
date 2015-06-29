@@ -11,13 +11,17 @@ namespace _86ME_ver1
         /// The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             SetForm sform = new SetForm();
-            Form1 f1 = new Form1();
             sform.ShowDialog();
+            Form1 f1;
+            if (args.Length > 0)
+                f1 = new Form1(args[0]);
+            else
+                f1 = new Form1();
             f1.com_port = sform.com_port;
             f1.connect_comport();
             Application.Run(f1);
