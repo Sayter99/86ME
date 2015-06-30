@@ -2172,8 +2172,6 @@ namespace _86ME_ver1
             writer.WriteLine("{");
             int space_num = 2;
             string space = set_space(space_num);
-            int loop_end = 0;
-            bool goto_flag = false;
             for (int i = 0, j = 0, flag_count = 0; i < m.Events.Count; i++)
             {
                 if (m.Events[i] is ME_Frame)
@@ -2192,44 +2190,55 @@ namespace _86ME_ver1
                     if (i != m.Events.Count - 1)
                         writer.WriteLine();
                 }
+                else if (m.Events[i] is ME_Flag)
+                {
+                    for (int k = i; k < m.Events.Count; k++)
+                    {
+                        if (m.Events[k] is ME_Goto)
+                        {
+                            if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
+                            {
+                                ME_Goto g = (ME_Goto)m.Events[k];
+
+                                string for_var = g.name + "_" + flag_count.ToString();
+                                writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
+                                ((ME_Flag)m.Events[i]).var = for_var;
+
+                                space_num += 2;
+                                space = set_space(space_num);
+                                flag_count++;
+                            }
+                        }
+                    }
+                }
                 else if (m.Events[i] is ME_Goto)
                 {
-                    if (goto_flag == true && i == loop_end)
-                    {
-                        space_num -= 2;
-                        space = set_space(space_num);
-                        writer.WriteLine(space + "}");
-                        loop_end = 0;
-                        goto_flag = false;
-                    }
-
-                    if (((ME_Goto)m.Events[i]).parsed == true)
-                        continue;
-
-                    ((ME_Goto)m.Events[i]).parsed = true;
                     ME_Goto g = (ME_Goto)m.Events[i];
-                    loop_end = i;
                     if (g.is_goto)
                     {
                         for (int k = 0; k < i; k++)
                         {
                             if (m.Events[k] is ME_Flag)
                             {
-                                if (String.Compare(((ME_Goto)m.Events[i]).name, ((ME_Flag)m.Events[k]).name) == 0)
+                                if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                 {
-                                    i = k;
-                                    goto_flag = true;
-                                    string for_var = g.name + "_" + flag_count.ToString();
-                                    writer.Write(space + "for(int " + for_var + " = 0; " + for_var +
-                                                 " < " + g.loops + "; " + for_var + "++)\n" + space + "{\n");
-                                    space_num += 2;
+                                    string for_var = ((ME_Flag)m.Events[k]).var;
+                                    space_num -= 2;
                                     space = set_space(space_num);
-                                    flag_count++;
+                                    if (((ME_Goto)m.Events[i]).infinite == false)
+                                    {
+                                        writer.Write(space + "if(" + for_var + "++ < " +
+                                                     g.loops + ") goto flag_" + for_var + ";\n\n");
+                                    }
+                                    else
+                                    {
+                                        writer.WriteLine(space + "goto flag_" + for_var + ";\n");
+                                    }
                                 }
                             }
                         }
                     }
-                }
+                } //ME_Goto
             }
             writer.WriteLine("}");
 
@@ -2420,7 +2429,6 @@ namespace _86ME_ver1
                 writer.WriteLine("{");
                 int space_num = 2;
                 string space = set_space(space_num);
-                List<int> loop_end = new List<int>();
                 for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
                 {
                     if (m.Events[i] is ME_Frame)
@@ -2446,22 +2454,12 @@ namespace _86ME_ver1
                             {
                                 if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
                                 {
-                                    if (loop_end.Count > 0)
-                                        if (k >= loop_end[loop_end.Count - 1])
-                                            continue;
-                                    loop_end.Add(k);
-                                    ((ME_Goto)m.Events[k]).parsed = true;
                                     ME_Goto g = (ME_Goto)m.Events[k];
-                                    if ( g.infinite == false)
-                                    {
-                                        string for_var = g.name + "_" + flag_count.ToString();
-                                        writer.Write(space + "for(int " + for_var + " = 0; " + for_var +
-                                                    " <= " + g.loops + "; " + for_var + "++)\n" + space + "{\n");
-                                    }
-                                    else
-                                    {
-                                        writer.Write(space + "while(1)\n" + space + "{\n");
-                                    }
+
+                                    string for_var = g.name + "_" + flag_count.ToString();
+                                    writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
+                                    ((ME_Flag)m.Events[i]).var = for_var;
+
                                     space_num += 2;
                                     space = set_space(space_num);
                                     flag_count++;
@@ -2471,20 +2469,6 @@ namespace _86ME_ver1
                     }
                     else if (m.Events[i] is ME_Goto)
                     {
-                        if (((ME_Goto)m.Events[i]).parsed == true &&
-                            loop_end[loop_end.Count - 1] == i)
-                        {
-                            space_num -= 2;
-                            space = set_space(space_num);
-                            writer.WriteLine(space + "}");
-                            loop_end.Remove(loop_end[loop_end.Count - 1]);
-                            continue;
-                        }
-                        else if (((ME_Goto)m.Events[i]).parsed == true)
-                        {
-                            continue;
-                        }
-
                         ME_Goto g = (ME_Goto)m.Events[i];
                         if (g.is_goto)
                         {
@@ -2494,22 +2478,18 @@ namespace _86ME_ver1
                                 {
                                     if (String.Compare( g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                     {
-                                        ((ME_Goto)m.Events[i]).parsed = true;
-                                        loop_end.Add(k);
+                                        string for_var = ((ME_Flag)m.Events[k]).var;
+                                        space_num -= 2;
+                                        space = set_space(space_num);
                                         if (((ME_Goto)m.Events[i]).infinite == false)
                                         {
-                                            string for_var = g.name + "_" + flag_count.ToString();
-                                            writer.Write(space + "for(int " + for_var + " = 0; " + for_var +
-                                                        " < " + g.loops + "; " + for_var + "++)\n" + space + "{\n");
+                                            writer.Write(space + "if(" + for_var + "++ < " +
+                                                         g.loops + ") goto flag_" + for_var + ";\n\n");
                                         }
                                         else
                                         {
-                                            writer.WriteLine(space + "while(1){");
+                                            writer.WriteLine(space + "goto flag_" + for_var + ";\n");
                                         }
-                                        i = k;
-                                        space_num += 2;
-                                        space = set_space(space_num);
-                                        flag_count++;
                                     }
                                 }
                             }

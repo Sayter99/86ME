@@ -56,9 +56,11 @@ namespace _86ME_ver1
     public class ME_Flag
     {
         public string name;
+        public string var;
         public ME_Flag()
         {
             this.name = null;
+            this.var = null;
         }
     }
 }

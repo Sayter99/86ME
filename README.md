@@ -9,6 +9,7 @@ _VERSION_: v1.2
 * Add some captions to contorls. They will apear when the mouse move on them.
 * After loading a picture of robot, the file name of the picture will be shown.
 * Support infinite loop now.
+* Support generating sketches containing nested loops now.
 * For loading rbm files more conveniently, users can drag a rbm file into 86ME.exe and it will be loaded automatically.
 * Update the tutorial of 86ME(http://www.86duino.com/index.php?p=11544&lang=TW).
 
