@@ -1066,25 +1066,24 @@ namespace _86ME_ver1
                         else
                             ngoto.is_goto = false;
                         i++;
-                        if (String.Compare(datas[i], "frame") == 0)
+                        int value;
+                        bool success = int.TryParse(datas[i], out value);
+                        if (!success)
                         {
                             i--;
                             motiontag.Events.Add(ngoto);
                             continue;
                         }
                         ngoto.loops = datas[i];
-                        ngoto.current_loop = int.Parse(ngoto.loops);
+                        ngoto.current_loop = value;
                         i++;
-                        if (String.Compare(datas[i], "frame") == 0)
-                        {
-                            i--;
-                            motiontag.Events.Add(ngoto);
-                            continue;
-                        }
                         if (String.Compare(datas[i], "True") == 0)
                             ngoto.infinite = true;
-                        else
+                        else if (String.Compare(datas[i], "False") == 0)
                             ngoto.infinite = false;
+                        else
+                            i--;
+
                         motiontag.Events.Add(ngoto);
                     }
                 }
