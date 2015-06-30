@@ -147,6 +147,7 @@ namespace _86ME_ver1
                     fcheck[i].Left += 5;
                     fcheck[i].Checked = sync_list[i];
                     fcheck[i].CheckedChanged += new EventHandler(sync_CheckedChanged);
+                    fcheck[i].Name = i.ToString();
                     flabel[i].Size = new Size(40, 18);
                     flabel[i].BackColor = Color.White;
                     flabel[i].Top += 3;
@@ -217,13 +218,55 @@ namespace _86ME_ver1
             }
         }
 
-        public void sync_CheckedChanged(object sender, EventArgs e) //TODO
+        private bool sync_list_empty()
         {
+            for (int i = 0; i < 45; i++)
+                if (sync_list[i] == true)
+                    return false;
+
+            return true;
+        }
+
+        public void sync_CheckedChanged(object sender, EventArgs e) //sender -> fcheck[i]
+        {
+            int index = int.Parse(((CheckBox)sender).Name);
             if (((CheckBox)sender).Checked == true && autocheck.Checked == false)
-                autocheck.Checked = true;
-            if (((CheckBox)sender).Checked == false)
             {
-                ;
+                sync_list[index] = true;
+                autocheck.Checked = true;
+            }
+            else if (((CheckBox)sender).Checked == true && autocheck.Checked == true)
+            {
+                sync_list[index] = true;
+                for (int i = 0; i < 45; i++)
+                {
+                    if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
+                        autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
+                    else if (sync_list[i] == false)
+                        autoframe[i] = 0;
+                }
+                autocheck.Enabled = false;
+
+                if (string.Compare(com_port, "OFF") != 0)
+                {
+                    try
+                    {
+                        arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
+                        Thread.Sleep(int.Parse(delaytext.Text));
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                    }
+                }
+                autocheck.Enabled = true;
+            }
+            else if (((CheckBox)sender).Checked == false)
+            {
+                sync_list[index] = false;
+                if (sync_list_empty())
+                    autocheck.Checked = false;
             }
         }
 
@@ -295,10 +338,10 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            {
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
                                 autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                            }
+                            else if (sync_list[i] == false)
+                                autoframe[i] = 0;
                         }
                         if (string.Compare(com_port, "OFF") != 0)
                         {
@@ -1023,9 +1066,21 @@ namespace _86ME_ver1
                         else
                             ngoto.is_goto = false;
                         i++;
+                        if (String.Compare(datas[i], "frame") == 0)
+                        {
+                            i--;
+                            motiontag.Events.Add(ngoto);
+                            continue;
+                        }
                         ngoto.loops = datas[i];
                         ngoto.current_loop = int.Parse(ngoto.loops);
                         i++;
+                        if (String.Compare(datas[i], "frame") == 0)
+                        {
+                            i--;
+                            motiontag.Events.Add(ngoto);
+                            continue;
+                        }
                         if (String.Compare(datas[i], "True") == 0)
                             ngoto.infinite = true;
                         else
@@ -1312,10 +1367,10 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            {
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
                                 autoframe[i] = (int)(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] + offset[i]);
-                            }
+                            else if (sync_list[i] == false)
+                                autoframe[i] = 0;
                         }
                         autocheck.Enabled = false;
                         if (string.Compare(com_port, "OFF") != 0)
@@ -1364,10 +1419,10 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            {
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
                                 autoframe[i] = (int)homeframe[i] + offset[i];
-                            }
+                            else if (sync_list[i] == false)
+                                autoframe[i] = 0;
                         }
                         autocheck.Enabled = false;
                         if (string.Compare(com_port, "OFF") != 0)
@@ -2027,16 +2082,25 @@ namespace _86ME_ver1
                 }
                 else if (autocheck.Checked == true)
                 {
+                    if (sync_list_empty())
+                    {
+                        for (int i = 0; i < 45; i++)
+                        {
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                            {
+                                fcheck[i].Checked = true;
+                            }
+                        }
+                    }
                     for (int i = 0; i < 45; i++)
                     {
-                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                        {
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
                             autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                        }
+                        else if (sync_list[i] == false)
+                            autoframe[i] = 0;
                     }
 
                     autocheck.Enabled = false;
-                    autocheck.Capture = false;
 
                     if (string.Compare(com_port, "OFF") != 0)
                     {
@@ -2051,8 +2115,13 @@ namespace _86ME_ver1
                             MessageBox.Show("Failed to send messages. Please check the connection and restart.");
                         }
                     }
-                    autocheck.Capture = true;
                     autocheck.Enabled = true;
+                }
+                else if(autocheck.Checked == false)
+                {
+                    for(int i = 0; i < 45; i++)
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
+                            fcheck[i].Checked = false;
                 }
             }
         }
