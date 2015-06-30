@@ -1,13 +1,25 @@
 86ME (86Duino Motion Editor)
 ---------
-_VERSION_: v1.1b
+_VERSION_: v1.2
 
-* Fix bugs that the generated files contain space in their names.
-* Fix bugs that 86ME cannot load pictures containing space in file names. 
+* Change the checkbox "Auto Play" to sync, and add a tracebar for tuning the speed of synchronizing motors.
+* For substituting synchronizing all motors in a frame, 86ME supports to synchronizing choosed motors now.
+* Some UIs move to the new groupbox called global settings.
+* The method of adding new actions is more instinctive that users can choose action type in the same area.
+* Add some captions to contorls. They will apear when the mouse move on them.
+* After loading a picture of robot, the file name of the picture will be shown.
+* Support infinite loop now.
+* For loading rbm files more conveniently, users can drag a rbm file into 86ME.exe and it will be loaded automatically.
+* Update the tutorial of 86ME(http://www.86duino.com/index.php?p=11544&lang=TW).
 
 If you find any bug, or want to provide software patches or 
 to request enhancements about 86ME, please report to the 86Duino 
 forum: http://www.86duino.com/?page_id=85.
+
+_VERSION_: v1.1b
+
+* Fix bugs that the generated files contain space in their names.
+* Fix bugs that 86ME cannot load pictures containing space in file names. 
 
 _VERSION_: v1.1
 
@@ -18,19 +30,11 @@ _VERSION_: v1.1
 * Update information of Help->About.
 * Update the tutorial of 86ME(http://www.86duino.com/index.php?p=11544&lang=TW).
 
-If you find any bug, or want to provide software patches or 
-to request enhancements about 86ME, please report to the 86Duino 
-forum: http://www.86duino.com/?page_id=85.
-
 _VERSION_: v1.0
 
 This is the Robot Motion Editor of the open-source 86Duino electronic platforms.
 The motion editor is designed to edit servo motions and generate 86Duino programs 
 for controlling RC servos through Servo86 library of 86Duino.
-
-If you find any bug, or want to provide software patches or 
-to request enhancements about 86ME, please report to the 86Duino 
-forum: http://www.86duino.com/?page_id=85.
 
 
 #### INSTALLATION ####
