@@ -1911,6 +1911,8 @@ namespace _86ME_ver1
             MotionTest.Enabled = false;
             motion_pause.Enabled = true;
             motion_stop.Enabled = true;
+            autocheck.Enabled = false;
+            capturebutton.Enabled = false;
             Framelist.Enabled = false;
             SoundPlayer sp = null;
             if (ME_Motionlist == null)
@@ -1998,6 +2000,7 @@ namespace _86ME_ver1
                 }
             }
             mtest_start_pos = 0;
+            typecombo.Text = "";
             MotionTest.Enabled = true;
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
@@ -2048,6 +2051,7 @@ namespace _86ME_ver1
             if (motiontest_state == (int)mtest_states.pause)
             {
                 mtest_start_pos = 0;
+                typecombo.Text = "";
                 MotionTest.Enabled = true;
                 motion_pause.Enabled = false;
                 motion_stop.Enabled = false;
@@ -2137,7 +2141,8 @@ namespace _86ME_ver1
 
         public void generate_ino(string path, List<int> channels, int frame_count)
         {
-            nfilename = path + "\\86Duino_Motion_Sketch" + ".ino";
+            Directory.CreateDirectory(path + "\\_86Duino_Motion_Sketch");
+            nfilename = path + "\\_86Duino_Motion_Sketch\\_86Duino_Motion_Sketch" + ".ino";
             TextWriter writer = new StreamWriter(nfilename);
 
             // include and declare
@@ -2264,6 +2269,11 @@ namespace _86ME_ver1
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
             {
+                if (!Directory.Exists(path.SelectedPath))
+                {
+                    MessageBox.Show("The selected directory does not exist, please try again.");
+                    return;
+                }
                 ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
                 for (int j = 0; j < m.Events.Count; j++)
                 {
@@ -2354,7 +2364,13 @@ namespace _86ME_ver1
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
             {
-                nfilename = path.SelectedPath + "\\AllinOne_Motion_Sketch.ino";
+                if (!Directory.Exists(path.SelectedPath))
+                {
+                    MessageBox.Show("The selected directory does not exist, please try again.");
+                    return;
+                }
+                Directory.CreateDirectory(path.SelectedPath + "\\AllinOne_Motion_Sketch");
+                nfilename = path.SelectedPath + "\\AllinOne_Motion_Sketch\\AllinOne_Motion_Sketch.ino";
                 TextWriter writer = new StreamWriter(nfilename);
                 // include and declare
                 writer.WriteLine("#include <Servo86.h>");
