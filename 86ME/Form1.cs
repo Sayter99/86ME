@@ -1911,6 +1911,7 @@ namespace _86ME_ver1
             MotionTest.Enabled = false;
             motion_pause.Enabled = true;
             motion_stop.Enabled = true;
+            Framelist.Enabled = false;
             SoundPlayer sp = null;
             if (ME_Motionlist == null)
                 return;
@@ -1926,7 +1927,6 @@ namespace _86ME_ver1
                     MotionTest.Enabled = true;
                     motion_pause.Enabled = false;
                     motion_stop.Enabled = true;
-                    Framelist.Enabled = false;
                     Motionlist.Enabled = false;
                     MotionCombo.Enabled = false;
                     if (sp != null)
@@ -2001,7 +2001,6 @@ namespace _86ME_ver1
             MotionTest.Enabled = true;
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
-            Framelist.Enabled = false;
             Motionlist.Enabled = true;
             MotionCombo.Enabled = true;
             for (int j = 0; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
