@@ -206,35 +206,35 @@
             // frameToolStripMenuItem
             // 
             this.frameToolStripMenuItem.Name = "frameToolStripMenuItem";
-            this.frameToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.frameToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.frameToolStripMenuItem.Text = "Frame";
             this.frameToolStripMenuItem.Click += new System.EventHandler(this.frameToolStripMenuItem_Click);
             // 
             // homeToolStripMenuItem
             // 
             this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
-            this.homeToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.homeToolStripMenuItem.Text = "HomeFrame";
             this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
             // 
             // flagToolStripMenuItem
             // 
             this.flagToolStripMenuItem.Name = "flagToolStripMenuItem";
-            this.flagToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.flagToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.flagToolStripMenuItem.Text = "Flag";
             this.flagToolStripMenuItem.Click += new System.EventHandler(this.flagToolStripMenuItem_Click);
             // 
             // gotoToolStripMenuItem
             // 
             this.gotoToolStripMenuItem.Name = "gotoToolStripMenuItem";
-            this.gotoToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.gotoToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.gotoToolStripMenuItem.Text = "Goto";
             this.gotoToolStripMenuItem.Click += new System.EventHandler(this.gotoToolStripMenuItem_Click);
             // 
             // delayToolStripMenuItem
             // 
             this.delayToolStripMenuItem.Name = "delayToolStripMenuItem";
-            this.delayToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.delayToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.delayToolStripMenuItem.Text = "Delay";
             this.delayToolStripMenuItem.Click += new System.EventHandler(this.delayToolStripMenuItem_Click);
             // 
@@ -375,7 +375,7 @@
             // fast
             // 
             this.fast.AutoSize = true;
-            this.fast.Location = new System.Drawing.Point(193, 36);
+            this.fast.Location = new System.Drawing.Point(160, 37);
             this.fast.Name = "fast";
             this.fast.Size = new System.Drawing.Size(21, 12);
             this.fast.TabIndex = 14;
@@ -384,7 +384,7 @@
             // slow
             // 
             this.slow.AutoSize = true;
-            this.slow.Location = new System.Drawing.Point(108, 36);
+            this.slow.Location = new System.Drawing.Point(80, 37);
             this.slow.Name = "slow";
             this.slow.Size = new System.Drawing.Size(26, 12);
             this.slow.TabIndex = 13;
@@ -393,7 +393,7 @@
             // sync_speed
             // 
             this.sync_speed.LargeChange = 1;
-            this.sync_speed.Location = new System.Drawing.Point(110, 11);
+            this.sync_speed.Location = new System.Drawing.Point(77, 11);
             this.sync_speed.Maximum = 5;
             this.sync_speed.Minimum = 1;
             this.sync_speed.Name = "sync_speed";
@@ -401,7 +401,7 @@
             this.sync_speed.TabIndex = 12;
             this.ttp.SetToolTip(this.sync_speed, "Set the speed of sychronizing motors.\nThe motors will act faster when the setting" +
         " is closer to fast, and vice versa.");
-            this.sync_speed.Value = 3;
+            this.sync_speed.Value = 5;
             this.sync_speed.ValueChanged += new System.EventHandler(this.SyncSpeed);
             // 
             // motorRelease
@@ -418,7 +418,7 @@
             // autocheck
             // 
             this.autocheck.AutoSize = true;
-            this.autocheck.Location = new System.Drawing.Point(30, 22);
+            this.autocheck.Location = new System.Drawing.Point(30, 23);
             this.autocheck.Name = "autocheck";
             this.autocheck.Size = new System.Drawing.Size(47, 16);
             this.autocheck.TabIndex = 9;
@@ -429,7 +429,7 @@
             // 
             // capturebutton
             // 
-            this.capturebutton.Location = new System.Drawing.Point(324, 18);
+            this.capturebutton.Location = new System.Drawing.Point(346, 18);
             this.capturebutton.Name = "capturebutton";
             this.capturebutton.Size = new System.Drawing.Size(76, 23);
             this.capturebutton.TabIndex = 7;
@@ -624,7 +624,7 @@
             this.groupBox4.Size = new System.Drawing.Size(720, 60);
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Global Settings";
+            this.groupBox4.Text = "Edit Settings";
             // 
             // Form1
             // 

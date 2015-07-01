@@ -29,6 +29,7 @@ namespace _86ME_ver1
     public partial class Form1 : Form
     {
         string init_load_file = "";
+        int last_sync_frame;
         int offset_Max = 255;
         int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
@@ -148,6 +149,7 @@ namespace _86ME_ver1
                     fcheck[i].Checked = sync_list[i];
                     fcheck[i].CheckedChanged += new EventHandler(sync_CheckedChanged);
                     fcheck[i].Name = i.ToString();
+                    fcheck[i].Visible = false; // remove fcheck[i]
                     flabel[i].Size = new Size(40, 18);
                     flabel[i].BackColor = Color.White;
                     flabel[i].Top += 3;
@@ -303,7 +305,7 @@ namespace _86ME_ver1
                 if(sync_speed.Value == 5)
                     arduino.setSyncSpeed(0);
                 else
-                    arduino.setSyncSpeed(sync_speed.Value);
+                    arduino.setSyncSpeed(400 + sync_speed.Value * 400);
             }
         }
 
@@ -466,7 +468,7 @@ namespace _86ME_ver1
                         try
                         {
                             arduino = new Arduino();
-                            arduino.setSyncSpeed(3);
+                            arduino.setSyncSpeed(0);
                         }
                         catch
                         {
@@ -480,7 +482,7 @@ namespace _86ME_ver1
                         try
                         {
                             arduino = new Arduino(com_port);
-                            arduino.setSyncSpeed(3);
+                            arduino.setSyncSpeed(0);
                         }
                         catch
                         {
@@ -625,6 +627,9 @@ namespace _86ME_ver1
                     writer.Write(Motion.ftext4[j].Text + " ");
                 }
                 writer.Write("\n");
+                //
+                writer.WriteLine("Sync " + sync_speed.Value.ToString());
+                //
                 if (Motion.picfilename != null)
                 {
                     writer.Write("picmode ");
@@ -867,6 +872,11 @@ namespace _86ME_ver1
                                 MessageBox.Show("The loaded file is corrupt. Please check the format of Range.");
                             }
                         }
+                    }
+                    else if (String.Compare(datas[i], "Sync") == 0)
+                    {
+                        i++;
+                        sync_speed.Value = int.Parse(datas[i]);
                     }
                     else if (String.Compare(datas[i], "picmode") == 0)
                     {
@@ -2114,8 +2124,15 @@ namespace _86ME_ver1
                     {
                         try
                         {
-                            arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
-                            Thread.Sleep(int.Parse(delaytext.Text));
+                            if (last_sync_frame != Motionlist.SelectedIndex)
+                            {
+                                arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
+                                Thread.Sleep(int.Parse(delaytext.Text));
+                            }
+                            else if(last_sync_frame == Motionlist.SelectedIndex)
+                            {
+                                arduino.frameWrite(0x6F, autoframe, 0);
+                            }
                         }
                         catch
                         {
@@ -2127,6 +2144,7 @@ namespace _86ME_ver1
                 }
                 else if(autocheck.Checked == false)
                 {
+                    last_sync_frame = Motionlist.SelectedIndex;
                     for(int i = 0; i < 45; i++)
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
                             fcheck[i].Checked = false;
