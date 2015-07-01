@@ -235,7 +235,7 @@ namespace _86ME_ver1
                 sync_list[index] = true;
                 autocheck.Checked = true;
             }
-            else if (((CheckBox)sender).Checked == true && autocheck.Checked == true)
+            else if (((CheckBox)sender).Checked == true && autocheck.Checked == true && sync_list[index] == false)
             {
                 sync_list[index] = true;
                 for (int i = 0; i < 45; i++)
@@ -2092,6 +2092,7 @@ namespace _86ME_ver1
                         {
                             if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                             {
+                                sync_list[i] = true;
                                 fcheck[i].Checked = true;
                             }
                         }
