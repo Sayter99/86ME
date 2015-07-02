@@ -165,8 +165,10 @@ namespace _86ME_ver1
                         flabel[i].MouseDown += new MouseEventHandler(flMouseDown);
                         flabel[i].MouseMove += new MouseEventHandler(flMouseMove);
                         flabel[i].MouseUp += new MouseEventHandler(flMouseUp);
-                        if(File.Exists("cursors\\hand_open.cur"))
-                            flabel[i].Cursor = new Cursor("cursors\\hand_open.cur");
+                        using(var memoryStream = new MemoryStream(Properties.Resources.hand_open))
+                        {
+                            flabel[i].Cursor = new Cursor(memoryStream);
+                        }
                     }
                     ftext[i].KeyPress += new KeyPressEventHandler(numbercheck);
                     fbar[i].Size = new Size(160, 22);
@@ -275,16 +277,20 @@ namespace _86ME_ver1
 
         public void flMouseDown(object sender, MouseEventArgs e)
         {
-            if (File.Exists("cursors\\hand_close.cur"))
-                ((Label)sender).Cursor = new Cursor("cursors\\hand_close.cur");
+            using (var memoryStream = new MemoryStream(Properties.Resources.hand_close))
+            {
+                ((Label)sender).Cursor = new Cursor(memoryStream);
+            }
             mdx = e.X;
             mdy = e.Y;
         }
 
         public void flMouseUp(object sender, MouseEventArgs e)
         {
-            if (File.Exists("cursors\\hand_open.cur"))
-                ((Label)sender).Cursor = new Cursor("cursors\\hand_open.cur");
+            using (var memoryStream = new MemoryStream(Properties.Resources.hand_open))
+            {
+                ((Label)sender).Cursor = new Cursor(memoryStream);
+            }
         }
 
         public void flMouseMove(object sender, MouseEventArgs e)
