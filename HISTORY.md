@@ -1,7 +1,6 @@
 ### 86ME_v1.2 - 2015.. ###
 
-* Change the checkbox "Auto Play" to sync, and add a tracebar for tuning the speed of synchronizing motors.
-* For substituting synchronizing all motors in a frame, 86ME supports to synchronizing choosed motors now.
+* Change the checkbox "Auto Play" to "Sync", and add a tracebar for tuning the speed of synchronizing motors.
 * Some UIs move to the new groupbox called global settings.
 * The method of adding new actions is more instinctive that users can choose action type in the same area.
 * Add some captions to contorls. They will apear when the mouse move on them.
