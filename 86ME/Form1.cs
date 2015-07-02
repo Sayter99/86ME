@@ -29,7 +29,6 @@ namespace _86ME_ver1
     public partial class Form1 : Form
     {
         string init_load_file = "";
-        int last_sync_frame;
         int offset_Max = 255;
         int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
@@ -257,7 +256,6 @@ namespace _86ME_ver1
                     try
                     {
                         arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
-                        Thread.Sleep(int.Parse(delaytext.Text));
                     }
                     catch
                     {
@@ -2135,15 +2133,7 @@ namespace _86ME_ver1
                     {
                         try
                         {
-                            if (last_sync_frame != Motionlist.SelectedIndex)
-                            {
-                                arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
-                                Thread.Sleep(int.Parse(delaytext.Text));
-                            }
-                            else if(last_sync_frame == Motionlist.SelectedIndex)
-                            {
-                                arduino.frameWrite(0x6F, autoframe, 0);
-                            }
+                            arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
                         }
                         catch
                         {
@@ -2155,7 +2145,6 @@ namespace _86ME_ver1
                 }
                 else if(autocheck.Checked == false)
                 {
-                    last_sync_frame = Motionlist.SelectedIndex;
                     for(int i = 0; i < 45; i++)
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
                             fcheck[i].Checked = false;
