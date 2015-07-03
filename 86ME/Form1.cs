@@ -2191,7 +2191,7 @@ namespace _86ME_ver1
                 writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
 
             writer.WriteLine();
-            writer.WriteLine("ServoOffset myoffs(\"" + current_motion_name + "_setings\\\\" + 
+            writer.WriteLine("ServoOffset myoffs(\"" + current_motion_name + "_settings\\\\" + 
                              "86offset.txt\");");
             writer.WriteLine();
 
