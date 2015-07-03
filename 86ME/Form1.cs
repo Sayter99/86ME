@@ -2179,7 +2179,8 @@ namespace _86ME_ver1
         public void generate_ino(string path, List<int> channels, int frame_count)
         {
             string frm_name = MotionCombo.SelectedItem.ToString() + "_frm";
-            string motion_sketch_name = "\\Motion_" + MotionCombo.SelectedItem.ToString();
+            string current_motion_name = MotionCombo.SelectedItem.ToString();
+            string motion_sketch_name = "\\Motion_" + current_motion_name;
             nfilename = path + motion_sketch_name + motion_sketch_name + ".ino";
             TextWriter writer = new StreamWriter(nfilename);
 
@@ -2190,13 +2191,13 @@ namespace _86ME_ver1
                 writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
 
             writer.WriteLine();
-            writer.WriteLine("ServoOffset myoffs(\"86offset.txt\");");
+            writer.WriteLine("ServoOffset myoffs(\"" + current_motion_name + "_setings\\\\" + 
+                             "86offset.txt\");");
             writer.WriteLine();
 
             for (int i = 0; i < frame_count; i++)
             {
                 string fc = i.ToString();
-                string current_motion_name = MotionCombo.SelectedItem.ToString();
                 writer.WriteLine("ServoFrame " + frm_name + fc + "(\"" + current_motion_name +
                                  "_settings\\\\" + current_motion_name + "_frm" + fc + ".txt\");");
             }
