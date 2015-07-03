@@ -2196,8 +2196,9 @@ namespace _86ME_ver1
             for (int i = 0; i < frame_count; i++)
             {
                 string fc = i.ToString();
-                writer.WriteLine("ServoFrame " + frm_name + fc + "(\"" +
-                                 MotionCombo.SelectedItem.ToString() + "_frm" + fc + ".txt\");");
+                string current_motion_name = MotionCombo.SelectedItem.ToString();
+                writer.WriteLine("ServoFrame " + frm_name + fc + "(\"" + current_motion_name +
+                                 "_settings\\\\" + current_motion_name + "_frm" + fc + ".txt\");");
             }
             writer.WriteLine();
 
@@ -2315,15 +2316,17 @@ namespace _86ME_ver1
                     return;
                 }
                 string motion_sketch_name = "\\Motion_" + MotionCombo.SelectedItem.ToString();
+                string motion_settings_path = motion_sketch_name + "\\" + current_motion_name + "_settings";
                 Directory.CreateDirectory(txtPath + motion_sketch_name);
+                Directory.CreateDirectory(txtPath + motion_settings_path);
                 ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
                 for (int j = 0; j < m.Events.Count; j++)
                 {
                     if (m.Events[j] is ME_Frame)
                     {
                         int ch_count = 0;
-                        nfilename = txtPath + motion_sketch_name + "\\" + current_motion_name +
-                                    "_frm" + count.ToString() + ".txt";
+                        nfilename = txtPath + motion_settings_path + "\\" +
+                                    current_motion_name + "_frm" + count.ToString() + ".txt";
                         writer = new StreamWriter(nfilename);
                         ME_Frame f = (ME_Frame)m.Events[j];
                         for (int k = 0; k < 45; k++)
@@ -2345,7 +2348,7 @@ namespace _86ME_ver1
                         count++;
                     }
                 }
-                nfilename = txtPath + motion_sketch_name + "\\86offset" + ".txt";
+                nfilename = txtPath + motion_settings_path + "\\86offset" + ".txt";
                 writer = new StreamWriter(nfilename);
                 int offset_count = 0;
                 for (int i = 0; i < 45; i++)
