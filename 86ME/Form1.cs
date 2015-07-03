@@ -2165,8 +2165,10 @@ namespace _86ME_ver1
 
         public void generate_ino(string path, List<int> channels, int frame_count)
         {
-            Directory.CreateDirectory(path + "\\_86Duino_Motion_Sketch");
-            nfilename = path + "\\_86Duino_Motion_Sketch\\_86Duino_Motion_Sketch" + ".ino";
+            string frm_name = MotionCombo.SelectedItem.ToString() + "_frm";
+            string motion_sketch_name = "\\Motion_" + MotionCombo.SelectedItem.ToString();
+            Directory.CreateDirectory(path + motion_sketch_name);
+            nfilename = path + motion_sketch_name + motion_sketch_name + ".ino";
             TextWriter writer = new StreamWriter(nfilename);
 
             // include and declare
@@ -2182,7 +2184,7 @@ namespace _86ME_ver1
             for (int i = 0; i < frame_count; i++)
             {
                 string fc = i.ToString();
-                writer.WriteLine("ServoFrame frm" + fc + "(\"86frame_" + fc + ".txt\");");
+                writer.WriteLine("ServoFrame " + frm_name + fc + "(\"86frame_" + fc + ".txt\");");
             }
             writer.WriteLine();
 
@@ -2206,7 +2208,7 @@ namespace _86ME_ver1
                 if (m.Events[i] is ME_Frame)
                 {
                     ME_Frame f = (ME_Frame)m.Events[i];
-                    writer.WriteLine(space + "frm" + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
+                    writer.WriteLine(space + frm_name + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
                     writer.WriteLine(space + "while(isServoMultiMoving() == true);");
                     if (i != m.Events.Count - 1)
                         writer.WriteLine();
@@ -2377,7 +2379,7 @@ namespace _86ME_ver1
                 MessageBox.Show("You should add/select a motion name first");
                 return;
             }
-
+            string frm_name = MotionCombo.SelectedItem.ToString() + "_frm";
             FolderBrowserDialog path = new FolderBrowserDialog();
             var dialogResult = path.ShowDialog();
             string txtPath = path.SelectedPath;
@@ -2393,8 +2395,9 @@ namespace _86ME_ver1
                     MessageBox.Show("The selected directory does not exist, please try again.");
                     return;
                 }
-                Directory.CreateDirectory(path.SelectedPath + "\\AllinOne_Motion_Sketch");
-                nfilename = path.SelectedPath + "\\AllinOne_Motion_Sketch\\AllinOne_Motion_Sketch.ino";
+                string motion_sketch_name = "\\AllinOne_" + MotionCombo.SelectedItem.ToString();
+                Directory.CreateDirectory(path.SelectedPath + motion_sketch_name);
+                nfilename = path.SelectedPath + motion_sketch_name + motion_sketch_name + ".ino";
                 TextWriter writer = new StreamWriter(nfilename);
                 // include and declare
                 writer.WriteLine("#include <Servo86.h>");
@@ -2429,7 +2432,7 @@ namespace _86ME_ver1
                 writer.WriteLine();
 
                 for( int i=0; i < count; i++)
-                    writer.WriteLine("ServoFrame frm" + i.ToString() + ";");
+                    writer.WriteLine("ServoFrame " + frm_name + i.ToString() + ";");
 
                 writer.WriteLine();
 
@@ -2454,7 +2457,7 @@ namespace _86ME_ver1
                 {
                     for (int j = 0; j < channels.Count; j++)
                     {
-                        writer.WriteLine("  frm" + i.ToString() + ".positions[" + j.ToString() + "] = " + angle[i * channels.Count + j] + ";");
+                        writer.WriteLine("  " + frm_name + i.ToString() + ".positions[" + j.ToString() + "] = " + angle[i * channels.Count + j] + ";");
                     }
                     writer.WriteLine();
                 }
@@ -2474,7 +2477,7 @@ namespace _86ME_ver1
                     if (m.Events[i] is ME_Frame)
                     {
                         ME_Frame f = (ME_Frame)m.Events[i];
-                        writer.WriteLine(space + "frm" + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
+                        writer.WriteLine(space + frm_name + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
                         writer.WriteLine(space + "while(isServoMultiMoving() == true);");
                         if (i != m.Events.Count - 1)
                             writer.WriteLine();
