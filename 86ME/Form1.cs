@@ -51,6 +51,7 @@ namespace _86ME_ver1
         int homecount = 0;
         Boolean new_obj = false;
         String nfilename = "";
+        string load_filename = "";
         string picture_name;
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
@@ -593,10 +594,10 @@ namespace _86ME_ver1
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "rbm files (*.rbm)|*.rbm";
             dialog.Title = "Save File";
-            dialog.FileName = nfilename;
+            dialog.FileName = load_filename;
             if (dialog.ShowDialog() == DialogResult.OK && dialog.FileName != null)
             {
-                nfilename = Path.GetFileName(dialog.FileName);
+                load_filename = Path.GetFileName(dialog.FileName);
                 TextWriter writer = new StreamWriter(dialog.OpenFile());
                 string nFilePath = Path.GetDirectoryName(dialog.FileName);
 
@@ -771,7 +772,7 @@ namespace _86ME_ver1
 
             using (StreamReader reader = new StreamReader(filename))
             {
-                nfilename = Path.GetFileName(filename);
+                load_filename = Path.GetFileName(filename);
 
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
                 if (datas.Length < 235)
