@@ -415,8 +415,8 @@ namespace _86ME_ver1
                             break;
                         case "OtherServos":
                             fcheck[i].Enabled = true;
-                            ftext3[i].Text = "350";
-                            ftext4[i].Text = "4000";
+                            ftext3[i].Text = "600";
+                            ftext4[i].Text = "2400";
                             break;
                     }
                 }
