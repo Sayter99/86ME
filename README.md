@@ -2,7 +2,7 @@
 ---------
 _VERSION_: v1.2
 
-* Change the checkbox "Auto Play" to sync, and add a tracebar for tuning the speed of synchronizing motors.
+* Change the checkbox "Auto Play" to "Sync", and add a tracebar for tuning the speed of synchronizing motors.
 * Some UIs move to the new groupbox called global settings.
 * The method of adding new actions is more instinctive that users can choose action type in the same area.
 * Add some captions to contorls. They will apear when the mouse move on them.
@@ -28,7 +28,7 @@ _VERSION_: v1.1
 * Generate loop functions while generating 86Duino programs if there are flag-goto objects in the motionlist.
 * Add a new action type "HomeFrame".
 * Update information of Help->About.
-* Update the tutorial of 86ME(http://www.86duino.com/index.php?p=11544&lang=TW).
+* Update the tutorial of 86ME(http://www.86duino.com/index.php?p=11850&lang=TW).
 
 _VERSION_: v1.0
 
