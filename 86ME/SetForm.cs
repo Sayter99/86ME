@@ -19,19 +19,9 @@ namespace _86ME_ver1
                 this.ComboBox0.Items.Add(serialPort);
         }
 
-        private void SetForm_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button1_Click(object sender, EventArgs e)
-        {
-            this.DialogResult = DialogResult.Yes;
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
-            this.DialogResult = DialogResult.No;
+            this.DialogResult = DialogResult.Yes;
             if (string.Compare(ComboBox0.Text, "--auto--") == 0)
                 this.com_port = "AUTO";
             else if (string.Compare(ComboBox0.Text, "--write yourself--") == 0)
@@ -40,6 +30,11 @@ namespace _86ME_ver1
                 this.com_port = "OFF";
             else
                 this.com_port = ComboBox0.Text;
+        }
+
+        private void Exit_Click(object sender, EventArgs e)
+        {
+            this.DialogResult = DialogResult.No;
         }
     }
 }

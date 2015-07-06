@@ -100,7 +100,7 @@ namespace _86ME_ver1
         {
             if (String.Compare(init_load_file, "") != 0 && File.Exists(init_load_file))
             {
-                MessageBox.Show("Loding Complete");
+                MessageBox.Show(init_load_file + " is loaded");
                 load_project(init_load_file);
                 Application.Idle -= new EventHandler(init_load);
             }
@@ -733,7 +733,7 @@ namespace _86ME_ver1
             if (filename == null)
                 return;
             load_project(filename);
-            MessageBox.Show("Loding Complete");
+            MessageBox.Show(filename + " is loaded");
         }
 
         public void load_project(string filename)
@@ -2363,7 +2363,8 @@ namespace _86ME_ver1
                 writer.Dispose();
                 writer.Close();
                 generate_ino(txtPath, channels, count);
-                MessageBox.Show("Generating complete at " + txtPath + motion_sketch_name + "\\");
+                MessageBox.Show("The sketch and setting files are generated in " +
+                                txtPath + motion_sketch_name + "\\");
                 reset_goto_parsed();
             }
         }
@@ -2562,7 +2563,8 @@ namespace _86ME_ver1
                 }
                 writer.WriteLine("}");
 
-                MessageBox.Show("Generating complete at " + path.SelectedPath + motion_sketch_name + "\\");
+                MessageBox.Show("The sketch is generated in " +
+                                path.SelectedPath + motion_sketch_name + "\\");
                 writer.Dispose();
                 writer.Close();
                 reset_goto_parsed();
