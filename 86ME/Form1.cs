@@ -342,7 +342,6 @@ namespace _86ME_ver1
         public void Text_Changed(object sender, EventArgs e) //Text event
         {
             int n;
-
             if ((((MaskedTextBox)sender).Text) == "")
             {
                 (((MaskedTextBox)sender).Text) = "0";
@@ -2181,7 +2180,7 @@ namespace _86ME_ver1
         {
             string frm_name = MotionCombo.SelectedItem.ToString() + "_frm";
             string current_motion_name = MotionCombo.SelectedItem.ToString();
-            string motion_sketch_name = "\\Motion_" + current_motion_name;
+            string motion_sketch_name = "\\_86Duino_Motion_" + current_motion_name;
             nfilename = path + motion_sketch_name + motion_sketch_name + ".ino";
             TextWriter writer = new StreamWriter(nfilename);
 
@@ -2317,7 +2316,7 @@ namespace _86ME_ver1
                     MessageBox.Show("The selected directory does not exist, please try again.");
                     return;
                 }
-                string motion_sketch_name = "\\Motion_" + MotionCombo.SelectedItem.ToString();
+                string motion_sketch_name = "\\_86Duino_Motion_" + MotionCombo.SelectedItem.ToString();
                 string motion_settings_path = motion_sketch_name + "\\" + current_motion_name + "_settings";
                 Directory.CreateDirectory(txtPath + motion_sketch_name);
                 Directory.CreateDirectory(txtPath + motion_settings_path);
@@ -2364,7 +2363,7 @@ namespace _86ME_ver1
                 writer.Dispose();
                 writer.Close();
                 generate_ino(txtPath, channels, count);
-                MessageBox.Show("Generating complete");
+                MessageBox.Show("Generating complete at " + txtPath + motion_sketch_name + "\\");
                 reset_goto_parsed();
             }
         }
@@ -2417,7 +2416,7 @@ namespace _86ME_ver1
                     MessageBox.Show("The selected directory does not exist, please try again.");
                     return;
                 }
-                string motion_sketch_name = "\\All_" + MotionCombo.SelectedItem.ToString();
+                string motion_sketch_name = "\\AllinOne_" + MotionCombo.SelectedItem.ToString();
                 Directory.CreateDirectory(path.SelectedPath + motion_sketch_name);
                 nfilename = path.SelectedPath + motion_sketch_name + motion_sketch_name + ".ino";
                 TextWriter writer = new StreamWriter(nfilename);
@@ -2563,7 +2562,7 @@ namespace _86ME_ver1
                 }
                 writer.WriteLine("}");
 
-                MessageBox.Show("Generating complete");
+                MessageBox.Show("Generating complete at " + path.SelectedPath + motion_sketch_name + "\\");
                 writer.Dispose();
                 writer.Close();
                 reset_goto_parsed();
