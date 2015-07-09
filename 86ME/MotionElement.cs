@@ -9,10 +9,16 @@ namespace _86ME_ver1
     {
         public ArrayList Events;
         public string name;
+        public int trigger_method;
+        public bool trigger_on;
+        public string trigger_key;
         public ME_Motion()
         {
             this.name = null;
             this.Events = new ArrayList();
+            this.trigger_on = true;
+            this.trigger_method = 0;
+            this.trigger_key = "";
         }
     }
 

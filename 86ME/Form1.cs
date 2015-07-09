@@ -36,6 +36,7 @@ namespace _86ME_ver1
         int alltest_start_pos = 0;
         int motiontest_state;
         enum mtest_states { start, pause, stop };
+        enum mtest_method { always, keyboard };
         int default_delay = 1000;
         int current_motionlist_idx = -1;
         public string com_port;
@@ -1797,27 +1798,53 @@ namespace _86ME_ver1
 
         private void MotionCombo_TextChanged(object sender, EventArgs e)
         {
-            current_motionlist_idx = -1;
-            move_up.Enabled = false;
-            move_down.Enabled = false;
-            Boolean new_mot = true;
-            NewMotion.Enabled = false;
-            if (String.Compare(MotionCombo.Text, "") == 0)
-                new_mot = false;
-            for (int i = 0; i < MotionCombo.Items.Count; i++) 
-                if (String.Compare(MotionCombo.Text, MotionCombo.Items[i].ToString()) == 0)
+            if (MotionConfig.SelectedIndex == 0)
+            {
+                current_motionlist_idx = -1;
+                move_up.Enabled = false;
+                move_down.Enabled = false;
+                Boolean new_mot = true;
+                NewMotion.Enabled = false;
+                if (String.Compare(MotionCombo.Text, "") == 0)
                     new_mot = false;
-            if (new_mot) {
-                NewMotion.Enabled = true;
+                for (int i = 0; i < MotionCombo.Items.Count; i++)
+                    if (String.Compare(MotionCombo.Text, MotionCombo.Items[i].ToString()) == 0)
+                        new_mot = false;
+                if (new_mot)
+                {
+                    NewMotion.Enabled = true;
+                }
+                Motionlist.Items.Clear();
+                MotionTest.Enabled = false;
+                motion_pause.Enabled = false;
+                motion_stop.Enabled = false;
+                groupBox1.Enabled = false;
+                groupBox4.Enabled = false;
+                this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
             }
-            Motionlist.Items.Clear();
-            MotionTest.Enabled = false;
-            motion_pause.Enabled = false;
-            motion_stop.Enabled = false;
-            groupBox1.Enabled = false;
-            groupBox4.Enabled = false;
-            this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->"; ;
+            else if (MotionConfig.SelectedIndex == 1)
+            {
+                Boolean new_mot = true;
+                NewMotion.Enabled = false;
+                if (String.Compare(MotionCombo.Text, "") == 0)
+                    new_mot = false;
+                for (int i = 0; i < MotionCombo.Items.Count; i++)
+                    if (String.Compare(MotionCombo.Text, MotionCombo.Items[i].ToString()) == 0)
+                        new_mot = false;
+                if (new_mot)
+                {
+                    NewMotion.Enabled = true;
+                }
+                MotionTest.Enabled = false;
+                motion_pause.Enabled = false;
+                motion_stop.Enabled = false;
+                groupBox1.Enabled = false;
+                groupBox4.Enabled = false;
+                AlwaysTrigger.Enabled = false;
+                KeyboardTrigger.Enabled = false;
+            }
         }
+
         private void NewMotion_Click(object sender, EventArgs e)
         {
             if (!(new System.Text.RegularExpressions.Regex("^[a-zA-Z][a-zA-Z0-9_]{0,20}$")).IsMatch(MotionCombo.Text))
@@ -1829,7 +1856,7 @@ namespace _86ME_ver1
                 MotionCombo.Text = "";
                 MotionCombo.Focus();
             }
-            else if (MotionCombo.Text.IndexOf(" ") == -1)
+            else if (MotionCombo.Text.IndexOf(" ") == -1)//TODO: 1. add trigger attributions to m 2. load proj
             {
                 MotionCombo.Items.Add(MotionCombo.Text);
                 ME_Motion m = new ME_Motion();
@@ -1837,12 +1864,14 @@ namespace _86ME_ver1
                 ME_Motionlist.Add(m);
                 MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
                 Motionlist.Controls.Clear();
-                draw_background();
                 current_motionlist_idx = -1;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
-                this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
+                AlwaysTrigger.Enabled = true;
+                KeyboardTrigger.Enabled = true;
+                draw_background();
                 Motionlist.Focus();
+                this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
             }
             else
             {
@@ -2391,6 +2420,8 @@ namespace _86ME_ver1
             if(MotionConfig.SelectedIndex == 0)
             {
                 update_motionlist();
+                move_down.Enabled = true;
+                move_up.Enabled = true;
                 Framelist.Enabled = true;
                 autocheck.Enabled = true;
                 capturebutton.Enabled = true;
@@ -2399,11 +2430,33 @@ namespace _86ME_ver1
             }
             else if(MotionConfig.SelectedIndex == 1)
             {
+                typecombo.Text = "";
+                move_down.Enabled = false;
+                move_up.Enabled = false;
                 Framelist.Enabled = false;
                 autocheck.Enabled = false;
                 capturebutton.Enabled = false;
                 delaytext.Enabled = false;
                 ttp.SetToolTip(MotionTest, "Play all motions by checking the conditions of Motion Trigger.");
+                if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
+                {
+                    AlwaysTrigger.Enabled = false;
+                    KeyboardTrigger.Enabled = false;
+                }
+            }
+        }
+
+        private void KeyboardCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (KeyboardCheck.Checked == true)
+            {
+                KeyboardCombo.Enabled = true;
+                AlwaysTrigger.Enabled = false;
+            }
+            else if (KeyboardCheck.Checked == false)
+            {
+                KeyboardCombo.Enabled = false;
+                AlwaysTrigger.Enabled = true;
             }
         }
     }
