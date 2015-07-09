@@ -33,6 +33,7 @@ namespace _86ME_ver1
         int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
         int mtest_start_pos = 0;
+        int alltest_start_pos = 0;
         int motiontest_state;
         enum mtest_states { start, pause, stop };
         int default_delay = 1000;
@@ -50,7 +51,6 @@ namespace _86ME_ver1
         int framecount = 0;
         int homecount = 0;
         Boolean new_obj = false;
-        String nfilename = "";
         string load_filename = "";
         string picture_name;
         uint[] homeframe = new uint[45];
@@ -81,6 +81,7 @@ namespace _86ME_ver1
             groupBox4.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
+            CheckForIllegalCrossThreadCalls = false;// dangerous
         }
 
         public Form1(string filename)
@@ -92,6 +93,7 @@ namespace _86ME_ver1
             groupBox4.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
+            CheckForIllegalCrossThreadCalls = false;// dangerous
             init_load_file = filename;
             Application.Idle += new EventHandler(init_load);
         }
@@ -125,6 +127,7 @@ namespace _86ME_ver1
                     fbar[i] = new HScrollBar();
                     fpanel[i].Size = new Size(275, 30);
                     fpanel[i].BackColor = Color.Transparent;
+                    fpanel[i].BorderStyle = BorderStyle.FixedSingle;
                     if (Motion.picfilename == null || Motion.newflag == true)
                     {
                         fpanel[i].Top = count * 30;
@@ -642,7 +645,7 @@ namespace _86ME_ver1
                     writer.Write(Motion.ftext4[j].Text + " ");
                 }
                 writer.Write("\n");
-                //
+                // save sync_speed
                 writer.WriteLine("Sync " + sync_speed.Value.ToString());
                 //
                 if (Motion.picfilename != null)
@@ -656,7 +659,7 @@ namespace _86ME_ver1
                     writer.Write("\n");
                 }
 
-                for (int i = 0; i < ME_Motionlist.Count; i++)
+                for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
                     writer.Write("Motion " + m.name + "\n");
@@ -1944,8 +1947,10 @@ namespace _86ME_ver1
             return can_cap;
         }
 
-        public void MotionOnTest()
+        public void MotionOnTest(ME_Motion m)
         {
+            MotionConfig.Enabled = false;
+            MotionCombo.Enabled = false;
             MotionTest.Enabled = false;
             motion_pause.Enabled = true;
             motion_stop.Enabled = true;
@@ -1956,9 +1961,10 @@ namespace _86ME_ver1
             if (ME_Motionlist == null)
                 return;
 
-            for (int j = mtest_start_pos; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
+            for (int j = mtest_start_pos; j < m.Events.Count; j++)
             {
-                Motionlist.SelectedIndex = j;
+                if(MotionConfig.SelectedIndex == 0)
+                    Motionlist.SelectedIndex = j;
                 if (motiontest_state == (int)mtest_states.stop)
                     break;
                 else if(motiontest_state == (int)mtest_states.pause)
@@ -1967,8 +1973,6 @@ namespace _86ME_ver1
                     MotionTest.Enabled = true;
                     motion_pause.Enabled = false;
                     motion_stop.Enabled = true;
-                    Motionlist.Enabled = false;
-                    MotionCombo.Enabled = false;
                     if (sp != null)
                         sp.Stop();
                     this.richTextBox1.Text =
@@ -1979,21 +1983,21 @@ namespace _86ME_ver1
                             "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
                     return;
                 }
-                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Frame)
+                if (m.Events[j] is ME_Frame)
                 {
                     for (int i = 0; i < 45; i++)
                     {
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                         {
-                            autoframe[i] = (((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).frame[i] + offset[i]);
+                            autoframe[i] = (((ME_Frame)m.Events[j]).frame[i] + offset[i]);
                         }
                     }
                     if (string.Compare(com_port, "OFF") != 0)
                     {
                         try
                         {
-                            arduino.frameWrite(0x6F, autoframe, (int)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).delay);
-                            Thread.Sleep((int)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).delay);
+                            arduino.frameWrite(0x6F, autoframe, (int)((ME_Frame)m.Events[j]).delay);
+                            Thread.Sleep((int)((ME_Frame)m.Events[j]).delay);
                         }
                         catch
                         {
@@ -2002,54 +2006,59 @@ namespace _86ME_ver1
                         }
                     }
                 }
-                else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Delay)
+                else if (m.Events[j] is ME_Delay)
                 {
-                    Thread.Sleep((int)((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).delay);
+                    Thread.Sleep((int)((ME_Delay)m.Events[j]).delay);
                 }
-                else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Sound)
+                else if (m.Events[j] is ME_Sound)
                 {
-                    sp = new SoundPlayer(Application.StartupPath + "\\" + ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).filename);
+                    sp = new SoundPlayer(Application.StartupPath + "\\" + ((ME_Sound)m.Events[j]).filename);
                     sp.Play();
-                    Thread.Sleep((int)((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).delay);
+                    Thread.Sleep((int)((ME_Sound)m.Events[j]).delay);
                 }
-                else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
+                else if (m.Events[j] is ME_Goto)
                 {
-                    if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).is_goto &&
-                        (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop > 0 ||
-                        ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).infinite))
+                    if (((ME_Goto)m.Events[j]).is_goto &&
+                        (((ME_Goto)m.Events[j]).current_loop > 0 ||
+                        ((ME_Goto)m.Events[j]).infinite))
                     {
-                        if (((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).infinite == false)
-                            ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop--;
+                        if (((ME_Goto)m.Events[j]).infinite == false)
+                            ((ME_Goto)m.Events[j]).current_loop--;
                         for (int k = 0; k < j; k++)
                         {
-                            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[k] is ME_Flag)
+                            if (m.Events[k] is ME_Flag)
                             {
-                                if (String.Compare(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).name,
-                                                ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[k]).name) == 0)
+                                if (String.Compare(((ME_Goto)m.Events[j]).name,
+                                                ((ME_Flag)m.Events[k]).name) == 0)
                                     j = k;
                             }
                         }
                     }
-                    else if(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop == 0)
+                    else if(((ME_Goto)m.Events[j]).current_loop == 0)
                     {
-                        int loop_num = int.Parse(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).loops);
-                        ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop = loop_num;
+                        int loop_num = int.Parse(((ME_Goto)m.Events[j]).loops);
+                        ((ME_Goto)m.Events[j]).current_loop = loop_num;
                     }
                 }
             }
-            mtest_start_pos = 0;
-            typecombo.Text = "";
-            MotionTest.Enabled = true;
-            motion_pause.Enabled = false;
-            motion_stop.Enabled = false;
-            Motionlist.Enabled = true;
-            MotionCombo.Enabled = true;
-            for (int j = 0; j < ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count; j++)
+            
+            if (MotionConfig.SelectedIndex == 0 || motiontest_state != (int)mtest_states.start)
             {
-                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j] is ME_Goto)
+                mtest_start_pos = 0;
+                alltest_start_pos = 0;
+                typecombo.Text = "";
+                motion_pause.Enabled = false;
+                motion_stop.Enabled = false;
+                MotionConfig.Enabled = true;
+                MotionTest.Enabled = true;
+                MotionCombo.Enabled = true;
+            }
+            for (int j = 0; j < m.Events.Count; j++)
+            {
+                if (m.Events[j] is ME_Goto)
                 {
-                    int loops = int.Parse(((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).loops);
-                    ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[j]).current_loop = loops;
+                    int loops = int.Parse(((ME_Goto)m.Events[j]).loops);
+                    ((ME_Goto)m.Events[j]).current_loop = loops;
                 }
             }
             if (sp != null)
@@ -2062,6 +2071,28 @@ namespace _86ME_ver1
                     "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
         }
 
+        public void AllMotionTest()
+        {
+            while(motiontest_state == (int)mtest_states.start)
+            {
+                for (int i = alltest_start_pos; i < ME_Motionlist.Count; i++ )
+                {
+                    if (motiontest_state == (int)mtest_states.start)
+                    {
+                        //if()
+                        MotionOnTest(((ME_Motion)ME_Motionlist[i]));
+                    }
+                    if (motiontest_state == (int)mtest_states.pause)
+                    {
+                        alltest_start_pos = i;
+                        break;
+                    }
+                    if (i == ME_Motionlist.Count - 1)
+                        alltest_start_pos = 0;
+                }
+            }
+        }
+
         private void MotionTest_Click(object sender, EventArgs e)
         {
             // TODO: Using Thread to control UI
@@ -2069,13 +2100,16 @@ namespace _86ME_ver1
             Framelist.Controls.Clear();
             motiontest_state = (int)mtest_states.start;
             Thread t;
-            if (MotionCombo.SelectedItem != null)
+            if (MotionCombo.SelectedItem != null && MotionConfig.SelectedIndex == 0)
             {
-                CheckForIllegalCrossThreadCalls = false;// dangerous
-                t = new Thread(MotionOnTest);
+                t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
                 t.Start();
             }
-            Update_framelist();
+            else if (ME_Motionlist != null && MotionConfig.SelectedIndex == 1)
+            {
+                t = new Thread(() => AllMotionTest());
+                t.Start();
+            }
             draw_background();
         }
 
@@ -2089,13 +2123,14 @@ namespace _86ME_ver1
             if (motiontest_state == (int)mtest_states.pause)
             {
                 mtest_start_pos = 0;
+                alltest_start_pos = 0;
                 typecombo.Text = "";
                 MotionTest.Enabled = true;
                 motion_pause.Enabled = false;
                 motion_stop.Enabled = false;
                 Framelist.Enabled = false;
-                Motionlist.Enabled = true;
                 MotionCombo.Enabled = true;
+                MotionConfig.Enabled = true;
                 this.richTextBox1.Text =
                         "   ___   __   ____        _\n" +
                         "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
@@ -2176,197 +2211,32 @@ namespace _86ME_ver1
             System.Diagnostics.Process.Start("http://www.86duino.com/?p=11544");
         }
 
-        public void generate_ino(string path, List<int> channels, int frame_count)
+        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string frm_name = MotionCombo.SelectedItem.ToString() + "_frm";
-            string current_motion_name = MotionCombo.SelectedItem.ToString();
-            string motion_sketch_name = "\\_86Duino_Motion_" + current_motion_name;
-            nfilename = path + motion_sketch_name + motion_sketch_name + ".ino";
-            TextWriter writer = new StreamWriter(nfilename);
-
-            // include and declare
-            writer.WriteLine("#include <Servo86.h>");
-            writer.WriteLine();
-            for(int i=0; i<channels.Count; i++)
-                writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
-
-            writer.WriteLine();
-            writer.WriteLine("ServoOffset myoffs(\"" + current_motion_name + "_settings\\\\" + 
-                             "86offset.txt\");");
-            writer.WriteLine();
-
-            for (int i = 0; i < frame_count; i++)
-            {
-                string fc = i.ToString();
-                writer.WriteLine("ServoFrame " + frm_name + fc + "(\"" + current_motion_name +
-                                 "_settings\\\\" + current_motion_name + "_frm" + fc + ".txt\");");
-            }
-            writer.WriteLine();
-
-            //void setup {}
-            writer.WriteLine("void setup()");
-            writer.WriteLine("{");
-            for (int i = 0; i < channels.Count; i++)
-                writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
-            writer.WriteLine("  myoffs.setOffsets();");
-            writer.WriteLine("}");
-            writer.WriteLine();
-
-            //void loop {}
-            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
-            writer.WriteLine("void loop()");
-            writer.WriteLine("{");
-            int space_num = 2;
-            string space = set_space(space_num);
-            for (int i = 0, j = 0, flag_count = 0; i < m.Events.Count; i++)
-            {
-                if (m.Events[i] is ME_Frame)
-                {
-                    ME_Frame f = (ME_Frame)m.Events[i];
-                    writer.WriteLine(space + frm_name + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
-                    writer.WriteLine(space + "while(isServoMultiMoving() == true);");
-                    if (i != m.Events.Count - 1)
-                        writer.WriteLine();
-                    j++;
-                }
-                else if (m.Events[i] is ME_Delay)
-                {
-                    ME_Delay d = (ME_Delay)m.Events[i];
-                    writer.WriteLine(space + "delay(" + d.delay.ToString() + ");");
-                    if (i != m.Events.Count - 1)
-                        writer.WriteLine();
-                }
-                else if (m.Events[i] is ME_Flag)
-                {
-                    for (int k = i; k < m.Events.Count; k++)
-                    {
-                        if (m.Events[k] is ME_Goto)
-                        {
-                            if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
-                            {
-                                ME_Goto g = (ME_Goto)m.Events[k];
-
-                                string for_var = g.name + "_" + flag_count.ToString();
-                                writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
-                                ((ME_Flag)m.Events[i]).var = for_var;
-
-                                space_num += 2;
-                                space = set_space(space_num);
-                                flag_count++;
-                            }
-                        }
-                    }
-                }
-                else if (m.Events[i] is ME_Goto)
-                {
-                    ME_Goto g = (ME_Goto)m.Events[i];
-                    if (g.is_goto)
-                    {
-                        for (int k = 0; k < i; k++)
-                        {
-                            if (m.Events[k] is ME_Flag)
-                            {
-                                if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
-                                {
-                                    string for_var = ((ME_Flag)m.Events[k]).var;
-                                    space_num -= 2;
-                                    space = set_space(space_num);
-                                    if (((ME_Goto)m.Events[i]).infinite == false)
-                                    {
-                                        writer.Write(space + "if(" + for_var + "++ < " +
-                                                     g.loops + ") goto flag_" + for_var + ";\n\n");
-                                    }
-                                    else
-                                    {
-                                        writer.WriteLine(space + "goto flag_" + for_var + ";\n");
-                                    }
-                                }
-                            }
-                        }
-                    }
-                } //ME_Goto
-            }
-            writer.WriteLine("}");
-
-            writer.Dispose();
-            writer.Close();
+            about a = new about();
+            a.ShowDialog();
         }
 
         private void Generate_Click(object sender, EventArgs e)
         {
             if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
             {
-                MessageBox.Show("You should add/select a motion name first");
+                MessageBox.Show("You should add a motion first");
                 return;
             }
+            generate_sketches g = new generate_sketches((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex], Motion, offset, ME_Motionlist);
+            g.generate_withFiles();
+        }
 
-            FolderBrowserDialog path = new FolderBrowserDialog();
-            var dialogResult = path.ShowDialog();
-            string txtPath = path.SelectedPath;
-            List<int> channels = new List<int>();
-            int count = 0;
-            bool add_channel = true;
-            TextWriter writer;
-            string current_motion_name = MotionCombo.SelectedItem.ToString();
-
-            if (dialogResult == DialogResult.OK && path.SelectedPath != null)
+        private void GenerateAllInOne_Click(object sender, EventArgs e)
+        {
+            if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
             {
-                if (!Directory.Exists(path.SelectedPath))
-                {
-                    MessageBox.Show("The selected directory does not exist, please try again.");
-                    return;
-                }
-                string motion_sketch_name = "\\_86Duino_Motion_" + MotionCombo.SelectedItem.ToString();
-                string motion_settings_path = motion_sketch_name + "\\" + current_motion_name + "_settings";
-                Directory.CreateDirectory(txtPath + motion_sketch_name);
-                Directory.CreateDirectory(txtPath + motion_settings_path);
-                ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
-                for (int j = 0; j < m.Events.Count; j++)
-                {
-                    if (m.Events[j] is ME_Frame)
-                    {
-                        int ch_count = 0;
-                        nfilename = txtPath + motion_settings_path + "\\" +
-                                    current_motion_name + "_frm" + count.ToString() + ".txt";
-                        writer = new StreamWriter(nfilename);
-                        ME_Frame f = (ME_Frame)m.Events[j];
-                        for (int k = 0; k < 45; k++)
-                        {
-                            if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                            {
-                                writer.Write("channel");
-                                writer.Write(ch_count.ToString() + "=");
-                                writer.WriteLine(f.frame[k].ToString());
-                                if(add_channel)
-                                    channels.Add(k);
-                                ch_count++;
-                            }
-                        }
-                        ((ME_Frame)m.Events[j]).num = count;
-                        add_channel = false;
-                        writer.Dispose();
-                        writer.Close();
-                        count++;
-                    }
-                }
-                nfilename = txtPath + motion_settings_path + "\\86offset" + ".txt";
-                writer = new StreamWriter(nfilename);
-                int offset_count = 0;
-                for (int i = 0; i < 45; i++)
-                {
-                    if (offset[i] != 0 && String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                        writer.WriteLine("channel" + offset_count.ToString() + "=" + offset[i].ToString());
-                    if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                        offset_count++;
-                }
-
-                writer.Dispose();
-                writer.Close();
-                generate_ino(txtPath, channels, count);
-                MessageBox.Show("The sketch and setting files are generated in " +
-                                txtPath + motion_sketch_name + "\\");
-                reset_goto_parsed();
+                MessageBox.Show("You should add a motion first");
+                return;
             }
+            generate_sketches g = new generate_sketches((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex], Motion, offset, ME_Motionlist);
+            g.generate_AllinOne();
         }
 
         public bool have_86()
@@ -2386,205 +2256,6 @@ namespace _86ME_ver1
             MessageBox.Show("Cannot find 86Duino, entering offline mode", "",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
-        }
-
-        private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            about a = new about();
-            a.ShowDialog();
-        }
-
-        private void GenerateAllInOne_Click(object sender, EventArgs e)
-        {
-            if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
-            {
-                MessageBox.Show("You should add/select a motion name first");
-                return;
-            }
-            string frm_name = MotionCombo.SelectedItem.ToString() + "_frm";
-            FolderBrowserDialog path = new FolderBrowserDialog();
-            var dialogResult = path.ShowDialog();
-            string txtPath = path.SelectedPath;
-            List<int> channels = new List<int>();
-            List<int> angle = new List<int>();
-            int count = 0;
-            bool add_channel = true;
-
-            if (dialogResult == DialogResult.OK && path.SelectedPath != null)
-            {
-                if (!Directory.Exists(path.SelectedPath))
-                {
-                    MessageBox.Show("The selected directory does not exist, please try again.");
-                    return;
-                }
-                string motion_sketch_name = "\\AllinOne_" + MotionCombo.SelectedItem.ToString();
-                Directory.CreateDirectory(path.SelectedPath + motion_sketch_name);
-                nfilename = path.SelectedPath + motion_sketch_name + motion_sketch_name + ".ino";
-                TextWriter writer = new StreamWriter(nfilename);
-                // include and declare
-                writer.WriteLine("#include <Servo86.h>");
-                writer.WriteLine();
-
-                ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
-                for (int j = 0; j < m.Events.Count; j++)
-                {
-                    if (m.Events[j] is ME_Frame)
-                    {
-                        ME_Frame f = (ME_Frame)m.Events[j];
-                        for (int k = 0; k < 45; k++)
-                        {
-                            if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                            {
-                                angle.Add(f.frame[k]);
-                                if (add_channel)
-                                    channels.Add(k);
-                            }
-                        }
-                        add_channel = false;
-                        ((ME_Frame)m.Events[j]).num = count;
-                        count++;
-                    }
-                }
-
-                for (int i = 0; i < channels.Count; i++)
-                    writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
-
-                writer.WriteLine();
-                writer.WriteLine("ServoOffset myoffs;");
-                writer.WriteLine();
-
-                for( int i=0; i < count; i++)
-                    writer.WriteLine("ServoFrame " + frm_name + i.ToString() + ";");
-
-                writer.WriteLine();
-
-                // setup
-                writer.WriteLine("void setup()");
-                writer.WriteLine("{");
-                for (int i = 0; i < channels.Count; i++)
-                    writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
-                writer.WriteLine();
-
-                int offset_count = 0;
-                for (int i = 0; i < 45; i++)
-                {
-                    if (offset[i] != 0 && String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                        writer.WriteLine("  myoffs.offsets[" + offset_count.ToString() + "] = " + offset[i].ToString() + ";");
-                    if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                        offset_count++;
-                }
-                writer.WriteLine();
-
-                for (int i = 0; i < count; i++)
-                {
-                    for (int j = 0; j < channels.Count; j++)
-                    {
-                        writer.WriteLine("  " + frm_name + i.ToString() + ".positions[" + j.ToString() + "] = " + angle[i * channels.Count + j] + ";");
-                    }
-                    writer.WriteLine();
-                }
-
-                writer.WriteLine("  myoffs.setOffsets();");
-
-                writer.WriteLine("}");
-                writer.WriteLine();
-
-                // loop
-                writer.WriteLine("void loop()");
-                writer.WriteLine("{");
-                int space_num = 2;
-                string space = set_space(space_num);
-                for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
-                {
-                    if (m.Events[i] is ME_Frame)
-                    {
-                        ME_Frame f = (ME_Frame)m.Events[i];
-                        writer.WriteLine(space + frm_name + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
-                        writer.WriteLine(space + "while(isServoMultiMoving() == true);");
-                        if (i != m.Events.Count - 1)
-                            writer.WriteLine();
-                    }
-                    else if (m.Events[i] is ME_Delay)
-                    {
-                        ME_Delay d = (ME_Delay)m.Events[i];
-                        writer.WriteLine(space + "delay(" + d.delay.ToString() + ");");
-                        if (i != m.Events.Count - 1)
-                            writer.WriteLine();
-                    }
-                    else if (m.Events[i] is ME_Flag)
-                    {
-                        for (int k = i; k < m.Events.Count; k++)
-                        {
-                            if (m.Events[k] is ME_Goto)
-                            {
-                                if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
-                                {
-                                    ME_Goto g = (ME_Goto)m.Events[k];
-
-                                    string for_var = g.name + "_" + flag_count.ToString();
-                                    writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
-                                    ((ME_Flag)m.Events[i]).var = for_var;
-
-                                    space_num += 2;
-                                    space = set_space(space_num);
-                                    flag_count++;
-                                }
-                            }
-                        }
-                    }
-                    else if (m.Events[i] is ME_Goto)
-                    {
-                        ME_Goto g = (ME_Goto)m.Events[i];
-                        if (g.is_goto)
-                        {
-                            for (int k = 0; k < i; k++)
-                            {
-                                if (m.Events[k] is ME_Flag)
-                                {
-                                    if (String.Compare( g.name, ((ME_Flag)m.Events[k]).name) == 0)
-                                    {
-                                        string for_var = ((ME_Flag)m.Events[k]).var;
-                                        space_num -= 2;
-                                        space = set_space(space_num);
-                                        if (((ME_Goto)m.Events[i]).infinite == false)
-                                        {
-                                            writer.Write(space + "if(" + for_var + "++ < " +
-                                                         g.loops + ") goto flag_" + for_var + ";\n\n");
-                                        }
-                                        else
-                                        {
-                                            writer.WriteLine(space + "goto flag_" + for_var + ";\n");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } //ME_Goto
-                }
-                writer.WriteLine("}");
-
-                MessageBox.Show("The sketch is generated in " +
-                                path.SelectedPath + motion_sketch_name + "\\");
-                writer.Dispose();
-                writer.Close();
-                reset_goto_parsed();
-            }
-        }
-
-        private void reset_goto_parsed()
-        {
-            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
-            for (int i = 0; i < m.Events.Count; i++)
-                if (m.Events[i] is ME_Goto)
-                    ((ME_Goto)m.Events[i]).parsed = false;
-        }
-
-        private string set_space(int n)
-        {
-            string ret_str = "";
-            for (int i = 0; i < n; i++)
-                ret_str += " ";
-            return ret_str;
         }
 
         private void draw_background()
@@ -2713,6 +2384,27 @@ namespace _86ME_ver1
             Motionlist.Items.Insert(n + 2, Motionlist.SelectedItem);
             Motionlist.Items.RemoveAt(n);
             Motionlist.SelectedIndex = current_motionlist_idx + 1;
+        }
+
+        private void MotionConfig_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(MotionConfig.SelectedIndex == 0)
+            {
+                update_motionlist();
+                Framelist.Enabled = true;
+                autocheck.Enabled = true;
+                capturebutton.Enabled = true;
+                delaytext.Enabled = true;
+                ttp.SetToolTip(MotionTest, "Play the current motion list from the first item to the end.");
+            }
+            else if(MotionConfig.SelectedIndex == 1)
+            {
+                Framelist.Enabled = false;
+                autocheck.Enabled = false;
+                capturebutton.Enabled = false;
+                delaytext.Enabled = false;
+                ttp.SetToolTip(MotionTest, "Play all motions by checking the conditions of Motion Trigger.");
+            }
         }
     }
 }

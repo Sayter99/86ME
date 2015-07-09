@@ -67,15 +67,17 @@
             this.autocheck = new System.Windows.Forms.CheckBox();
             this.capturebutton = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.MotionConfig = new System.Windows.Forms.TabControl();
+            this.ActionList = new System.Windows.Forms.TabPage();
+            this.Motionlist = new System.Windows.Forms.ListBox();
+            this.MotionTrigger = new System.Windows.Forms.TabPage();
             this.motion_stop = new System.Windows.Forms.Button();
             this.motion_pause = new System.Windows.Forms.Button();
             this.move_down = new System.Windows.Forms.Button();
             this.move_up = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.MotionTest = new System.Windows.Forms.Button();
             this.NewMotion = new System.Windows.Forms.Button();
-            this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionCombo = new System.Windows.Forms.ComboBox();
             this.Generate = new System.Windows.Forms.Button();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -91,6 +93,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).BeginInit();
             this.groupBox3.SuspendLayout();
+            this.MotionConfig.SuspendLayout();
+            this.ActionList.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -442,15 +446,14 @@
             // 
             // groupBox3
             // 
+            this.groupBox3.Controls.Add(this.MotionConfig);
             this.groupBox3.Controls.Add(this.motion_stop);
             this.groupBox3.Controls.Add(this.motion_pause);
             this.groupBox3.Controls.Add(this.move_down);
             this.groupBox3.Controls.Add(this.move_up);
-            this.groupBox3.Controls.Add(this.textBox2);
             this.groupBox3.Controls.Add(this.textBox1);
             this.groupBox3.Controls.Add(this.MotionTest);
             this.groupBox3.Controls.Add(this.NewMotion);
-            this.groupBox3.Controls.Add(this.Motionlist);
             this.groupBox3.Controls.Add(this.MotionCombo);
             this.groupBox3.Location = new System.Drawing.Point(739, 28);
             this.groupBox3.Name = "groupBox3";
@@ -458,6 +461,52 @@
             this.groupBox3.TabIndex = 3;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "Motion";
+            // 
+            // MotionConfig
+            // 
+            this.MotionConfig.Controls.Add(this.ActionList);
+            this.MotionConfig.Controls.Add(this.MotionTrigger);
+            this.MotionConfig.Location = new System.Drawing.Point(7, 109);
+            this.MotionConfig.Name = "MotionConfig";
+            this.MotionConfig.SelectedIndex = 0;
+            this.MotionConfig.Size = new System.Drawing.Size(256, 444);
+            this.MotionConfig.TabIndex = 10;
+            this.MotionConfig.SelectedIndexChanged += new System.EventHandler(this.MotionConfig_SelectedIndexChanged);
+            // 
+            // ActionList
+            // 
+            this.ActionList.Controls.Add(this.Motionlist);
+            this.ActionList.Location = new System.Drawing.Point(4, 22);
+            this.ActionList.Name = "ActionList";
+            this.ActionList.Padding = new System.Windows.Forms.Padding(3);
+            this.ActionList.Size = new System.Drawing.Size(248, 418);
+            this.ActionList.TabIndex = 0;
+            this.ActionList.Text = "Action List";
+            this.ActionList.UseVisualStyleBackColor = true;
+            // 
+            // Motionlist
+            // 
+            this.Motionlist.Font = new System.Drawing.Font("PMingLiU", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Motionlist.FormattingEnabled = true;
+            this.Motionlist.IntegralHeight = false;
+            this.Motionlist.ItemHeight = 19;
+            this.Motionlist.Location = new System.Drawing.Point(1, 3);
+            this.Motionlist.Name = "Motionlist";
+            this.Motionlist.ScrollAlwaysVisible = true;
+            this.Motionlist.Size = new System.Drawing.Size(245, 413);
+            this.Motionlist.TabIndex = 1;
+            this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
+            this.Motionlist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Motionlist_MouseDown);
+            // 
+            // MotionTrigger
+            // 
+            this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
+            this.MotionTrigger.Name = "MotionTrigger";
+            this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
+            this.MotionTrigger.Size = new System.Drawing.Size(248, 418);
+            this.MotionTrigger.TabIndex = 1;
+            this.MotionTrigger.Text = "Motion Trigger";
+            this.MotionTrigger.UseVisualStyleBackColor = true;
             // 
             // motion_stop
             // 
@@ -487,7 +536,7 @@
             // 
             this.move_down.Enabled = false;
             this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
-            this.move_down.Location = new System.Drawing.Point(142, 560);
+            this.move_down.Location = new System.Drawing.Point(142, 559);
             this.move_down.Name = "move_down";
             this.move_down.Size = new System.Drawing.Size(45, 35);
             this.move_down.TabIndex = 7;
@@ -506,16 +555,6 @@
             this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
             this.move_up.UseVisualStyleBackColor = true;
             this.move_up.Click += new System.EventHandler(this.motionlist_up);
-            // 
-            // textBox2
-            // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox2.Location = new System.Drawing.Point(7, 110);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(100, 15);
-            this.textBox2.TabIndex = 5;
-            this.textBox2.Text = "Action List:";
             // 
             // textBox1
             // 
@@ -549,20 +588,6 @@
             this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
             this.NewMotion.UseVisualStyleBackColor = true;
             this.NewMotion.Click += new System.EventHandler(this.NewMotion_Click);
-            // 
-            // Motionlist
-            // 
-            this.Motionlist.Font = new System.Drawing.Font("PMingLiU", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Motionlist.FormattingEnabled = true;
-            this.Motionlist.IntegralHeight = false;
-            this.Motionlist.ItemHeight = 19;
-            this.Motionlist.Location = new System.Drawing.Point(7, 129);
-            this.Motionlist.Name = "Motionlist";
-            this.Motionlist.ScrollAlwaysVisible = true;
-            this.Motionlist.Size = new System.Drawing.Size(261, 425);
-            this.Motionlist.TabIndex = 1;
-            this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
-            this.Motionlist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Motionlist_MouseDown);
             // 
             // MotionCombo
             // 
@@ -659,6 +684,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
+            this.MotionConfig.ResumeLayout(false);
+            this.ActionList.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
@@ -705,7 +732,6 @@
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.Button GenerateAllInOne;
         private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.TextBox textBox2;
         private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
@@ -720,6 +746,9 @@
         private System.Windows.Forms.Label slow;
         private System.Windows.Forms.ToolTip ttp;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.TabControl MotionConfig;
+        private System.Windows.Forms.TabPage ActionList;
+        private System.Windows.Forms.TabPage MotionTrigger;
     }
 }
 

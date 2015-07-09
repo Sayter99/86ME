@@ -73,8 +73,8 @@
       <DependentUpon>about.cs</DependentUpon>
     </Compile>
     <Compile Include="firmata.cs" />
-    <Compile Include="ME_Event.cs" />
-    <Compile Include="ME_Motion.cs" />
+    <Compile Include="MotionElement.cs" />
+    <Compile Include="MotionGen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
