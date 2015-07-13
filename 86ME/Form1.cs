@@ -33,11 +33,9 @@ namespace _86ME_ver1
         int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
         int mtest_start_pos = 0;
-        int alltest_start_pos = 0;
         int motiontest_state;
         enum mtest_states { start, pause, stop };
         enum mtest_method { always, keyboard };
-        string mtest_key = "";
         int default_delay = 1000;
         int current_motionlist_idx = -1;
         public string com_port;
@@ -1333,68 +1331,6 @@ namespace _86ME_ver1
             draw_background();
         }
 
-        private void MotionCombo_SelectedIndexChanged_plying(object sender, EventArgs e)
-        {
-            Motionlist.Items.Clear();
-            framecount = 0;
-            homecount = 0;
-            for (int i = 0; i < ME_Motionlist.Count; i++)
-            {
-                ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                if (MotionCombo.SelectedItem == null)
-                    break;
-                if (String.Compare(MotionCombo.SelectedItem.ToString(), m.name.ToString()) == 0)
-                {
-                    for (int j = 0; j < m.Events.Count; j++)
-                    {
-                        if (m.Events[j] is ME_Frame)
-                        {
-                            if (((ME_Frame)m.Events[j]).type == 1)
-                            {
-                                Motionlist.Items.Add("[Frame] " + ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name + "-" + framecount);
-                                framecount++;
-                            }
-                            else if (((ME_Frame)m.Events[j]).type == 0)
-                            {
-                                Motionlist.Items.Add("[Home] " + homecount);
-                                homecount++;
-                                for (int k = 0; k < 45; k++)
-                                {
-                                    if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                                    {
-                                        ((ME_Frame)m.Events[j]).frame[k] = (int)homeframe[k];
-                                    }
-                                }
-                            }
-                        }
-                        else if (m.Events[j] is ME_Delay)
-                        {
-                            ME_Delay d = (ME_Delay)m.Events[j];
-                            Motionlist.Items.Add("[Delay]");
-                        }
-                        else if (m.Events[j] is ME_Sound)
-                        {
-                            ME_Sound s = (ME_Sound)m.Events[j];
-                            Motionlist.Items.Add("[Sound] " + s.filename);
-
-                        }
-                        else if (m.Events[j] is ME_Goto)
-                        {
-                            ME_Goto g = (ME_Goto)m.Events[j];
-                            Motionlist.Items.Add("[Goto] " + g.name);
-
-                        }
-                        else if (m.Events[j] is ME_Flag)
-                        {
-                            ME_Flag fl = (ME_Flag)m.Events[j];
-                            Motionlist.Items.Add("[Flag] " + fl.name);
-                        }
-                    }
-                    break;
-                }
-            }
-        }
-
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             update_motionlist();
@@ -1408,9 +1344,17 @@ namespace _86ME_ver1
             Keyboard_groupBox.Enabled = true;
             ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
             if (m.trigger_method == (int)mtest_method.always)
+            {
                 Always_radioButton.Checked = true;
+                Always_groupBox.Enabled = true;
+                Keyboard_groupBox.Enabled = false;
+            }
             else
+            {
                 Keyboard_radioButton.Checked = true;
+                Always_groupBox.Enabled = false;
+                Keyboard_groupBox.Enabled = true;
+            }
             if (m.trigger_on)
                 AlwaysOn.Checked = true;
             else
@@ -1968,7 +1912,7 @@ namespace _86ME_ver1
                 Always_radioButton.Enabled = true;
                 Keyboard_radioButton.Enabled = true;
                 Always_groupBox.Enabled = true;
-                Keyboard_groupBox.Enabled = true;
+                Keyboard_groupBox.Enabled = false;
                 Always_radioButton.Checked = true;
                 AlwaysOn.Checked = true;
                 //Motion Config
@@ -2101,101 +2045,95 @@ namespace _86ME_ver1
             if (ME_Motionlist == null)
                 return;
 
-            if (runMotion(m))
+            for (int j = mtest_start_pos; j < m.Events.Count; j++)
             {
-                for (int j = mtest_start_pos; j < m.Events.Count; j++)
+                if (MotionConfig.SelectedIndex == 0)
+                    Motionlist.SelectedIndex = j;
+                if (motiontest_state == (int)mtest_states.stop)
+                    break;
+                if (motiontest_state == (int)mtest_states.pause)
                 {
-                    if (MotionConfig.SelectedIndex == 0)
-                        Motionlist.SelectedIndex = j;
-                    if (motiontest_state == (int)mtest_states.stop)
-                        break;
-                    if (motiontest_state == (int)mtest_states.pause)
+                    mtest_start_pos = j;
+                    MotionTest.Enabled = true;
+                    motion_pause.Enabled = false;
+                    motion_stop.Enabled = true;
+                    if (sp != null)
+                        sp.Stop();
+                    this.richTextBox1.Text =
+                            "   ___   __   ____        _\n" +
+                            "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                            "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                            " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                            "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
+                    return;
+                }
+                if (m.Events[j] is ME_Frame)
+                {
+                    for (int i = 0; i < 45; i++)
                     {
-                        mtest_start_pos = j;
-                        MotionTest.Enabled = true;
-                        motion_pause.Enabled = false;
-                        motion_stop.Enabled = true;
-                        if (sp != null)
-                            sp.Stop();
-                        this.richTextBox1.Text =
-                                "   ___   __   ____        _\n" +
-                                "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
-                                "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
-                                " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
-                                "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
-                        return;
-                    }
-                    if (m.Events[j] is ME_Frame)
-                    {
-                        for (int i = 0; i < 45; i++)
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            {
-                                autoframe[i] = (((ME_Frame)m.Events[j]).frame[i] + offset[i]);
-                            }
-                        }
-                        if (string.Compare(com_port, "OFF") != 0)
-                        {
-                            try
-                            {
-                                arduino.frameWrite(0x6F, autoframe, (int)((ME_Frame)m.Events[j]).delay);
-                                Thread.Sleep((int)((ME_Frame)m.Events[j]).delay);
-                            }
-                            catch
-                            {
-                                com_port = "OFF";
-                                MessageBox.Show("Failed to send messages. Please check the connection and restart.");
-                            }
+                            autoframe[i] = (((ME_Frame)m.Events[j]).frame[i] + offset[i]);
                         }
                     }
-                    else if (m.Events[j] is ME_Delay)
+                    if (string.Compare(com_port, "OFF") != 0)
                     {
-                        Thread.Sleep((int)((ME_Delay)m.Events[j]).delay);
-                    }
-                    else if (m.Events[j] is ME_Sound)
-                    {
-                        sp = new SoundPlayer(Application.StartupPath + "\\" + ((ME_Sound)m.Events[j]).filename);
-                        sp.Play();
-                        Thread.Sleep((int)((ME_Sound)m.Events[j]).delay);
-                    }
-                    else if (m.Events[j] is ME_Goto)
-                    {
-                        if (((ME_Goto)m.Events[j]).is_goto &&
-                            (((ME_Goto)m.Events[j]).current_loop > 0 ||
-                            ((ME_Goto)m.Events[j]).infinite))
+                        try
                         {
-                            if (((ME_Goto)m.Events[j]).infinite == false)
-                                ((ME_Goto)m.Events[j]).current_loop--;
-                            for (int k = 0; k < j; k++)
+                            arduino.frameWrite(0x6F, autoframe, (int)((ME_Frame)m.Events[j]).delay);
+                            Thread.Sleep((int)((ME_Frame)m.Events[j]).delay);
+                        }
+                        catch
+                        {
+                            com_port = "OFF";
+                            MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                        }
+                    }
+                }
+                else if (m.Events[j] is ME_Delay)
+                {
+                    Thread.Sleep((int)((ME_Delay)m.Events[j]).delay);
+                }
+                else if (m.Events[j] is ME_Sound)
+                {
+                    sp = new SoundPlayer(Application.StartupPath + "\\" + ((ME_Sound)m.Events[j]).filename);
+                    sp.Play();
+                    Thread.Sleep((int)((ME_Sound)m.Events[j]).delay);
+                }
+                else if (m.Events[j] is ME_Goto)
+                {
+                    if (((ME_Goto)m.Events[j]).is_goto &&
+                        (((ME_Goto)m.Events[j]).current_loop > 0 ||
+                        ((ME_Goto)m.Events[j]).infinite))
+                    {
+                        if (((ME_Goto)m.Events[j]).infinite == false)
+                            ((ME_Goto)m.Events[j]).current_loop--;
+                        for (int k = 0; k < j; k++)
+                        {
+                            if (m.Events[k] is ME_Flag)
                             {
-                                if (m.Events[k] is ME_Flag)
-                                {
-                                    if (String.Compare(((ME_Goto)m.Events[j]).name,
-                                                    ((ME_Flag)m.Events[k]).name) == 0)
-                                        j = k;
-                                }
+                                if (String.Compare(((ME_Goto)m.Events[j]).name,
+                                                ((ME_Flag)m.Events[k]).name) == 0)
+                                    j = k;
                             }
                         }
-                        else if (((ME_Goto)m.Events[j]).current_loop == 0)
-                        {
-                            int loop_num = int.Parse(((ME_Goto)m.Events[j]).loops);
-                            ((ME_Goto)m.Events[j]).current_loop = loop_num;
-                        }
+                    }
+                    else if (((ME_Goto)m.Events[j]).current_loop == 0)
+                    {
+                        int loop_num = int.Parse(((ME_Goto)m.Events[j]).loops);
+                        ((ME_Goto)m.Events[j]).current_loop = loop_num;
                     }
                 }
             }
             
-            if (motiontest_state != (int)mtest_states.start)
-            {
-                mtest_start_pos = 0;
-                alltest_start_pos = 0;
-                typecombo.Text = "";
-                motion_pause.Enabled = false;
-                motion_stop.Enabled = false;
-                MotionConfig.Enabled = true;
-                MotionTest.Enabled = true;
-                MotionCombo.Enabled = true;
-            }
+            mtest_start_pos = 0;
+            typecombo.Text = "";
+            motion_pause.Enabled = false;
+            motion_stop.Enabled = false;
+            MotionConfig.Enabled = true;
+            MotionTest.Enabled = true;
+            MotionCombo.Enabled = true;
+
             for (int j = 0; j < m.Events.Count; j++)
             {
                 if (m.Events[j] is ME_Goto)
@@ -2214,105 +2152,17 @@ namespace _86ME_ver1
                     "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
         }
 
-        private bool runMotion(ME_Motion m)
-        {
-            switch(m.trigger_method)
-            {
-                case (int)mtest_method.always:
-                    if (m.trigger_on)
-                        return true;
-                    else
-                        return false;
-                case (int)mtest_method.keyboard:
-                    if (String.Compare(m.trigger_key, mtest_key) == 0)
-                        return true;
-                    else
-                        return false;
-                default:
-                    return true;
-            }
-        }
-
-        public void AllMotionTest()
-        {
-            MotionCombo.SelectedIndexChanged -= new EventHandler(MotionCombo_SelectedIndexChanged);
-            MotionCombo.TextChanged -= new EventHandler(MotionCombo_TextChanged);
-            MotionCombo.SelectedIndexChanged += new EventHandler(MotionCombo_SelectedIndexChanged_plying);
-            MotionConfig.SelectedIndex = 0;
-            while(motiontest_state == (int)mtest_states.start)
-            {
-                for (int i = alltest_start_pos; i < ME_Motionlist.Count; i++ )
-                {
-                    if (motiontest_state == (int)mtest_states.start)
-                    {
-                        MotionCombo.SelectedIndex = i;
-                        MotionOnTest(((ME_Motion)ME_Motionlist[i]));
-                    }
-                    if (motiontest_state == (int)mtest_states.pause)
-                    {
-                        mtest_start_pos = Motionlist.SelectedIndex;
-                        alltest_start_pos = i;
-                        MotionTest.Enabled = true;
-                        motion_pause.Enabled = false;
-                        motion_stop.Enabled = true;
-                        this.richTextBox1.Text =
-                                "   ___   __   ____        _\n" +
-                                "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
-                                "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
-                                " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
-                                "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
-                        break;
-                    }
-                    else if ((motiontest_state == (int)mtest_states.stop))
-                    {
-                        mtest_start_pos = 0;
-                        alltest_start_pos = 0;
-                        typecombo.Text = "";
-                        MotionTest.Enabled = true;
-                        motion_pause.Enabled = false;
-                        motion_stop.Enabled = false;
-                        Framelist.Enabled = false;
-                        MotionCombo.Enabled = true;
-                        MotionConfig.Enabled = true;
-                        this.richTextBox1.Text =
-                                "   ___   __   ____        _\n" +
-                                "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
-                                "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
-                                " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
-                                "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
-                        break;
-                    }
-                    if (i == ME_Motionlist.Count - 1)
-                        alltest_start_pos = 0;
-                }
-            }
-            MotionCombo.SelectedIndexChanged -= new EventHandler(MotionCombo_SelectedIndexChanged_plying);
-            MotionCombo.TextChanged += new EventHandler(MotionCombo_TextChanged);
-            MotionCombo.SelectedIndexChanged += new EventHandler(MotionCombo_SelectedIndexChanged);
-        }
-
         private void MotionTest_Click(object sender, EventArgs e)
         {
             // TODO: Using Thread to control UI
+            MotionConfig.SelectedIndex = 0;
             Motionlist.Focus();
             Framelist.Controls.Clear();
             motiontest_state = (int)mtest_states.start;
             Thread t;
-            t = new Thread(() => AllMotionTest());
+            t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
             t.IsBackground = true;
             t.Start();
-            //if (MotionCombo.SelectedItem != null && MotionConfig.SelectedIndex == 0)
-            //{
-            //    t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
-            //    t.IsBackground = true;
-            //    t.Start();
-            //}
-            //else if (ME_Motionlist != null && MotionConfig.SelectedIndex == 1)
-            //{
-            //    t = new Thread(() => AllMotionTest());
-            //    t.IsBackground = true;
-            //    t.Start();
-            //}
             draw_background();
         }
 
@@ -2326,7 +2176,6 @@ namespace _86ME_ver1
             if (motiontest_state == (int)mtest_states.pause)
             {
                 mtest_start_pos = 0;
-                alltest_start_pos = 0;
                 typecombo.Text = "";
                 MotionTest.Enabled = true;
                 motion_pause.Enabled = false;
@@ -2589,31 +2438,6 @@ namespace _86ME_ver1
             Motionlist.SelectedIndex = current_motionlist_idx + 1;
         }
 
-        private void Form1_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z)
-                mtest_key = "KEY_" + ((char)e.KeyCode).ToString();
-            else if (e.KeyCode == Keys.Up)
-                mtest_key = "KEY_UP";
-            else if (e.KeyCode == Keys.Down)
-                mtest_key = "KEY_DOWN";
-            else if (e.KeyCode == Keys.Left)
-                mtest_key = "KEY_LEFT";
-            else if (e.KeyCode == Keys.Right)
-                mtest_key = "KEY_RIGHT";
-            else if (e.KeyCode == Keys.Escape)
-                mtest_key = "KEY_ESC";
-            else if (e.KeyCode == Keys.Space)
-                mtest_key = "KEY_SPACE";
-            else
-                mtest_key = "";
-        }
-
-        private void Form1_KeyUp(object sender, KeyEventArgs e)
-        {
-            mtest_key = "";
-        }
-
         private void MotionConfig_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(MotionConfig.SelectedIndex == 0)
@@ -2644,6 +2468,16 @@ namespace _86ME_ver1
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = false;
                 }
+                else if (Always_radioButton.Checked == true)
+                {
+                    Always_groupBox.Enabled = true;
+                    Keyboard_groupBox.Enabled = false;
+                }
+                else if (Keyboard_radioButton.Checked == true)
+                {
+                    Always_groupBox.Enabled = false;
+                    Keyboard_groupBox.Enabled = true;
+                }
             }
         }
 
@@ -2651,12 +2485,16 @@ namespace _86ME_ver1
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.always;
+            Always_groupBox.Enabled = true;
+            Keyboard_groupBox.Enabled = false;
         }
 
         private void Keyboard_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.keyboard;
+            Always_groupBox.Enabled = false;
+            Keyboard_groupBox.Enabled = true;
         }
 
         private void AlwaysOn_CheckedChanged(object sender, EventArgs e)

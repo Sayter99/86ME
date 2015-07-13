@@ -815,9 +815,6 @@
             this.MotionTrigger.ResumeLayout(false);
             this.MotionTrigger.PerformLayout();
             this.Keyboard_groupBox.ResumeLayout(false);
-            this.KeyPreview = true;
-            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
-            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
             this.Always_groupBox.ResumeLayout(false);
             this.Always_groupBox.PerformLayout();
             this.groupBox4.ResumeLayout(false);
