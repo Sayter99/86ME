@@ -18,7 +18,7 @@ namespace _86ME_ver1
             this.Events = new ArrayList();
             this.trigger_on = true;
             this.trigger_method = 0;
-            this.trigger_key = "";
+            this.trigger_key = "KEY_A";
         }
     }
 

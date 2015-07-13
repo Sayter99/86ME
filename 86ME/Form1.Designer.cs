@@ -71,10 +71,13 @@
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
-            this.KeyboardTrigger = new System.Windows.Forms.GroupBox();
-            this.KeyboardCheck = new System.Windows.Forms.CheckBox();
+            this.Keyboard_radioButton = new System.Windows.Forms.RadioButton();
+            this.Always_radioButton = new System.Windows.Forms.RadioButton();
+            this.Keyboard_groupBox = new System.Windows.Forms.GroupBox();
             this.KeyboardCombo = new System.Windows.Forms.ComboBox();
-            this.AlwaysTrigger = new System.Windows.Forms.GroupBox();
+            this.Always_groupBox = new System.Windows.Forms.GroupBox();
+            this.AlwaysOff = new System.Windows.Forms.RadioButton();
+            this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.motion_stop = new System.Windows.Forms.Button();
             this.motion_pause = new System.Windows.Forms.Button();
             this.move_down = new System.Windows.Forms.Button();
@@ -88,8 +91,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.AlwaysOn = new System.Windows.Forms.RadioButton();
-            this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -102,8 +103,8 @@
             this.MotionConfig.SuspendLayout();
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
-            this.KeyboardTrigger.SuspendLayout();
-            this.AlwaysTrigger.SuspendLayout();
+            this.Keyboard_groupBox.SuspendLayout();
+            this.Always_groupBox.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -510,8 +511,10 @@
             // MotionTrigger
             // 
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
-            this.MotionTrigger.Controls.Add(this.KeyboardTrigger);
-            this.MotionTrigger.Controls.Add(this.AlwaysTrigger);
+            this.MotionTrigger.Controls.Add(this.Keyboard_radioButton);
+            this.MotionTrigger.Controls.Add(this.Always_radioButton);
+            this.MotionTrigger.Controls.Add(this.Keyboard_groupBox);
+            this.MotionTrigger.Controls.Add(this.Always_groupBox);
             this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
             this.MotionTrigger.Name = "MotionTrigger";
             this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
@@ -519,48 +522,117 @@
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Motion Trigger";
             // 
-            // KeyboardTrigger
+            // Keyboard_radioButton
             // 
-            this.KeyboardTrigger.Controls.Add(this.KeyboardCheck);
-            this.KeyboardTrigger.Controls.Add(this.KeyboardCombo);
-            this.KeyboardTrigger.Location = new System.Drawing.Point(6, 65);
-            this.KeyboardTrigger.Name = "KeyboardTrigger";
-            this.KeyboardTrigger.Size = new System.Drawing.Size(236, 58);
-            this.KeyboardTrigger.TabIndex = 1;
-            this.KeyboardTrigger.TabStop = false;
-            this.KeyboardTrigger.Text = "Keyboard";
+            this.Keyboard_radioButton.AutoSize = true;
+            this.Keyboard_radioButton.Location = new System.Drawing.Point(15, 65);
+            this.Keyboard_radioButton.Name = "Keyboard_radioButton";
+            this.Keyboard_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.Keyboard_radioButton.TabIndex = 3;
+            this.Keyboard_radioButton.TabStop = true;
+            this.Keyboard_radioButton.UseVisualStyleBackColor = true;
+            this.Keyboard_radioButton.CheckedChanged += new System.EventHandler(this.Keyboard_radioButton_CheckedChanged);
             // 
-            // KeyboardCheck
+            // Always_radioButton
             // 
-            this.KeyboardCheck.AutoSize = true;
-            this.KeyboardCheck.Location = new System.Drawing.Point(22, 25);
-            this.KeyboardCheck.Name = "KeyboardCheck";
-            this.KeyboardCheck.Size = new System.Drawing.Size(63, 16);
-            this.KeyboardCheck.TabIndex = 1;
-            this.KeyboardCheck.Text = "Use Key";
-            this.KeyboardCheck.UseVisualStyleBackColor = true;
-            this.KeyboardCheck.CheckedChanged += new System.EventHandler(this.KeyboardCheck_CheckedChanged);
+            this.Always_radioButton.AutoSize = true;
+            this.Always_radioButton.Checked = true;
+            this.Always_radioButton.Location = new System.Drawing.Point(15, 7);
+            this.Always_radioButton.Name = "Always_radioButton";
+            this.Always_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.Always_radioButton.TabIndex = 2;
+            this.Always_radioButton.TabStop = true;
+            this.Always_radioButton.UseVisualStyleBackColor = true;
+            this.Always_radioButton.CheckedChanged += new System.EventHandler(this.Always_radioButton_CheckedChanged);
+            // 
+            // Keyboard_groupBox
+            // 
+            this.Keyboard_groupBox.Controls.Add(this.KeyboardCombo);
+            this.Keyboard_groupBox.Location = new System.Drawing.Point(35, 65);
+            this.Keyboard_groupBox.Name = "Keyboard_groupBox";
+            this.Keyboard_groupBox.Size = new System.Drawing.Size(207, 58);
+            this.Keyboard_groupBox.TabIndex = 1;
+            this.Keyboard_groupBox.TabStop = false;
+            this.Keyboard_groupBox.Text = "Keyboard";
             // 
             // KeyboardCombo
             // 
             this.KeyboardCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.KeyboardCombo.Enabled = false;
             this.KeyboardCombo.FormattingEnabled = true;
-            this.KeyboardCombo.Location = new System.Drawing.Point(91, 23);
+            this.KeyboardCombo.Items.AddRange(new object[] {
+            "KEY_A",
+            "KEY_B",
+            "KEY_C",
+            "KEY_D",
+            "KEY_E",
+            "KEY_F",
+            "KEY_G",
+            "KEY_H",
+            "KEY_I",
+            "KEY_J",
+            "KEY_K",
+            "KEY_L",
+            "KEY_M",
+            "KEY_N",
+            "KEY_O",
+            "KEY_P",
+            "KEY_Q",
+            "KEY_R",
+            "KEY_S",
+            "KEY_T",
+            "KEY_U",
+            "KEY_V",
+            "KEY_W",
+            "KEY_X",
+            "KEY_Y",
+            "KEY_Z",
+            "KEY_SPACE",
+            "KEY_LEFT",
+            "KEY_RIGHT",
+            "KEY_UP",
+            "KEY_DOWN",
+            "KEY_ESC"});
+            this.KeyboardCombo.Location = new System.Drawing.Point(45, 21);
             this.KeyboardCombo.Name = "KeyboardCombo";
             this.KeyboardCombo.Size = new System.Drawing.Size(121, 20);
             this.KeyboardCombo.TabIndex = 0;
+            this.KeyboardCombo.SelectedIndex = 0;
+            this.KeyboardCombo.SelectedIndexChanged += new System.EventHandler(KeyboardCombo_SelectedIndexChanged);
             // 
-            // AlwaysTrigger
+            // Always_groupBox
             // 
-            this.AlwaysTrigger.Controls.Add(this.AlwaysOff);
-            this.AlwaysTrigger.Controls.Add(this.AlwaysOn);
-            this.AlwaysTrigger.Location = new System.Drawing.Point(6, 6);
-            this.AlwaysTrigger.Name = "AlwaysTrigger";
-            this.AlwaysTrigger.Size = new System.Drawing.Size(236, 53);
-            this.AlwaysTrigger.TabIndex = 0;
-            this.AlwaysTrigger.TabStop = false;
-            this.AlwaysTrigger.Text = "Always";
+            this.Always_groupBox.Controls.Add(this.AlwaysOff);
+            this.Always_groupBox.Controls.Add(this.AlwaysOn);
+            this.Always_groupBox.Location = new System.Drawing.Point(35, 6);
+            this.Always_groupBox.Name = "Always_groupBox";
+            this.Always_groupBox.Size = new System.Drawing.Size(207, 53);
+            this.Always_groupBox.TabIndex = 0;
+            this.Always_groupBox.TabStop = false;
+            this.Always_groupBox.Text = "Always";
+            // 
+            // AlwaysOff
+            // 
+            this.AlwaysOff.AutoSize = true;
+            this.AlwaysOff.Location = new System.Drawing.Point(91, 21);
+            this.AlwaysOff.Name = "AlwaysOff";
+            this.AlwaysOff.Size = new System.Drawing.Size(39, 16);
+            this.AlwaysOff.TabIndex = 1;
+            this.AlwaysOff.Text = "Off";
+            this.AlwaysOff.UseVisualStyleBackColor = true;
+            this.AlwaysOff.CheckedChanged += new System.EventHandler(this.AlwaysOff_CheckedChanged);
+            // 
+            // AlwaysOn
+            // 
+            this.AlwaysOn.AutoSize = true;
+            this.AlwaysOn.Checked = true;
+            this.AlwaysOn.Location = new System.Drawing.Point(22, 21);
+            this.AlwaysOn.Name = "AlwaysOn";
+            this.AlwaysOn.Size = new System.Drawing.Size(37, 16);
+            this.AlwaysOn.TabIndex = 0;
+            this.AlwaysOn.TabStop = true;
+            this.AlwaysOn.Text = "On";
+            this.AlwaysOn.UseVisualStyleBackColor = true;
+            this.AlwaysOn.CheckedChanged += new System.EventHandler(this.AlwaysOn_CheckedChanged);
             // 
             // motion_stop
             // 
@@ -705,28 +777,6 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Edit Settings";
             // 
-            // AlwaysOn
-            // 
-            this.AlwaysOn.AutoSize = true;
-            this.AlwaysOn.Checked = true;
-            this.AlwaysOn.Location = new System.Drawing.Point(22, 21);
-            this.AlwaysOn.Name = "AlwaysOn";
-            this.AlwaysOn.Size = new System.Drawing.Size(37, 16);
-            this.AlwaysOn.TabIndex = 0;
-            this.AlwaysOn.TabStop = true;
-            this.AlwaysOn.Text = "On";
-            this.AlwaysOn.UseVisualStyleBackColor = true;
-            // 
-            // AlwaysOff
-            // 
-            this.AlwaysOff.AutoSize = true;
-            this.AlwaysOff.Location = new System.Drawing.Point(91, 21);
-            this.AlwaysOff.Name = "AlwaysOff";
-            this.AlwaysOff.Size = new System.Drawing.Size(39, 16);
-            this.AlwaysOff.TabIndex = 1;
-            this.AlwaysOff.Text = "Off";
-            this.AlwaysOff.UseVisualStyleBackColor = true;
-            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -763,10 +813,13 @@
             this.MotionConfig.ResumeLayout(false);
             this.ActionList.ResumeLayout(false);
             this.MotionTrigger.ResumeLayout(false);
-            this.KeyboardTrigger.ResumeLayout(false);
-            this.KeyboardTrigger.PerformLayout();
-            this.AlwaysTrigger.ResumeLayout(false);
-            this.AlwaysTrigger.PerformLayout();
+            this.MotionTrigger.PerformLayout();
+            this.Keyboard_groupBox.ResumeLayout(false);
+            this.KeyPreview = true;
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
+            this.KeyUp += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyUp);
+            this.Always_groupBox.ResumeLayout(false);
+            this.Always_groupBox.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
             this.ResumeLayout(false);
@@ -830,12 +883,13 @@
         private System.Windows.Forms.TabControl MotionConfig;
         private System.Windows.Forms.TabPage ActionList;
         private System.Windows.Forms.TabPage MotionTrigger;
-        private System.Windows.Forms.GroupBox KeyboardTrigger;
-        private System.Windows.Forms.CheckBox KeyboardCheck;
+        private System.Windows.Forms.GroupBox Keyboard_groupBox;
         private System.Windows.Forms.ComboBox KeyboardCombo;
-        private System.Windows.Forms.GroupBox AlwaysTrigger;
+        private System.Windows.Forms.GroupBox Always_groupBox;
         private System.Windows.Forms.RadioButton AlwaysOff;
         private System.Windows.Forms.RadioButton AlwaysOn;
+        private System.Windows.Forms.RadioButton Always_radioButton;
+        private System.Windows.Forms.RadioButton Keyboard_radioButton;
     }
 }
 

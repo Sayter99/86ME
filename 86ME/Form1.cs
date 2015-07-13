@@ -37,6 +37,7 @@ namespace _86ME_ver1
         int motiontest_state;
         enum mtest_states { start, pause, stop };
         enum mtest_method { always, keyboard };
+        string mtest_key = "";
         int default_delay = 1000;
         int current_motionlist_idx = -1;
         public string com_port;
@@ -663,7 +664,7 @@ namespace _86ME_ver1
                 for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                    writer.Write("Motion " + m.name + "\n");
+                    writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.trigger_on + " " + m.trigger_key + "\n");
                     for (int j = 0; j < m.Events.Count; j++)
                     {
                         if (m.Events[j] is ME_Frame)
@@ -967,6 +968,22 @@ namespace _86ME_ver1
                         {
                             motiontag = new ME_Motion();
                             motiontag.name = datas[i];
+                            i++;
+                            if (String.Compare("frame", datas[i]) != 0 && String.Compare("home", datas[i]) != 0 &&
+                                String.Compare("delay", datas[i]) != 0 && String.Compare("sound", datas[i]) != 0 &&
+                                String.Compare("flag", datas[i]) != 0 && String.Compare("goto", datas[i]) != 0)
+                            {
+                                motiontag.trigger_method = int.Parse(datas[i]);
+                                i++;
+                                if (String.Compare("True", datas[i]) == 0)
+                                    motiontag.trigger_on = true;
+                                else
+                                    motiontag.trigger_on = false;
+                                i++;
+                                motiontag.trigger_key = datas[i];
+                            }
+                            else
+                                i--;
                             ME_Motionlist.Add(motiontag);
                         }
                     }
@@ -1315,12 +1332,26 @@ namespace _86ME_ver1
             }
             draw_background();
         }
+
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             update_motionlist();
             move_up.Enabled = false;
             move_down.Enabled = false;
             current_motionlist_idx = -1;
+            // Motion Trigger part
+            Always_radioButton.Enabled = true;
+            Keyboard_radioButton.Enabled = true;
+            Always_groupBox.Enabled = true;
+            Keyboard_groupBox.Enabled = true;
+            ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
+            if (m.trigger_method == (int)mtest_method.always)
+                Always_radioButton.Checked = true;
+            else
+                Keyboard_radioButton.Checked = true;
+            AlwaysOn.Checked = m.trigger_on;
+            AlwaysOff.Checked = !m.trigger_on;
+            KeyboardCombo.Text = m.trigger_key;
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1840,8 +1871,11 @@ namespace _86ME_ver1
                 motion_stop.Enabled = false;
                 groupBox1.Enabled = false;
                 groupBox4.Enabled = false;
-                AlwaysTrigger.Enabled = false;
-                KeyboardTrigger.Enabled = false;
+                //Motion Config
+                Always_radioButton.Enabled = false;
+                Keyboard_radioButton.Enabled = false;
+                Always_groupBox.Enabled = false;
+                Keyboard_groupBox.Enabled = false;
             }
         }
 
@@ -1853,10 +1887,9 @@ namespace _86ME_ver1
                     MessageBox.Show("Please enter a name starting in English and without special characters");
                 else
                     MessageBox.Show("Please enter a name less than 20 letters");
-                MotionCombo.Text = "";
                 MotionCombo.Focus();
             }
-            else if (MotionCombo.Text.IndexOf(" ") == -1)//TODO: 1. add trigger attributions to m 2. load proj
+            else if (MotionCombo.Text.IndexOf(" ") == -1) // add new motion successfully
             {
                 MotionCombo.Items.Add(MotionCombo.Text);
                 ME_Motion m = new ME_Motion();
@@ -1867,19 +1900,33 @@ namespace _86ME_ver1
                 current_motionlist_idx = -1;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
-                AlwaysTrigger.Enabled = true;
-                KeyboardTrigger.Enabled = true;
+                //Motion Config
+                Always_radioButton.Enabled = true;
+                Keyboard_radioButton.Enabled = true;
+                Always_groupBox.Enabled = true;
+                Keyboard_groupBox.Enabled = true;
+                Always_radioButton.Checked = true;
+                AlwaysOn.Checked = true;
+                //Motion Config
+                KeyboardCombo.SelectedIndex = 0;
                 draw_background();
-                Motionlist.Focus();
-                this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
+                if (MotionConfig.SelectedIndex == 0)
+                {
+                    Motionlist.Focus();
+                    this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
+                }
+                else
+                {
+                    Always_groupBox.Focus();
+                }
             }
             else
             {
                 MessageBox.Show("Motion name should without space.");
-                MotionCombo.Text = "";
                 MotionCombo.Focus();
             }
         }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool close = true;
@@ -2100,6 +2147,25 @@ namespace _86ME_ver1
                     "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
         }
 
+        private bool runMotion(ME_Motion m)
+        {
+            switch(m.trigger_method)
+            {
+                case (int)mtest_method.always:
+                    if (m.trigger_on)
+                        return true;
+                    else
+                        return false;
+                case (int)mtest_method.keyboard:
+                    if (String.Compare(m.trigger_key, mtest_key) == 0)
+                        return true;
+                    else
+                        return false;
+                default:
+                    return true;
+            }
+        }
+
         public void AllMotionTest()
         {
             while(motiontest_state == (int)mtest_states.start)
@@ -2108,8 +2174,8 @@ namespace _86ME_ver1
                 {
                     if (motiontest_state == (int)mtest_states.start)
                     {
-                        //if()
-                        MotionOnTest(((ME_Motion)ME_Motionlist[i]));
+                        if (runMotion(((ME_Motion)ME_Motionlist[i])))
+                            MotionOnTest(((ME_Motion)ME_Motionlist[i]));
                     }
                     if (motiontest_state == (int)mtest_states.pause)
                     {
@@ -2132,11 +2198,13 @@ namespace _86ME_ver1
             if (MotionCombo.SelectedItem != null && MotionConfig.SelectedIndex == 0)
             {
                 t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
+                t.IsBackground = true;
                 t.Start();
             }
             else if (ME_Motionlist != null && MotionConfig.SelectedIndex == 1)
             {
                 t = new Thread(() => AllMotionTest());
+                t.IsBackground = true;
                 t.Start();
             }
             draw_background();
@@ -2415,6 +2483,32 @@ namespace _86ME_ver1
             Motionlist.SelectedIndex = current_motionlist_idx + 1;
         }
 
+        private void Form1_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode >= Keys.A && e.KeyCode <= Keys.Z)
+                mtest_key = "KEY_" + ((char)e.KeyCode).ToString();
+            else if (e.KeyCode == Keys.Up)
+                mtest_key = "KEY_UP";
+            else if (e.KeyCode == Keys.Down)
+                mtest_key = "KEY_DOWN";
+            else if (e.KeyCode == Keys.Left)
+                mtest_key = "KEY_LEFT";
+            else if (e.KeyCode == Keys.Right)
+                mtest_key = "KEY_RIGHT";
+            else if (e.KeyCode == Keys.Escape)
+                mtest_key = "KEY_ESC";
+            else if (e.KeyCode == Keys.Space)
+                mtest_key = "KEY_SPACE";
+            else
+                mtest_key = "";
+            MessageBox.Show(mtest_key);
+        }
+
+        private void Form1_KeyUp(object sender, KeyEventArgs e)
+        {
+            mtest_key = "";
+        }
+
         private void MotionConfig_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(MotionConfig.SelectedIndex == 0)
@@ -2440,24 +2534,42 @@ namespace _86ME_ver1
                 ttp.SetToolTip(MotionTest, "Play all motions by checking the conditions of Motion Trigger.");
                 if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
                 {
-                    AlwaysTrigger.Enabled = false;
-                    KeyboardTrigger.Enabled = false;
+                    Always_radioButton.Enabled = false;
+                    Keyboard_radioButton.Enabled = false;
+                    Always_groupBox.Enabled = false;
+                    Keyboard_groupBox.Enabled = false;
                 }
             }
         }
 
-        private void KeyboardCheck_CheckedChanged(object sender, EventArgs e)
+        private void Always_radioButton_CheckedChanged(object sender, EventArgs e)
         {
-            if (KeyboardCheck.Checked == true)
-            {
-                KeyboardCombo.Enabled = true;
-                AlwaysTrigger.Enabled = false;
-            }
-            else if (KeyboardCheck.Checked == false)
-            {
-                KeyboardCombo.Enabled = false;
-                AlwaysTrigger.Enabled = true;
-            }
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.always;
+        }
+
+        private void Keyboard_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.keyboard;
+        }
+
+        private void AlwaysOn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_on = true;
+        }
+
+        private void AlwaysOff_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_on = false;
+        }
+
+        private void KeyboardCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_key = KeyboardCombo.Text;
         }
     }
 }

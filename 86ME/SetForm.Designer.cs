@@ -37,7 +37,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(73, 60);
+            this.button2.Location = new System.Drawing.Point(57, 60);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(112, 33);
             this.button2.TabIndex = 1;
@@ -70,9 +70,9 @@
             // 
             // Exit
             // 
-            this.Exit.Location = new System.Drawing.Point(191, 70);
+            this.Exit.Location = new System.Drawing.Point(175, 60);
             this.Exit.Name = "Exit";
-            this.Exit.Size = new System.Drawing.Size(47, 23);
+            this.Exit.Size = new System.Drawing.Size(47, 33);
             this.Exit.TabIndex = 5;
             this.Exit.Text = "Exit";
             this.Exit.UseVisualStyleBackColor = true;
