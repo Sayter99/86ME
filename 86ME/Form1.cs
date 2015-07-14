@@ -70,7 +70,8 @@ namespace _86ME_ver1
                                 "Move action UP",
                                 "Move action DOWN",
                                 "Duplicate frame",
-                                "Add new action at the first field"};
+                                "Add new action at the first field",
+                                "Insert an intermediate frame"};
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
         public Form1()
         {
@@ -1682,7 +1683,12 @@ namespace _86ME_ver1
                 {
                     motionToolStripMenuItem.Text = "Add new action at the next field";
                     contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
-                    for (int i = 2; i < motionevent.Length - 1; i++)
+
+                    if ((((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count - 1) > Motionlist.SelectedIndex)
+                        if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1] is ME_Frame)
+                            contextMenuStrip1.Items.Add("Insert an intermediate frame");
+
+                    for (int i = 2; i < motionevent.Length - 2; i++)
                         contextMenuStrip1.Items.Add(motionevent[i]);
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -1692,7 +1698,7 @@ namespace _86ME_ver1
                 {
                     motionToolStripMenuItem.Text = "Add new action at the next field";
                     contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
-                    for (int i = 2; i < motionevent.Length - 2; i++)
+                    for (int i = 2; i < motionevent.Length - 3; i++)
                         contextMenuStrip1.Items.Add(motionevent[i]);
                     contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -1755,8 +1761,7 @@ namespace _86ME_ver1
                             break;
                         case 5:
                             Framelist.Enabled = false;
-                            ME_Frame f = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
-                            if (f.type == 1)
+                            if (((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).type == 1)
                             {
                                 Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
                                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
@@ -1764,7 +1769,7 @@ namespace _86ME_ver1
                                 ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay;
                                 Motionlist.SelectedIndex++;
                             }
-                            else if (f.type == 0)
+                            else if (((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).type == 0)
                             {
                                 Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home] " + homecount++.ToString());
                                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
@@ -1775,6 +1780,17 @@ namespace _86ME_ver1
                             }
                             break;
                         case 6:
+                            break;
+                        case 7:
+                            Framelist.Enabled = false;
+                            ME_Frame f1 = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
+                            ME_Frame f2 = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]);
+                            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
+                            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
+                            for (int j = 0; j < 45; j++)
+                                ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame[j] = (f1.frame[j] + f2.frame[j]) / 2;
+                            ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
+                            Motionlist.SelectedIndex++;
                             break;
                     }
         }
@@ -2271,23 +2287,23 @@ namespace _86ME_ver1
 
         private void Generate_Click(object sender, EventArgs e)
         {
-            if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
+            if (ME_Motionlist == null)
             {
                 MessageBox.Show("You should add a motion first");
                 return;
             }
-            generate_sketches g = new generate_sketches((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex], Motion, offset, ME_Motionlist);
+            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist);
             g.generate_withFiles();
         }
 
         private void GenerateAllInOne_Click(object sender, EventArgs e)
         {
-            if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
+            if (ME_Motionlist == null)
             {
                 MessageBox.Show("You should add a motion first");
                 return;
             }
-            generate_sketches g = new generate_sketches((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex], Motion, offset, ME_Motionlist);
+            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist);
             g.generate_AllinOne();
         }
 

@@ -12,6 +12,7 @@ namespace _86ME_ver1
         public int trigger_method;
         public bool trigger_on;
         public string trigger_key;
+        public int frames;
         public ME_Motion()
         {
             this.name = null;
@@ -19,6 +20,7 @@ namespace _86ME_ver1
             this.trigger_on = true;
             this.trigger_method = 0;
             this.trigger_key = "KEY_A";
+            this.frames = 0;
         }
     }
 
@@ -59,7 +61,6 @@ namespace _86ME_ver1
         public bool is_goto;
         public string loops;
         public int current_loop;
-        public bool parsed;
         public bool infinite;
         public ME_Goto()
         {
@@ -68,7 +69,6 @@ namespace _86ME_ver1
             this.loops = "0";
             this.current_loop = 0;
             this.infinite = false;
-            this.parsed = false;
         }
     }
     public class ME_Flag

@@ -510,6 +510,7 @@
             // 
             // MotionTrigger
             // 
+            this.MotionTrigger.AutoScroll = true;
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
             this.MotionTrigger.Controls.Add(this.Keyboard_radioButton);
             this.MotionTrigger.Controls.Add(this.Always_radioButton);
@@ -520,12 +521,12 @@
             this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
             this.MotionTrigger.Size = new System.Drawing.Size(248, 418);
             this.MotionTrigger.TabIndex = 1;
-            this.MotionTrigger.Text = "Motion Trigger";
+            this.MotionTrigger.Text = "Trigger";
             // 
             // Keyboard_radioButton
             // 
             this.Keyboard_radioButton.AutoSize = true;
-            this.Keyboard_radioButton.Location = new System.Drawing.Point(15, 65);
+            this.Keyboard_radioButton.Location = new System.Drawing.Point(7, 65);
             this.Keyboard_radioButton.Name = "Keyboard_radioButton";
             this.Keyboard_radioButton.Size = new System.Drawing.Size(14, 13);
             this.Keyboard_radioButton.TabIndex = 3;
@@ -537,7 +538,7 @@
             // 
             this.Always_radioButton.AutoSize = true;
             this.Always_radioButton.Checked = true;
-            this.Always_radioButton.Location = new System.Drawing.Point(15, 7);
+            this.Always_radioButton.Location = new System.Drawing.Point(7, 7);
             this.Always_radioButton.Name = "Always_radioButton";
             this.Always_radioButton.Size = new System.Drawing.Size(14, 13);
             this.Always_radioButton.TabIndex = 2;
@@ -548,9 +549,9 @@
             // Keyboard_groupBox
             // 
             this.Keyboard_groupBox.Controls.Add(this.KeyboardCombo);
-            this.Keyboard_groupBox.Location = new System.Drawing.Point(35, 65);
+            this.Keyboard_groupBox.Location = new System.Drawing.Point(27, 65);
             this.Keyboard_groupBox.Name = "Keyboard_groupBox";
-            this.Keyboard_groupBox.Size = new System.Drawing.Size(207, 58);
+            this.Keyboard_groupBox.Size = new System.Drawing.Size(192, 58);
             this.Keyboard_groupBox.TabIndex = 1;
             this.Keyboard_groupBox.TabStop = false;
             this.Keyboard_groupBox.Text = "Keyboard";
@@ -592,20 +593,19 @@
             "KEY_UP",
             "KEY_DOWN",
             "KEY_ESC"});
-            this.KeyboardCombo.Location = new System.Drawing.Point(45, 21);
+            this.KeyboardCombo.Location = new System.Drawing.Point(32, 21);
             this.KeyboardCombo.Name = "KeyboardCombo";
             this.KeyboardCombo.Size = new System.Drawing.Size(121, 20);
             this.KeyboardCombo.TabIndex = 0;
-            this.KeyboardCombo.SelectedIndex = 0;
-            this.KeyboardCombo.SelectedIndexChanged += new System.EventHandler(KeyboardCombo_SelectedIndexChanged);
+            this.KeyboardCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardCombo_SelectedIndexChanged);
             // 
             // Always_groupBox
             // 
             this.Always_groupBox.Controls.Add(this.AlwaysOff);
             this.Always_groupBox.Controls.Add(this.AlwaysOn);
-            this.Always_groupBox.Location = new System.Drawing.Point(35, 6);
+            this.Always_groupBox.Location = new System.Drawing.Point(27, 6);
             this.Always_groupBox.Name = "Always_groupBox";
-            this.Always_groupBox.Size = new System.Drawing.Size(207, 53);
+            this.Always_groupBox.Size = new System.Drawing.Size(192, 53);
             this.Always_groupBox.TabIndex = 0;
             this.Always_groupBox.TabStop = false;
             this.Always_groupBox.Text = "Always";
