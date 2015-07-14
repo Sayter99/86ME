@@ -1,3 +1,9 @@
+### 86ME_v1.3 - 2015.. ###
+
+If you find any bug, or want to provide software patches or 
+to request enhancements about 86ME, please report to the 86Duino 
+forum: http://www.86duino.com/?page_id=85.
+
 ### 86ME_v1.2 - 2015.07.06 ###
 
 * Change the checkbox "Auto Play" to "Sync", and add a tracebar for tuning the speed of synchronizing motors.
