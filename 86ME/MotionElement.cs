@@ -11,7 +11,7 @@ namespace _86ME_ver1
         public string name;
         public int trigger_method;
         public int auto_method;
-        public string trigger_key;
+        public int trigger_key;
         public int trigger_keyType;
         public int frames;
         public ME_Motion()
@@ -20,7 +20,7 @@ namespace _86ME_ver1
             this.Events = new ArrayList();
             this.trigger_method = 0;
             this.auto_method = 0;
-            this.trigger_key = "KEY_A";
+            this.trigger_key = 0;
             this.trigger_keyType = 1;
             this.frames = 0;
         }

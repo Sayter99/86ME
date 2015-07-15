@@ -13,7 +13,6 @@ namespace _86ME_ver1
 
     public class generate_sketches
     {
-        List<string> trigger_keys = new List<string>();
         private string nfilename = "";
         private ArrayList ME_Motionlist;
         private NewMotion Motion;
@@ -31,6 +30,26 @@ namespace _86ME_ver1
             }
         }
 
+        private int convert_keynum(int keynum)
+        {
+            if (keynum <= 25)
+                return keynum + 4;
+            else if (keynum == 26)
+                return 0x2C;
+            else if (keynum == 27)
+                return 0x50;
+            else if (keynum == 28)
+                return 0x4F;
+            else if (keynum == 29)
+                return 0x52;
+            else if (keynum == 30)
+                return 0x51;
+            else if (keynum == 31)
+                return 0x29;
+            else
+                return 0;
+        }
+
         private string trigger_condition(ME_Motion m)
         {
             switch(m.trigger_method)
@@ -44,11 +63,11 @@ namespace _86ME_ver1
                         return m.name + "_title == 1";
                 case (int)mtest_method.keyboard:
                     if (m.trigger_keyType == (int)keyboard_method.first)
-                        return "key_state(" + m.trigger_key + ") == 0";
+                        return "keys_state[" + convert_keynum(m.trigger_key) + "] == 0";
                     else if (m.trigger_keyType == (int)keyboard_method.pressed)
-                        return "key_state(" + m.trigger_key + ") == 1";
+                        return "keys_state[" + convert_keynum(m.trigger_key) + "] == 1";
                     else // release
-                        return "key_state(" + m.trigger_key + ") == 2";
+                        return "keys_state[" + convert_keynum(m.trigger_key) + "] == 2";
                 default:
                     return "1";
             }
@@ -144,7 +163,7 @@ namespace _86ME_ver1
             writer.WriteLine(space + "}");
         }
 
-        public void generate_ino(string path, List<int> channels)
+        public void generate_ino(string path, List<int> channels, List<uint> home)
         {
             string frm_name = "_frm";
             string current_motion_name = "";
@@ -157,9 +176,9 @@ namespace _86ME_ver1
             // *** INCLUDE HEADERS FOR TRIGGER ***
             if (method_flag[1]) // keyboard
             {
-                writer.WriteLine("#include <Arduino.h>");
-                writer.WriteLine("#include <USBHost.h>");
-                writer.WriteLine("#include <allegro.h>");
+                writer.WriteLine("#include <KeyboardController.h>\n");
+                writer.WriteLine("USBHost usb;");
+                writer.WriteLine("KeyboardController keyboard(usb);");
             }
             // *** INCLUDE HEADERS FOR TRIGGER ***
             writer.WriteLine();
@@ -169,6 +188,7 @@ namespace _86ME_ver1
             writer.WriteLine();
             writer.WriteLine("ServoOffset myoffs(\"" + "_86ME_settings\\\\" + "86offset.txt\");");
             writer.WriteLine();
+            writer.WriteLine("ServoFrame _86ME_HOME;\n");// automatic homeframe
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
@@ -189,34 +209,49 @@ namespace _86ME_ver1
 
             if (method_flag[1]) // keyboard
             {
-                writer.WriteLine("static int key_press[KEY_MAX] = {0};\n" + "int key_state(int k)\n" +
-                                 "{\n  if(key[k] && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
-                                 "	return 0;\n  }\n" + "  else if(key[k] && key_press[k])\n  {\n" +
+                writer.WriteLine("char current_key = 0;");
+                writer.WriteLine("void keyPressed(){current_key = keyboard.getOemKey();}");
+                writer.WriteLine("void keyReleased(){current_key = 0;}");
+                writer.WriteLine("static int keys_state[128];");
+                writer.WriteLine("static int key_press[128] = {0};\n" + "int key_state(int k)\n" +
+                                 "{\n  if(current_key==k && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
+                                 "	return 0;\n  }\n" + "  else if(current_key==k && key_press[k])\n  {\n" +
                                  "    key_press[k] = 1;\n" + "    return 1;\n  }\n" +
-                                 "  else if(!key[k] && key_press[k])\n  {\n" +"    key_press[k] = 0;\n" +
+                                 "  else if(current_key!=k && key_press[k])\n  {\n" + "    key_press[k] = 0;\n" +
                                  "    return 2;\n  }\n" + "  return 3;\n}\n");
             }
 
             //void setup {}
             writer.WriteLine("void setup()");
             writer.WriteLine("{");
-            // *** SETUP FOR TRIGGER ***
-            if (method_flag[1]) // keyboard
-            {
-                writer.WriteLine("  allegro_init();");
-                writer.WriteLine("  install_timer();"); //tmp
-                writer.WriteLine("  install_keyboard();\n");
-            }
-            // *** SETUP FOR TRIGGER ***
             for (int i = 0; i < channels.Count; i++)
                 writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
-            writer.WriteLine("  myoffs.setOffsets();");
-            writer.WriteLine("}");
             writer.WriteLine();
+            for (int j = 0; j < channels.Count; j++)
+                writer.WriteLine("  _86ME_HOME.positions[" + j.ToString() + "] = " + home[j] + ";");
+            writer.WriteLine();
+            writer.WriteLine("  myoffs.setOffsets();");
+            writer.WriteLine();
+            writer.WriteLine("  _86ME_HOME.playPositions(0);\n}");
 
             //void loop {}
             writer.WriteLine("void loop()");
             writer.WriteLine("{");
+            if (method_flag[1])
+            {
+                writer.WriteLine("  usb.Task();");
+                int[] keys_state = new int[128];
+                for (int i = 0; i < ME_Motionlist.Count; i++)
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    if (m.trigger_method == (int)mtest_method.keyboard && keys_state[convert_keynum(m.trigger_key)] == 0)
+                    {
+                        writer.WriteLine("  keys_state[" + convert_keynum(m.trigger_key) +
+                                         "] = key_state(" + convert_keynum(m.trigger_key) + ");");
+                        keys_state[convert_keynum(m.trigger_key)] = 1;
+                    }
+                }
+            }
             int space_num = 2;
             string space = set_space(space_num);
             for (int j = 0; j < ME_Motionlist.Count; j++) //title
@@ -245,6 +280,7 @@ namespace _86ME_ver1
             var dialogResult = path.ShowDialog();
             string txtPath = path.SelectedPath;
             List<int> channels = new List<int>();
+            List<uint> home = new List<uint>();
             int count = 0;
             bool add_channel = true;
             TextWriter writer;
@@ -281,7 +317,11 @@ namespace _86ME_ver1
                                 {
                                     writer.Write("channel");
                                     writer.Write(ch_count.ToString() + "=");
-                                    writer.WriteLine(f.frame[k].ToString());
+                                    if (f.type == 1)
+                                        writer.WriteLine(f.frame[k].ToString());
+                                    else if (f.type == 0)
+                                        writer.WriteLine(Motion.ftext2[k].Text.ToString());
+                                    home.Add(uint.Parse(Motion.ftext2[k].Text));
                                     if (add_channel)
                                         channels.Add(k);
                                     ch_count++;
@@ -309,7 +349,7 @@ namespace _86ME_ver1
 
                 writer.Dispose();
                 writer.Close();
-                generate_ino(txtPath, channels);
+                generate_ino(txtPath, channels, home);
                 MessageBox.Show("The sketch and setting files are generated in " +
                                 txtPath + motion_sketch_name + "\\");
             }
@@ -323,6 +363,7 @@ namespace _86ME_ver1
             string txtPath = path.SelectedPath;
             List<int> channels = new List<int>();
             List<int> angle = new List<int>();
+            List<uint> home = new List<uint>();
             int count = 0;
             int processed = 0;
             bool add_channel = true;
@@ -343,9 +384,9 @@ namespace _86ME_ver1
                 // *** INCLUDE HEADERS FOR TRIGGER ***
                 if (method_flag[1]) // keyboard
                 {
-                    writer.WriteLine("#include <Arduino.h>");
-                    writer.WriteLine("#include <USBHost.h>");
-                    writer.WriteLine("#include <allegro.h>");
+                    writer.WriteLine("#include <KeyboardController.h>\n");
+                    writer.WriteLine("USBHost usb;");
+                    writer.WriteLine("KeyboardController keyboard(usb);");
                 }
                 // *** INCLUDE HEADERS FOR TRIGGER ***
                 writer.WriteLine();
@@ -362,7 +403,11 @@ namespace _86ME_ver1
                             {
                                 if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
                                 {
-                                    angle.Add(f.frame[k]);
+                                    if (f.type == 1)
+                                        angle.Add(f.frame[k]);
+                                    else if (f.type == 0)
+                                        angle.Add(int.Parse(Motion.ftext2[k].Text));
+                                    home.Add(uint.Parse(Motion.ftext2[k].Text));
                                     if (add_channel)
                                         channels.Add(k);
                                 }
@@ -382,6 +427,7 @@ namespace _86ME_ver1
                 writer.WriteLine();
                 writer.WriteLine("ServoOffset myoffs;");
                 writer.WriteLine();
+                writer.WriteLine("ServoFrame _86ME_HOME;\n");// automatic homeframe
 
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
@@ -396,25 +442,21 @@ namespace _86ME_ver1
 
                 if (method_flag[1]) // keyboard
                 {
-                    writer.WriteLine("static int key_press[KEY_MAX] = {0};\n" + "int key_state(int k)\n" +
-                                     "{\n  if(key[k] && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
-                                     "	return 0;\n  }\n" + "  else if(key[k] && key_press[k])\n  {\n" +
+                    writer.WriteLine("char current_key = 0;");
+                    writer.WriteLine("void keyPressed(){current_key = keyboard.getOemKey();}");
+                    writer.WriteLine("void keyReleased(){current_key = 0;}");
+                    writer.WriteLine("static int keys_state[128];");
+                    writer.WriteLine("static int key_press[128] = {0};\n" + "int key_state(int k)\n" +
+                                     "{\n  if(current_key==k && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
+                                     "	return 0;\n  }\n" + "  else if(current_key==k && key_press[k])\n  {\n" +
                                      "    key_press[k] = 1;\n" + "    return 1;\n  }\n" +
-                                     "  else if(!key[k] && key_press[k])\n  {\n" + "    key_press[k] = 0;\n" +
+                                     "  else if(current_key!=k && key_press[k])\n  {\n" + "    key_press[k] = 0;\n" +
                                      "    return 2;\n  }\n" + "  return 3;\n}\n");
                 }
 
                 // setup
                 writer.WriteLine("void setup()");
                 writer.WriteLine("{");
-                // *** SETUP FOR TRIGGER ***
-                if (method_flag[1])//keyboard
-                {
-                    writer.WriteLine("  allegro_init();");
-                    writer.WriteLine("  install_timer();");
-                    writer.WriteLine("  install_keyboard();\n");
-                }
-                // *** SETUP FOR TRIGGER ***
                 for (int i = 0; i < channels.Count; i++)
                     writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
                 writer.WriteLine();
@@ -441,8 +483,12 @@ namespace _86ME_ver1
                     }
                     processed += channels.Count * ((ME_Motion)ME_Motionlist[k]).frames;
                 }
-
+                for (int j = 0; j < channels.Count; j++ )
+                    writer.WriteLine("  _86ME_HOME.positions[" + j.ToString() + "] = " + home[j] + ";");
+                writer.WriteLine();
                 writer.WriteLine("  myoffs.setOffsets();");
+                writer.WriteLine();
+                writer.WriteLine("  _86ME_HOME.playPositions(0);");
 
                 writer.WriteLine("}");
                 writer.WriteLine();
@@ -450,6 +496,21 @@ namespace _86ME_ver1
                 // loop
                 writer.WriteLine("void loop()");
                 writer.WriteLine("{");
+                if (method_flag[1])
+                {
+                    writer.WriteLine("  usb.Task();");
+                    int[] keys_state = new int[128];
+                    for(int i=0; i<ME_Motionlist.Count; i++)
+                    {
+                        ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                        if(m.trigger_method == (int)mtest_method.keyboard && keys_state[convert_keynum(m.trigger_key)] == 0)
+                        {
+                            writer.WriteLine("  keys_state[" + convert_keynum(m.trigger_key) +
+                                             "] = key_state(" + convert_keynum(m.trigger_key) + ");");
+                            keys_state[convert_keynum(m.trigger_key)] = 1;
+                        }
+                    }
+                }
                 int space_num = 2;
                 string space = set_space(space_num);
                 for (int j = 0; j < ME_Motionlist.Count; j++) //title

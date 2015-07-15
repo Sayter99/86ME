@@ -976,7 +976,7 @@ namespace _86ME_ver1
                                 i++;
                                 motiontag.auto_method = int.Parse(datas[i]);
                                 i++;
-                                motiontag.trigger_key = datas[i];
+                                motiontag.trigger_key = int.Parse(datas[i]);
                                 i++;
                                 motiontag.trigger_keyType = int.Parse(datas[i]);
                             }
@@ -1361,7 +1361,7 @@ namespace _86ME_ver1
                 AlwaysOff.Checked = true;
             else if (m.auto_method == (int)auto_method.title)
                 TitleMotion.Checked = true;
-            KeyboardCombo.Text = m.trigger_key;
+            KeyboardCombo.SelectedIndex = m.trigger_key;
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
         }
 
@@ -2537,7 +2537,7 @@ namespace _86ME_ver1
         private void KeyboardCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_key = KeyboardCombo.Text;
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_key = KeyboardCombo.SelectedIndex;
         }
 
         private void KeyboardTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
