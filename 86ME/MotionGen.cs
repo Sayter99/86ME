@@ -8,9 +8,12 @@ using System.IO;
 namespace _86ME_ver1
 {
     enum mtest_method { always, keyboard };
+    enum keyboard_method { first, pressed, release };
+    enum auto_method { on, off, title };
 
     public class generate_sketches
     {
+        List<string> trigger_keys = new List<string>();
         private string nfilename = "";
         private ArrayList ME_Motionlist;
         private NewMotion Motion;
@@ -33,12 +36,19 @@ namespace _86ME_ver1
             switch(m.trigger_method)
             {
                 case (int)mtest_method.always:
-                    if (m.trigger_on)
+                    if (m.auto_method == (int)auto_method.on)
                         return "1";
-                    else
+                    else if (m.auto_method == (int)auto_method.off)
                         return "0";
+                    else //title
+                        return m.name + "_title == 1";
                 case (int)mtest_method.keyboard:
-                    return "key[" + m.trigger_key + "]";
+                    if (m.trigger_keyType == (int)keyboard_method.first)
+                        return "key_state(" + m.trigger_key + ") == 0";
+                    else if (m.trigger_keyType == (int)keyboard_method.pressed)
+                        return "key_state(" + m.trigger_key + ") == 1";
+                    else // release
+                        return "key_state(" + m.trigger_key + ") == 2";
                 default:
                     return "1";
             }
@@ -50,6 +60,88 @@ namespace _86ME_ver1
             for (int i = 0; i < n; i++)
                 ret_str += " ";
             return ret_str;
+        }
+
+        private void generate_motion(ME_Motion m, string frm_name, TextWriter writer)
+        {
+            // *** TRIGGER ***
+            int space_num = 2;
+            string space = set_space(space_num);
+            writer.WriteLine(space + "if(" + trigger_condition(m) + ")\n" + space + "{");
+            space_num = 4;
+            space = set_space(space_num);
+            if (m.trigger_method == (int)mtest_method.always)
+                if (m.auto_method == (int)auto_method.title)
+                    writer.WriteLine(space + m.name + "_title--;");
+            // *** TRIGGER ***
+            for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
+            {
+                if (m.Events[i] is ME_Frame)
+                {
+                    ME_Frame f = (ME_Frame)m.Events[i];
+                    writer.WriteLine(space + frm_name + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
+                    writer.WriteLine(space + "while(isServoMultiMoving() == true);");
+                }
+                else if (m.Events[i] is ME_Delay)
+                {
+                    ME_Delay d = (ME_Delay)m.Events[i];
+                    writer.WriteLine(space + "delay(" + d.delay.ToString() + ");");
+                    if (i != m.Events.Count - 1)
+                        writer.WriteLine();
+                }
+                else if (m.Events[i] is ME_Flag)
+                {
+                    for (int k = i; k < m.Events.Count; k++)
+                    {
+                        if (m.Events[k] is ME_Goto)
+                        {
+                            if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
+                            {
+                                ME_Goto g = (ME_Goto)m.Events[k];
+
+                                string for_var = g.name + "_" + flag_count.ToString();
+                                writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
+                                ((ME_Flag)m.Events[i]).var = for_var;
+
+                                space_num += 2;
+                                space = set_space(space_num);
+                                flag_count++;
+                            }
+                        }
+                    }
+                }
+                else if (m.Events[i] is ME_Goto)
+                {
+                    ME_Goto g = (ME_Goto)m.Events[i];
+                    if (g.is_goto)
+                    {
+                        for (int k = 0; k < i; k++)
+                        {
+                            if (m.Events[k] is ME_Flag)
+                            {
+                                if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
+                                {
+                                    string for_var = ((ME_Flag)m.Events[k]).var;
+                                    space_num -= 2;
+                                    space = set_space(space_num);
+                                    if (((ME_Goto)m.Events[i]).infinite == false)
+                                    {
+                                        writer.Write(space + "if(" + for_var + "++ < " +
+                                                        g.loops + ") goto flag_" + for_var + ";\n\n");
+                                    }
+                                    else
+                                    {
+                                        writer.WriteLine(space + "goto flag_" + for_var + ";\n");
+                                    }
+                                }
+                            }
+                        }
+                    }
+                } //ME_Goto
+            }
+            space_num -= 2;
+            space = set_space(space_num);
+            writer.WriteLine(space + "}");
         }
 
         public void generate_ino(string path, List<int> channels)
@@ -66,7 +158,7 @@ namespace _86ME_ver1
             if (method_flag[1]) // keyboard
             {
                 writer.WriteLine("#include <Arduino.h>");
-                writer.WriteLine("#include <allegrokb.h>"); //tmp
+                writer.WriteLine("#include <USBHost.h>");
                 writer.WriteLine("#include <allegro.h>");
             }
             // *** INCLUDE HEADERS FOR TRIGGER ***
@@ -75,7 +167,7 @@ namespace _86ME_ver1
                 writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
 
             writer.WriteLine();
-            writer.WriteLine("ServoOffset myoffs(\"" + "settings\\\\" + "86offset.txt\");");
+            writer.WriteLine("ServoOffset myoffs(\"" + "_86ME_settings\\\\" + "86offset.txt\");");
             writer.WriteLine();
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -83,13 +175,26 @@ namespace _86ME_ver1
                 int frame_count = ((ME_Motion)ME_Motionlist[i]).frames;
                 frm_name = ((ME_Motion)ME_Motionlist[i]).name + "_frm";
                 current_motion_name = ((ME_Motion)ME_Motionlist[i]).name;
+                if (((ME_Motion)ME_Motionlist[i]).trigger_method == (int)mtest_method.always &&
+                        ((ME_Motion)ME_Motionlist[i]).auto_method == (int)auto_method.title)
+                    writer.WriteLine("int " + ((ME_Motion)ME_Motionlist[i]).name + "_title = 1;");
                 for (int j = 0; j < frame_count; j++)
                 {
                     string fc = j.ToString();
-                    writer.WriteLine("ServoFrame " + frm_name + fc + "(\"" + "settings\\\\" +
+                    writer.WriteLine("ServoFrame " + frm_name + fc + "(\"" + "_86ME_settings\\\\" +
                                      current_motion_name + "_frm" + fc + ".txt\");");
                 }
                 writer.WriteLine();
+            }
+
+            if (method_flag[1]) // keyboard
+            {
+                writer.WriteLine("static int key_press[KEY_MAX] = {0};\n" + "int key_state(int k)\n" +
+                                 "{\n  if(key[k] && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
+                                 "	return 0;\n  }\n" + "  else if(key[k] && key_press[k])\n  {\n" +
+                                 "    key_press[k] = 1;\n" + "    return 1;\n  }\n" +
+                                 "  else if(!key[k] && key_press[k])\n  {\n" +"    key_press[k] = 0;\n" +
+                                 "    return 2;\n  }\n" + "  return 3;\n}\n");
             }
 
             //void setup {}
@@ -114,83 +219,19 @@ namespace _86ME_ver1
             writer.WriteLine("{");
             int space_num = 2;
             string space = set_space(space_num);
+            for (int j = 0; j < ME_Motionlist.Count; j++) //title
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[j];
+                frm_name = ((ME_Motion)ME_Motionlist[j]).name.ToString() + "_frm";
+                if (m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title)
+                    generate_motion(m, frm_name, writer);
+            }
             for (int j = 0; j < ME_Motionlist.Count; j++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[j];
                 frm_name = ((ME_Motion)ME_Motionlist[j]).name.ToString() + "_frm";
-                // *** TRIGGER ***
-                writer.WriteLine(space + "if(" + trigger_condition(m) + ")\n" + space + "{");
-                space_num = 4;
-                space = set_space(space_num);
-                // *** TRIGGER ***
-                for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
-                {
-                    if (m.Events[i] is ME_Frame)
-                    {
-                        ME_Frame f = (ME_Frame)m.Events[i];
-                        writer.WriteLine(space + frm_name + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
-                        writer.WriteLine(space + "while(isServoMultiMoving() == true);");
-                    }
-                    else if (m.Events[i] is ME_Delay)
-                    {
-                        ME_Delay d = (ME_Delay)m.Events[i];
-                        writer.WriteLine(space + "delay(" + d.delay.ToString() + ");");
-                        if (i != m.Events.Count - 1)
-                            writer.WriteLine();
-                    }
-                    else if (m.Events[i] is ME_Flag)
-                    {
-                        for (int k = i; k < m.Events.Count; k++)
-                        {
-                            if (m.Events[k] is ME_Goto)
-                            {
-                                if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
-                                {
-                                    ME_Goto g = (ME_Goto)m.Events[k];
-
-                                    string for_var = g.name + "_" + flag_count.ToString();
-                                    writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
-                                    ((ME_Flag)m.Events[i]).var = for_var;
-
-                                    space_num += 2;
-                                    space = set_space(space_num);
-                                    flag_count++;
-                                }
-                            }
-                        }
-                    }
-                    else if (m.Events[i] is ME_Goto)
-                    {
-                        ME_Goto g = (ME_Goto)m.Events[i];
-                        if (g.is_goto)
-                        {
-                            for (int k = 0; k < i; k++)
-                            {
-                                if (m.Events[k] is ME_Flag)
-                                {
-                                    if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
-                                    {
-                                        string for_var = ((ME_Flag)m.Events[k]).var;
-                                        space_num -= 2;
-                                        space = set_space(space_num);
-                                        if (((ME_Goto)m.Events[i]).infinite == false)
-                                        {
-                                            writer.Write(space + "if(" + for_var + "++ < " +
-                                                         g.loops + ") goto flag_" + for_var + ";\n\n");
-                                        }
-                                        else
-                                        {
-                                            writer.WriteLine(space + "goto flag_" + for_var + ";\n");
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    } //ME_Goto
-                }
-                space_num -= 2;
-                space = set_space(space_num);
-                writer.WriteLine(space + "}");
+                if (!(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title))
+                    generate_motion(m, frm_name, writer);
             }
             writer.WriteLine("}");
 
@@ -217,7 +258,7 @@ namespace _86ME_ver1
                     return;
                 }
                 string motion_sketch_name = "\\_86Duino_Motion_Sketch";
-                string motion_settings_path = motion_sketch_name + "\\" + "settings";
+                string motion_settings_path = motion_sketch_name + "\\" + "_86ME_settings";
                 Directory.CreateDirectory(txtPath + motion_sketch_name);
                 Directory.CreateDirectory(txtPath + motion_settings_path);
                 for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -303,7 +344,7 @@ namespace _86ME_ver1
                 if (method_flag[1]) // keyboard
                 {
                     writer.WriteLine("#include <Arduino.h>");
-                    writer.WriteLine("#include <allegrokb.h>"); //tmp
+                    writer.WriteLine("#include <USBHost.h>");
                     writer.WriteLine("#include <allegro.h>");
                 }
                 // *** INCLUDE HEADERS FOR TRIGGER ***
@@ -333,6 +374,7 @@ namespace _86ME_ver1
                     }
                     ((ME_Motion)ME_Motionlist[i]).frames = count;
                 }
+                writer.WriteLine();
 
                 for (int i = 0; i < channels.Count; i++)
                     writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
@@ -344,9 +386,22 @@ namespace _86ME_ver1
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
                     frm_name = ((ME_Motion)ME_Motionlist[i]).name.ToString() + "_frm";
+                    if (((ME_Motion)ME_Motionlist[i]).trigger_method == (int)mtest_method.always &&
+                        ((ME_Motion)ME_Motionlist[i]).auto_method == (int)auto_method.title)
+                        writer.WriteLine("int " + ((ME_Motion)ME_Motionlist[i]).name + "_title = 1;");
                     for (int j = 0; j < ((ME_Motion)ME_Motionlist[i]).frames; j++)
                         writer.WriteLine("ServoFrame " + frm_name + j.ToString() + ";");
                     writer.WriteLine();
+                }
+
+                if (method_flag[1]) // keyboard
+                {
+                    writer.WriteLine("static int key_press[KEY_MAX] = {0};\n" + "int key_state(int k)\n" +
+                                     "{\n  if(key[k] && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
+                                     "	return 0;\n  }\n" + "  else if(key[k] && key_press[k])\n  {\n" +
+                                     "    key_press[k] = 1;\n" + "    return 1;\n  }\n" +
+                                     "  else if(!key[k] && key_press[k])\n  {\n" + "    key_press[k] = 0;\n" +
+                                     "    return 2;\n  }\n" + "  return 3;\n}\n");
                 }
 
                 // setup
@@ -397,83 +452,19 @@ namespace _86ME_ver1
                 writer.WriteLine("{");
                 int space_num = 2;
                 string space = set_space(space_num);
+                for (int j = 0; j < ME_Motionlist.Count; j++) //title
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[j];
+                    frm_name = ((ME_Motion)ME_Motionlist[j]).name.ToString() + "_frm";
+                    if(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title)
+                        generate_motion(m, frm_name, writer);
+                }
                 for (int j = 0; j < ME_Motionlist.Count; j++)
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[j];
                     frm_name = ((ME_Motion)ME_Motionlist[j]).name.ToString() + "_frm";
-                    // *** TRIGGER ***
-                    writer.WriteLine(space + "if(" + trigger_condition(m) + ")\n" + space + "{");
-                    space_num = 4;
-                    space = set_space(space_num);
-                    // *** TRIGGER ***
-                    for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
-                    {
-                        if (m.Events[i] is ME_Frame)
-                        {
-                            ME_Frame f = (ME_Frame)m.Events[i];
-                            writer.WriteLine(space + frm_name + f.num.ToString() + ".playPositions(" + f.delay.ToString() + ");");
-                            writer.WriteLine(space + "while(isServoMultiMoving() == true);");
-                        }
-                        else if (m.Events[i] is ME_Delay)
-                        {
-                            ME_Delay d = (ME_Delay)m.Events[i];
-                            writer.WriteLine(space + "delay(" + d.delay.ToString() + ");");
-                            if (i != m.Events.Count - 1)
-                                writer.WriteLine();
-                        }
-                        else if (m.Events[i] is ME_Flag)
-                        {
-                            for (int k = i; k < m.Events.Count; k++)
-                            {
-                                if (m.Events[k] is ME_Goto)
-                                {
-                                    if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
-                                    {
-                                        ME_Goto g = (ME_Goto)m.Events[k];
-
-                                        string for_var = g.name + "_" + flag_count.ToString();
-                                        writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
-                                        ((ME_Flag)m.Events[i]).var = for_var;
-
-                                        space_num += 2;
-                                        space = set_space(space_num);
-                                        flag_count++;
-                                    }
-                                }
-                            }
-                        }
-                        else if (m.Events[i] is ME_Goto)
-                        {
-                            ME_Goto g = (ME_Goto)m.Events[i];
-                            if (g.is_goto)
-                            {
-                                for (int k = 0; k < i; k++)
-                                {
-                                    if (m.Events[k] is ME_Flag)
-                                    {
-                                        if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
-                                        {
-                                            string for_var = ((ME_Flag)m.Events[k]).var;
-                                            space_num -= 2;
-                                            space = set_space(space_num);
-                                            if (((ME_Goto)m.Events[i]).infinite == false)
-                                            {
-                                                writer.Write(space + "if(" + for_var + "++ < " +
-                                                             g.loops + ") goto flag_" + for_var + ";\n\n");
-                                            }
-                                            else
-                                            {
-                                                writer.WriteLine(space + "goto flag_" + for_var + ";\n");
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        } //ME_Goto
-                    }
-                    space_num -= 2;
-                    space = set_space(space_num);
-                    writer.WriteLine(space + "}");
+                    if (!(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title))
+                        generate_motion(m, frm_name, writer);
                 }
                 writer.WriteLine("}");
 

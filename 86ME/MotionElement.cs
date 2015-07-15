@@ -10,16 +10,18 @@ namespace _86ME_ver1
         public ArrayList Events;
         public string name;
         public int trigger_method;
-        public bool trigger_on;
+        public int auto_method;
         public string trigger_key;
+        public int trigger_keyType;
         public int frames;
         public ME_Motion()
         {
             this.name = null;
             this.Events = new ArrayList();
-            this.trigger_on = true;
             this.trigger_method = 0;
+            this.auto_method = 0;
             this.trigger_key = "KEY_A";
+            this.trigger_keyType = 1;
             this.frames = 0;
         }
     }
@@ -37,6 +39,7 @@ namespace _86ME_ver1
             this.type = 1;
         }
     }
+
     public class ME_Delay 
     {
         public int delay;
@@ -45,6 +48,7 @@ namespace _86ME_ver1
             this.delay = 0;
         }
     }
+
     public class ME_Sound
     {
         public string filename;
@@ -55,6 +59,7 @@ namespace _86ME_ver1
             this.delay = -1;
         }
     }
+
     public class ME_Goto
     {
         public string name;
@@ -71,6 +76,7 @@ namespace _86ME_ver1
             this.infinite = false;
         }
     }
+
     public class ME_Flag
     {
         public string name;

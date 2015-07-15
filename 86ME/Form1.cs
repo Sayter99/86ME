@@ -35,7 +35,6 @@ namespace _86ME_ver1
         int mtest_start_pos = 0;
         int motiontest_state;
         enum mtest_states { start, pause, stop };
-        enum mtest_method { always, keyboard };
         int default_delay = 1000;
         int current_motionlist_idx = -1;
         public string com_port;
@@ -663,7 +662,8 @@ namespace _86ME_ver1
                 for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                    writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.trigger_on + " " + m.trigger_key + "\n");
+                    writer.Write("Motion " + m.name + " " + m.trigger_method + " " +
+                                 m.auto_method + " " + m.trigger_key + " " + m.trigger_keyType +  "\n");
                     for (int j = 0; j < m.Events.Count; j++)
                     {
                         if (m.Events[j] is ME_Frame)
@@ -974,12 +974,11 @@ namespace _86ME_ver1
                             {
                                 motiontag.trigger_method = int.Parse(datas[i]);
                                 i++;
-                                if (String.Compare("True", datas[i]) == 0)
-                                    motiontag.trigger_on = true;
-                                else
-                                    motiontag.trigger_on = false;
+                                motiontag.auto_method = int.Parse(datas[i]);
                                 i++;
                                 motiontag.trigger_key = datas[i];
+                                i++;
+                                motiontag.trigger_keyType = int.Parse(datas[i]);
                             }
                             else
                                 i--;
@@ -1356,11 +1355,14 @@ namespace _86ME_ver1
                 Always_groupBox.Enabled = false;
                 Keyboard_groupBox.Enabled = true;
             }
-            if (m.trigger_on)
+            if (m.auto_method == (int)auto_method.on)
                 AlwaysOn.Checked = true;
-            else
+            else if (m.auto_method == (int)auto_method.off)
                 AlwaysOff.Checked = true;
+            else if (m.auto_method == (int)auto_method.title)
+                TitleMotion.Checked = true;
             KeyboardCombo.Text = m.trigger_key;
+            KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1933,6 +1935,7 @@ namespace _86ME_ver1
                 AlwaysOn.Checked = true;
                 //Motion Config
                 KeyboardCombo.SelectedIndex = 0;
+                KeyboardTypeCombo.SelectedIndex = 1;
                 draw_background();
                 if (MotionConfig.SelectedIndex == 0)
                 {
@@ -2516,19 +2519,31 @@ namespace _86ME_ver1
         private void AlwaysOn_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_on = true;
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.on;
         }
 
         private void AlwaysOff_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_on = false;
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.off;
+        }
+
+        private void TitleMotion_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.title;
         }
 
         private void KeyboardCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_key = KeyboardCombo.Text;
+        }
+
+        private void KeyboardTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_keyType = KeyboardTypeCombo.SelectedIndex;
         }
     }
 }

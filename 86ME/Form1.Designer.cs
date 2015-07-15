@@ -74,8 +74,12 @@
             this.Keyboard_radioButton = new System.Windows.Forms.RadioButton();
             this.Always_radioButton = new System.Windows.Forms.RadioButton();
             this.Keyboard_groupBox = new System.Windows.Forms.GroupBox();
+            this.KeyboardTypeCombo = new System.Windows.Forms.ComboBox();
+            this.keyboardTypeLabel = new System.Windows.Forms.Label();
+            this.KeyboardKeyLabel = new System.Windows.Forms.Label();
             this.KeyboardCombo = new System.Windows.Forms.ComboBox();
             this.Always_groupBox = new System.Windows.Forms.GroupBox();
+            this.TitleMotion = new System.Windows.Forms.RadioButton();
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.motion_stop = new System.Windows.Forms.Button();
@@ -548,6 +552,9 @@
             // 
             // Keyboard_groupBox
             // 
+            this.Keyboard_groupBox.Controls.Add(this.KeyboardTypeCombo);
+            this.Keyboard_groupBox.Controls.Add(this.keyboardTypeLabel);
+            this.Keyboard_groupBox.Controls.Add(this.KeyboardKeyLabel);
             this.Keyboard_groupBox.Controls.Add(this.KeyboardCombo);
             this.Keyboard_groupBox.Location = new System.Drawing.Point(27, 65);
             this.Keyboard_groupBox.Name = "Keyboard_groupBox";
@@ -555,6 +562,38 @@
             this.Keyboard_groupBox.TabIndex = 1;
             this.Keyboard_groupBox.TabStop = false;
             this.Keyboard_groupBox.Text = "Keyboard";
+            // 
+            // KeyboardTypeCombo
+            // 
+            this.KeyboardTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.KeyboardTypeCombo.FormattingEnabled = true;
+            this.KeyboardTypeCombo.Items.AddRange(new object[] {
+            "First Press",
+            "Pressed",
+            "Release"});
+            this.KeyboardTypeCombo.Location = new System.Drawing.Point(117, 32);
+            this.KeyboardTypeCombo.Name = "KeyboardTypeCombo";
+            this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 20);
+            this.KeyboardTypeCombo.TabIndex = 3;
+            this.KeyboardTypeCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardTypeCombo_SelectedIndexChanged);
+            // 
+            // keyboardTypeLabel
+            // 
+            this.keyboardTypeLabel.AutoSize = true;
+            this.keyboardTypeLabel.Location = new System.Drawing.Point(115, 17);
+            this.keyboardTypeLabel.Name = "keyboardTypeLabel";
+            this.keyboardTypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.keyboardTypeLabel.TabIndex = 2;
+            this.keyboardTypeLabel.Text = "Type:";
+            // 
+            // KeyboardKeyLabel
+            // 
+            this.KeyboardKeyLabel.AutoSize = true;
+            this.KeyboardKeyLabel.Location = new System.Drawing.Point(14, 17);
+            this.KeyboardKeyLabel.Name = "KeyboardKeyLabel";
+            this.KeyboardKeyLabel.Size = new System.Drawing.Size(27, 12);
+            this.KeyboardKeyLabel.TabIndex = 1;
+            this.KeyboardKeyLabel.Text = "Key:";
             // 
             // KeyboardCombo
             // 
@@ -593,14 +632,15 @@
             "KEY_UP",
             "KEY_DOWN",
             "KEY_ESC"});
-            this.KeyboardCombo.Location = new System.Drawing.Point(32, 21);
+            this.KeyboardCombo.Location = new System.Drawing.Point(16, 32);
             this.KeyboardCombo.Name = "KeyboardCombo";
-            this.KeyboardCombo.Size = new System.Drawing.Size(121, 20);
+            this.KeyboardCombo.Size = new System.Drawing.Size(95, 20);
             this.KeyboardCombo.TabIndex = 0;
             this.KeyboardCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardCombo_SelectedIndexChanged);
             // 
             // Always_groupBox
             // 
+            this.Always_groupBox.Controls.Add(this.TitleMotion);
             this.Always_groupBox.Controls.Add(this.AlwaysOff);
             this.Always_groupBox.Controls.Add(this.AlwaysOn);
             this.Always_groupBox.Location = new System.Drawing.Point(27, 6);
@@ -608,16 +648,28 @@
             this.Always_groupBox.Size = new System.Drawing.Size(192, 53);
             this.Always_groupBox.TabIndex = 0;
             this.Always_groupBox.TabStop = false;
-            this.Always_groupBox.Text = "Always";
+            this.Always_groupBox.Text = "Auto";
+            // 
+            // TitleMotion
+            // 
+            this.TitleMotion.AutoSize = true;
+            this.TitleMotion.Location = new System.Drawing.Point(105, 13);
+            this.TitleMotion.Name = "TitleMotion";
+            this.TitleMotion.Size = new System.Drawing.Size(81, 16);
+            this.TitleMotion.TabIndex = 2;
+            this.TitleMotion.TabStop = true;
+            this.TitleMotion.Text = "Title Motion";
+            this.TitleMotion.UseVisualStyleBackColor = true;
+            this.TitleMotion.CheckedChanged += new System.EventHandler(this.TitleMotion_CheckedChanged);
             // 
             // AlwaysOff
             // 
             this.AlwaysOff.AutoSize = true;
-            this.AlwaysOff.Location = new System.Drawing.Point(91, 21);
+            this.AlwaysOff.Location = new System.Drawing.Point(16, 30);
             this.AlwaysOff.Name = "AlwaysOff";
-            this.AlwaysOff.Size = new System.Drawing.Size(39, 16);
+            this.AlwaysOff.Size = new System.Drawing.Size(76, 16);
             this.AlwaysOff.TabIndex = 1;
-            this.AlwaysOff.Text = "Off";
+            this.AlwaysOff.Text = "Always Off";
             this.AlwaysOff.UseVisualStyleBackColor = true;
             this.AlwaysOff.CheckedChanged += new System.EventHandler(this.AlwaysOff_CheckedChanged);
             // 
@@ -625,12 +677,12 @@
             // 
             this.AlwaysOn.AutoSize = true;
             this.AlwaysOn.Checked = true;
-            this.AlwaysOn.Location = new System.Drawing.Point(22, 21);
+            this.AlwaysOn.Location = new System.Drawing.Point(16, 13);
             this.AlwaysOn.Name = "AlwaysOn";
-            this.AlwaysOn.Size = new System.Drawing.Size(37, 16);
+            this.AlwaysOn.Size = new System.Drawing.Size(74, 16);
             this.AlwaysOn.TabIndex = 0;
             this.AlwaysOn.TabStop = true;
-            this.AlwaysOn.Text = "On";
+            this.AlwaysOn.Text = "Always On";
             this.AlwaysOn.UseVisualStyleBackColor = true;
             this.AlwaysOn.CheckedChanged += new System.EventHandler(this.AlwaysOn_CheckedChanged);
             // 
@@ -815,6 +867,7 @@
             this.MotionTrigger.ResumeLayout(false);
             this.MotionTrigger.PerformLayout();
             this.Keyboard_groupBox.ResumeLayout(false);
+            this.Keyboard_groupBox.PerformLayout();
             this.Always_groupBox.ResumeLayout(false);
             this.Always_groupBox.PerformLayout();
             this.groupBox4.ResumeLayout(false);
@@ -887,6 +940,10 @@
         private System.Windows.Forms.RadioButton AlwaysOn;
         private System.Windows.Forms.RadioButton Always_radioButton;
         private System.Windows.Forms.RadioButton Keyboard_radioButton;
+        private System.Windows.Forms.ComboBox KeyboardTypeCombo;
+        private System.Windows.Forms.Label keyboardTypeLabel;
+        private System.Windows.Forms.Label KeyboardKeyLabel;
+        private System.Windows.Forms.RadioButton TitleMotion;
     }
 }
 
