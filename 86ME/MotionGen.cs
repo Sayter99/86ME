@@ -7,7 +7,7 @@ using System.IO;
 
 namespace _86ME_ver1
 {
-    enum mtest_method { always, keyboard };
+    enum mtest_method { always, keyboard, bluetooth };
     enum keyboard_method { first, pressed, release };
     enum auto_method { on, off, title };
 

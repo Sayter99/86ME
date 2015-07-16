@@ -71,6 +71,12 @@
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
+            this.bt_groupBox = new System.Windows.Forms.GroupBox();
+            this.btKeyLabel = new System.Windows.Forms.Label();
+            this.btCombo = new System.Windows.Forms.ComboBox();
+            this.btTypeLabel = new System.Windows.Forms.Label();
+            this.btKeyText = new System.Windows.Forms.TextBox();
+            this.bt_radioButton = new System.Windows.Forms.RadioButton();
             this.Keyboard_radioButton = new System.Windows.Forms.RadioButton();
             this.Always_radioButton = new System.Windows.Forms.RadioButton();
             this.Keyboard_groupBox = new System.Windows.Forms.GroupBox();
@@ -107,6 +113,7 @@
             this.MotionConfig.SuspendLayout();
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
+            this.bt_groupBox.SuspendLayout();
             this.Keyboard_groupBox.SuspendLayout();
             this.Always_groupBox.SuspendLayout();
             this.groupBox4.SuspendLayout();
@@ -516,6 +523,8 @@
             // 
             this.MotionTrigger.AutoScroll = true;
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
+            this.MotionTrigger.Controls.Add(this.bt_groupBox);
+            this.MotionTrigger.Controls.Add(this.bt_radioButton);
             this.MotionTrigger.Controls.Add(this.Keyboard_radioButton);
             this.MotionTrigger.Controls.Add(this.Always_radioButton);
             this.MotionTrigger.Controls.Add(this.Keyboard_groupBox);
@@ -527,10 +536,74 @@
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
             // 
+            // bt_groupBox
+            // 
+            this.bt_groupBox.Controls.Add(this.btKeyLabel);
+            this.bt_groupBox.Controls.Add(this.btCombo);
+            this.bt_groupBox.Controls.Add(this.btTypeLabel);
+            this.bt_groupBox.Controls.Add(this.btKeyText);
+            this.bt_groupBox.Location = new System.Drawing.Point(27, 132);
+            this.bt_groupBox.Name = "bt_groupBox";
+            this.bt_groupBox.Size = new System.Drawing.Size(192, 57);
+            this.bt_groupBox.TabIndex = 5;
+            this.bt_groupBox.TabStop = false;
+            this.bt_groupBox.Text = "Bluetooth";
+            // 
+            // btKeyLabel
+            // 
+            this.btKeyLabel.AutoSize = true;
+            this.btKeyLabel.Location = new System.Drawing.Point(89, 14);
+            this.btKeyLabel.Name = "btKeyLabel";
+            this.btKeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.btKeyLabel.TabIndex = 4;
+            this.btKeyLabel.Text = "Key: ";
+            // 
+            // btCombo
+            // 
+            this.btCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btCombo.FormattingEnabled = true;
+            this.btCombo.Items.AddRange(new object[] {
+            "First Press",
+            "Pressed",
+            "Release"});
+            this.btCombo.Location = new System.Drawing.Point(16, 29);
+            this.btCombo.Name = "btCombo";
+            this.btCombo.Size = new System.Drawing.Size(69, 20);
+            this.btCombo.TabIndex = 5;
+            this.btCombo.SelectedIndexChanged += new System.EventHandler(btCombo_SelectedIndexChanged);
+            // 
+            // btTypeLabel
+            // 
+            this.btTypeLabel.AutoSize = true;
+            this.btTypeLabel.Location = new System.Drawing.Point(14, 14);
+            this.btTypeLabel.Name = "btTypeLabel";
+            this.btTypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.btTypeLabel.TabIndex = 4;
+            this.btTypeLabel.Text = "Type:";
+            // 
+            // btKeyText
+            // 
+            this.btKeyText.Location = new System.Drawing.Point(91, 29);
+            this.btKeyText.Name = "btKeyText";
+            this.btKeyText.Size = new System.Drawing.Size(95, 22);
+            this.btKeyText.TabIndex = 0;
+            this.btKeyText.TextChanged += new System.EventHandler(btKeyText_TextChanged);
+            // 
+            // bt_radioButton
+            // 
+            this.bt_radioButton.AutoSize = true;
+            this.bt_radioButton.Location = new System.Drawing.Point(7, 132);
+            this.bt_radioButton.Name = "bt_radioButton";
+            this.bt_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.bt_radioButton.TabIndex = 4;
+            this.bt_radioButton.TabStop = true;
+            this.bt_radioButton.UseVisualStyleBackColor = true;
+            this.bt_radioButton.CheckedChanged += new System.EventHandler(this.bt_radioButton_CheckedChanged);
+            // 
             // Keyboard_radioButton
             // 
             this.Keyboard_radioButton.AutoSize = true;
-            this.Keyboard_radioButton.Location = new System.Drawing.Point(7, 65);
+            this.Keyboard_radioButton.Location = new System.Drawing.Point(7, 68);
             this.Keyboard_radioButton.Name = "Keyboard_radioButton";
             this.Keyboard_radioButton.Size = new System.Drawing.Size(14, 13);
             this.Keyboard_radioButton.TabIndex = 3;
@@ -556,7 +629,7 @@
             this.Keyboard_groupBox.Controls.Add(this.keyboardTypeLabel);
             this.Keyboard_groupBox.Controls.Add(this.KeyboardKeyLabel);
             this.Keyboard_groupBox.Controls.Add(this.KeyboardCombo);
-            this.Keyboard_groupBox.Location = new System.Drawing.Point(27, 65);
+            this.Keyboard_groupBox.Location = new System.Drawing.Point(27, 68);
             this.Keyboard_groupBox.Name = "Keyboard_groupBox";
             this.Keyboard_groupBox.Size = new System.Drawing.Size(192, 58);
             this.Keyboard_groupBox.TabIndex = 1;
@@ -571,7 +644,7 @@
             "First Press",
             "Pressed",
             "Release"});
-            this.KeyboardTypeCombo.Location = new System.Drawing.Point(117, 32);
+            this.KeyboardTypeCombo.Location = new System.Drawing.Point(16, 32);
             this.KeyboardTypeCombo.Name = "KeyboardTypeCombo";
             this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 20);
             this.KeyboardTypeCombo.TabIndex = 3;
@@ -580,7 +653,7 @@
             // keyboardTypeLabel
             // 
             this.keyboardTypeLabel.AutoSize = true;
-            this.keyboardTypeLabel.Location = new System.Drawing.Point(115, 17);
+            this.keyboardTypeLabel.Location = new System.Drawing.Point(14, 17);
             this.keyboardTypeLabel.Name = "keyboardTypeLabel";
             this.keyboardTypeLabel.Size = new System.Drawing.Size(32, 12);
             this.keyboardTypeLabel.TabIndex = 2;
@@ -589,7 +662,7 @@
             // KeyboardKeyLabel
             // 
             this.KeyboardKeyLabel.AutoSize = true;
-            this.KeyboardKeyLabel.Location = new System.Drawing.Point(14, 17);
+            this.KeyboardKeyLabel.Location = new System.Drawing.Point(89, 17);
             this.KeyboardKeyLabel.Name = "KeyboardKeyLabel";
             this.KeyboardKeyLabel.Size = new System.Drawing.Size(27, 12);
             this.KeyboardKeyLabel.TabIndex = 1;
@@ -632,7 +705,7 @@
             "KEY_UP",
             "KEY_DOWN",
             "KEY_ESC"});
-            this.KeyboardCombo.Location = new System.Drawing.Point(16, 32);
+            this.KeyboardCombo.Location = new System.Drawing.Point(91, 32);
             this.KeyboardCombo.Name = "KeyboardCombo";
             this.KeyboardCombo.Size = new System.Drawing.Size(95, 20);
             this.KeyboardCombo.TabIndex = 0;
@@ -645,7 +718,7 @@
             this.Always_groupBox.Controls.Add(this.AlwaysOn);
             this.Always_groupBox.Location = new System.Drawing.Point(27, 6);
             this.Always_groupBox.Name = "Always_groupBox";
-            this.Always_groupBox.Size = new System.Drawing.Size(192, 53);
+            this.Always_groupBox.Size = new System.Drawing.Size(192, 56);
             this.Always_groupBox.TabIndex = 0;
             this.Always_groupBox.TabStop = false;
             this.Always_groupBox.Text = "Auto";
@@ -866,6 +939,8 @@
             this.ActionList.ResumeLayout(false);
             this.MotionTrigger.ResumeLayout(false);
             this.MotionTrigger.PerformLayout();
+            this.bt_groupBox.ResumeLayout(false);
+            this.bt_groupBox.PerformLayout();
             this.Keyboard_groupBox.ResumeLayout(false);
             this.Keyboard_groupBox.PerformLayout();
             this.Always_groupBox.ResumeLayout(false);
@@ -944,6 +1019,12 @@
         private System.Windows.Forms.Label keyboardTypeLabel;
         private System.Windows.Forms.Label KeyboardKeyLabel;
         private System.Windows.Forms.RadioButton TitleMotion;
+        private System.Windows.Forms.GroupBox bt_groupBox;
+        private System.Windows.Forms.Label btKeyLabel;
+        private System.Windows.Forms.ComboBox btCombo;
+        private System.Windows.Forms.Label btTypeLabel;
+        private System.Windows.Forms.TextBox btKeyText;
+        private System.Windows.Forms.RadioButton bt_radioButton;
     }
 }
 

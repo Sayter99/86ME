@@ -395,6 +395,7 @@ namespace _86ME_ver1
             else
                 ((MaskedTextBox)sender).Text = "";
         }
+
         public void numbercheck(object sender, KeyPressEventArgs e) //Text number check
         {
             if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8)
@@ -402,9 +403,45 @@ namespace _86ME_ver1
                 e.Handled = true;
             }
         }
+
+        private bool needToSave()
+        {
+            bool need_to_save = false;
+            if (File.Exists(load_filename))
+            {
+                string tmp_file = DateTime.Now.ToString("yyyyMMddhhmmss") + "_86ME_tmpGeneratedFile.rbm";
+                save_project(tmp_file);
+                StreamReader checker = new StreamReader(tmp_file);
+                StreamReader prev = new StreamReader(load_filename);
+                string[] datas_c = checker.ReadToEnd().Split(delimiterChars);
+                string[] datas_p = prev.ReadToEnd().Split(delimiterChars);
+                if (datas_c.Length == datas_p.Length)
+                {
+                    for (int i = 0; i < datas_c.Length; i++)
+                    {
+                        if (String.Compare(datas_c[i], datas_p[i]) != 0)
+                        {
+                            need_to_save = true;
+                            break;
+                        }
+                    }
+                }
+                else
+                    need_to_save = true;
+                checker.Dispose();
+                checker.Close();
+                prev.Dispose();
+                prev.Close();
+                File.Delete(tmp_file);
+            }
+            else if(Motion != null)
+                return true;
+            return need_to_save;
+        }
+
         private void fileToolStripMenuItem_Click(object sender, EventArgs e) //new project
         {
-            if (Motion != null)
+            if (needToSave())
             {
                 DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
@@ -418,6 +455,7 @@ namespace _86ME_ver1
             nMotion.ShowDialog();
             if (nMotion.DialogResult == DialogResult.OK)
             {
+                load_filename = "";
                 Motion = nMotion;
                 groupBox2.Enabled = true;
                 groupBox3.Enabled = true;
@@ -466,7 +504,7 @@ namespace _86ME_ver1
                     picture_name = nMotion.picfilename;
                     draw_background();
                 }
-
+                this.MotionConfig.SelectedIndex = 0;
                 this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
             }
         }
@@ -596,132 +634,139 @@ namespace _86ME_ver1
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "rbm files (*.rbm)|*.rbm";
             dialog.Title = "Save File";
-            dialog.FileName = load_filename;
+            dialog.FileName = Path.GetFileName(load_filename);
             if (dialog.ShowDialog() == DialogResult.OK && dialog.FileName != null)
             {
-                load_filename = Path.GetFileName(dialog.FileName);
-                TextWriter writer = new StreamWriter(dialog.OpenFile());
-                string nFilePath = Path.GetDirectoryName(dialog.FileName);
-
-                writer.Write("BoardVer ");
-                writer.Write(Motion.comboBox1.SelectedItem.ToString());
-                writer.Write("\n");
-                writer.Write("Servo ");
-                for (int i = 0; i < 45; i++)
-                {
-                    ComboBox cb = Motion.fbox[i];
-                    writer.Write(cb.Text);
-                    if (i != 44)
-                        writer.Write(" ");
-                }
-                writer.Write("\n");
-                writer.Write("Offset ");
-                for (int j = 0; j < 45; j++)
-                {
-                    if (string.Compare(Motion.ftext[j].Text, "") == 0)
-                        Motion.ftext[j].Text = "0";
-                    writer.Write(Motion.ftext[j].Text + " ");
-                }
-                writer.Write("\n");
-                writer.Write("Homeframe ");
-                for (int j = 0; j < 45; j++)
-                {
-                    if (string.Compare(Motion.ftext[j].Text, "") == 0)
-                        Motion.ftext2[j].Text = "1500";
-                    writer.Write(Motion.ftext2[j].Text + " ");
-                }
-                writer.Write("\n");
-                writer.Write("Range ");
-                for (int j = 0; j < 45; j++)
-                {
-                    if (string.Compare(Motion.ftext3[j].Text, "") == 0)
-                        Motion.ftext3[j].Text = "600";
-                    writer.Write(Motion.ftext3[j].Text + " ");
-                }
-                for (int j = 0; j < 45; j++)
-                {
-                    if (string.Compare(Motion.ftext4[j].Text, "") == 0)
-                        Motion.ftext4[j].Text = "2400";
-                    writer.Write(Motion.ftext4[j].Text + " ");
-                }
-                writer.Write("\n");
-                // save sync_speed
-                writer.WriteLine("Sync " + sync_speed.Value.ToString());
-                //
-                if (Motion.picfilename != null)
-                {
-                    writer.Write("picmode ");
-                    writer.Write(Motion.picfilename + " ");
-                    for (int i = 0; i < 45; i++)
-                        writer.Write(Motion.channelx[i] + " ");
-                    for (int i = 0; i < 45; i++)
-                        writer.Write(Motion.channely[i] + " ");
-                    writer.Write("\n");
-                }
-
-                for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
-                {
-                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                    writer.Write("Motion " + m.name + " " + m.trigger_method + " " +
-                                 m.auto_method + " " + m.trigger_key + " " + m.trigger_keyType +  "\n");
-                    for (int j = 0; j < m.Events.Count; j++)
-                    {
-                        if (m.Events[j] is ME_Frame)
-                        {
-                            ME_Frame f=(ME_Frame)m.Events[j];
-                            if(f.type == 1)
-                                writer.Write("frame " + f.delay.ToString() + " ");
-                            else if(f.type == 0)
-                                writer.Write("home " + f.delay.ToString() + " ");
-                            int count = 0;
-                            for(int k = 0; k < 45; k++)
-                                if (String.Compare(Motion.fbox[k].Text,"---noServo---") != 0) {
-                                    count++;
-                                }
-                            for (int k = 0; k < 45; k++)
-                                if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                                {
-                                    count--;
-                                    writer.Write(f.frame[k].ToString());
-                                    if (count != 0)
-                                        writer.Write(" ");
-                                }
-                            writer.Write("\n");
-                        }
-                        else if(m.Events[j] is ME_Delay)
-                        {
-                            ME_Delay d=(ME_Delay)m.Events[j];
-                            writer.Write("delay " + d.delay.ToString() + "\n");
-                        }
-                        else if (m.Events[j] is ME_Sound)
-                        {
-                            ME_Sound s = (ME_Sound)m.Events[j];
-                            writer.Write("sound " + s.filename + " " + s.delay.ToString() + "\n");
-                        }
-                        else if (m.Events[j] is ME_Goto)
-                        {
-                            ME_Goto g = (ME_Goto)m.Events[j];
-                            writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + " " + g.infinite + "\n");
-                        }
-                        else if (m.Events[j] is ME_Flag)
-                        {
-                            ME_Flag fl = (ME_Flag)m.Events[j];
-                            writer.Write("flag " + fl.name + "\n");
-
-                        }
-                    }
-                    writer.Write("MotionEnd " + m.name);
-                    if (i != ME_Motionlist.Count - 1)
-                        writer.Write("\n");
-                }
-
-                writer.Dispose();
-                writer.Close();
+                load_filename = dialog.FileName.ToString();
+                save_project(load_filename);
             }
         }
+
+        private void save_project(string filename)
+        {
+            TextWriter writer = new StreamWriter(filename);
+
+            writer.Write("BoardVer ");
+            writer.Write(Motion.comboBox1.SelectedItem.ToString());
+            writer.Write("\n");
+            writer.Write("Servo ");
+            for (int i = 0; i < 45; i++)
+            {
+                ComboBox cb = Motion.fbox[i];
+                writer.Write(cb.Text);
+                if (i != 44)
+                    writer.Write(" ");
+            }
+            writer.Write("\n");
+            writer.Write("Offset ");
+            for (int j = 0; j < 45; j++)
+            {
+                if (string.Compare(Motion.ftext[j].Text, "") == 0)
+                    Motion.ftext[j].Text = "0";
+                writer.Write(Motion.ftext[j].Text + " ");
+            }
+            writer.Write("\n");
+            writer.Write("Homeframe ");
+            for (int j = 0; j < 45; j++)
+            {
+                if (string.Compare(Motion.ftext[j].Text, "") == 0)
+                    Motion.ftext2[j].Text = "1500";
+                writer.Write(Motion.ftext2[j].Text + " ");
+            }
+            writer.Write("\n");
+            writer.Write("Range ");
+            for (int j = 0; j < 45; j++)
+            {
+                if (string.Compare(Motion.ftext3[j].Text, "") == 0)
+                    Motion.ftext3[j].Text = "600";
+                writer.Write(Motion.ftext3[j].Text + " ");
+            }
+            for (int j = 0; j < 45; j++)
+            {
+                if (string.Compare(Motion.ftext4[j].Text, "") == 0)
+                    Motion.ftext4[j].Text = "2400";
+                writer.Write(Motion.ftext4[j].Text + " ");
+            }
+            writer.Write("\n");
+            // save sync_speed
+            writer.WriteLine("Sync " + sync_speed.Value.ToString());
+            //
+            if (Motion.picfilename != null)
+            {
+                writer.Write("picmode ");
+                writer.Write(Motion.picfilename + " ");
+                for (int i = 0; i < 45; i++)
+                    writer.Write(Motion.channelx[i] + " ");
+                for (int i = 0; i < 45; i++)
+                    writer.Write(Motion.channely[i] + " ");
+                writer.Write("\n");
+            }
+
+            for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
+                writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
+                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.trigger_btType + "\n");
+                for (int j = 0; j < m.Events.Count; j++)
+                {
+                    if (m.Events[j] is ME_Frame)
+                    {
+                        ME_Frame f = (ME_Frame)m.Events[j];
+                        if (f.type == 1)
+                            writer.Write("frame " + f.delay.ToString() + " ");
+                        else if (f.type == 0)
+                            writer.Write("home " + f.delay.ToString() + " ");
+                        int count = 0;
+                        for (int k = 0; k < 45; k++)
+                            if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                            {
+                                count++;
+                            }
+                        for (int k = 0; k < 45; k++)
+                            if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                            {
+                                count--;
+                                writer.Write(f.frame[k].ToString());
+                                if (count != 0)
+                                    writer.Write(" ");
+                            }
+                        writer.Write("\n");
+                    }
+                    else if (m.Events[j] is ME_Delay)
+                    {
+                        ME_Delay d = (ME_Delay)m.Events[j];
+                        writer.Write("delay " + d.delay.ToString() + "\n");
+                    }
+                    else if (m.Events[j] is ME_Sound)
+                    {
+                        ME_Sound s = (ME_Sound)m.Events[j];
+                        writer.Write("sound " + s.filename + " " + s.delay.ToString() + "\n");
+                    }
+                    else if (m.Events[j] is ME_Goto)
+                    {
+                        ME_Goto g = (ME_Goto)m.Events[j];
+                        writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + " " + g.infinite + "\n");
+                    }
+                    else if (m.Events[j] is ME_Flag)
+                    {
+                        ME_Flag fl = (ME_Flag)m.Events[j];
+                        writer.Write("flag " + fl.name + "\n");
+
+                    }
+                }
+                writer.Write("MotionEnd " + m.name);
+                if (i != ME_Motionlist.Count - 1)
+                    writer.Write("\n");
+            }
+
+            writer.Dispose();
+            writer.Close();
+        }
+
         private void actionToolStripMenuItem_Click(object sender, EventArgs e)      //load project
         {
-            if (Motion != null)
+            if (needToSave())
             {
                 DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
@@ -737,6 +782,7 @@ namespace _86ME_ver1
             if (filename == null)
                 return;
             load_project(filename);
+            MotionConfig.SelectedIndex = 0;
             MessageBox.Show(filename + " is loaded");
         }
 
@@ -775,7 +821,7 @@ namespace _86ME_ver1
 
             using (StreamReader reader = new StreamReader(filename))
             {
-                load_filename = Path.GetFileName(filename);
+                load_filename = filename;
 
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
                 if (datas.Length < 235)
@@ -971,7 +1017,7 @@ namespace _86ME_ver1
                             if (String.Compare("frame", datas[i]) != 0 && String.Compare("home", datas[i]) != 0 &&
                                 String.Compare("delay", datas[i]) != 0 && String.Compare("sound", datas[i]) != 0 &&
                                 String.Compare("flag", datas[i]) != 0 && String.Compare("goto", datas[i]) != 0)
-                            {
+                            { // triggers
                                 motiontag.trigger_method = int.Parse(datas[i]);
                                 i++;
                                 motiontag.auto_method = int.Parse(datas[i]);
@@ -979,6 +1025,13 @@ namespace _86ME_ver1
                                 motiontag.trigger_key = int.Parse(datas[i]);
                                 i++;
                                 motiontag.trigger_keyType = int.Parse(datas[i]);
+                                i++;
+                                if (String.Compare("---noBtKey---", datas[i]) == 0)
+                                    motiontag.bt_key = "";
+                                else
+                                    motiontag.bt_key = datas[i];
+                                i++;
+                                motiontag.trigger_btType = int.Parse(datas[i]);
                             }
                             else
                                 i--;
@@ -1340,20 +1393,28 @@ namespace _86ME_ver1
             // Motion Trigger part
             Always_radioButton.Enabled = true;
             Keyboard_radioButton.Enabled = true;
-            Always_groupBox.Enabled = true;
-            Keyboard_groupBox.Enabled = true;
+            bt_radioButton.Enabled = true;
             ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
             if (m.trigger_method == (int)mtest_method.always)
             {
                 Always_radioButton.Checked = true;
                 Always_groupBox.Enabled = true;
                 Keyboard_groupBox.Enabled = false;
+                bt_groupBox.Enabled = false;
             }
-            else
+            else if(m.trigger_method == (int)mtest_method.keyboard)
             {
                 Keyboard_radioButton.Checked = true;
                 Always_groupBox.Enabled = false;
                 Keyboard_groupBox.Enabled = true;
+                bt_groupBox.Enabled = false;
+            }
+            else if (m.trigger_method == (int)mtest_method.bluetooth)
+            {
+                bt_radioButton.Checked = true;
+                Always_groupBox.Enabled = false;
+                Keyboard_groupBox.Enabled = false;
+                bt_groupBox.Enabled = true;
             }
             if (m.auto_method == (int)auto_method.on)
                 AlwaysOn.Checked = true;
@@ -1363,6 +1424,8 @@ namespace _86ME_ver1
                 TitleMotion.Checked = true;
             KeyboardCombo.SelectedIndex = m.trigger_key;
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
+            btCombo.SelectedIndex = m.trigger_btType;
+            btKeyText.Text = m.bt_key;
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1900,8 +1963,10 @@ namespace _86ME_ver1
                 //Motion Config
                 Always_radioButton.Enabled = false;
                 Keyboard_radioButton.Enabled = false;
+                bt_radioButton.Enabled = false;
                 Always_groupBox.Enabled = false;
                 Keyboard_groupBox.Enabled = false;
+                bt_groupBox.Enabled = false;
             }
         }
 
@@ -1929,13 +1994,13 @@ namespace _86ME_ver1
                 //Motion Config
                 Always_radioButton.Enabled = true;
                 Keyboard_radioButton.Enabled = true;
+                bt_radioButton.Enabled = true;
                 Always_groupBox.Enabled = true;
                 Keyboard_groupBox.Enabled = false;
+                bt_groupBox.Enabled = false;
                 Always_radioButton.Checked = true;
                 AlwaysOn.Checked = true;
                 //Motion Config
-                KeyboardCombo.SelectedIndex = 0;
-                KeyboardTypeCombo.SelectedIndex = 1;
                 draw_background();
                 if (MotionConfig.SelectedIndex == 0)
                 {
@@ -1957,7 +2022,7 @@ namespace _86ME_ver1
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool close = true;
-            if (Motion != null)
+            if (needToSave())
             {
                 DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
@@ -2484,18 +2549,28 @@ namespace _86ME_ver1
                 {
                     Always_radioButton.Enabled = false;
                     Keyboard_radioButton.Enabled = false;
+                    bt_radioButton.Enabled = false;
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = false;
+                    bt_groupBox.Enabled = false;
                 }
                 else if (Always_radioButton.Checked == true)
                 {
                     Always_groupBox.Enabled = true;
                     Keyboard_groupBox.Enabled = false;
+                    bt_groupBox.Enabled = false;
                 }
                 else if (Keyboard_radioButton.Checked == true)
                 {
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = true;
+                    bt_groupBox.Enabled = false;
+                }
+                else if (bt_radioButton.Checked == true)
+                {
+                    Always_groupBox.Enabled = false;
+                    Keyboard_groupBox.Enabled = false;
+                    bt_groupBox.Enabled = true;
                 }
             }
         }
@@ -2503,35 +2578,58 @@ namespace _86ME_ver1
         private void Always_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.always;
-            Always_groupBox.Enabled = true;
-            Keyboard_groupBox.Enabled = false;
+                if (Always_radioButton.Checked == true)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.always;
+                    Always_groupBox.Enabled = true;
+                    Keyboard_groupBox.Enabled = false;
+                    bt_groupBox.Enabled = false;
+                }
         }
 
         private void Keyboard_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.keyboard;
-            Always_groupBox.Enabled = false;
-            Keyboard_groupBox.Enabled = true;
+                if (Keyboard_radioButton.Checked == true)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.keyboard;
+                    Always_groupBox.Enabled = false;
+                    Keyboard_groupBox.Enabled = true;
+                    bt_groupBox.Enabled = false;
+                }
+        }
+
+        private void bt_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                if (bt_radioButton.Checked == true)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.bluetooth;
+                    Always_groupBox.Enabled = false;
+                    Keyboard_groupBox.Enabled = false;
+                    bt_groupBox.Enabled = true;
+                }
         }
 
         private void AlwaysOn_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.on;
+                if(AlwaysOn.Checked == true)
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.on;
         }
 
         private void AlwaysOff_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.off;
+                if (AlwaysOff.Checked == true)
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.off;
         }
 
         private void TitleMotion_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.title;
+                if (TitleMotion.Checked == true)
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.title;
         }
 
         private void KeyboardCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -2545,5 +2643,21 @@ namespace _86ME_ver1
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_keyType = KeyboardTypeCombo.SelectedIndex;
         }
+
+        private void btKeyText_TextChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_key = btKeyText.Text;
+                btKeyLabel.Text = "Key: " + btKeyText.Text;
+            }
+        }
+
+        private void btCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_btType = btCombo.SelectedIndex;
+        }
+
     }
 }
