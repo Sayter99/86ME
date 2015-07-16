@@ -102,7 +102,6 @@ namespace _86ME_ver1
         {
             if (String.Compare(init_load_file, "") != 0 && File.Exists(init_load_file))
             {
-                MessageBox.Show(init_load_file + " is loaded");
                 load_project(init_load_file);
                 Application.Idle -= new EventHandler(init_load);
             }
@@ -407,7 +406,7 @@ namespace _86ME_ver1
         private bool needToSave()
         {
             bool need_to_save = false;
-            if (File.Exists(load_filename))
+            if (File.Exists(load_filename) && Motion != null)
             {
                 string tmp_file = DateTime.Now.ToString("yyyyMMddhhmmss") + "_86ME_tmpGeneratedFile.rbm";
                 save_project(tmp_file);
@@ -688,9 +687,6 @@ namespace _86ME_ver1
                 writer.Write(Motion.ftext4[j].Text + " ");
             }
             writer.Write("\n");
-            // save sync_speed
-            writer.WriteLine("Sync " + sync_speed.Value.ToString());
-            //
             if (Motion.picfilename != null)
             {
                 writer.Write("picmode ");
@@ -701,7 +697,9 @@ namespace _86ME_ver1
                     writer.Write(Motion.channely[i] + " ");
                 writer.Write("\n");
             }
-
+            // save sync_speed
+            writer.WriteLine("Sync " + sync_speed.Value.ToString());
+            //
             for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -783,7 +781,6 @@ namespace _86ME_ver1
                 return;
             load_project(filename);
             MotionConfig.SelectedIndex = 0;
-            MessageBox.Show(filename + " is loaded");
         }
 
         public void load_project(string filename)
@@ -1228,6 +1225,7 @@ namespace _86ME_ver1
                             "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
                             " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
                             "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
+            MessageBox.Show(filename + " is loaded");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -1426,6 +1424,15 @@ namespace _86ME_ver1
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
             btCombo.SelectedIndex = m.trigger_btType;
             btKeyText.Text = m.bt_key;
+            if (MotionConfig.SelectedIndex == 0)
+                this.richTextBox1.Text =
+                            "   ___   __   ____        _\n" +
+                            "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                            "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                            " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                            "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
+            else
+                this.richTextBox1.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1940,7 +1947,6 @@ namespace _86ME_ver1
                 motion_stop.Enabled = false;
                 groupBox1.Enabled = false;
                 groupBox4.Enabled = false;
-                this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
             }
             else if (MotionConfig.SelectedIndex == 1)
             {
@@ -1968,6 +1974,7 @@ namespace _86ME_ver1
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = false;
             }
+            this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
         }
 
         private void NewMotion_Click(object sender, EventArgs e)
@@ -2002,15 +2009,9 @@ namespace _86ME_ver1
                 AlwaysOn.Checked = true;
                 //Motion Config
                 draw_background();
-                if (MotionConfig.SelectedIndex == 0)
-                {
-                    Motionlist.Focus();
-                    this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
-                }
-                else
-                {
-                    Always_groupBox.Focus();
-                }
+                MotionConfig.SelectedIndex = 0;
+                Motionlist.Focus();
+                this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
             }
             else
             {
@@ -2533,7 +2534,12 @@ namespace _86ME_ver1
                 autocheck.Enabled = true;
                 capturebutton.Enabled = true;
                 delaytext.Enabled = true;
-                ttp.SetToolTip(MotionTest, "Play the current motion list from the first item to the end.");
+                this.richTextBox1.Text =
+                    "   ___   __   ____        _\n" +
+                    "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                    "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                    " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                    "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
             }
             else if(MotionConfig.SelectedIndex == 1)
             {
@@ -2544,7 +2550,6 @@ namespace _86ME_ver1
                 autocheck.Enabled = false;
                 capturebutton.Enabled = false;
                 delaytext.Enabled = false;
-                ttp.SetToolTip(MotionTest, "Play all motions by checking the conditions of Motion Trigger.");
                 if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
                 {
                     Always_radioButton.Enabled = false;
@@ -2572,6 +2577,7 @@ namespace _86ME_ver1
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = true;
                 }
+                this.richTextBox1.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
             }
         }
 

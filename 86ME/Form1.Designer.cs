@@ -570,6 +570,9 @@
             this.btCombo.Name = "btCombo";
             this.btCombo.Size = new System.Drawing.Size(69, 20);
             this.btCombo.TabIndex = 5;
+            this.ttp.SetToolTip(this.btCombo, "First Press: Perform the selected motion while pressing the choosed key first time." +
+                                              "\nPressed: Perform the selected motion if the choosed key is pressed continuosly." +
+                                              "\nRelease: Perform the selected motion after the choosed key is released.");
             this.btCombo.SelectedIndexChanged += new System.EventHandler(btCombo_SelectedIndexChanged);
             // 
             // btTypeLabel
@@ -587,6 +590,7 @@
             this.btKeyText.Name = "btKeyText";
             this.btKeyText.Size = new System.Drawing.Size(95, 22);
             this.btKeyText.TabIndex = 0;
+            this.ttp.SetToolTip(this.btKeyText, "Set the signal from bluetooth for triggering the selected motion.");
             this.btKeyText.TextChanged += new System.EventHandler(btKeyText_TextChanged);
             // 
             // bt_radioButton
@@ -648,6 +652,9 @@
             this.KeyboardTypeCombo.Name = "KeyboardTypeCombo";
             this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 20);
             this.KeyboardTypeCombo.TabIndex = 3;
+            this.ttp.SetToolTip(this.KeyboardTypeCombo, "First Press: Perform the selected motion while pressing the choosed key first time." +
+                                                        "\nPressed: Perform the selected motion if the choosed key is pressed continuosly." +
+                                                        "\nRelease: Perform the selected motion after the choosed key is released.");
             this.KeyboardTypeCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardTypeCombo_SelectedIndexChanged);
             // 
             // keyboardTypeLabel
@@ -730,6 +737,7 @@
             this.TitleMotion.Name = "TitleMotion";
             this.TitleMotion.Size = new System.Drawing.Size(81, 16);
             this.TitleMotion.TabIndex = 2;
+            this.ttp.SetToolTip(this.TitleMotion, "Let the selected motion perfom once in the begining.");
             this.TitleMotion.TabStop = true;
             this.TitleMotion.Text = "Title Motion";
             this.TitleMotion.UseVisualStyleBackColor = true;
@@ -742,6 +750,7 @@
             this.AlwaysOff.Name = "AlwaysOff";
             this.AlwaysOff.Size = new System.Drawing.Size(76, 16);
             this.AlwaysOff.TabIndex = 1;
+            this.ttp.SetToolTip(this.AlwaysOff, "Let the selected motion NEVER perform.");
             this.AlwaysOff.Text = "Always Off";
             this.AlwaysOff.UseVisualStyleBackColor = true;
             this.AlwaysOff.CheckedChanged += new System.EventHandler(this.AlwaysOff_CheckedChanged);
@@ -754,6 +763,7 @@
             this.AlwaysOn.Name = "AlwaysOn";
             this.AlwaysOn.Size = new System.Drawing.Size(74, 16);
             this.AlwaysOn.TabIndex = 0;
+            this.ttp.SetToolTip(this.AlwaysOn, "Let the selected motion always perform.");
             this.AlwaysOn.TabStop = true;
             this.AlwaysOn.Text = "Always On";
             this.AlwaysOn.UseVisualStyleBackColor = true;
