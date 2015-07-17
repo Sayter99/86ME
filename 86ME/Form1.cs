@@ -705,7 +705,7 @@ namespace _86ME_ver1
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
                 writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
-                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.trigger_btType + "\n");
+                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.bt_port + "\n");
                 for (int j = 0; j < m.Events.Count; j++)
                 {
                     if (m.Events[j] is ME_Frame)
@@ -1028,7 +1028,7 @@ namespace _86ME_ver1
                                 else
                                     motiontag.bt_key = datas[i];
                                 i++;
-                                motiontag.trigger_btType = int.Parse(datas[i]);
+                                motiontag.bt_port = int.Parse(datas[i]);
                             }
                             else
                                 i--;
@@ -1422,8 +1422,8 @@ namespace _86ME_ver1
                 TitleMotion.Checked = true;
             KeyboardCombo.SelectedIndex = m.trigger_key;
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
-            btCombo.SelectedIndex = m.trigger_btType;
             btKeyText.Text = m.bt_key;
+            btPortCombo.SelectedIndex = m.bt_port;
             if (MotionConfig.SelectedIndex == 0)
                 this.richTextBox1.Text =
                             "   ___   __   ____        _\n" +
@@ -2559,7 +2559,16 @@ namespace _86ME_ver1
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
                 }
-                else if (Always_radioButton.Checked == true)
+                else
+                {
+                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method == (int)mtest_method.always)
+                        Always_radioButton.Checked = true;
+                    else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method == (int)mtest_method.keyboard)
+                        Keyboard_radioButton.Checked = true;
+                    else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method == (int)mtest_method.bluetooth)
+                        bt_radioButton.Checked = true;
+                }
+                if (Always_radioButton.Checked == true)
                 {
                     Always_groupBox.Enabled = true;
                     Keyboard_groupBox.Enabled = false;
@@ -2659,10 +2668,10 @@ namespace _86ME_ver1
             }
         }
 
-        private void btCombo_SelectedIndexChanged(object sender, EventArgs e)
+        private void btPortCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_btType = btCombo.SelectedIndex;
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_port = btPortCombo.SelectedIndex;
         }
 
     }

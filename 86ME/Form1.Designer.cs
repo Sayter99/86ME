@@ -73,8 +73,6 @@
             this.MotionTrigger = new System.Windows.Forms.TabPage();
             this.bt_groupBox = new System.Windows.Forms.GroupBox();
             this.btKeyLabel = new System.Windows.Forms.Label();
-            this.btCombo = new System.Windows.Forms.ComboBox();
-            this.btTypeLabel = new System.Windows.Forms.Label();
             this.btKeyText = new System.Windows.Forms.TextBox();
             this.bt_radioButton = new System.Windows.Forms.RadioButton();
             this.Keyboard_radioButton = new System.Windows.Forms.RadioButton();
@@ -101,6 +99,8 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btPortLabel = new System.Windows.Forms.Label();
+            this.btPortCombo = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -538,9 +538,9 @@
             // 
             // bt_groupBox
             // 
+            this.bt_groupBox.Controls.Add(this.btPortCombo);
+            this.bt_groupBox.Controls.Add(this.btPortLabel);
             this.bt_groupBox.Controls.Add(this.btKeyLabel);
-            this.bt_groupBox.Controls.Add(this.btCombo);
-            this.bt_groupBox.Controls.Add(this.btTypeLabel);
             this.bt_groupBox.Controls.Add(this.btKeyText);
             this.bt_groupBox.Location = new System.Drawing.Point(27, 132);
             this.bt_groupBox.Name = "bt_groupBox";
@@ -552,46 +552,21 @@
             // btKeyLabel
             // 
             this.btKeyLabel.AutoSize = true;
-            this.btKeyLabel.Location = new System.Drawing.Point(89, 14);
+            this.btKeyLabel.Location = new System.Drawing.Point(14, 14);
             this.btKeyLabel.Name = "btKeyLabel";
             this.btKeyLabel.Size = new System.Drawing.Size(30, 12);
             this.btKeyLabel.TabIndex = 4;
             this.btKeyLabel.Text = "Key: ";
             // 
-            // btCombo
-            // 
-            this.btCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.btCombo.FormattingEnabled = true;
-            this.btCombo.Items.AddRange(new object[] {
-            "First Press",
-            "Pressed",
-            "Release"});
-            this.btCombo.Location = new System.Drawing.Point(16, 29);
-            this.btCombo.Name = "btCombo";
-            this.btCombo.Size = new System.Drawing.Size(69, 20);
-            this.btCombo.TabIndex = 5;
-            this.ttp.SetToolTip(this.btCombo, "First Press: Perform the selected motion while pressing the choosed key first time." +
-                                              "\nPressed: Perform the selected motion if the choosed key is pressed continuosly." +
-                                              "\nRelease: Perform the selected motion after the choosed key is released.");
-            this.btCombo.SelectedIndexChanged += new System.EventHandler(btCombo_SelectedIndexChanged);
-            // 
-            // btTypeLabel
-            // 
-            this.btTypeLabel.AutoSize = true;
-            this.btTypeLabel.Location = new System.Drawing.Point(14, 14);
-            this.btTypeLabel.Name = "btTypeLabel";
-            this.btTypeLabel.Size = new System.Drawing.Size(32, 12);
-            this.btTypeLabel.TabIndex = 4;
-            this.btTypeLabel.Text = "Type:";
-            // 
             // btKeyText
             // 
-            this.btKeyText.Location = new System.Drawing.Point(91, 29);
+            this.btKeyText.Location = new System.Drawing.Point(16, 29);
+            this.btKeyText.MaxLength = 1;
             this.btKeyText.Name = "btKeyText";
-            this.btKeyText.Size = new System.Drawing.Size(95, 22);
+            this.btKeyText.Size = new System.Drawing.Size(69, 22);
             this.btKeyText.TabIndex = 0;
-            this.ttp.SetToolTip(this.btKeyText, "Set the signal from bluetooth for triggering the selected motion.");
-            this.btKeyText.TextChanged += new System.EventHandler(btKeyText_TextChanged);
+            this.ttp.SetToolTip(this.btKeyText, "Set a character for triggering the selected motion by bluetooth.");
+            this.btKeyText.TextChanged += new System.EventHandler(this.btKeyText_TextChanged);
             // 
             // bt_radioButton
             // 
@@ -652,9 +627,7 @@
             this.KeyboardTypeCombo.Name = "KeyboardTypeCombo";
             this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 20);
             this.KeyboardTypeCombo.TabIndex = 3;
-            this.ttp.SetToolTip(this.KeyboardTypeCombo, "First Press: Perform the selected motion while pressing the choosed key first time." +
-                                                        "\nPressed: Perform the selected motion if the choosed key is pressed continuosly." +
-                                                        "\nRelease: Perform the selected motion after the choosed key is released.");
+            this.ttp.SetToolTip(this.KeyboardTypeCombo, resources.GetString("KeyboardTypeCombo.ToolTip"));
             this.KeyboardTypeCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardTypeCombo_SelectedIndexChanged);
             // 
             // keyboardTypeLabel
@@ -737,9 +710,9 @@
             this.TitleMotion.Name = "TitleMotion";
             this.TitleMotion.Size = new System.Drawing.Size(81, 16);
             this.TitleMotion.TabIndex = 2;
-            this.ttp.SetToolTip(this.TitleMotion, "Let the selected motion perfom once in the begining.");
             this.TitleMotion.TabStop = true;
             this.TitleMotion.Text = "Title Motion";
+            this.ttp.SetToolTip(this.TitleMotion, "Let the selected motion perfom once in the begining.");
             this.TitleMotion.UseVisualStyleBackColor = true;
             this.TitleMotion.CheckedChanged += new System.EventHandler(this.TitleMotion_CheckedChanged);
             // 
@@ -750,8 +723,8 @@
             this.AlwaysOff.Name = "AlwaysOff";
             this.AlwaysOff.Size = new System.Drawing.Size(76, 16);
             this.AlwaysOff.TabIndex = 1;
-            this.ttp.SetToolTip(this.AlwaysOff, "Let the selected motion NEVER perform.");
             this.AlwaysOff.Text = "Always Off";
+            this.ttp.SetToolTip(this.AlwaysOff, "Let the selected motion NEVER perform.");
             this.AlwaysOff.UseVisualStyleBackColor = true;
             this.AlwaysOff.CheckedChanged += new System.EventHandler(this.AlwaysOff_CheckedChanged);
             // 
@@ -763,9 +736,9 @@
             this.AlwaysOn.Name = "AlwaysOn";
             this.AlwaysOn.Size = new System.Drawing.Size(74, 16);
             this.AlwaysOn.TabIndex = 0;
-            this.ttp.SetToolTip(this.AlwaysOn, "Let the selected motion always perform.");
             this.AlwaysOn.TabStop = true;
             this.AlwaysOn.Text = "Always On";
+            this.ttp.SetToolTip(this.AlwaysOn, "Let the selected motion always perform.");
             this.AlwaysOn.UseVisualStyleBackColor = true;
             this.AlwaysOn.CheckedChanged += new System.EventHandler(this.AlwaysOn_CheckedChanged);
             // 
@@ -912,6 +885,30 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Edit Settings";
             // 
+            // btPortLabel
+            // 
+            this.btPortLabel.AutoSize = true;
+            this.btPortLabel.Location = new System.Drawing.Point(89, 14);
+            this.btPortLabel.Name = "btPortLabel";
+            this.btPortLabel.Size = new System.Drawing.Size(53, 12);
+            this.btPortLabel.TabIndex = 5;
+            this.btPortLabel.Text = "Used Port:";
+            // 
+            // btPortCombo
+            // 
+            this.btPortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btPortCombo.FormattingEnabled = true;
+            this.btPortCombo.Items.AddRange(new object[] {
+            "Serial1",
+            "Serial2",
+            "Serial3"});
+            this.btPortCombo.Location = new System.Drawing.Point(91, 29);
+            this.btPortCombo.Name = "btPortCombo";
+            this.btPortCombo.Size = new System.Drawing.Size(95, 20);
+            this.btPortCombo.TabIndex = 4;
+            this.ttp.SetToolTip(this.btPortCombo, "Set used port for connecting bluetooth.");
+            this.btPortCombo.SelectedIndexChanged += new System.EventHandler(btPortCombo_SelectedIndexChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -926,7 +923,7 @@
             this.Controls.Add(this.groupBox4);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
-            this.MaximumSize = new System.Drawing.Size(1040, 980);
+            this.MaximumSize = new System.Drawing.Size(1040, 736);
             this.MinimumSize = new System.Drawing.Size(1040, 736);
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -1031,10 +1028,10 @@
         private System.Windows.Forms.RadioButton TitleMotion;
         private System.Windows.Forms.GroupBox bt_groupBox;
         private System.Windows.Forms.Label btKeyLabel;
-        private System.Windows.Forms.ComboBox btCombo;
-        private System.Windows.Forms.Label btTypeLabel;
         private System.Windows.Forms.TextBox btKeyText;
         private System.Windows.Forms.RadioButton bt_radioButton;
+        private System.Windows.Forms.ComboBox btPortCombo;
+        private System.Windows.Forms.Label btPortLabel;
     }
 }
 

@@ -10,6 +10,7 @@ namespace _86ME_ver1
     enum mtest_method { always, keyboard, bluetooth };
     enum keyboard_method { first, pressed, release };
     enum auto_method { on, off, title };
+    enum serial_ports { serial1, serial2, serial3};
 
     public class generate_sketches
     {
@@ -18,6 +19,7 @@ namespace _86ME_ver1
         private NewMotion Motion;
         private bool[] method_flag = new bool[16];
         private int[] offset = new int[45];
+        private bool[] used_ports = new bool[3];
 
         public generate_sketches(NewMotion nMotion, int[] off, ArrayList motionlist)
         {
@@ -27,6 +29,7 @@ namespace _86ME_ver1
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 method_flag[((ME_Motion)ME_Motionlist[i]).trigger_method] = true;
+                used_ports[((ME_Motion)ME_Motionlist[i]).bt_port] = true;
             }
         }
 
@@ -68,6 +71,15 @@ namespace _86ME_ver1
                         return "keys_state[" + convert_keynum(m.trigger_key) + "] == 1";
                     else // release
                         return "keys_state[" + convert_keynum(m.trigger_key) + "] == 2";
+                case (int)mtest_method.bluetooth:
+                    if (String.Compare("", m.bt_key) == 0)
+                        return "0";
+                    else if (m.bt_port == (int)serial_ports.serial1)
+                        return "Serial1_Command == \'" + m.bt_key + "\'";
+                    else if (m.bt_port == (int)serial_ports.serial2)
+                        return "Serial2_Command == \'" + m.bt_key + "\'";
+                    else
+                        return "Serial3_Command == \'" + m.bt_key + "\'";
                 default:
                     return "1";
             }
@@ -118,7 +130,7 @@ namespace _86ME_ver1
                             {
                                 ME_Goto g = (ME_Goto)m.Events[k];
 
-                                string for_var = g.name + "_" + flag_count.ToString();
+                                string for_var = m.name + "_" + g.name + "_" + flag_count.ToString();
                                 writer.Write(space + "int " + for_var + " = 0;\n" + space + "flag_" + for_var + ":\n\n");
                                 ((ME_Flag)m.Events[i]).var = for_var;
 
@@ -145,12 +157,12 @@ namespace _86ME_ver1
                                     space = set_space(space_num);
                                     if (((ME_Goto)m.Events[i]).infinite == false)
                                     {
-                                        writer.Write(space + "if(" + for_var + "++ < " +
-                                                        g.loops + ") goto flag_" + for_var + ";\n\n");
+                                        writer.WriteLine(space + "if(" + for_var + "++ < " +
+                                                        g.loops + ") goto flag_" + for_var + ";");
                                     }
                                     else
                                     {
-                                        writer.WriteLine(space + "goto flag_" + for_var + ";\n");
+                                        writer.WriteLine(space + "goto flag_" + for_var + ";");
                                     }
                                 }
                             }
@@ -173,15 +185,20 @@ namespace _86ME_ver1
 
             // include and declare
             writer.WriteLine("#include <Servo86.h>");
-            // *** INCLUDE HEADERS FOR TRIGGER ***
+            // *** FOR TRIGGER ***
             if (method_flag[1]) // keyboard
             {
                 writer.WriteLine("#include <KeyboardController.h>\n");
                 writer.WriteLine("USBHost usb;");
                 writer.WriteLine("KeyboardController keyboard(usb);");
             }
-            // *** INCLUDE HEADERS FOR TRIGGER ***
             writer.WriteLine();
+            if(method_flag[2]) // bt
+                for (int i = 0; i < 3; i++)
+                    if (used_ports[i])
+                        writer.WriteLine("int Serial" + (i+1).ToString() + "_Command;");
+            // *** FOR TRIGGER ***
+
             for (int i = 0; i < channels.Count; i++)
                 writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
 
@@ -224,6 +241,11 @@ namespace _86ME_ver1
             //void setup {}
             writer.WriteLine("void setup()");
             writer.WriteLine("{");
+            if (method_flag[2]) // bt
+                for (int i = 0; i < 3; i++)
+                    if (used_ports[i])
+                        writer.WriteLine("  Serial" + (i + 1).ToString() + ".begin(9600);");
+            writer.WriteLine();
             for (int i = 0; i < channels.Count; i++)
                 writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
             writer.WriteLine();
@@ -237,6 +259,7 @@ namespace _86ME_ver1
             //void loop {}
             writer.WriteLine("void loop()");
             writer.WriteLine("{");
+            // *** FOR TRIGGER ***
             if (method_flag[1])
             {
                 writer.WriteLine("  usb.Task();");
@@ -252,6 +275,15 @@ namespace _86ME_ver1
                     }
                 }
             }
+            if (method_flag[2])
+            {
+                for (int i = 0; i < 3; i++)
+                    if (used_ports[i])
+                        writer.WriteLine("  if(Serial" + (i + 1).ToString() + ".available()){ Serial" +
+                                             (i + 1).ToString() + "_Command = Serial" + (i + 1).ToString() +
+                                             ".read(); } else { Serial" + (i + 1).ToString() + "_Command = 0xFFF; }");
+            }
+            // *** FOR TRIGGER ***
             int space_num = 2;
             string space = set_space(space_num);
             for (int j = 0; j < ME_Motionlist.Count; j++) //title
@@ -381,16 +413,19 @@ namespace _86ME_ver1
                 TextWriter writer = new StreamWriter(nfilename);
                 // include and declare
                 writer.WriteLine("#include <Servo86.h>");
-                // *** INCLUDE HEADERS FOR TRIGGER ***
+                // *** FOR TRIGGER ***
                 if (method_flag[1]) // keyboard
                 {
                     writer.WriteLine("#include <KeyboardController.h>\n");
                     writer.WriteLine("USBHost usb;");
                     writer.WriteLine("KeyboardController keyboard(usb);");
                 }
-                // *** INCLUDE HEADERS FOR TRIGGER ***
                 writer.WriteLine();
-
+                if (method_flag[2]) // bt
+                    for (int i = 0; i < 3; i++)
+                        if (used_ports[i])
+                            writer.WriteLine("int Serial" + (i + 1).ToString() + "_Command;");
+                // *** FOR TRIGGER ***
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
                     count = 0;
@@ -457,6 +492,11 @@ namespace _86ME_ver1
                 // setup
                 writer.WriteLine("void setup()");
                 writer.WriteLine("{");
+                if (method_flag[2]) // bt
+                    for (int i = 0; i < 3; i++)
+                        if (used_ports[i])
+                            writer.WriteLine("  Serial" + (i + 1).ToString() + ".begin(9600);");
+                writer.WriteLine();
                 for (int i = 0; i < channels.Count; i++)
                     writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
                 writer.WriteLine();
@@ -511,6 +551,15 @@ namespace _86ME_ver1
                         }
                     }
                 }
+                if (method_flag[2])
+                {
+                    for (int i = 0; i < 3; i++)
+                        if (used_ports[i])
+                            writer.WriteLine("  if(Serial" + (i + 1).ToString() + ".available()){ Serial" +
+                                             (i + 1).ToString() + "_Command = Serial" + (i + 1).ToString() +
+                                             ".read(); } else { Serial" + (i + 1).ToString() + "_Command = 0xFFF; }");
+                }
+                writer.WriteLine();
                 int space_num = 2;
                 string space = set_space(space_num);
                 for (int j = 0; j < ME_Motionlist.Count; j++) //title

@@ -14,7 +14,7 @@ namespace _86ME_ver1
         public int trigger_key;
         public int trigger_keyType;
         public string bt_key;
-        public int trigger_btType;
+        public int bt_port;
         public int frames;
         public ME_Motion()
         {
@@ -25,7 +25,7 @@ namespace _86ME_ver1
             this.trigger_key = 0;
             this.trigger_keyType = 1;
             this.bt_key = "";
-            this.trigger_btType = 1;
+            this.bt_port = 0;
             this.frames = 0;
         }
     }
