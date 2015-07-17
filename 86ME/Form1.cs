@@ -28,7 +28,7 @@ namespace _86ME_ver1
 {
     public partial class Form1 : Form
     {
-        string init_load_file = "";
+        public string init_load_file = "";
         int offset_Max = 255;
         int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
@@ -1010,28 +1010,23 @@ namespace _86ME_ver1
                         {
                             motiontag = new ME_Motion();
                             motiontag.name = datas[i];
-                            i++;
-                            if (String.Compare("frame", datas[i]) != 0 && String.Compare("home", datas[i]) != 0 &&
-                                String.Compare("delay", datas[i]) != 0 && String.Compare("sound", datas[i]) != 0 &&
-                                String.Compare("flag", datas[i]) != 0 && String.Compare("goto", datas[i]) != 0)
+                            int try_out;
+                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
+                                String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
+                                int.TryParse(datas[i + 1], out try_out))
                             { // triggers
-                                motiontag.trigger_method = int.Parse(datas[i]);
-                                i++;
-                                motiontag.auto_method = int.Parse(datas[i]);
-                                i++;
-                                motiontag.trigger_key = int.Parse(datas[i]);
-                                i++;
-                                motiontag.trigger_keyType = int.Parse(datas[i]);
+                                motiontag.trigger_method = int.Parse(datas[++i]);
+                                motiontag.auto_method = int.Parse(datas[++i]);
+                                motiontag.trigger_key = int.Parse(datas[++i]);
+                                motiontag.trigger_keyType = int.Parse(datas[++i]);
                                 i++;
                                 if (String.Compare("---noBtKey---", datas[i]) == 0)
                                     motiontag.bt_key = "";
                                 else
                                     motiontag.bt_key = datas[i];
-                                i++;
-                                motiontag.bt_port = int.Parse(datas[i]);
+                                motiontag.bt_port = int.Parse(datas[++i]);
                             }
-                            else
-                                i--;
                             ME_Motionlist.Add(motiontag);
                         }
                     }
@@ -2559,16 +2554,7 @@ namespace _86ME_ver1
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
                 }
-                else
-                {
-                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method == (int)mtest_method.always)
-                        Always_radioButton.Checked = true;
-                    else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method == (int)mtest_method.keyboard)
-                        Keyboard_radioButton.Checked = true;
-                    else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method == (int)mtest_method.bluetooth)
-                        bt_radioButton.Checked = true;
-                }
-                if (Always_radioButton.Checked == true)
+                else if (Always_radioButton.Checked == true)
                 {
                     Always_groupBox.Enabled = true;
                     Keyboard_groupBox.Enabled = false;
