@@ -72,6 +72,8 @@
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
             this.bt_groupBox = new System.Windows.Forms.GroupBox();
+            this.btPortCombo = new System.Windows.Forms.ComboBox();
+            this.btPortLabel = new System.Windows.Forms.Label();
             this.btKeyLabel = new System.Windows.Forms.Label();
             this.btKeyText = new System.Windows.Forms.TextBox();
             this.bt_radioButton = new System.Windows.Forms.RadioButton();
@@ -99,8 +101,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btPortLabel = new System.Windows.Forms.Label();
-            this.btPortCombo = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -549,6 +549,30 @@
             this.bt_groupBox.TabStop = false;
             this.bt_groupBox.Text = "Bluetooth";
             // 
+            // btPortCombo
+            // 
+            this.btPortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btPortCombo.FormattingEnabled = true;
+            this.btPortCombo.Items.AddRange(new object[] {
+            "Serial1",
+            "Serial2",
+            "Serial3"});
+            this.btPortCombo.Location = new System.Drawing.Point(117, 29);
+            this.btPortCombo.Name = "btPortCombo";
+            this.btPortCombo.Size = new System.Drawing.Size(69, 20);
+            this.btPortCombo.TabIndex = 4;
+            this.ttp.SetToolTip(this.btPortCombo, "Set used port for connecting bluetooth.");
+            this.btPortCombo.SelectedIndexChanged += new System.EventHandler(this.btPortCombo_SelectedIndexChanged);
+            // 
+            // btPortLabel
+            // 
+            this.btPortLabel.AutoSize = true;
+            this.btPortLabel.Location = new System.Drawing.Point(115, 14);
+            this.btPortLabel.Name = "btPortLabel";
+            this.btPortLabel.Size = new System.Drawing.Size(53, 12);
+            this.btPortLabel.TabIndex = 5;
+            this.btPortLabel.Text = "Used Port:";
+            // 
             // btKeyLabel
             // 
             this.btKeyLabel.AutoSize = true;
@@ -563,7 +587,7 @@
             this.btKeyText.Location = new System.Drawing.Point(16, 29);
             this.btKeyText.MaxLength = 1;
             this.btKeyText.Name = "btKeyText";
-            this.btKeyText.Size = new System.Drawing.Size(69, 22);
+            this.btKeyText.Size = new System.Drawing.Size(95, 22);
             this.btKeyText.TabIndex = 0;
             this.ttp.SetToolTip(this.btKeyText, "Set a character for triggering the selected motion by bluetooth.");
             this.btKeyText.TextChanged += new System.EventHandler(this.btKeyText_TextChanged);
@@ -623,7 +647,7 @@
             "First Press",
             "Pressed",
             "Release"});
-            this.KeyboardTypeCombo.Location = new System.Drawing.Point(16, 32);
+            this.KeyboardTypeCombo.Location = new System.Drawing.Point(117, 32);
             this.KeyboardTypeCombo.Name = "KeyboardTypeCombo";
             this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 20);
             this.KeyboardTypeCombo.TabIndex = 3;
@@ -633,7 +657,7 @@
             // keyboardTypeLabel
             // 
             this.keyboardTypeLabel.AutoSize = true;
-            this.keyboardTypeLabel.Location = new System.Drawing.Point(14, 17);
+            this.keyboardTypeLabel.Location = new System.Drawing.Point(115, 17);
             this.keyboardTypeLabel.Name = "keyboardTypeLabel";
             this.keyboardTypeLabel.Size = new System.Drawing.Size(32, 12);
             this.keyboardTypeLabel.TabIndex = 2;
@@ -642,7 +666,7 @@
             // KeyboardKeyLabel
             // 
             this.KeyboardKeyLabel.AutoSize = true;
-            this.KeyboardKeyLabel.Location = new System.Drawing.Point(89, 17);
+            this.KeyboardKeyLabel.Location = new System.Drawing.Point(14, 17);
             this.KeyboardKeyLabel.Name = "KeyboardKeyLabel";
             this.KeyboardKeyLabel.Size = new System.Drawing.Size(27, 12);
             this.KeyboardKeyLabel.TabIndex = 1;
@@ -685,7 +709,7 @@
             "KEY_UP",
             "KEY_DOWN",
             "KEY_ESC"});
-            this.KeyboardCombo.Location = new System.Drawing.Point(91, 32);
+            this.KeyboardCombo.Location = new System.Drawing.Point(16, 32);
             this.KeyboardCombo.Name = "KeyboardCombo";
             this.KeyboardCombo.Size = new System.Drawing.Size(95, 20);
             this.KeyboardCombo.TabIndex = 0;
@@ -884,30 +908,6 @@
             this.groupBox4.TabIndex = 15;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Edit Settings";
-            // 
-            // btPortLabel
-            // 
-            this.btPortLabel.AutoSize = true;
-            this.btPortLabel.Location = new System.Drawing.Point(89, 14);
-            this.btPortLabel.Name = "btPortLabel";
-            this.btPortLabel.Size = new System.Drawing.Size(53, 12);
-            this.btPortLabel.TabIndex = 5;
-            this.btPortLabel.Text = "Used Port:";
-            // 
-            // btPortCombo
-            // 
-            this.btPortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.btPortCombo.FormattingEnabled = true;
-            this.btPortCombo.Items.AddRange(new object[] {
-            "Serial1",
-            "Serial2",
-            "Serial3"});
-            this.btPortCombo.Location = new System.Drawing.Point(91, 29);
-            this.btPortCombo.Name = "btPortCombo";
-            this.btPortCombo.Size = new System.Drawing.Size(95, 20);
-            this.btPortCombo.TabIndex = 4;
-            this.ttp.SetToolTip(this.btPortCombo, "Set used port for connecting bluetooth.");
-            this.btPortCombo.SelectedIndexChanged += new System.EventHandler(btPortCombo_SelectedIndexChanged);
             // 
             // Form1
             // 
