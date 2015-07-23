@@ -732,10 +732,10 @@
             this.TitleMotion.AutoSize = true;
             this.TitleMotion.Location = new System.Drawing.Point(105, 13);
             this.TitleMotion.Name = "TitleMotion";
-            this.TitleMotion.Size = new System.Drawing.Size(81, 16);
+            this.TitleMotion.Size = new System.Drawing.Size(61, 16);
             this.TitleMotion.TabIndex = 2;
             this.TitleMotion.TabStop = true;
-            this.TitleMotion.Text = "Title Motion";
+            this.TitleMotion.Text = "Start Up";
             this.ttp.SetToolTip(this.TitleMotion, "Let the selected motion perfom once in the begining.");
             this.TitleMotion.UseVisualStyleBackColor = true;
             this.TitleMotion.CheckedChanged += new System.EventHandler(this.TitleMotion_CheckedChanged);
