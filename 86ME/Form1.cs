@@ -28,6 +28,8 @@ namespace _86ME_ver1
 {
     public partial class Form1 : Form
     {
+        string[] ps2pins = new string[4]{"0", "0", "0", "0"};
+        bool change_board = false;
         public string init_load_file = "";
         int offset_Max = 255;
         int offset_min = -256;
@@ -438,6 +440,73 @@ namespace _86ME_ver1
             return need_to_save;
         }
 
+        private void initPs2()
+        {
+            if (board_ver86 == 0) //one
+            {
+                ps2DATCombo.Items.Clear();
+                ps2CMDCombo.Items.Clear();
+                ps2ATTCombo.Items.Clear();
+                ps2CLKCombo.Items.Clear();
+                for (int i = 0; i < 45; i++)
+                {
+                    ps2DATCombo.Items.Add(i.ToString());
+                    ps2CMDCombo.Items.Add(i.ToString());
+                    ps2ATTCombo.Items.Add(i.ToString());
+                    ps2CLKCombo.Items.Add(i.ToString());
+                }
+            }
+            else if (board_ver86 == 1) //zero
+            {
+                ps2DATCombo.Items.Clear();
+                ps2CMDCombo.Items.Clear();
+                ps2ATTCombo.Items.Clear();
+                ps2CLKCombo.Items.Clear();
+                for (int i = 0; i < 14; i++)
+                {
+                    ps2DATCombo.Items.Add(i.ToString());
+                    ps2CMDCombo.Items.Add(i.ToString());
+                    ps2ATTCombo.Items.Add(i.ToString());
+                    ps2CLKCombo.Items.Add(i.ToString());
+                }
+                for (int i = 42; i < 45; i++)
+                {
+                    ps2DATCombo.Items.Add(i.ToString());
+                    ps2CMDCombo.Items.Add(i.ToString());
+                    ps2ATTCombo.Items.Add(i.ToString());
+                    ps2CLKCombo.Items.Add(i.ToString());
+                }
+            }
+            else if (board_ver86 == 2) //edu
+            {
+                ps2DATCombo.Items.Clear();
+                ps2CMDCombo.Items.Clear();
+                ps2ATTCombo.Items.Clear();
+                ps2CLKCombo.Items.Clear();
+                for (int i = 0; i < 21; i++)
+                {
+                    ps2DATCombo.Items.Add(i.ToString());
+                    ps2CMDCombo.Items.Add(i.ToString());
+                    ps2ATTCombo.Items.Add(i.ToString());
+                    ps2CLKCombo.Items.Add(i.ToString());
+                }
+                for (int i = 31; i < 33; i++)
+                {
+                    ps2DATCombo.Items.Add(i.ToString());
+                    ps2CMDCombo.Items.Add(i.ToString());
+                    ps2ATTCombo.Items.Add(i.ToString());
+                    ps2CLKCombo.Items.Add(i.ToString());
+                }
+                for (int i = 42; i < 45; i++)
+                {
+                    ps2DATCombo.Items.Add(i.ToString());
+                    ps2CMDCombo.Items.Add(i.ToString());
+                    ps2ATTCombo.Items.Add(i.ToString());
+                    ps2CLKCombo.Items.Add(i.ToString());
+                }
+            }
+        }
+
         private void fileToolStripMenuItem_Click(object sender, EventArgs e) //new project
         {
             if (needToSave())
@@ -468,6 +537,7 @@ namespace _86ME_ver1
                 delaytext.Text = default_delay.ToString();
                 typecombo.Text = "";
                 board_ver86 = Motion.comboBox1.SelectedIndex;
+                initPs2();
 
                 for (int i = 0; i < 45; i++)
                 {
@@ -612,7 +682,11 @@ namespace _86ME_ver1
                 Update_framelist();
                 update_motionlist();
                 draw_background();
-                board_ver86 = Motion.comboBox1.SelectedIndex;
+                if (board_ver86 != Motion.comboBox1.SelectedIndex)
+                {
+                    board_ver86 = Motion.comboBox1.SelectedIndex;
+                    change_board = true;
+                }
             }
             else if (Motion.DialogResult == DialogResult.Cancel)
             {
@@ -626,6 +700,16 @@ namespace _86ME_ver1
                     Motion.ftext3[i].Text = min[i].ToString();
                     Motion.ftext4[i].Text = Max[i].ToString();
                 }
+            }
+            MotionConfig.SelectedIndex = 0;
+            initPs2();
+            if(change_board)
+            {
+                ps2pins[0] = "0";
+                ps2pins[1] = "0";
+                ps2pins[2] = "0";
+                ps2pins[3] = "0";
+                change_board = false;
             }
         }
         private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)    //save project
@@ -647,6 +731,7 @@ namespace _86ME_ver1
 
             writer.Write("BoardVer ");
             writer.Write(Motion.comboBox1.SelectedItem.ToString());
+            writer.Write(" " + ps2pins[0] + " " + ps2pins[1] + " " + ps2pins[2] + " " + ps2pins[3]);
             writer.Write("\n");
             writer.Write("Servo ");
             for (int i = 0; i < 45; i++)
@@ -705,7 +790,8 @@ namespace _86ME_ver1
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
                 writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
-                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.bt_port + "\n");
+                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.bt_port +
+                             " " + m.ps2_key + " " + m.ps2_type + "\n");
                 for (int j = 0; j < m.Events.Count; j++)
                 {
                     if (m.Events[j] is ME_Frame)
@@ -821,28 +907,19 @@ namespace _86ME_ver1
                 load_filename = filename;
 
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                if (datas.Length < 235)
+                if (datas.Length < 239)
                 {
                     MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
                     return;
                 }
-                if (datas[234] == "picmode")
+                if (datas[0] != "BoardVer" ||
+                    (datas[6] != "Servo" && datas[2] != "Servo") ||
+                    (datas[52] != "Offset" && datas[48] != "Offset") ||
+                    (datas[99] != "Homeframe" && datas[95] != "Homeframe") ||
+                    (datas[146] != "Range" && datas[142] != "Range"))
                 {
-                    if (datas[0] != "BoardVer" || datas[2] != "Servo" || datas[48] != "Offset" ||
-                       datas[95] != "Homeframe" || datas[142] != "Range")
-                    {
-                        MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
-                        return;
-                    }
-                }
-                else
-                {
-                    if (datas[0] != "BoardVer" || datas[2] != "Servo" || datas[48] != "Offset" ||
-                       datas[95] != "Homeframe" || datas[142] != "Range")
-                    {
-                        MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
-                        return;
-                    }
+                    MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
+                    return;
                 }
 
                 ME_Motionlist = new ArrayList();
@@ -859,12 +936,21 @@ namespace _86ME_ver1
                     {
                         i++;
                         for (int j = 0; j < rbver.Length; j++)
+                        {
                             if (String.Compare(datas[i], rbver[j]) == 0)
                             {
                                 //***fix bug after remove rb
                                 nMotion.comboBox1.SelectedIndex = j - 7;
                                 board_ver86 = j - 7;
                             }
+                        }
+                        if (String.Compare(datas[i + 1], "Servo") != 0)
+                        {
+                            ps2pins[0] = datas[++i];
+                            ps2pins[1] = datas[++i];
+                            ps2pins[2] = datas[++i];
+                            ps2pins[3] = datas[++i];
+                        }
                     }
                     else if (String.Compare(datas[i], "Offset") == 0)
                     {
@@ -1014,7 +1100,7 @@ namespace _86ME_ver1
                             if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
                                 String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
                                 String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
-                                int.TryParse(datas[i + 1], out try_out))
+                                String.Compare("MotionEnd", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
                             { // triggers
                                 motiontag.trigger_method = int.Parse(datas[++i]);
                                 motiontag.auto_method = int.Parse(datas[++i]);
@@ -1026,6 +1112,14 @@ namespace _86ME_ver1
                                 else
                                     motiontag.bt_key = datas[i];
                                 motiontag.bt_port = int.Parse(datas[++i]);
+                            }
+                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
+                                String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
+                                String.Compare("MotionEnd", datas[i + 1]) != 0)
+                            {
+                                motiontag.ps2_key = datas[++i];
+                                motiontag.ps2_type = int.Parse(datas[++i]);
                             }
                             ME_Motionlist.Add(motiontag);
                         }
@@ -1198,6 +1292,8 @@ namespace _86ME_ver1
                 nMotion.picfilename = null;
                 pictureBox1.Image = null;
             }
+
+            initPs2();
 
             groupBox2.Enabled = true;
             groupBox3.Enabled = true;
@@ -1387,6 +1483,7 @@ namespace _86ME_ver1
             Always_radioButton.Enabled = true;
             Keyboard_radioButton.Enabled = true;
             bt_radioButton.Enabled = true;
+            ps2_radioButton.Enabled = true;
             ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
             if (m.trigger_method == (int)mtest_method.always)
             {
@@ -1394,6 +1491,7 @@ namespace _86ME_ver1
                 Always_groupBox.Enabled = true;
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = false;
+                ps2_groupBox.Enabled = false;
             }
             else if(m.trigger_method == (int)mtest_method.keyboard)
             {
@@ -1401,6 +1499,7 @@ namespace _86ME_ver1
                 Always_groupBox.Enabled = false;
                 Keyboard_groupBox.Enabled = true;
                 bt_groupBox.Enabled = false;
+                ps2_groupBox.Enabled = false;
             }
             else if (m.trigger_method == (int)mtest_method.bluetooth)
             {
@@ -1408,6 +1507,15 @@ namespace _86ME_ver1
                 Always_groupBox.Enabled = false;
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = true;
+                ps2_groupBox.Enabled = false;
+            }
+            else if (m.trigger_method == (int)mtest_method.ps2)
+            {
+                ps2_radioButton.Checked = true;
+                Always_groupBox.Enabled = false;
+                Keyboard_groupBox.Enabled = false;
+                bt_groupBox.Enabled = false;
+                ps2_groupBox.Enabled = true;
             }
             if (m.auto_method == (int)auto_method.on)
                 AlwaysOn.Checked = true;
@@ -1419,6 +1527,12 @@ namespace _86ME_ver1
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
             btKeyText.Text = m.bt_key;
             btPortCombo.SelectedIndex = m.bt_port;
+            ps2DATCombo.Text = ps2pins[0];
+            ps2CMDCombo.Text = ps2pins[1];
+            ps2ATTCombo.Text = ps2pins[2];
+            ps2CLKCombo.Text = ps2pins[3];
+            ps2KeyCombo.Text = m.ps2_key;
+            ps2TypeCombo.SelectedIndex = m.ps2_type;
             if (MotionConfig.SelectedIndex == 0)
                 this.richTextBox1.Text =
                             "   ___   __   ____        _\n" +
@@ -1965,9 +2079,11 @@ namespace _86ME_ver1
                 Always_radioButton.Enabled = false;
                 Keyboard_radioButton.Enabled = false;
                 bt_radioButton.Enabled = false;
+                ps2_radioButton.Enabled = false;
                 Always_groupBox.Enabled = false;
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = false;
+                ps2_groupBox.Enabled = false;
             }
             this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
         }
@@ -1993,16 +2109,6 @@ namespace _86ME_ver1
                 current_motionlist_idx = -1;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
-                //Motion Config
-                Always_radioButton.Enabled = true;
-                Keyboard_radioButton.Enabled = true;
-                bt_radioButton.Enabled = true;
-                Always_groupBox.Enabled = true;
-                Keyboard_groupBox.Enabled = false;
-                bt_groupBox.Enabled = false;
-                Always_radioButton.Checked = true;
-                AlwaysOn.Checked = true;
-                //Motion Config
                 draw_background();
                 MotionConfig.SelectedIndex = 0;
                 Motionlist.Focus();
@@ -2356,7 +2462,7 @@ namespace _86ME_ver1
                 MessageBox.Show("You should add a motion first");
                 return;
             }
-            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist);
+            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins);
             g.generate_withFiles();
         }
 
@@ -2367,7 +2473,7 @@ namespace _86ME_ver1
                 MessageBox.Show("You should add a motion first");
                 return;
             }
-            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist);
+            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins);
             g.generate_AllinOne();
         }
 
@@ -2553,24 +2659,42 @@ namespace _86ME_ver1
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
+                    ps2_groupBox.Enabled = false;
                 }
-                else if (Always_radioButton.Checked == true)
+                else
                 {
-                    Always_groupBox.Enabled = true;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = false;
-                }
-                else if (Keyboard_radioButton.Checked == true)
-                {
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = true;
-                    bt_groupBox.Enabled = false;
-                }
-                else if (bt_radioButton.Checked == true)
-                {
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = true;
+                    if (Always_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = true;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = false;
+                    }
+                    else if (Keyboard_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = true;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = false;
+                    }
+                    else if (bt_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = true;
+                        ps2_groupBox.Enabled = false;
+                    }
+                    else if (ps2_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = true;
+                    }
+                    ps2DATCombo.Text = ps2pins[0];
+                    ps2CMDCombo.Text = ps2pins[1];
+                    ps2ATTCombo.Text = ps2pins[2];
+                    ps2CLKCombo.Text = ps2pins[3];
                 }
                 this.richTextBox1.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
             }
@@ -2585,6 +2709,7 @@ namespace _86ME_ver1
                     Always_groupBox.Enabled = true;
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
+                    ps2_groupBox.Enabled = false;
                 }
         }
 
@@ -2597,6 +2722,7 @@ namespace _86ME_ver1
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = true;
                     bt_groupBox.Enabled = false;
+                    ps2_groupBox.Enabled = false;
                 }
         }
 
@@ -2609,6 +2735,20 @@ namespace _86ME_ver1
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = true;
+                    ps2_groupBox.Enabled = false;
+                }
+        }
+
+        private void ps2_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                if (ps2_radioButton.Checked == true)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.ps2;
+                    Always_groupBox.Enabled = false;
+                    Keyboard_groupBox.Enabled = false;
+                    bt_groupBox.Enabled = false;
+                    ps2_groupBox.Enabled = true;
                 }
         }
 
@@ -2660,5 +2800,36 @@ namespace _86ME_ver1
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_port = btPortCombo.SelectedIndex;
         }
 
+        private void ps2DATCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ps2pins[0] = ps2DATCombo.Text;
+        }
+
+        private void ps2CMDCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ps2pins[1] = ps2CMDCombo.Text;
+        }
+
+        private void ps2ATTCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ps2pins[2] = ps2ATTCombo.Text;
+        }
+
+        private void ps2CLKCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ps2pins[3] = ps2CLKCombo.Text;
+        }
+
+        private void ps2KeyCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).ps2_key = ps2KeyCombo.Text;
+        }
+
+        private void ps2TypeCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).ps2_type = ps2TypeCombo.SelectedIndex;
+        }
     }
 }

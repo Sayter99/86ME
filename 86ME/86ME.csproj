@@ -13,7 +13,7 @@
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <ApplicationIcon>1357303350_44947.ico</ApplicationIcon>
+    <ApplicationIcon>icons\86Duino.ico</ApplicationIcon>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -161,7 +161,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="1357303350_44947.ico" />
+    <Content Include="icons\86Duino.ico" />
     <None Include="Resources\hand_open.cur" />
     <None Include="Resources\hand_close.cur" />
     <None Include="icons\stop.png" />

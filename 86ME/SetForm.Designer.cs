@@ -56,7 +56,6 @@
             this.ComboBox0.Name = "ComboBox0";
             this.ComboBox0.Size = new System.Drawing.Size(212, 27);
             this.ComboBox0.TabIndex = 3;
-            this.ComboBox0.SelectedIndex = 0;
             // 
             // textBox1
             // 

@@ -7,7 +7,7 @@ using System.IO;
 
 namespace _86ME_ver1
 {
-    enum mtest_method { always, keyboard, bluetooth };
+    enum mtest_method { always, keyboard, bluetooth, ps2 };
     enum keyboard_method { first, pressed, release };
     enum auto_method { on, off, title };
     enum serial_ports { serial1, serial2, serial3};
@@ -20,12 +20,14 @@ namespace _86ME_ver1
         private bool[] method_flag = new bool[16];
         private int[] offset = new int[45];
         private bool[] used_ports = new bool[3];
+        private string[] ps2_pins = new string[4];
 
-        public generate_sketches(NewMotion nMotion, int[] off, ArrayList motionlist)
+        public generate_sketches(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins)
         {
             this.Motion = nMotion;
             this.offset = off;
             this.ME_Motionlist = motionlist;
+            this.ps2_pins = ps2pins;
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 method_flag[((ME_Motion)ME_Motionlist[i]).trigger_method] = true;
@@ -80,6 +82,13 @@ namespace _86ME_ver1
                         return "Serial2_Command == \'" + m.bt_key + "\'";
                     else
                         return "Serial3_Command == \'" + m.bt_key + "\'";
+                case (int)mtest_method.ps2:
+                    if (m.ps2_type == (int)keyboard_method.first)
+                        return "ps2x.ButtonPressed(" + m.ps2_key + ")";
+                    else if (m.ps2_type == (int)keyboard_method.pressed)
+                        return "ps2x.Button(" + m.ps2_key + ") && !ps2x.ButtonPressed(" + m.ps2_key + ")";
+                    else
+                        return "ps2x.ButtonReleased(" + m.ps2_key + ")";
                 default:
                     return "1";
             }
@@ -185,19 +194,11 @@ namespace _86ME_ver1
 
             // include and declare
             writer.WriteLine("#include <Servo86.h>");
-            // *** FOR TRIGGER ***
             if (method_flag[1]) // keyboard
-            {
-                writer.WriteLine("#include <KeyboardController.h>\n");
-                writer.WriteLine("USBHost usb;");
-                writer.WriteLine("KeyboardController keyboard(usb);");
-            }
+                writer.WriteLine("#include <KeyboardController.h>");
+            if (method_flag[3]) // ps2
+                writer.WriteLine("#include <PS2X_lib.h>");
             writer.WriteLine();
-            if(method_flag[2]) // bt
-                for (int i = 0; i < 3; i++)
-                    if (used_ports[i])
-                        writer.WriteLine("int Serial" + (i+1).ToString() + "_Command;");
-            // *** FOR TRIGGER ***
 
             for (int i = 0; i < channels.Count; i++)
                 writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
@@ -226,6 +227,8 @@ namespace _86ME_ver1
 
             if (method_flag[1]) // keyboard
             {
+                writer.WriteLine("USBHost usb;");
+                writer.WriteLine("KeyboardController keyboard(usb);");
                 writer.WriteLine("char current_key = 0;");
                 writer.WriteLine("void keyPressed(){current_key = keyboard.getOemKey();}");
                 writer.WriteLine("void keyReleased(){current_key = 0;}");
@@ -237,7 +240,14 @@ namespace _86ME_ver1
                                  "  else if(current_key!=k && key_press[k])\n  {\n" + "    key_press[k] = 0;\n" +
                                  "    return 2;\n  }\n" + "  return 3;\n}\n");
             }
+            if (method_flag[2]) // bt
+                for (int i = 0; i < 3; i++)
+                    if (used_ports[i])
+                        writer.WriteLine("int Serial" + (i + 1).ToString() + "_Command;");
+            if (method_flag[3]) // ps2
+                writer.WriteLine("PS2X ps2x;");
 
+            writer.WriteLine();
             //void setup {}
             writer.WriteLine("void setup()");
             writer.WriteLine("{");
@@ -246,6 +256,9 @@ namespace _86ME_ver1
                     if (used_ports[i])
                         writer.WriteLine("  Serial" + (i + 1).ToString() + ".begin(9600);");
             writer.WriteLine();
+            if (method_flag[3]) // ps2
+                writer.WriteLine("  ps2x.config_gamepad(" + ps2_pins[3] + ", " + ps2_pins[1] +
+                                 ", " + ps2_pins[2] + ", " + ps2_pins[0] + ", false, false);\n");
             for (int i = 0; i < channels.Count; i++)
                 writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
             writer.WriteLine();
@@ -283,6 +296,8 @@ namespace _86ME_ver1
                                              (i + 1).ToString() + "_Command = Serial" + (i + 1).ToString() +
                                              ".read(); } else { Serial" + (i + 1).ToString() + "_Command = 0xFFF; }");
             }
+            if (method_flag[3])
+                writer.WriteLine("  ps2x.read_gamepad();");
             // *** FOR TRIGGER ***
             int space_num = 2;
             string space = set_space(space_num);
@@ -413,19 +428,11 @@ namespace _86ME_ver1
                 TextWriter writer = new StreamWriter(nfilename);
                 // include and declare
                 writer.WriteLine("#include <Servo86.h>");
-                // *** FOR TRIGGER ***
                 if (method_flag[1]) // keyboard
-                {
-                    writer.WriteLine("#include <KeyboardController.h>\n");
-                    writer.WriteLine("USBHost usb;");
-                    writer.WriteLine("KeyboardController keyboard(usb);");
-                }
-                writer.WriteLine();
-                if (method_flag[2]) // bt
-                    for (int i = 0; i < 3; i++)
-                        if (used_ports[i])
-                            writer.WriteLine("int Serial" + (i + 1).ToString() + "_Command;");
-                // *** FOR TRIGGER ***
+                    writer.WriteLine("#include <KeyboardController.h>");
+                if (method_flag[3]) // ps2
+                    writer.WriteLine("#include <PS2X_lib.h>");
+
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
                     count = 0;
@@ -477,6 +484,8 @@ namespace _86ME_ver1
 
                 if (method_flag[1]) // keyboard
                 {
+                    writer.WriteLine("USBHost usb;");
+                    writer.WriteLine("KeyboardController keyboard(usb);");
                     writer.WriteLine("char current_key = 0;");
                     writer.WriteLine("void keyPressed(){current_key = keyboard.getOemKey();}");
                     writer.WriteLine("void keyReleased(){current_key = 0;}");
@@ -488,7 +497,14 @@ namespace _86ME_ver1
                                      "  else if(current_key!=k && key_press[k])\n  {\n" + "    key_press[k] = 0;\n" +
                                      "    return 2;\n  }\n" + "  return 3;\n}\n");
                 }
+                if (method_flag[2]) // bt
+                    for (int i = 0; i < 3; i++)
+                        if (used_ports[i])
+                            writer.WriteLine("int Serial" + (i + 1).ToString() + "_Command;");
+                if (method_flag[3]) // ps2
+                    writer.WriteLine("PS2X ps2x;");
 
+                writer.WriteLine();
                 // setup
                 writer.WriteLine("void setup()");
                 writer.WriteLine("{");
@@ -497,6 +513,9 @@ namespace _86ME_ver1
                         if (used_ports[i])
                             writer.WriteLine("  Serial" + (i + 1).ToString() + ".begin(9600);");
                 writer.WriteLine();
+                if (method_flag[3]) // ps2
+                    writer.WriteLine("  ps2x.config_gamepad(" + ps2_pins[3] + ", " + ps2_pins[1] +
+                                     ", " + ps2_pins[2] + ", " + ps2_pins[0] + ", false, false);\n");
                 for (int i = 0; i < channels.Count; i++)
                     writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
                 writer.WriteLine();
@@ -559,7 +578,8 @@ namespace _86ME_ver1
                                              (i + 1).ToString() + "_Command = Serial" + (i + 1).ToString() +
                                              ".read(); } else { Serial" + (i + 1).ToString() + "_Command = 0xFFF; }");
                 }
-                writer.WriteLine();
+                if (method_flag[3])
+                    writer.WriteLine("  ps2x.read_gamepad();");
                 int space_num = 2;
                 string space = set_space(space_num);
                 for (int j = 0; j < ME_Motionlist.Count; j++) //title

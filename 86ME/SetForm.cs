@@ -15,6 +15,7 @@ namespace _86ME_ver1
         {
             InitializeComponent();
             string[] serialPorts = SerialPort.GetPortNames();
+            ComboBox0.SelectedIndex = 0;
             foreach (string serialPort in serialPorts)
                 this.ComboBox0.Items.Add(serialPort);
         }

@@ -71,6 +71,20 @@
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
+            this.ps2_groupBox = new System.Windows.Forms.GroupBox();
+            this.ps2CLKCombo = new System.Windows.Forms.ComboBox();
+            this.ps2ATTCombo = new System.Windows.Forms.ComboBox();
+            this.ps2CMDCombo = new System.Windows.Forms.ComboBox();
+            this.ps2DATCombo = new System.Windows.Forms.ComboBox();
+            this.ps2CLKLabel = new System.Windows.Forms.Label();
+            this.ps2ATTLabel = new System.Windows.Forms.Label();
+            this.ps2CMDLabel = new System.Windows.Forms.Label();
+            this.ps2DATLabel = new System.Windows.Forms.Label();
+            this.ps2TypeCombo = new System.Windows.Forms.ComboBox();
+            this.ps2KeyLabel = new System.Windows.Forms.Label();
+            this.ps2TypeLabel = new System.Windows.Forms.Label();
+            this.ps2KeyCombo = new System.Windows.Forms.ComboBox();
+            this.ps2_radioButton = new System.Windows.Forms.RadioButton();
             this.bt_groupBox = new System.Windows.Forms.GroupBox();
             this.btPortCombo = new System.Windows.Forms.ComboBox();
             this.btPortLabel = new System.Windows.Forms.Label();
@@ -113,6 +127,7 @@
             this.MotionConfig.SuspendLayout();
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
+            this.ps2_groupBox.SuspendLayout();
             this.bt_groupBox.SuspendLayout();
             this.Keyboard_groupBox.SuspendLayout();
             this.Always_groupBox.SuspendLayout();
@@ -523,6 +538,8 @@
             // 
             this.MotionTrigger.AutoScroll = true;
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
+            this.MotionTrigger.Controls.Add(this.ps2_groupBox);
+            this.MotionTrigger.Controls.Add(this.ps2_radioButton);
             this.MotionTrigger.Controls.Add(this.bt_groupBox);
             this.MotionTrigger.Controls.Add(this.bt_radioButton);
             this.MotionTrigger.Controls.Add(this.Keyboard_radioButton);
@@ -535,6 +552,182 @@
             this.MotionTrigger.Size = new System.Drawing.Size(248, 418);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
+            // 
+            // ps2_groupBox
+            // 
+            this.ps2_groupBox.Controls.Add(this.ps2CLKCombo);
+            this.ps2_groupBox.Controls.Add(this.ps2ATTCombo);
+            this.ps2_groupBox.Controls.Add(this.ps2CMDCombo);
+            this.ps2_groupBox.Controls.Add(this.ps2DATCombo);
+            this.ps2_groupBox.Controls.Add(this.ps2CLKLabel);
+            this.ps2_groupBox.Controls.Add(this.ps2ATTLabel);
+            this.ps2_groupBox.Controls.Add(this.ps2CMDLabel);
+            this.ps2_groupBox.Controls.Add(this.ps2DATLabel);
+            this.ps2_groupBox.Controls.Add(this.ps2TypeCombo);
+            this.ps2_groupBox.Controls.Add(this.ps2KeyLabel);
+            this.ps2_groupBox.Controls.Add(this.ps2TypeLabel);
+            this.ps2_groupBox.Controls.Add(this.ps2KeyCombo);
+            this.ps2_groupBox.Location = new System.Drawing.Point(27, 195);
+            this.ps2_groupBox.Name = "ps2_groupBox";
+            this.ps2_groupBox.Size = new System.Drawing.Size(192, 102);
+            this.ps2_groupBox.TabIndex = 6;
+            this.ps2_groupBox.TabStop = false;
+            this.ps2_groupBox.Text = "PS2 Controller";
+            // 
+            // ps2CLKCombo
+            // 
+            this.ps2CLKCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ps2CLKCombo.FormattingEnabled = true;
+            this.ps2CLKCombo.Location = new System.Drawing.Point(145, 33);
+            this.ps2CLKCombo.Name = "ps2CLKCombo";
+            this.ps2CLKCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2CLKCombo.TabIndex = 13;
+            this.ps2CLKCombo.SelectedIndexChanged += new System.EventHandler(ps2CLKCombo_SelectedIndexChanged);
+            this.ttp.SetToolTip(this.ps2CLKCombo, "Set used pin of CLK.");
+            // 
+            // ps2ATTCombo
+            // 
+            this.ps2ATTCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ps2ATTCombo.FormattingEnabled = true;
+            this.ps2ATTCombo.Location = new System.Drawing.Point(102, 33);
+            this.ps2ATTCombo.Name = "ps2ATTCombo";
+            this.ps2ATTCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2ATTCombo.TabIndex = 12;
+            this.ps2ATTCombo.SelectedIndexChanged += new System.EventHandler(ps2ATTCombo_SelectedIndexChanged);
+            this.ttp.SetToolTip(this.ps2ATTCombo, "Set used pin of ATT.");
+            // 
+            // ps2CMDCombo
+            // 
+            this.ps2CMDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ps2CMDCombo.FormattingEnabled = true;
+            this.ps2CMDCombo.Location = new System.Drawing.Point(59, 33);
+            this.ps2CMDCombo.Name = "ps2CMDCombo";
+            this.ps2CMDCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2CMDCombo.TabIndex = 11;
+            this.ps2CMDCombo.SelectedIndexChanged += new System.EventHandler(ps2CMDCombo_SelectedIndexChanged);
+            this.ttp.SetToolTip(this.ps2CMDCombo, "Set used pin of CMD.");
+            // 
+            // ps2DATCombo
+            // 
+            this.ps2DATCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ps2DATCombo.FormattingEnabled = true;
+            this.ps2DATCombo.Location = new System.Drawing.Point(16, 33);
+            this.ps2DATCombo.Name = "ps2DATCombo";
+            this.ps2DATCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2DATCombo.TabIndex = 6;
+            this.ps2DATCombo.SelectedIndexChanged += new System.EventHandler(ps2DATCombo_SelectedIndexChanged);
+            this.ttp.SetToolTip(this.ps2DATCombo, "Set used pin of DAT.");
+            // 
+            // ps2CLKLabel
+            // 
+            this.ps2CLKLabel.AutoSize = true;
+            this.ps2CLKLabel.Location = new System.Drawing.Point(143, 18);
+            this.ps2CLKLabel.Name = "ps2CLKLabel";
+            this.ps2CLKLabel.Size = new System.Drawing.Size(34, 12);
+            this.ps2CLKLabel.TabIndex = 10;
+            this.ps2CLKLabel.Text = "CLK: ";
+            // 
+            // ps2ATTLabel
+            // 
+            this.ps2ATTLabel.AutoSize = true;
+            this.ps2ATTLabel.Location = new System.Drawing.Point(100, 18);
+            this.ps2ATTLabel.Name = "ps2ATTLabel";
+            this.ps2ATTLabel.Size = new System.Drawing.Size(33, 12);
+            this.ps2ATTLabel.TabIndex = 9;
+            this.ps2ATTLabel.Text = "ATT: ";
+            // 
+            // ps2CMDLabel
+            // 
+            this.ps2CMDLabel.AutoSize = true;
+            this.ps2CMDLabel.Location = new System.Drawing.Point(57, 18);
+            this.ps2CMDLabel.Name = "ps2CMDLabel";
+            this.ps2CMDLabel.Size = new System.Drawing.Size(37, 12);
+            this.ps2CMDLabel.TabIndex = 8;
+            this.ps2CMDLabel.Text = "CMD: ";
+            // 
+            // ps2DATLabel
+            // 
+            this.ps2DATLabel.AutoSize = true;
+            this.ps2DATLabel.Location = new System.Drawing.Point(14, 18);
+            this.ps2DATLabel.Name = "ps2DATLabel";
+            this.ps2DATLabel.Size = new System.Drawing.Size(31, 12);
+            this.ps2DATLabel.TabIndex = 7;
+            this.ps2DATLabel.Text = "DAT:";
+            // 
+            // ps2TypeCombo
+            // 
+            this.ps2TypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ps2TypeCombo.FormattingEnabled = true;
+            this.ps2TypeCombo.Items.AddRange(new object[] {
+            "First Press",
+            "Pressed",
+            "Release"});
+            this.ps2TypeCombo.Location = new System.Drawing.Point(117, 76);
+            this.ps2TypeCombo.Name = "ps2TypeCombo";
+            this.ps2TypeCombo.Size = new System.Drawing.Size(69, 20);
+            this.ps2TypeCombo.TabIndex = 6;
+            this.ps2TypeCombo.SelectedIndexChanged += new System.EventHandler(ps2TypeCombo_SelectedIndexChanged);
+            this.ttp.SetToolTip(this.ps2TypeCombo, resources.GetString("ps2TypeCombo.ToolTip"));
+            // 
+            // ps2KeyLabel
+            // 
+            this.ps2KeyLabel.AutoSize = true;
+            this.ps2KeyLabel.Location = new System.Drawing.Point(14, 61);
+            this.ps2KeyLabel.Name = "ps2KeyLabel";
+            this.ps2KeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.ps2KeyLabel.TabIndex = 4;
+            this.ps2KeyLabel.Text = "Key: ";
+            // 
+            // ps2TypeLabel
+            // 
+            this.ps2TypeLabel.AutoSize = true;
+            this.ps2TypeLabel.Location = new System.Drawing.Point(115, 61);
+            this.ps2TypeLabel.Name = "ps2TypeLabel";
+            this.ps2TypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.ps2TypeLabel.TabIndex = 5;
+            this.ps2TypeLabel.Text = "Type:";
+            // 
+            // ps2KeyCombo
+            // 
+            this.ps2KeyCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ps2KeyCombo.FormattingEnabled = true;
+            this.ps2KeyCombo.Items.AddRange(new object[] {
+            "PSB_SELECT",
+            "PSB_L3",
+            "PSB_R3",
+            "PSB_START",
+            "PSB_PAD_UP",
+            "PSB_PAD_RIGHT",
+            "PSB_PAD_DOWN",
+            "PSB_PAD_LEFT",
+            "PSB_L2",
+            "PSB_R2",
+            "PSB_L1",
+            "PSB_R1",
+            "PSB_GREEN",
+            "PSB_RED",
+            "PSB_BLUE",
+            "PSB_PINK",
+            "PSB_TRIANGLE",
+            "PSB_CIRCLE",
+            "PSB_CROSS",
+            "PSB_SQUARE"});
+            this.ps2KeyCombo.Location = new System.Drawing.Point(16, 76);
+            this.ps2KeyCombo.Name = "ps2KeyCombo";
+            this.ps2KeyCombo.Size = new System.Drawing.Size(95, 20);
+            this.ps2KeyCombo.TabIndex = 4;
+            this.ps2KeyCombo.SelectedIndexChanged += new System.EventHandler(ps2KeyCombo_SelectedIndexChanged);
+            // 
+            // ps2_radioButton
+            // 
+            this.ps2_radioButton.AutoSize = true;
+            this.ps2_radioButton.Location = new System.Drawing.Point(7, 195);
+            this.ps2_radioButton.Name = "ps2_radioButton";
+            this.ps2_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.ps2_radioButton.TabIndex = 6;
+            this.ps2_radioButton.TabStop = true;
+            this.ps2_radioButton.UseVisualStyleBackColor = true;
+            this.ps2_radioButton.CheckedChanged += new System.EventHandler(this.ps2_radioButton_CheckedChanged);
             // 
             // bt_groupBox
             // 
@@ -946,6 +1139,8 @@
             this.ActionList.ResumeLayout(false);
             this.MotionTrigger.ResumeLayout(false);
             this.MotionTrigger.PerformLayout();
+            this.ps2_groupBox.ResumeLayout(false);
+            this.ps2_groupBox.PerformLayout();
             this.bt_groupBox.ResumeLayout(false);
             this.bt_groupBox.PerformLayout();
             this.Keyboard_groupBox.ResumeLayout(false);
@@ -1032,6 +1227,20 @@
         private System.Windows.Forms.RadioButton bt_radioButton;
         private System.Windows.Forms.ComboBox btPortCombo;
         private System.Windows.Forms.Label btPortLabel;
+        private System.Windows.Forms.GroupBox ps2_groupBox;
+        private System.Windows.Forms.Label ps2KeyLabel;
+        private System.Windows.Forms.RadioButton ps2_radioButton;
+        private System.Windows.Forms.ComboBox ps2CLKCombo;
+        private System.Windows.Forms.ComboBox ps2ATTCombo;
+        private System.Windows.Forms.ComboBox ps2CMDCombo;
+        private System.Windows.Forms.ComboBox ps2DATCombo;
+        private System.Windows.Forms.Label ps2CLKLabel;
+        private System.Windows.Forms.Label ps2ATTLabel;
+        private System.Windows.Forms.Label ps2CMDLabel;
+        private System.Windows.Forms.Label ps2DATLabel;
+        private System.Windows.Forms.ComboBox ps2TypeCombo;
+        private System.Windows.Forms.Label ps2TypeLabel;
+        private System.Windows.Forms.ComboBox ps2KeyCombo;
     }
 }
 
