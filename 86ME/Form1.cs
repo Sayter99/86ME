@@ -2650,6 +2650,7 @@ namespace _86ME_ver1
                     Always_radioButton.Enabled = false;
                     Keyboard_radioButton.Enabled = false;
                     bt_radioButton.Enabled = false;
+                    ps2_radioButton.Enabled = false;
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
