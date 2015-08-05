@@ -1112,12 +1112,6 @@ namespace _86ME_ver1
                                 else
                                     motiontag.bt_key = datas[i];
                                 motiontag.bt_port = int.Parse(datas[++i]);
-                            }
-                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
-                                String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
-                                String.Compare("MotionEnd", datas[i + 1]) != 0)
-                            {
                                 motiontag.ps2_key = datas[++i];
                                 motiontag.ps2_type = int.Parse(datas[++i]);
                             }
