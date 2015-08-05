@@ -4,13 +4,13 @@ _VERSION_: v1.3
 
 * Move sketch generation functions to MotionElement.cs.
 * Add a tabpage named MotionTrigger for setting the condition to trigger the selected motion.
-* Add three methods(auto, keyboard, bluetooth) to trigger motions.
+* Add three methods(auto, keyboard, bluetooth, ps2 controller) to trigger motions.
 * Integrate all motions and triggers into generated sketches now.
 * Add a function to insert intermediate frame.
 * 86ME can check whether a project needs to be saved now.
 * Update content of tool tips.
 
-**If you find any bug, or want to provide software patches or to request enhancements about 86ME, please report to the 86Duino [forum](http://www.86duino.com/?page_id=85)**
+**If you find any bug, or want to provide software patches or to request enhancements about 86ME, please report to the 86Duino [forum](http://www.86duino.com/?page_id=85).**
 
 _VERSION_: v1.2
 
