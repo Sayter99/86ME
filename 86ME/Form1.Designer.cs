@@ -578,50 +578,50 @@
             // 
             this.ps2CLKCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2CLKCombo.FormattingEnabled = true;
-            this.ps2CLKCombo.Location = new System.Drawing.Point(145, 33);
+            this.ps2CLKCombo.Location = new System.Drawing.Point(145, 73);
             this.ps2CLKCombo.Name = "ps2CLKCombo";
             this.ps2CLKCombo.Size = new System.Drawing.Size(41, 20);
             this.ps2CLKCombo.TabIndex = 13;
-            this.ps2CLKCombo.SelectedIndexChanged += new System.EventHandler(ps2CLKCombo_SelectedIndexChanged);
             this.ttp.SetToolTip(this.ps2CLKCombo, "Set used pin of CLK.");
+            this.ps2CLKCombo.SelectedIndexChanged += new System.EventHandler(this.ps2CLKCombo_SelectedIndexChanged);
             // 
             // ps2ATTCombo
             // 
             this.ps2ATTCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2ATTCombo.FormattingEnabled = true;
-            this.ps2ATTCombo.Location = new System.Drawing.Point(102, 33);
+            this.ps2ATTCombo.Location = new System.Drawing.Point(102, 73);
             this.ps2ATTCombo.Name = "ps2ATTCombo";
             this.ps2ATTCombo.Size = new System.Drawing.Size(41, 20);
             this.ps2ATTCombo.TabIndex = 12;
-            this.ps2ATTCombo.SelectedIndexChanged += new System.EventHandler(ps2ATTCombo_SelectedIndexChanged);
             this.ttp.SetToolTip(this.ps2ATTCombo, "Set used pin of ATT.");
+            this.ps2ATTCombo.SelectedIndexChanged += new System.EventHandler(this.ps2ATTCombo_SelectedIndexChanged);
             // 
             // ps2CMDCombo
             // 
             this.ps2CMDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2CMDCombo.FormattingEnabled = true;
-            this.ps2CMDCombo.Location = new System.Drawing.Point(59, 33);
+            this.ps2CMDCombo.Location = new System.Drawing.Point(59, 73);
             this.ps2CMDCombo.Name = "ps2CMDCombo";
             this.ps2CMDCombo.Size = new System.Drawing.Size(41, 20);
             this.ps2CMDCombo.TabIndex = 11;
-            this.ps2CMDCombo.SelectedIndexChanged += new System.EventHandler(ps2CMDCombo_SelectedIndexChanged);
             this.ttp.SetToolTip(this.ps2CMDCombo, "Set used pin of CMD.");
+            this.ps2CMDCombo.SelectedIndexChanged += new System.EventHandler(this.ps2CMDCombo_SelectedIndexChanged);
             // 
             // ps2DATCombo
             // 
             this.ps2DATCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2DATCombo.FormattingEnabled = true;
-            this.ps2DATCombo.Location = new System.Drawing.Point(16, 33);
+            this.ps2DATCombo.Location = new System.Drawing.Point(16, 73);
             this.ps2DATCombo.Name = "ps2DATCombo";
             this.ps2DATCombo.Size = new System.Drawing.Size(41, 20);
             this.ps2DATCombo.TabIndex = 6;
-            this.ps2DATCombo.SelectedIndexChanged += new System.EventHandler(ps2DATCombo_SelectedIndexChanged);
             this.ttp.SetToolTip(this.ps2DATCombo, "Set used pin of DAT.");
+            this.ps2DATCombo.SelectedIndexChanged += new System.EventHandler(this.ps2DATCombo_SelectedIndexChanged);
             // 
             // ps2CLKLabel
             // 
             this.ps2CLKLabel.AutoSize = true;
-            this.ps2CLKLabel.Location = new System.Drawing.Point(143, 18);
+            this.ps2CLKLabel.Location = new System.Drawing.Point(143, 58);
             this.ps2CLKLabel.Name = "ps2CLKLabel";
             this.ps2CLKLabel.Size = new System.Drawing.Size(34, 12);
             this.ps2CLKLabel.TabIndex = 10;
@@ -630,7 +630,7 @@
             // ps2ATTLabel
             // 
             this.ps2ATTLabel.AutoSize = true;
-            this.ps2ATTLabel.Location = new System.Drawing.Point(100, 18);
+            this.ps2ATTLabel.Location = new System.Drawing.Point(100, 58);
             this.ps2ATTLabel.Name = "ps2ATTLabel";
             this.ps2ATTLabel.Size = new System.Drawing.Size(33, 12);
             this.ps2ATTLabel.TabIndex = 9;
@@ -639,7 +639,7 @@
             // ps2CMDLabel
             // 
             this.ps2CMDLabel.AutoSize = true;
-            this.ps2CMDLabel.Location = new System.Drawing.Point(57, 18);
+            this.ps2CMDLabel.Location = new System.Drawing.Point(57, 58);
             this.ps2CMDLabel.Name = "ps2CMDLabel";
             this.ps2CMDLabel.Size = new System.Drawing.Size(37, 12);
             this.ps2CMDLabel.TabIndex = 8;
@@ -648,7 +648,7 @@
             // ps2DATLabel
             // 
             this.ps2DATLabel.AutoSize = true;
-            this.ps2DATLabel.Location = new System.Drawing.Point(14, 18);
+            this.ps2DATLabel.Location = new System.Drawing.Point(14, 58);
             this.ps2DATLabel.Name = "ps2DATLabel";
             this.ps2DATLabel.Size = new System.Drawing.Size(31, 12);
             this.ps2DATLabel.TabIndex = 7;
@@ -662,17 +662,17 @@
             "First Press",
             "Pressed",
             "Release"});
-            this.ps2TypeCombo.Location = new System.Drawing.Point(117, 76);
+            this.ps2TypeCombo.Location = new System.Drawing.Point(117, 33);
             this.ps2TypeCombo.Name = "ps2TypeCombo";
             this.ps2TypeCombo.Size = new System.Drawing.Size(69, 20);
             this.ps2TypeCombo.TabIndex = 6;
-            this.ps2TypeCombo.SelectedIndexChanged += new System.EventHandler(ps2TypeCombo_SelectedIndexChanged);
             this.ttp.SetToolTip(this.ps2TypeCombo, resources.GetString("ps2TypeCombo.ToolTip"));
+            this.ps2TypeCombo.SelectedIndexChanged += new System.EventHandler(this.ps2TypeCombo_SelectedIndexChanged);
             // 
             // ps2KeyLabel
             // 
             this.ps2KeyLabel.AutoSize = true;
-            this.ps2KeyLabel.Location = new System.Drawing.Point(14, 61);
+            this.ps2KeyLabel.Location = new System.Drawing.Point(14, 18);
             this.ps2KeyLabel.Name = "ps2KeyLabel";
             this.ps2KeyLabel.Size = new System.Drawing.Size(30, 12);
             this.ps2KeyLabel.TabIndex = 4;
@@ -681,7 +681,7 @@
             // ps2TypeLabel
             // 
             this.ps2TypeLabel.AutoSize = true;
-            this.ps2TypeLabel.Location = new System.Drawing.Point(115, 61);
+            this.ps2TypeLabel.Location = new System.Drawing.Point(115, 18);
             this.ps2TypeLabel.Name = "ps2TypeLabel";
             this.ps2TypeLabel.Size = new System.Drawing.Size(32, 12);
             this.ps2TypeLabel.TabIndex = 5;
@@ -712,11 +712,11 @@
             "PSB_CIRCLE",
             "PSB_CROSS",
             "PSB_SQUARE"});
-            this.ps2KeyCombo.Location = new System.Drawing.Point(16, 76);
+            this.ps2KeyCombo.Location = new System.Drawing.Point(16, 33);
             this.ps2KeyCombo.Name = "ps2KeyCombo";
             this.ps2KeyCombo.Size = new System.Drawing.Size(95, 20);
             this.ps2KeyCombo.TabIndex = 4;
-            this.ps2KeyCombo.SelectedIndexChanged += new System.EventHandler(ps2KeyCombo_SelectedIndexChanged);
+            this.ps2KeyCombo.SelectedIndexChanged += new System.EventHandler(this.ps2KeyCombo_SelectedIndexChanged);
             // 
             // ps2_radioButton
             // 
