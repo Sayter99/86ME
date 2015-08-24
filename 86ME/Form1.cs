@@ -2451,7 +2451,7 @@ namespace _86ME_ver1
 
         private void Generate_Click(object sender, EventArgs e)
         {
-            if (ME_Motionlist == null)
+            if (ME_Motionlist.Count == 0)
             {
                 MessageBox.Show("You should add a motion first");
                 return;
@@ -2462,7 +2462,7 @@ namespace _86ME_ver1
 
         private void GenerateAllInOne_Click(object sender, EventArgs e)
         {
-            if (ME_Motionlist == null)
+            if (ME_Motionlist.Count == 0)
             {
                 MessageBox.Show("You should add a motion first");
                 return;
@@ -2622,7 +2622,7 @@ namespace _86ME_ver1
         {
             if(MotionConfig.SelectedIndex == 0)
             {
-                update_motionlist();
+                //update_motionlist();
                 move_down.Enabled = true;
                 move_up.Enabled = true;
                 Framelist.Enabled = true;
