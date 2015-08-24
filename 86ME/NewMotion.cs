@@ -188,6 +188,7 @@ namespace _86ME_ver1
                 flabel[i].Top += 5;
                 flabel[i].Left += 5;
 
+                fbox[i].DropDownStyle = ComboBoxStyle.DropDownList;
                 fbox[i].Size = new Size(135, 22);
                 fbox[i].Left += 70;
 

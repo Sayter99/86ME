@@ -2623,8 +2623,9 @@ namespace _86ME_ver1
             if(MotionConfig.SelectedIndex == 0)
             {
                 //update_motionlist();
-                move_down.Enabled = true;
-                move_up.Enabled = true;
+                //move_down.Enabled = true;
+                //move_up.Enabled = true;
+                Motionlist.SelectedIndex = -1;
                 Framelist.Enabled = true;
                 autocheck.Enabled = true;
                 capturebutton.Enabled = true;
