@@ -509,14 +509,23 @@ namespace _86ME_ver1
 
         private void fileToolStripMenuItem_Click(object sender, EventArgs e) //new project
         {
-            if (needToSave())
+            if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Save changes?", "Exit", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    save_project(load_filename);
+                }
+            }
+            else if (needToSave())
+            {
+                DialogResult dialogResult = MessageBox.Show("Save this project?", "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
                 }
             }
+
             NewMotion nMotion = new NewMotion();
             if (string.Compare(com_port, "OFF") != 0)
                 nMotion.arduino = arduino;
@@ -850,9 +859,17 @@ namespace _86ME_ver1
 
         private void actionToolStripMenuItem_Click(object sender, EventArgs e)      //load project
         {
-            if (needToSave())
+            if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show("Save changes?", "Exit", MessageBoxButtons.YesNo);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    save_project(load_filename);
+                }
+            }
+            else if (needToSave())
+            {
+                DialogResult dialogResult = MessageBox.Show("Save this project?", "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -2118,9 +2135,22 @@ namespace _86ME_ver1
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool close = true;
-            if (needToSave())
+            if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show("Do you want to save this project?", "Exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show("Save changes?", "Exit", MessageBoxButtons.YesNoCancel);
+                if (dialogResult == DialogResult.Yes)
+                {
+                    save_project(load_filename);
+                }
+                else if (dialogResult == DialogResult.Cancel)
+                {
+                    close = false;
+                    e.Cancel = true;
+                }
+            }
+            else if (needToSave())
+            {
+                DialogResult dialogResult = MessageBox.Show("Save this project?", "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
