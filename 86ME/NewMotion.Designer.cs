@@ -44,6 +44,7 @@
             // 
             // button1
             // 
+            this.button1.Cursor = System.Windows.Forms.Cursors.Default;
             this.button1.Location = new System.Drawing.Point(299, 514);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
@@ -54,6 +55,7 @@
             // 
             // button2
             // 
+            this.button2.Cursor = System.Windows.Forms.Cursors.Default;
             this.button2.Location = new System.Drawing.Point(413, 514);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
@@ -104,6 +106,7 @@
             // 
             // button3
             // 
+            this.button3.Cursor = System.Windows.Forms.Cursors.Default;
             this.button3.Location = new System.Drawing.Point(64, 514);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(125, 23);
@@ -144,10 +147,8 @@
             this.pic_loaded.AutoSize = true;
             this.pic_loaded.Location = new System.Drawing.Point(195, 519);
             this.pic_loaded.Name = "pic_loaded";
-            this.pic_loaded.Size = new System.Drawing.Size(84, 12);
+            this.pic_loaded.Size = new System.Drawing.Size(0, 12);
             this.pic_loaded.TabIndex = 13;
-            this.pic_loaded.Text = "";
-            this.Visible = false;
             // 
             // NewMotion
             // 

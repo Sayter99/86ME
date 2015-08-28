@@ -37,6 +37,7 @@
             // 
             // button2
             // 
+            this.button2.Cursor = System.Windows.Forms.Cursors.Default;
             this.button2.Location = new System.Drawing.Point(57, 60);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(112, 33);
@@ -69,6 +70,7 @@
             // 
             // Exit
             // 
+            this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
             this.Exit.Location = new System.Drawing.Point(175, 60);
             this.Exit.Name = "Exit";
             this.Exit.Size = new System.Drawing.Size(47, 33);

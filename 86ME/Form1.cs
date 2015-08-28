@@ -2243,6 +2243,8 @@ namespace _86ME_ver1
 
         public void MotionOnTest(ME_Motion m)
         {
+            move_down.Enabled = false;
+            move_up.Enabled = false;
             MotionConfig.Enabled = false;
             MotionCombo.Enabled = false;
             MotionTest.Enabled = false;

@@ -446,6 +446,7 @@
             // 
             // motorRelease
             // 
+            this.motorRelease.Cursor = System.Windows.Forms.Cursors.Default;
             this.motorRelease.Location = new System.Drawing.Point(239, 18);
             this.motorRelease.Name = "motorRelease";
             this.motorRelease.Size = new System.Drawing.Size(76, 23);
@@ -469,6 +470,7 @@
             // 
             // capturebutton
             // 
+            this.capturebutton.Cursor = System.Windows.Forms.Cursors.Default;
             this.capturebutton.Location = new System.Drawing.Point(346, 18);
             this.capturebutton.Name = "capturebutton";
             this.capturebutton.Size = new System.Drawing.Size(76, 23);
@@ -502,10 +504,10 @@
             // 
             this.MotionConfig.Controls.Add(this.ActionList);
             this.MotionConfig.Controls.Add(this.MotionTrigger);
-            this.MotionConfig.Location = new System.Drawing.Point(7, 109);
+            this.MotionConfig.Location = new System.Drawing.Point(7, 66);
             this.MotionConfig.Name = "MotionConfig";
             this.MotionConfig.SelectedIndex = 0;
-            this.MotionConfig.Size = new System.Drawing.Size(256, 444);
+            this.MotionConfig.Size = new System.Drawing.Size(231, 488);
             this.MotionConfig.TabIndex = 10;
             this.MotionConfig.SelectedIndexChanged += new System.EventHandler(this.MotionConfig_SelectedIndexChanged);
             // 
@@ -515,7 +517,7 @@
             this.ActionList.Location = new System.Drawing.Point(4, 22);
             this.ActionList.Name = "ActionList";
             this.ActionList.Padding = new System.Windows.Forms.Padding(3);
-            this.ActionList.Size = new System.Drawing.Size(248, 418);
+            this.ActionList.Size = new System.Drawing.Size(223, 462);
             this.ActionList.TabIndex = 0;
             this.ActionList.Text = "Action List";
             this.ActionList.UseVisualStyleBackColor = true;
@@ -529,7 +531,7 @@
             this.Motionlist.Location = new System.Drawing.Point(1, 3);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
-            this.Motionlist.Size = new System.Drawing.Size(245, 413);
+            this.Motionlist.Size = new System.Drawing.Size(219, 456);
             this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Motionlist_MouseDown);
@@ -549,7 +551,7 @@
             this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
             this.MotionTrigger.Name = "MotionTrigger";
             this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionTrigger.Size = new System.Drawing.Size(248, 418);
+            this.MotionTrigger.Size = new System.Drawing.Size(223, 462);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
             // 
@@ -961,8 +963,9 @@
             // 
             // motion_stop
             // 
+            this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
             this.motion_stop.Image = global::_86ME_ver1.Properties.Resources.stop;
-            this.motion_stop.Location = new System.Drawing.Point(220, 21);
+            this.motion_stop.Location = new System.Drawing.Point(166, 560);
             this.motion_stop.Name = "motion_stop";
             this.motion_stop.Size = new System.Drawing.Size(43, 35);
             this.motion_stop.TabIndex = 9;
@@ -973,8 +976,9 @@
             // 
             // motion_pause
             // 
+            this.motion_pause.Cursor = System.Windows.Forms.Cursors.Default;
             this.motion_pause.Image = global::_86ME_ver1.Properties.Resources.pause;
-            this.motion_pause.Location = new System.Drawing.Point(171, 21);
+            this.motion_pause.Location = new System.Drawing.Point(117, 560);
             this.motion_pause.Name = "motion_pause";
             this.motion_pause.Size = new System.Drawing.Size(43, 35);
             this.motion_pause.TabIndex = 8;
@@ -985,11 +989,12 @@
             // 
             // move_down
             // 
+            this.move_down.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_down.Enabled = false;
             this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
-            this.move_down.Location = new System.Drawing.Point(142, 559);
+            this.move_down.Location = new System.Drawing.Point(244, 316);
             this.move_down.Name = "move_down";
-            this.move_down.Size = new System.Drawing.Size(45, 35);
+            this.move_down.Size = new System.Drawing.Size(23, 37);
             this.move_down.TabIndex = 7;
             this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
             this.move_down.UseVisualStyleBackColor = true;
@@ -997,11 +1002,12 @@
             // 
             // move_up
             // 
+            this.move_up.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_up.Enabled = false;
             this.move_up.Image = global::_86ME_ver1.Properties.Resources.up_arrow;
-            this.move_up.Location = new System.Drawing.Point(86, 559);
+            this.move_up.Location = new System.Drawing.Point(244, 273);
             this.move_up.Name = "move_up";
-            this.move_up.Size = new System.Drawing.Size(45, 35);
+            this.move_up.Size = new System.Drawing.Size(23, 37);
             this.move_up.TabIndex = 6;
             this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
             this.move_up.UseVisualStyleBackColor = true;
@@ -1010,7 +1016,7 @@
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(7, 62);
+            this.textBox1.Location = new System.Drawing.Point(7, 18);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
             this.textBox1.Size = new System.Drawing.Size(100, 15);
@@ -1019,8 +1025,9 @@
             // 
             // MotionTest
             // 
+            this.MotionTest.Cursor = System.Windows.Forms.Cursors.Default;
             this.MotionTest.Image = global::_86ME_ver1.Properties.Resources.play;
-            this.MotionTest.Location = new System.Drawing.Point(122, 21);
+            this.MotionTest.Location = new System.Drawing.Point(68, 560);
             this.MotionTest.Name = "MotionTest";
             this.MotionTest.Size = new System.Drawing.Size(43, 35);
             this.MotionTest.TabIndex = 3;
@@ -1030,10 +1037,10 @@
             // 
             // NewMotion
             // 
-            this.NewMotion.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.NewMotion.Location = new System.Drawing.Point(15, 28);
+            this.NewMotion.Cursor = System.Windows.Forms.Cursors.Default;
+            this.NewMotion.Location = new System.Drawing.Point(196, 36);
             this.NewMotion.Name = "NewMotion";
-            this.NewMotion.Size = new System.Drawing.Size(101, 23);
+            this.NewMotion.Size = new System.Drawing.Size(71, 23);
             this.NewMotion.TabIndex = 2;
             this.NewMotion.Text = "Add Motion";
             this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
@@ -1043,15 +1050,16 @@
             // MotionCombo
             // 
             this.MotionCombo.FormattingEnabled = true;
-            this.MotionCombo.Location = new System.Drawing.Point(7, 83);
+            this.MotionCombo.Location = new System.Drawing.Point(7, 39);
             this.MotionCombo.Name = "MotionCombo";
-            this.MotionCombo.Size = new System.Drawing.Size(260, 20);
+            this.MotionCombo.Size = new System.Drawing.Size(183, 20);
             this.MotionCombo.TabIndex = 0;
             this.MotionCombo.SelectedIndexChanged += new System.EventHandler(this.MotionCombo_SelectedIndexChanged);
             this.MotionCombo.TextChanged += new System.EventHandler(this.MotionCombo_TextChanged);
             // 
             // Generate
             // 
+            this.Generate.Cursor = System.Windows.Forms.Cursors.Default;
             this.Generate.Location = new System.Drawing.Point(746, 635);
             this.Generate.Name = "Generate";
             this.Generate.Size = new System.Drawing.Size(267, 23);
@@ -1069,6 +1077,7 @@
             // 
             // GenerateAllInOne
             // 
+            this.GenerateAllInOne.Cursor = System.Windows.Forms.Cursors.Default;
             this.GenerateAllInOne.Location = new System.Drawing.Point(746, 665);
             this.GenerateAllInOne.Name = "GenerateAllInOne";
             this.GenerateAllInOne.Size = new System.Drawing.Size(267, 23);
