@@ -19,19 +19,21 @@ namespace _86ME_ver1
         private NewMotion Motion;
         private bool[] method_flag = new bool[16];
         private int[] offset = new int[45];
-        private bool[] used_ports = new bool[3];
         private string[] ps2_pins = new string[4];
+        private string bt_baud;
+        private string bt_port;
 
-        public generate_sketches(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins)
+        public generate_sketches(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port)
         {
             this.Motion = nMotion;
             this.offset = off;
             this.ME_Motionlist = motionlist;
             this.ps2_pins = ps2pins;
+            this.bt_baud = bt_baud;
+            this.bt_port = bt_port;
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 method_flag[((ME_Motion)ME_Motionlist[i]).trigger_method] = true;
-                used_ports[((ME_Motion)ME_Motionlist[i]).bt_port] = true;
             }
         }
 
@@ -76,12 +78,8 @@ namespace _86ME_ver1
                 case (int)mtest_method.bluetooth:
                     if (String.Compare("", m.bt_key) == 0)
                         return "0";
-                    else if (m.bt_port == (int)serial_ports.serial1)
-                        return "Serial1_Command == \'" + m.bt_key + "\'";
-                    else if (m.bt_port == (int)serial_ports.serial2)
-                        return "Serial2_Command == \'" + m.bt_key + "\'";
                     else
-                        return "Serial3_Command == \'" + m.bt_key + "\'";
+                        return bt_port + "_Command == \'" + m.bt_key + "\'";
                 case (int)mtest_method.ps2:
                     if (m.ps2_type == (int)keyboard_method.first)
                         return "ps2x.ButtonPressed(" + m.ps2_key + ")";
@@ -241,9 +239,7 @@ namespace _86ME_ver1
                                  "    return 2;\n  }\n" + "  return 3;\n}\n");
             }
             if (method_flag[2]) // bt
-                for (int i = 0; i < 3; i++)
-                    if (used_ports[i])
-                        writer.WriteLine("int Serial" + (i + 1).ToString() + "_Command;");
+                writer.WriteLine("int " + bt_port + "_Command;");
             if (method_flag[3]) // ps2
                 writer.WriteLine("PS2X ps2x;");
 
@@ -252,9 +248,7 @@ namespace _86ME_ver1
             writer.WriteLine("void setup()");
             writer.WriteLine("{");
             if (method_flag[2]) // bt
-                for (int i = 0; i < 3; i++)
-                    if (used_ports[i])
-                        writer.WriteLine("  Serial" + (i + 1).ToString() + ".begin(9600);");
+                writer.WriteLine("  " + bt_port + ".begin(" + bt_baud + ");");
             writer.WriteLine();
             if (method_flag[3]) // ps2
                 writer.WriteLine("  ps2x.config_gamepad(" + ps2_pins[3] + ", " + ps2_pins[1] +
@@ -290,11 +284,8 @@ namespace _86ME_ver1
             }
             if (method_flag[2])
             {
-                for (int i = 0; i < 3; i++)
-                    if (used_ports[i])
-                        writer.WriteLine("  if(Serial" + (i + 1).ToString() + ".available()){ Serial" +
-                                             (i + 1).ToString() + "_Command = Serial" + (i + 1).ToString() +
-                                             ".read(); } else { Serial" + (i + 1).ToString() + "_Command = 0xFFF; }");
+                writer.WriteLine("  if(" + bt_port + ".available()){ " + bt_port + "_Command = " + bt_port +
+                                 ".read(); } else { " + bt_port + "_Command = 0xFFF; }");
             }
             if (method_flag[3])
                 writer.WriteLine("  ps2x.read_gamepad();");
@@ -498,9 +489,7 @@ namespace _86ME_ver1
                                      "    return 2;\n  }\n" + "  return 3;\n}\n");
                 }
                 if (method_flag[2]) // bt
-                    for (int i = 0; i < 3; i++)
-                        if (used_ports[i])
-                            writer.WriteLine("int Serial" + (i + 1).ToString() + "_Command;");
+                    writer.WriteLine("int " + bt_port + "_Command;");
                 if (method_flag[3]) // ps2
                     writer.WriteLine("PS2X ps2x;");
 
@@ -509,9 +498,7 @@ namespace _86ME_ver1
                 writer.WriteLine("void setup()");
                 writer.WriteLine("{");
                 if (method_flag[2]) // bt
-                    for (int i = 0; i < 3; i++)
-                        if (used_ports[i])
-                            writer.WriteLine("  Serial" + (i + 1).ToString() + ".begin(9600);");
+                    writer.WriteLine("  " + bt_port + ".begin(" + bt_baud + ");");
                 writer.WriteLine();
                 if (method_flag[3]) // ps2
                     writer.WriteLine("  ps2x.config_gamepad(" + ps2_pins[3] + ", " + ps2_pins[1] +
@@ -572,11 +559,8 @@ namespace _86ME_ver1
                 }
                 if (method_flag[2])
                 {
-                    for (int i = 0; i < 3; i++)
-                        if (used_ports[i])
-                            writer.WriteLine("  if(Serial" + (i + 1).ToString() + ".available()){ Serial" +
-                                             (i + 1).ToString() + "_Command = Serial" + (i + 1).ToString() +
-                                             ".read(); } else { Serial" + (i + 1).ToString() + "_Command = 0xFFF; }");
+                    writer.WriteLine("  if(" + bt_port + ".available()){ " + bt_port + "_Command = " + bt_port +
+                                 ".read(); } else { " + bt_port + "_Command = 0xFFF; }");
                 }
                 if (method_flag[3])
                     writer.WriteLine("  ps2x.read_gamepad();");

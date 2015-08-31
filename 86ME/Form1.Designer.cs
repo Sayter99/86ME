@@ -115,6 +115,8 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.btBaudLabel = new System.Windows.Forms.Label();
+            this.btBaudCombo = new System.Windows.Forms.ComboBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -569,7 +571,7 @@
             this.ps2_groupBox.Controls.Add(this.ps2KeyLabel);
             this.ps2_groupBox.Controls.Add(this.ps2TypeLabel);
             this.ps2_groupBox.Controls.Add(this.ps2KeyCombo);
-            this.ps2_groupBox.Location = new System.Drawing.Point(27, 195);
+            this.ps2_groupBox.Location = new System.Drawing.Point(27, 240);
             this.ps2_groupBox.Name = "ps2_groupBox";
             this.ps2_groupBox.Size = new System.Drawing.Size(192, 102);
             this.ps2_groupBox.TabIndex = 6;
@@ -723,7 +725,7 @@
             // ps2_radioButton
             // 
             this.ps2_radioButton.AutoSize = true;
-            this.ps2_radioButton.Location = new System.Drawing.Point(7, 195);
+            this.ps2_radioButton.Location = new System.Drawing.Point(7, 240);
             this.ps2_radioButton.Name = "ps2_radioButton";
             this.ps2_radioButton.Size = new System.Drawing.Size(14, 13);
             this.ps2_radioButton.TabIndex = 6;
@@ -733,13 +735,15 @@
             // 
             // bt_groupBox
             // 
+            this.bt_groupBox.Controls.Add(this.btBaudCombo);
+            this.bt_groupBox.Controls.Add(this.btBaudLabel);
             this.bt_groupBox.Controls.Add(this.btPortCombo);
             this.bt_groupBox.Controls.Add(this.btPortLabel);
             this.bt_groupBox.Controls.Add(this.btKeyLabel);
             this.bt_groupBox.Controls.Add(this.btKeyText);
             this.bt_groupBox.Location = new System.Drawing.Point(27, 132);
             this.bt_groupBox.Name = "bt_groupBox";
-            this.bt_groupBox.Size = new System.Drawing.Size(192, 57);
+            this.bt_groupBox.Size = new System.Drawing.Size(192, 102);
             this.bt_groupBox.TabIndex = 5;
             this.bt_groupBox.TabStop = false;
             this.bt_groupBox.Text = "Bluetooth";
@@ -752,9 +756,9 @@
             "Serial1",
             "Serial2",
             "Serial3"});
-            this.btPortCombo.Location = new System.Drawing.Point(117, 29);
+            this.btPortCombo.Location = new System.Drawing.Point(105, 69);
             this.btPortCombo.Name = "btPortCombo";
-            this.btPortCombo.Size = new System.Drawing.Size(69, 20);
+            this.btPortCombo.Size = new System.Drawing.Size(81, 20);
             this.btPortCombo.TabIndex = 4;
             this.ttp.SetToolTip(this.btPortCombo, "Set used port for connecting bluetooth.");
             this.btPortCombo.SelectedIndexChanged += new System.EventHandler(this.btPortCombo_SelectedIndexChanged);
@@ -762,7 +766,7 @@
             // btPortLabel
             // 
             this.btPortLabel.AutoSize = true;
-            this.btPortLabel.Location = new System.Drawing.Point(115, 14);
+            this.btPortLabel.Location = new System.Drawing.Point(103, 54);
             this.btPortLabel.Name = "btPortLabel";
             this.btPortLabel.Size = new System.Drawing.Size(53, 12);
             this.btPortLabel.TabIndex = 5;
@@ -782,7 +786,7 @@
             this.btKeyText.Location = new System.Drawing.Point(16, 29);
             this.btKeyText.MaxLength = 1;
             this.btKeyText.Name = "btKeyText";
-            this.btKeyText.Size = new System.Drawing.Size(95, 22);
+            this.btKeyText.Size = new System.Drawing.Size(170, 22);
             this.btKeyText.TabIndex = 0;
             this.ttp.SetToolTip(this.btKeyText, "Set a character for triggering the selected motion by bluetooth.");
             this.btKeyText.TextChanged += new System.EventHandler(this.btKeyText_TextChanged);
@@ -1111,6 +1115,32 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Edit Settings";
             // 
+            // btBaudLabel
+            // 
+            this.btBaudLabel.AutoSize = true;
+            this.btBaudLabel.Location = new System.Drawing.Point(14, 54);
+            this.btBaudLabel.Name = "btBaudLabel";
+            this.btBaudLabel.Size = new System.Drawing.Size(57, 12);
+            this.btBaudLabel.TabIndex = 6;
+            this.btBaudLabel.Text = "Baud Rate:";
+            // 
+            // btBaudCombo
+            // 
+            this.btBaudCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btBaudCombo.FormattingEnabled = true;
+            this.btBaudCombo.Items.AddRange(new object[] {
+            "9600",
+            "19200",
+            "38400",
+            "57600",
+            "115200"});
+            this.btBaudCombo.Location = new System.Drawing.Point(16, 70);
+            this.btBaudCombo.Name = "btBaudCombo";
+            this.btBaudCombo.Size = new System.Drawing.Size(78, 20);
+            this.btBaudCombo.TabIndex = 7;
+            this.btBaudCombo.SelectedIndexChanged += new System.EventHandler(this.btBaudCombo_SelectedIndexChanged);
+            this.ttp.SetToolTip(this.btBaudCombo, "Set used port for connecting bluetooth.");
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1250,6 +1280,8 @@
         private System.Windows.Forms.ComboBox ps2TypeCombo;
         private System.Windows.Forms.Label ps2TypeLabel;
         private System.Windows.Forms.ComboBox ps2KeyCombo;
+        private System.Windows.Forms.ComboBox btBaudCombo;
+        private System.Windows.Forms.Label btBaudLabel;
     }
 }
 

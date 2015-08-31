@@ -28,6 +28,8 @@ namespace _86ME_ver1
 {
     public partial class Form1 : Form
     {
+        string bt_port = "Serial1";
+        string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
         bool change_board = false;
         public string init_load_file = "";
@@ -740,7 +742,8 @@ namespace _86ME_ver1
 
             writer.Write("BoardVer ");
             writer.Write(Motion.comboBox1.SelectedItem.ToString());
-            writer.Write(" " + ps2pins[0] + " " + ps2pins[1] + " " + ps2pins[2] + " " + ps2pins[3]);
+            writer.Write(" " + ps2pins[0] + " " + ps2pins[1] + " " + ps2pins[2] + " " + ps2pins[3] + " " +
+                         bt_baud + " " + bt_port);
             writer.Write("\n");
             writer.Write("Servo ");
             for (int i = 0; i < 45; i++)
@@ -799,8 +802,8 @@ namespace _86ME_ver1
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
                 writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
-                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.bt_port +
-                             " " + m.ps2_key + " " + m.ps2_type + "\n");
+                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
+                             " " + m.ps2_type + "\n");
                 for (int j = 0; j < m.Events.Count; j++)
                 {
                     if (m.Events[j] is ME_Frame)
@@ -882,6 +885,11 @@ namespace _86ME_ver1
             String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
             if (filename == null)
                 return;
+            if( String.Compare(Path.GetExtension(filename), ".rbm") != 0 )
+            {
+                MessageBox.Show("The opened " + Path.GetExtension(filename) + " file isn't .rbm file.");
+                return;
+            }
             load_project(filename);
             MotionConfig.SelectedIndex = 0;
         }
@@ -929,11 +937,7 @@ namespace _86ME_ver1
                     MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
                     return;
                 }
-                if (datas[0] != "BoardVer" ||
-                    (datas[6] != "Servo" && datas[2] != "Servo") ||
-                    (datas[52] != "Offset" && datas[48] != "Offset") ||
-                    (datas[99] != "Homeframe" && datas[95] != "Homeframe") ||
-                    (datas[146] != "Range" && datas[142] != "Range"))
+                if (datas[0] != "BoardVer")
                 {
                     MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
                     return;
@@ -967,6 +971,11 @@ namespace _86ME_ver1
                             ps2pins[1] = datas[++i];
                             ps2pins[2] = datas[++i];
                             ps2pins[3] = datas[++i];
+                        }
+                        if (String.Compare(datas[i + 1], "Servo") != 0)
+                        {
+                            bt_baud = datas[++i];
+                            bt_port = datas[++i];
                         }
                     }
                     else if (String.Compare(datas[i], "Offset") == 0)
@@ -1128,7 +1137,8 @@ namespace _86ME_ver1
                                     motiontag.bt_key = "";
                                 else
                                     motiontag.bt_key = datas[i];
-                                motiontag.bt_port = int.Parse(datas[++i]);
+                                if (int.TryParse(datas[++i], out try_out) == false)
+                                    i--;
                                 motiontag.ps2_key = datas[++i];
                                 motiontag.ps2_type = int.Parse(datas[++i]);
                             }
@@ -1537,7 +1547,8 @@ namespace _86ME_ver1
             KeyboardCombo.SelectedIndex = m.trigger_key;
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
             btKeyText.Text = m.bt_key;
-            btPortCombo.SelectedIndex = m.bt_port;
+            btPortCombo.Text = bt_port;
+            btBaudCombo.Text = bt_baud;
             ps2DATCombo.Text = ps2pins[0];
             ps2CMDCombo.Text = ps2pins[1];
             ps2ATTCombo.Text = ps2pins[2];
@@ -2488,7 +2499,7 @@ namespace _86ME_ver1
                 MessageBox.Show("You should add a motion first");
                 return;
             }
-            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins);
+            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_withFiles();
         }
 
@@ -2499,7 +2510,7 @@ namespace _86ME_ver1
                 MessageBox.Show("You should add a motion first");
                 return;
             }
-            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins);
+            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_AllinOne();
         }
 
@@ -2824,8 +2835,12 @@ namespace _86ME_ver1
 
         private void btPortCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_port = btPortCombo.SelectedIndex;
+            bt_port = btPortCombo.Text;
+        }
+
+        private void btBaudCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bt_baud = btBaudCombo.Text;
         }
 
         private void ps2DATCombo_SelectedIndexChanged(object sender, EventArgs e)
