@@ -910,20 +910,21 @@ namespace _86ME_ver1
                                             "86Duino_EduCake",
                                             "unknow"};
             string[] servo = new string[] { "---noServo---",
-                                            "KONDO_KRS786",       
-                                            "KONDO_KRS788",       
-                                            "KONDO_KRS78X",       
-                                            "KONDO_KRS4014",      
-                                            "KONDO_KRS4024",      
-                                            "HITEC_HSR8498",      
-                                            "FUTABA_S3003",       
-                                            "SHAYYE_SYS214050",   
-                                            "TOWERPRO_MG995",     
-                                            "TOWERPRO_MG996",     
-                                            "DMP_RS0263",         
-                                            "DMP_RS1270",         
-                                            "GWS_S777",           
-                                            "GWS_S03T",           
+                                            "KONDO_KRS786",
+                                            "KONDO_KRS788",
+                                            "KONDO_KRS78X",
+                                            "KONDO_KRS4014",
+                                            "KONDO_KRS4024",
+                                            "HITEC_HSR8498",
+                                            "FUTABA_S3003",
+                                            "SHAYYE_SYS214050",
+                                            "TOWERPRO_MG995",
+                                            "TOWERPRO_MG996",
+                                            "TOWERPRO_SG90",
+                                            "DMP_RS0263",
+                                            "DMP_RS1270",
+                                            "GWS_S777",
+                                            "GWS_S03T",
                                             "GWS_MICRO",
                                             "OtherServos"};
 
@@ -2233,6 +2234,8 @@ namespace _86ME_ver1
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG995") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG996") == 0)
+                    captured[i] = false;
+                else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_SG90") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "DMP_RS0263") == 0)
                     captured[i] = false;

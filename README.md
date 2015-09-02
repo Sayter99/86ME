@@ -5,6 +5,7 @@ _VERSION_: v1.4
 * Refine UIs of Motion Group.
 * Add a ComboBox for setting bluetooth buad rate.
 * Make saving existing projects more convenient.
+* Add TOWERPRO_SG90 to servo list.
 * Fix bugs that changing tabpage MotionConfig may enable some controls unexpectedly.
 
 _VERSION_: v1.3

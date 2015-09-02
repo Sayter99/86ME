@@ -264,7 +264,8 @@ namespace _86ME_ver1
                                                       "FUTABA_S3003",       
                                                       "SHAYYE_SYS214050",   
                                                       "TOWERPRO_MG995",     
-                                                      "TOWERPRO_MG996",     
+                                                      "TOWERPRO_MG996",
+                                                      "TOWERPRO_SG90",
                                                       "DMP_RS0263",         
                                                       "DMP_RS1270",         
                                                       "GWS_S777",           
@@ -272,7 +273,8 @@ namespace _86ME_ver1
                                                       "GWS_MICRO",
                                                       "OtherServos"});
                 fbox[i].SelectedIndex = 0;
-                fbox[i].TextChanged += new EventHandler(this.motors_TextIndexChanged);
+                fbox[i].Name = i.ToString();
+                fbox[i].SelectedIndexChanged += new EventHandler(this.motors_SelectedIndexChanged);
                 if (i < 10)
                     flabel[i].Text = "SetServo " + i.ToString() + ":";
                 else
@@ -325,7 +327,7 @@ namespace _86ME_ver1
             }
         }
 
-        private void motors_TextIndexChanged(object sender, EventArgs e)
+        private void motors_SelectedIndexChanged(object sender, EventArgs e)
         {
             for (int i = 0; i < 45; i++)
             {
@@ -388,6 +390,11 @@ namespace _86ME_ver1
                             fcheck[i].Enabled = true;
                             ftext3[i].Text = "800";
                             ftext4[i].Text = "2200";
+                            break;
+                        case "TOWERPRO_SG90":
+                            fcheck[i].Enabled = true;
+                            ftext3[i].Text = "500";
+                            ftext4[i].Text = "2500";
                             break;
                         case "DMP_RS0263":
                             fcheck[i].Enabled = true;
