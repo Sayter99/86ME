@@ -1940,6 +1940,7 @@ namespace _86ME_ver1
                             autocheck.Enabled= false;
                             Framelist.Controls.Clear();
                             Framelist.Enabled = false;
+                            update_motionlist();
                             draw_background();
                             break;
                         case 3:
@@ -2551,10 +2552,10 @@ namespace _86ME_ver1
 
         private void update_motionlist()
         {
-            if (autocheck.Checked == true)
-            {
-                autocheck.Checked = false;
-            }
+            //if (autocheck.Checked == true)
+            //{
+            //    autocheck.Checked = false;
+            //}
             groupBox1.Enabled = false;
             groupBox4.Enabled = false;
             Motionlist.Items.Clear();
@@ -2598,13 +2599,11 @@ namespace _86ME_ver1
                         {
                             ME_Sound s = (ME_Sound)m.Events[j];
                             Motionlist.Items.Add("[Sound] " + s.filename);
-
                         }
                         else if (m.Events[j] is ME_Goto)
                         {
                             ME_Goto g = (ME_Goto)m.Events[j];
                             Motionlist.Items.Add("[Goto] " + g.name);
-
                         }
                         else if (m.Events[j] is ME_Flag)
                         {
