@@ -79,6 +79,8 @@ namespace _86ME_ver1
         public Form1()
         {
             InitializeComponent();
+            saveFrame.Visible = false;
+            loadFrame.Visible = false;
             groupBox1.Enabled = false;
             groupBox2.Enabled = false;
             groupBox3.Enabled = false;
@@ -91,6 +93,8 @@ namespace _86ME_ver1
         public Form1(string filename)
         {
             InitializeComponent();
+            saveFrame.Visible = false;
+            loadFrame.Visible = false;
             groupBox1.Enabled = false;
             groupBox2.Enabled = false;
             groupBox3.Enabled = false;
@@ -1617,6 +1621,8 @@ namespace _86ME_ver1
         {
             if (Motionlist.SelectedIndex == -1)
             {
+                saveFrame.Visible = false;
+                loadFrame.Visible = false;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
                 this.label2.Text = "Delay:";
@@ -1631,6 +1637,8 @@ namespace _86ME_ver1
                 string[] datas = Motionlist.SelectedItem.ToString().Split(' ');
                 if (String.Compare(datas[0], "[Frame]") == 0)
                 {
+                    saveFrame.Visible = true;
+                    loadFrame.Visible = true;
                     this.label2.Text = "Play Time:";
                     typecombo.SelectedIndex = 0;
                     typecombo.Text = "Frame";
@@ -1683,6 +1691,8 @@ namespace _86ME_ver1
                 }
                 else if (String.Compare(datas[0], "[Home]") == 0)
                 {
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
                     this.label2.Text = "Play Time:";
                     typecombo.SelectedIndex = 4;
                     typecombo.Text = "HomeFrame";
@@ -1735,6 +1745,8 @@ namespace _86ME_ver1
                 }
                 else if (String.Compare(datas[0], "[Delay]") == 0)
                 {
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
                     this.label2.Text = "Delay:";
                     typecombo.SelectedIndex = 1;
                     typecombo.Text = "Delay";
@@ -1743,6 +1755,8 @@ namespace _86ME_ver1
                 }
                 else if (String.Compare(datas[0], "[Sound]") == 0)
                 {
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
                     this.label2.Text = "Play Time:";
                     typecombo.SelectedIndex = 2;
                     typecombo.Text = "Sound";
@@ -1750,6 +1764,8 @@ namespace _86ME_ver1
                 }
                 else if (String.Compare(datas[0], "[Flag]") == 0)
                 {
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
                     typecombo.SelectedIndex = 3;
                     this.label2.Text = "Delay:";
                     typecombo.Text = "Flag";
@@ -1773,6 +1789,8 @@ namespace _86ME_ver1
                 }
                 else if (String.Compare(datas[0], "[Goto]") == 0)
                 {
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
                     typecombo.SelectedIndex = 2;
                     this.label2.Text = "Delay:";
                     typecombo.Text = "Goto";
@@ -2083,6 +2101,8 @@ namespace _86ME_ver1
             }
             else if (MotionConfig.SelectedIndex == 1)
             {
+                saveFrame.Visible = false;
+                loadFrame.Visible = false;
                 Boolean new_mot = true;
                 NewMotion.Enabled = false;
                 if (String.Compare(MotionCombo.Text, "") == 0)
@@ -2258,6 +2278,8 @@ namespace _86ME_ver1
 
         public void MotionOnTest(ME_Motion m)
         {
+            saveFrame.Enabled = false;
+            loadFrame.Enabled = false;
             move_down.Enabled = false;
             move_up.Enabled = false;
             MotionConfig.Enabled = false;
@@ -2355,6 +2377,8 @@ namespace _86ME_ver1
             
             mtest_start_pos = 0;
             typecombo.Text = "";
+            saveFrame.Enabled = true;
+            loadFrame.Enabled = true;
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
             MotionConfig.Enabled = true;
@@ -2404,6 +2428,8 @@ namespace _86ME_ver1
             {
                 mtest_start_pos = 0;
                 typecombo.Text = "";
+                saveFrame.Enabled = true;
+                loadFrame.Enabled = true;
                 MotionTest.Enabled = true;
                 motion_pause.Enabled = false;
                 motion_stop.Enabled = false;
@@ -2876,5 +2902,80 @@ namespace _86ME_ver1
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).ps2_type = ps2TypeCombo.SelectedIndex;
         }
+
+        private void saveFrame_Click(object sender, EventArgs e)
+        {
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "86frame file (*.txt)|*.txt";
+            dialog.Title = "Save Frame";
+            if (dialog.ShowDialog() == DialogResult.OK && dialog.FileName != null)
+            {
+                int ch_count = 0;
+                TextWriter writer = new StreamWriter(dialog.FileName);
+                ME_Frame f = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
+                for (int k = 0; k < 45; k++)
+                {
+                    if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                    {
+                        writer.Write("channel");
+                        writer.Write(ch_count.ToString() + "=");
+                        writer.WriteLine(f.frame[k].ToString());
+                        ch_count++;
+                    }
+                }
+                writer.Dispose();
+                writer.Close();
+            }
+        }
+
+        private void loadFrame_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "86frame file (*.txt)|*.txt";
+            dialog.Title = "Load Frame";
+            String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
+            if (filename == null)
+                return;
+            using (StreamReader reader = new StreamReader(filename))
+            {
+                ME_Frame f = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
+                int ch_count = 0;
+                List<int> ch_mapping = new List<int>();
+                for (int k = 0; k < 45; k++)
+                {
+                    if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                    {
+                        ch_mapping.Add(k);
+                        ch_count++;
+                    }
+                }
+
+                while (reader.Peek() >= 0)
+                {
+                    string[] datas = reader.ReadLine().Split('=', '\n');
+                    int channel = 50;
+                    for (int i = 0; i < datas.Length; i++)
+                    {
+                        if (i == 0) //channelX
+                        {
+                            if (datas[i].Length < 8)
+                                break;
+                            else if (String.Compare(datas[i].Substring(0, 7), "channel") == 0)
+                                if (int.TryParse(datas[i].Substring(7), out channel) == false)
+                                    break;
+                        }
+                        else if (i == 1) //val
+                        {
+                            int val;
+                            if (int.TryParse(datas[i], out val))
+                                if (channel != 50 && ch_count > channel)
+                                    f.frame[ch_mapping[channel]] = val;
+                        }
+                    }
+                }
+            }
+            Update_framelist();
+        }
+
     }
 }

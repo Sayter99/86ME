@@ -59,7 +59,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Framelist = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.fast = new System.Windows.Forms.Label();
             this.slow = new System.Windows.Forms.Label();
             this.sync_speed = new System.Windows.Forms.TrackBar();
@@ -86,6 +85,8 @@
             this.ps2KeyCombo = new System.Windows.Forms.ComboBox();
             this.ps2_radioButton = new System.Windows.Forms.RadioButton();
             this.bt_groupBox = new System.Windows.Forms.GroupBox();
+            this.btBaudCombo = new System.Windows.Forms.ComboBox();
+            this.btBaudLabel = new System.Windows.Forms.Label();
             this.btPortCombo = new System.Windows.Forms.ComboBox();
             this.btPortLabel = new System.Windows.Forms.Label();
             this.btKeyLabel = new System.Windows.Forms.Label();
@@ -102,12 +103,7 @@
             this.TitleMotion = new System.Windows.Forms.RadioButton();
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
-            this.motion_stop = new System.Windows.Forms.Button();
-            this.motion_pause = new System.Windows.Forms.Button();
-            this.move_down = new System.Windows.Forms.Button();
-            this.move_up = new System.Windows.Forms.Button();
             this.textBox1 = new System.Windows.Forms.TextBox();
-            this.MotionTest = new System.Windows.Forms.Button();
             this.NewMotion = new System.Windows.Forms.Button();
             this.MotionCombo = new System.Windows.Forms.ComboBox();
             this.Generate = new System.Windows.Forms.Button();
@@ -115,15 +111,20 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.btBaudLabel = new System.Windows.Forms.Label();
-            this.btBaudCombo = new System.Windows.Forms.ComboBox();
+            this.motion_stop = new System.Windows.Forms.Button();
+            this.motion_pause = new System.Windows.Forms.Button();
+            this.move_down = new System.Windows.Forms.Button();
+            this.move_up = new System.Windows.Forms.Button();
+            this.MotionTest = new System.Windows.Forms.Button();
+            this.loadFrame = new System.Windows.Forms.Button();
+            this.saveFrame = new System.Windows.Forms.Button();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.menuStrip1.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.Framelist.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).BeginInit();
             this.groupBox3.SuspendLayout();
             this.MotionConfig.SuspendLayout();
@@ -134,6 +135,7 @@
             this.Keyboard_groupBox.SuspendLayout();
             this.Always_groupBox.SuspendLayout();
             this.groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -319,6 +321,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.loadFrame);
+            this.panel1.Controls.Add(this.saveFrame);
             this.panel1.Controls.Add(this.label3);
             this.panel1.Controls.Add(this.delaytext);
             this.panel1.Controls.Add(this.label2);
@@ -403,16 +407,6 @@
             this.Framelist.Name = "Framelist";
             this.Framelist.Size = new System.Drawing.Size(694, 470);
             this.Framelist.TabIndex = 5;
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(694, 470);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
             // 
             // fast
             // 
@@ -748,6 +742,32 @@
             this.bt_groupBox.TabStop = false;
             this.bt_groupBox.Text = "Bluetooth";
             // 
+            // btBaudCombo
+            // 
+            this.btBaudCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btBaudCombo.FormattingEnabled = true;
+            this.btBaudCombo.Items.AddRange(new object[] {
+            "9600",
+            "19200",
+            "38400",
+            "57600",
+            "115200"});
+            this.btBaudCombo.Location = new System.Drawing.Point(16, 70);
+            this.btBaudCombo.Name = "btBaudCombo";
+            this.btBaudCombo.Size = new System.Drawing.Size(78, 20);
+            this.btBaudCombo.TabIndex = 7;
+            this.ttp.SetToolTip(this.btBaudCombo, "Set used port for connecting bluetooth.");
+            this.btBaudCombo.SelectedIndexChanged += new System.EventHandler(this.btBaudCombo_SelectedIndexChanged);
+            // 
+            // btBaudLabel
+            // 
+            this.btBaudLabel.AutoSize = true;
+            this.btBaudLabel.Location = new System.Drawing.Point(14, 54);
+            this.btBaudLabel.Name = "btBaudLabel";
+            this.btBaudLabel.Size = new System.Drawing.Size(57, 12);
+            this.btBaudLabel.TabIndex = 6;
+            this.btBaudLabel.Text = "Baud Rate:";
+            // 
             // btPortCombo
             // 
             this.btPortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -965,58 +985,6 @@
             this.AlwaysOn.UseVisualStyleBackColor = true;
             this.AlwaysOn.CheckedChanged += new System.EventHandler(this.AlwaysOn_CheckedChanged);
             // 
-            // motion_stop
-            // 
-            this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
-            this.motion_stop.Image = global::_86ME_ver1.Properties.Resources.stop;
-            this.motion_stop.Location = new System.Drawing.Point(166, 560);
-            this.motion_stop.Name = "motion_stop";
-            this.motion_stop.Size = new System.Drawing.Size(43, 35);
-            this.motion_stop.TabIndex = 9;
-            this.ttp.SetToolTip(this.motion_stop, "Stop the process of playing frames.\nThis operation cannot be recovered, so the ne" +
-        "xt play will start from the first item.");
-            this.motion_stop.UseVisualStyleBackColor = true;
-            this.motion_stop.Click += new System.EventHandler(this.motion_stop_Click);
-            // 
-            // motion_pause
-            // 
-            this.motion_pause.Cursor = System.Windows.Forms.Cursors.Default;
-            this.motion_pause.Image = global::_86ME_ver1.Properties.Resources.pause;
-            this.motion_pause.Location = new System.Drawing.Point(117, 560);
-            this.motion_pause.Name = "motion_pause";
-            this.motion_pause.Size = new System.Drawing.Size(43, 35);
-            this.motion_pause.TabIndex = 8;
-            this.ttp.SetToolTip(this.motion_pause, "Pause the process of playing frames,\nthe paused process can be continue by clicki" +
-        "ng \"Play\" again.");
-            this.motion_pause.UseVisualStyleBackColor = true;
-            this.motion_pause.Click += new System.EventHandler(this.motion_pause_Click);
-            // 
-            // move_down
-            // 
-            this.move_down.Cursor = System.Windows.Forms.Cursors.Default;
-            this.move_down.Enabled = false;
-            this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
-            this.move_down.Location = new System.Drawing.Point(244, 316);
-            this.move_down.Name = "move_down";
-            this.move_down.Size = new System.Drawing.Size(23, 37);
-            this.move_down.TabIndex = 7;
-            this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
-            this.move_down.UseVisualStyleBackColor = true;
-            this.move_down.Click += new System.EventHandler(this.motionlist_down);
-            // 
-            // move_up
-            // 
-            this.move_up.Cursor = System.Windows.Forms.Cursors.Default;
-            this.move_up.Enabled = false;
-            this.move_up.Image = global::_86ME_ver1.Properties.Resources.up_arrow;
-            this.move_up.Location = new System.Drawing.Point(244, 273);
-            this.move_up.Name = "move_up";
-            this.move_up.Size = new System.Drawing.Size(23, 37);
-            this.move_up.TabIndex = 6;
-            this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
-            this.move_up.UseVisualStyleBackColor = true;
-            this.move_up.Click += new System.EventHandler(this.motionlist_up);
-            // 
             // textBox1
             // 
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -1026,18 +994,6 @@
             this.textBox1.Size = new System.Drawing.Size(100, 15);
             this.textBox1.TabIndex = 4;
             this.textBox1.Text = "Motion Name:";
-            // 
-            // MotionTest
-            // 
-            this.MotionTest.Cursor = System.Windows.Forms.Cursors.Default;
-            this.MotionTest.Image = global::_86ME_ver1.Properties.Resources.play;
-            this.MotionTest.Location = new System.Drawing.Point(68, 560);
-            this.MotionTest.Name = "MotionTest";
-            this.MotionTest.Size = new System.Drawing.Size(43, 35);
-            this.MotionTest.TabIndex = 3;
-            this.ttp.SetToolTip(this.MotionTest, "Play the current motion list from the first item to the end.");
-            this.MotionTest.UseVisualStyleBackColor = true;
-            this.MotionTest.Click += new System.EventHandler(this.MotionTest_Click);
             // 
             // NewMotion
             // 
@@ -1115,31 +1071,102 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Edit Settings";
             // 
-            // btBaudLabel
+            // motion_stop
             // 
-            this.btBaudLabel.AutoSize = true;
-            this.btBaudLabel.Location = new System.Drawing.Point(14, 54);
-            this.btBaudLabel.Name = "btBaudLabel";
-            this.btBaudLabel.Size = new System.Drawing.Size(57, 12);
-            this.btBaudLabel.TabIndex = 6;
-            this.btBaudLabel.Text = "Baud Rate:";
+            this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.motion_stop.Image = global::_86ME_ver1.Properties.Resources.stop;
+            this.motion_stop.Location = new System.Drawing.Point(166, 560);
+            this.motion_stop.Name = "motion_stop";
+            this.motion_stop.Size = new System.Drawing.Size(43, 35);
+            this.motion_stop.TabIndex = 9;
+            this.ttp.SetToolTip(this.motion_stop, "Stop the process of playing frames.\nThis operation cannot be recovered, so the ne" +
+        "xt play will start from the first item.");
+            this.motion_stop.UseVisualStyleBackColor = true;
+            this.motion_stop.Click += new System.EventHandler(this.motion_stop_Click);
             // 
-            // btBaudCombo
+            // motion_pause
             // 
-            this.btBaudCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.btBaudCombo.FormattingEnabled = true;
-            this.btBaudCombo.Items.AddRange(new object[] {
-            "9600",
-            "19200",
-            "38400",
-            "57600",
-            "115200"});
-            this.btBaudCombo.Location = new System.Drawing.Point(16, 70);
-            this.btBaudCombo.Name = "btBaudCombo";
-            this.btBaudCombo.Size = new System.Drawing.Size(78, 20);
-            this.btBaudCombo.TabIndex = 7;
-            this.btBaudCombo.SelectedIndexChanged += new System.EventHandler(this.btBaudCombo_SelectedIndexChanged);
-            this.ttp.SetToolTip(this.btBaudCombo, "Set used port for connecting bluetooth.");
+            this.motion_pause.Cursor = System.Windows.Forms.Cursors.Default;
+            this.motion_pause.Image = global::_86ME_ver1.Properties.Resources.pause;
+            this.motion_pause.Location = new System.Drawing.Point(117, 560);
+            this.motion_pause.Name = "motion_pause";
+            this.motion_pause.Size = new System.Drawing.Size(43, 35);
+            this.motion_pause.TabIndex = 8;
+            this.ttp.SetToolTip(this.motion_pause, "Pause the process of playing frames,\nthe paused process can be continue by clicki" +
+        "ng \"Play\" again.");
+            this.motion_pause.UseVisualStyleBackColor = true;
+            this.motion_pause.Click += new System.EventHandler(this.motion_pause_Click);
+            // 
+            // move_down
+            // 
+            this.move_down.Cursor = System.Windows.Forms.Cursors.Default;
+            this.move_down.Enabled = false;
+            this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
+            this.move_down.Location = new System.Drawing.Point(244, 316);
+            this.move_down.Name = "move_down";
+            this.move_down.Size = new System.Drawing.Size(23, 37);
+            this.move_down.TabIndex = 7;
+            this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
+            this.move_down.UseVisualStyleBackColor = true;
+            this.move_down.Click += new System.EventHandler(this.motionlist_down);
+            // 
+            // move_up
+            // 
+            this.move_up.Cursor = System.Windows.Forms.Cursors.Default;
+            this.move_up.Enabled = false;
+            this.move_up.Image = global::_86ME_ver1.Properties.Resources.up_arrow;
+            this.move_up.Location = new System.Drawing.Point(244, 273);
+            this.move_up.Name = "move_up";
+            this.move_up.Size = new System.Drawing.Size(23, 37);
+            this.move_up.TabIndex = 6;
+            this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
+            this.move_up.UseVisualStyleBackColor = true;
+            this.move_up.Click += new System.EventHandler(this.motionlist_up);
+            // 
+            // MotionTest
+            // 
+            this.MotionTest.Cursor = System.Windows.Forms.Cursors.Default;
+            this.MotionTest.Image = global::_86ME_ver1.Properties.Resources.play;
+            this.MotionTest.Location = new System.Drawing.Point(68, 560);
+            this.MotionTest.Name = "MotionTest";
+            this.MotionTest.Size = new System.Drawing.Size(43, 35);
+            this.MotionTest.TabIndex = 3;
+            this.ttp.SetToolTip(this.MotionTest, "Play the current motion list from the first item to the end.");
+            this.MotionTest.UseVisualStyleBackColor = true;
+            this.MotionTest.Click += new System.EventHandler(this.MotionTest_Click);
+            // 
+            // loadFrame
+            // 
+            this.loadFrame.Image = global::_86ME_ver1.Properties.Resources.load_frame;
+            this.loadFrame.Location = new System.Drawing.Point(262, 4);
+            this.loadFrame.Name = "loadFrame";
+            this.loadFrame.Size = new System.Drawing.Size(38, 37);
+            this.loadFrame.TabIndex = 13;
+            this.ttp.SetToolTip(this.loadFrame, "Load a frame from file to set servos.");
+            this.loadFrame.UseVisualStyleBackColor = true;
+            this.loadFrame.Click += new System.EventHandler(this.loadFrame_Click);
+            // 
+            // saveFrame
+            // 
+            this.saveFrame.Image = global::_86ME_ver1.Properties.Resources.save_frame;
+            this.saveFrame.Location = new System.Drawing.Point(218, 4);
+            this.saveFrame.Name = "saveFrame";
+            this.saveFrame.Size = new System.Drawing.Size(38, 37);
+            this.saveFrame.TabIndex = 12;
+            this.ttp.SetToolTip(this.saveFrame, "Save current frame as a txt file.");
+            this.saveFrame.UseVisualStyleBackColor = true;
+            this.saveFrame.Click += new System.EventHandler(this.saveFrame_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(694, 470);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // Form1
             // 
@@ -1170,7 +1197,6 @@
             this.panel1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.Framelist.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).EndInit();
             this.groupBox3.ResumeLayout(false);
             this.groupBox3.PerformLayout();
@@ -1188,6 +1214,7 @@
             this.Always_groupBox.PerformLayout();
             this.groupBox4.ResumeLayout(false);
             this.groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1282,6 +1309,8 @@
         private System.Windows.Forms.ComboBox ps2KeyCombo;
         private System.Windows.Forms.ComboBox btBaudCombo;
         private System.Windows.Forms.Label btBaudLabel;
+        private System.Windows.Forms.Button saveFrame;
+        private System.Windows.Forms.Button loadFrame;
     }
 }
 

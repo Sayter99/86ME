@@ -123,6 +123,9 @@
   <metadata name="ttp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
+  <metadata name="ttp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
   <data name="ps2TypeCombo.ToolTip" xml:space="preserve">
     <value>First Press: Perform the selected motion while pressing the choosed key first time.
 Pressed: Perform the selected motion if the choosed key is pressed continuosly.

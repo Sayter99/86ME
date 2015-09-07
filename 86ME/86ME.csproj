@@ -162,6 +162,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons\86Duino.ico" />
+    <None Include="icons\load_frame.png" />
+    <None Include="icons\save_frame.png" />
     <None Include="Resources\hand_open.cur" />
     <None Include="Resources\hand_close.cur" />
     <None Include="icons\stop.png" />
