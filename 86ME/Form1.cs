@@ -2906,7 +2906,7 @@ namespace _86ME_ver1
         private void saveFrame_Click(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "86frame file (*.txt)|*.txt";
+            dialog.Filter = "86Duino frame file (*.txt)|*.txt";
             dialog.Title = "Save Frame";
             if (dialog.ShowDialog() == DialogResult.OK && dialog.FileName != null)
             {
@@ -2931,7 +2931,7 @@ namespace _86ME_ver1
         private void loadFrame_Click(object sender, EventArgs e)
         {
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Filter = "86frame file (*.txt)|*.txt";
+            dialog.Filter = "86Duino frame file (*.txt)|*.txt";
             dialog.Title = "Load Frame";
             String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
             if (filename == null)
