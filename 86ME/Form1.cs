@@ -22,7 +22,6 @@ using System.IO.Ports;
 using System.Collections;
 using System.Threading;
 using System.Media;
-using System.Management;
 
 namespace _86ME_ver1
 {
@@ -597,39 +596,32 @@ namespace _86ME_ver1
         {
             if (arduino == null && (string.Compare(com_port, "OFF") != 0))
             {
-                if (!have_86())
+                if (string.Compare(com_port, "AUTO") == 0)
                 {
-                    ;
+                    try
+                    {
+                        arduino = new Arduino();
+                        arduino.setSyncSpeed(0);
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
                 else
                 {
-                    if (string.Compare(com_port, "AUTO") == 0)
+                    try
                     {
-                        try
-                        {
-                            arduino = new Arduino();
-                            arduino.setSyncSpeed(0);
-                        }
-                        catch
-                        {
-                            com_port = "OFF";
-                            MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
-                                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
+                        arduino = new Arduino(com_port);
+                        arduino.setSyncSpeed(0);
                     }
-                    else
+                    catch
                     {
-                        try
-                        {
-                            arduino = new Arduino(com_port);
-                            arduino.setSyncSpeed(0);
-                        }
-                        catch
-                        {
-                            com_port = "OFF";
-                            MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
-                                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        }
+                        com_port = "OFF";
+                        MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     }
                 }
             }
@@ -2542,25 +2534,6 @@ namespace _86ME_ver1
             }
             generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_AllinOne();
-        }
-
-        public bool have_86()
-        {
-            ManagementScope scope = new ManagementScope("\\\\.\\root\\cimv2");
-            ObjectQuery query = new ObjectQuery("SELECT * FROM Win32_PnPEntity");
-            ManagementObjectSearcher searcher = new ManagementObjectSearcher(scope, query);
-            ManagementObjectCollection queryCollection = searcher.Get();
-            foreach (ManagementObject Obj in queryCollection)
-            {
-                if (Obj["Name"] != null && Obj["Name"].ToString().Contains("86Duino"))
-                {
-                    return true;
-                }
-            }
-            com_port = "OFF";
-            MessageBox.Show("Cannot find 86Duino, entering offline mode", "",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            return false;
         }
 
         private void draw_background()
