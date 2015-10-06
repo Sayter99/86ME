@@ -596,33 +596,16 @@ namespace _86ME_ver1
         {
             if (arduino == null && (string.Compare(com_port, "OFF") != 0))
             {
-                if (string.Compare(com_port, "AUTO") == 0)
+                try
                 {
-                    try
-                    {
-                        arduino = new Arduino();
-                        arduino.setSyncSpeed(0);
-                    }
-                    catch
-                    {
-                        com_port = "OFF";
-                        MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                    arduino = new Arduino(com_port);
+                    arduino.setSyncSpeed(0);
                 }
-                else
+                catch
                 {
-                    try
-                    {
-                        arduino = new Arduino(com_port);
-                        arduino.setSyncSpeed(0);
-                    }
-                    catch
-                    {
-                        com_port = "OFF";
-                        MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
+                    com_port = "OFF";
+                    MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
+                                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }

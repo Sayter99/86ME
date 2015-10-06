@@ -29,7 +29,7 @@ namespace _86ME_ver1
             if (string.Compare(ComboBox0.Text, "--auto--") == 0)
             {
                 if (!have_86())
-                    this.com_port = "AUTO";
+                    this.com_port = "OFF";
             }
             else if (string.Compare(ComboBox0.Text, "--offline--") == 0)
                 this.com_port = "OFF";
@@ -54,11 +54,10 @@ namespace _86ME_ver1
                 {
                     foreach (string serialPort in serialPorts)
                         if (Obj["Name"].ToString().Contains(serialPort))
-                            com_port = serialPort;
+                            this.com_port = serialPort;
                     return true;
                 }
             }
-            this.com_port = "OFF";
             MessageBox.Show("Cannot find 86Duino, entering offline mode", "",
                             MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
