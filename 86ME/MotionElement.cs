@@ -17,6 +17,7 @@ namespace _86ME_ver1
         public int frames;
         public string ps2_key;
         public int ps2_type;
+        public int property;
         public ME_Motion()
         {
             this.name = null;
@@ -29,6 +30,7 @@ namespace _86ME_ver1
             this.frames = 0;
             this.ps2_key = "PSB_SELECT";
             this.ps2_type = 1;
+            this.property = 0;
         }
     }
 

@@ -1,6 +1,6 @@
 ﻿namespace _86ME_ver1
 {
-    partial class Form1
+    partial class Main
     {
         /// <summary>
         /// Required designer variable.
@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,10 +48,10 @@
             this.flagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.delayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.panel1 = new System.Windows.Forms.Panel();
+            this.Action_groupBox = new System.Windows.Forms.GroupBox();
+            this.Hint_groupBox = new System.Windows.Forms.GroupBox();
+            this.hint_richTextBox = new System.Windows.Forms.RichTextBox();
+            this.action_panel = new System.Windows.Forms.Panel();
             this.loadFrame = new System.Windows.Forms.Button();
             this.saveFrame = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
@@ -61,14 +61,14 @@
             this.label1 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Framelist = new System.Windows.Forms.Panel();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.Robot_pictureBox = new System.Windows.Forms.PictureBox();
             this.fast = new System.Windows.Forms.Label();
             this.slow = new System.Windows.Forms.Label();
             this.sync_speed = new System.Windows.Forms.TrackBar();
             this.motorRelease = new System.Windows.Forms.Button();
             this.autocheck = new System.Windows.Forms.CheckBox();
             this.capturebutton = new System.Windows.Forms.Button();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.Motion_groupBox = new System.Windows.Forms.GroupBox();
             this.MotionConfig = new System.Windows.Forms.TabControl();
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
@@ -106,11 +106,15 @@
             this.TitleMotion = new System.Windows.Forms.RadioButton();
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
+            this.MotionProperty = new System.Windows.Forms.TabPage();
+            this.NonBlocking = new System.Windows.Forms.RadioButton();
+            this.Blocking = new System.Windows.Forms.RadioButton();
+            this.MotionPropertyLabel = new System.Windows.Forms.Label();
             this.motion_stop = new System.Windows.Forms.Button();
             this.motion_pause = new System.Windows.Forms.Button();
             this.move_down = new System.Windows.Forms.Button();
             this.move_up = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.MotionNameLabel = new System.Windows.Forms.TextBox();
             this.MotionTest = new System.Windows.Forms.Button();
             this.NewMotion = new System.Windows.Forms.Button();
             this.MotionCombo = new System.Windows.Forms.ComboBox();
@@ -118,16 +122,16 @@
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.Setting_groupBox = new System.Windows.Forms.GroupBox();
             this.menuStrip1.SuspendLayout();
-            this.groupBox1.SuspendLayout();
-            this.groupBox2.SuspendLayout();
-            this.panel1.SuspendLayout();
+            this.Action_groupBox.SuspendLayout();
+            this.Hint_groupBox.SuspendLayout();
+            this.action_panel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.Framelist.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Robot_pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).BeginInit();
-            this.groupBox3.SuspendLayout();
+            this.Motion_groupBox.SuspendLayout();
             this.MotionConfig.SuspendLayout();
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
@@ -135,7 +139,8 @@
             this.bt_groupBox.SuspendLayout();
             this.Keyboard_groupBox.SuspendLayout();
             this.Always_groupBox.SuspendLayout();
-            this.groupBox4.SuspendLayout();
+            this.MotionProperty.SuspendLayout();
+            this.Setting_groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip1
@@ -282,56 +287,56 @@
             this.delayToolStripMenuItem.Text = "Delay";
             this.delayToolStripMenuItem.Click += new System.EventHandler(this.delayToolStripMenuItem_Click);
             // 
-            // groupBox1
+            // Action_groupBox
             // 
-            this.groupBox1.BackColor = System.Drawing.SystemColors.Control;
-            this.groupBox1.Controls.Add(this.groupBox2);
-            this.groupBox1.Controls.Add(this.panel1);
-            this.groupBox1.Controls.Add(this.panel2);
-            this.groupBox1.Location = new System.Drawing.Point(13, 94);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(720, 594);
-            this.groupBox1.TabIndex = 1;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Action";
+            this.Action_groupBox.BackColor = System.Drawing.SystemColors.Control;
+            this.Action_groupBox.Controls.Add(this.Hint_groupBox);
+            this.Action_groupBox.Controls.Add(this.action_panel);
+            this.Action_groupBox.Controls.Add(this.panel2);
+            this.Action_groupBox.Location = new System.Drawing.Point(13, 94);
+            this.Action_groupBox.Name = "Action_groupBox";
+            this.Action_groupBox.Size = new System.Drawing.Size(720, 594);
+            this.Action_groupBox.TabIndex = 1;
+            this.Action_groupBox.TabStop = false;
+            this.Action_groupBox.Text = "Action";
             // 
-            // groupBox2
+            // Hint_groupBox
             // 
-            this.groupBox2.Controls.Add(this.richTextBox1);
-            this.groupBox2.Location = new System.Drawing.Point(321, 0);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(399, 106);
-            this.groupBox2.TabIndex = 2;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Hint";
+            this.Hint_groupBox.Controls.Add(this.hint_richTextBox);
+            this.Hint_groupBox.Location = new System.Drawing.Point(321, 0);
+            this.Hint_groupBox.Name = "Hint_groupBox";
+            this.Hint_groupBox.Size = new System.Drawing.Size(399, 106);
+            this.Hint_groupBox.TabIndex = 2;
+            this.Hint_groupBox.TabStop = false;
+            this.Hint_groupBox.Text = "Hint";
             // 
-            // richTextBox1
+            // hint_richTextBox
             // 
-            this.richTextBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.richTextBox1.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.richTextBox1.Location = new System.Drawing.Point(3, 18);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(393, 85);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "   ___   __   ____        _\n  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n  / _ \\| \'_ \\|" +
+            this.hint_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hint_richTextBox.Font = new System.Drawing.Font("Consolas", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.hint_richTextBox.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.hint_richTextBox.Location = new System.Drawing.Point(3, 18);
+            this.hint_richTextBox.Name = "hint_richTextBox";
+            this.hint_richTextBox.ReadOnly = true;
+            this.hint_richTextBox.Size = new System.Drawing.Size(393, 85);
+            this.hint_richTextBox.TabIndex = 0;
+            this.hint_richTextBox.Text = "   ___   __   ____        _\n  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n  / _ \\| \'_ \\|" +
     " | | | | | | | \'_ \\ / _ \\\n | (_) | (_) | |_| | |_| | | | | | (_) |\n  \\___/ \\___/" +
     "|____/ \\__,_|_|_| |_|\\___/";
             // 
-            // panel1
+            // action_panel
             // 
-            this.panel1.Controls.Add(this.loadFrame);
-            this.panel1.Controls.Add(this.saveFrame);
-            this.panel1.Controls.Add(this.label3);
-            this.panel1.Controls.Add(this.delaytext);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Controls.Add(this.typecombo);
-            this.panel1.Controls.Add(this.label1);
-            this.panel1.Location = new System.Drawing.Point(12, 21);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(303, 85);
-            this.panel1.TabIndex = 4;
+            this.action_panel.Controls.Add(this.loadFrame);
+            this.action_panel.Controls.Add(this.saveFrame);
+            this.action_panel.Controls.Add(this.label3);
+            this.action_panel.Controls.Add(this.delaytext);
+            this.action_panel.Controls.Add(this.label2);
+            this.action_panel.Controls.Add(this.typecombo);
+            this.action_panel.Controls.Add(this.label1);
+            this.action_panel.Location = new System.Drawing.Point(12, 21);
+            this.action_panel.Name = "action_panel";
+            this.action_panel.Size = new System.Drawing.Size(303, 85);
+            this.action_panel.TabIndex = 4;
             // 
             // loadFrame
             // 
@@ -424,22 +429,22 @@
             this.Framelist.AutoScroll = true;
             this.Framelist.BackColor = System.Drawing.Color.Transparent;
             this.Framelist.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.Framelist.Controls.Add(this.pictureBox1);
+            this.Framelist.Controls.Add(this.Robot_pictureBox);
             this.Framelist.Location = new System.Drawing.Point(3, 3);
             this.Framelist.Name = "Framelist";
             this.Framelist.Size = new System.Drawing.Size(694, 470);
             this.Framelist.TabIndex = 5;
             // 
-            // pictureBox1
+            // Robot_pictureBox
             // 
-            this.pictureBox1.BackColor = System.Drawing.Color.Transparent;
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(694, 470);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
+            this.Robot_pictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.Robot_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Robot_pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.Robot_pictureBox.Name = "Robot_pictureBox";
+            this.Robot_pictureBox.Size = new System.Drawing.Size(694, 470);
+            this.Robot_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Robot_pictureBox.TabIndex = 0;
+            this.Robot_pictureBox.TabStop = false;
             // 
             // fast
             // 
@@ -511,28 +516,29 @@
             this.capturebutton.UseVisualStyleBackColor = true;
             this.capturebutton.Click += new System.EventHandler(this.capturebutton_Click);
             // 
-            // groupBox3
+            // Motion_groupBox
             // 
-            this.groupBox3.Controls.Add(this.MotionConfig);
-            this.groupBox3.Controls.Add(this.motion_stop);
-            this.groupBox3.Controls.Add(this.motion_pause);
-            this.groupBox3.Controls.Add(this.move_down);
-            this.groupBox3.Controls.Add(this.move_up);
-            this.groupBox3.Controls.Add(this.textBox1);
-            this.groupBox3.Controls.Add(this.MotionTest);
-            this.groupBox3.Controls.Add(this.NewMotion);
-            this.groupBox3.Controls.Add(this.MotionCombo);
-            this.groupBox3.Location = new System.Drawing.Point(739, 28);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(273, 601);
-            this.groupBox3.TabIndex = 3;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "Motion";
+            this.Motion_groupBox.Controls.Add(this.MotionConfig);
+            this.Motion_groupBox.Controls.Add(this.motion_stop);
+            this.Motion_groupBox.Controls.Add(this.motion_pause);
+            this.Motion_groupBox.Controls.Add(this.move_down);
+            this.Motion_groupBox.Controls.Add(this.move_up);
+            this.Motion_groupBox.Controls.Add(this.MotionNameLabel);
+            this.Motion_groupBox.Controls.Add(this.MotionTest);
+            this.Motion_groupBox.Controls.Add(this.NewMotion);
+            this.Motion_groupBox.Controls.Add(this.MotionCombo);
+            this.Motion_groupBox.Location = new System.Drawing.Point(739, 28);
+            this.Motion_groupBox.Name = "Motion_groupBox";
+            this.Motion_groupBox.Size = new System.Drawing.Size(273, 601);
+            this.Motion_groupBox.TabIndex = 3;
+            this.Motion_groupBox.TabStop = false;
+            this.Motion_groupBox.Text = "Motion";
             // 
             // MotionConfig
             // 
             this.MotionConfig.Controls.Add(this.ActionList);
             this.MotionConfig.Controls.Add(this.MotionTrigger);
+            this.MotionConfig.Controls.Add(this.MotionProperty);
             this.MotionConfig.Location = new System.Drawing.Point(7, 66);
             this.MotionConfig.Name = "MotionConfig";
             this.MotionConfig.SelectedIndex = 0;
@@ -1018,6 +1024,52 @@
             this.AlwaysOn.UseVisualStyleBackColor = true;
             this.AlwaysOn.CheckedChanged += new System.EventHandler(this.AlwaysOn_CheckedChanged);
             // 
+            // MotionProperty
+            // 
+            this.MotionProperty.Controls.Add(this.NonBlocking);
+            this.MotionProperty.Controls.Add(this.Blocking);
+            this.MotionProperty.Controls.Add(this.MotionPropertyLabel);
+            this.MotionProperty.Location = new System.Drawing.Point(4, 22);
+            this.MotionProperty.Name = "MotionProperty";
+            this.MotionProperty.Padding = new System.Windows.Forms.Padding(3);
+            this.MotionProperty.Size = new System.Drawing.Size(223, 462);
+            this.MotionProperty.TabIndex = 2;
+            this.MotionProperty.Text = "Property";
+            this.MotionProperty.UseVisualStyleBackColor = true;
+            // 
+            // NonBlocking
+            // 
+            this.NonBlocking.AutoSize = true;
+            this.NonBlocking.Location = new System.Drawing.Point(15, 45);
+            this.NonBlocking.Name = "NonBlocking";
+            this.NonBlocking.Size = new System.Drawing.Size(88, 16);
+            this.NonBlocking.TabIndex = 2;
+            this.NonBlocking.TabStop = true;
+            this.NonBlocking.Text = "Non-blocking";
+            this.NonBlocking.UseVisualStyleBackColor = true;
+            this.NonBlocking.CheckedChanged += new System.EventHandler(this.NonBlocking_CheckedChanged);
+            // 
+            // Blocking
+            // 
+            this.Blocking.AutoSize = true;
+            this.Blocking.Location = new System.Drawing.Point(15, 23);
+            this.Blocking.Name = "Blocking";
+            this.Blocking.Size = new System.Drawing.Size(66, 16);
+            this.Blocking.TabIndex = 1;
+            this.Blocking.TabStop = true;
+            this.Blocking.Text = "Blocking";
+            this.Blocking.UseVisualStyleBackColor = true;
+            this.Blocking.CheckedChanged += new System.EventHandler(this.Blocking_CheckedChanged);
+            // 
+            // MotionPropertyLabel
+            // 
+            this.MotionPropertyLabel.AutoSize = true;
+            this.MotionPropertyLabel.Location = new System.Drawing.Point(7, 4);
+            this.MotionPropertyLabel.Name = "MotionPropertyLabel";
+            this.MotionPropertyLabel.Size = new System.Drawing.Size(181, 12);
+            this.MotionPropertyLabel.TabIndex = 0;
+            this.MotionPropertyLabel.Text = "Set properties of the choosed motion :";
+            // 
             // motion_stop
             // 
             this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
@@ -1070,15 +1122,15 @@
             this.move_up.UseVisualStyleBackColor = true;
             this.move_up.Click += new System.EventHandler(this.motionlist_up);
             // 
-            // textBox1
+            // MotionNameLabel
             // 
-            this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(7, 18);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(100, 15);
-            this.textBox1.TabIndex = 4;
-            this.textBox1.Text = "Motion Name:";
+            this.MotionNameLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.MotionNameLabel.Location = new System.Drawing.Point(7, 18);
+            this.MotionNameLabel.Name = "MotionNameLabel";
+            this.MotionNameLabel.ReadOnly = true;
+            this.MotionNameLabel.Size = new System.Drawing.Size(100, 15);
+            this.MotionNameLabel.TabIndex = 4;
+            this.MotionNameLabel.Text = "Motion Name:";
             // 
             // MotionTest
             // 
@@ -1153,22 +1205,22 @@
             this.ttp.ShowAlways = true;
             this.ttp.UseFading = false;
             // 
-            // groupBox4
+            // Setting_groupBox
             // 
-            this.groupBox4.Controls.Add(this.fast);
-            this.groupBox4.Controls.Add(this.motorRelease);
-            this.groupBox4.Controls.Add(this.slow);
-            this.groupBox4.Controls.Add(this.capturebutton);
-            this.groupBox4.Controls.Add(this.sync_speed);
-            this.groupBox4.Controls.Add(this.autocheck);
-            this.groupBox4.Location = new System.Drawing.Point(13, 28);
-            this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(720, 60);
-            this.groupBox4.TabIndex = 15;
-            this.groupBox4.TabStop = false;
-            this.groupBox4.Text = "Edit Settings";
+            this.Setting_groupBox.Controls.Add(this.fast);
+            this.Setting_groupBox.Controls.Add(this.motorRelease);
+            this.Setting_groupBox.Controls.Add(this.slow);
+            this.Setting_groupBox.Controls.Add(this.capturebutton);
+            this.Setting_groupBox.Controls.Add(this.sync_speed);
+            this.Setting_groupBox.Controls.Add(this.autocheck);
+            this.Setting_groupBox.Location = new System.Drawing.Point(13, 28);
+            this.Setting_groupBox.Name = "Setting_groupBox";
+            this.Setting_groupBox.Size = new System.Drawing.Size(720, 60);
+            this.Setting_groupBox.TabIndex = 15;
+            this.Setting_groupBox.TabStop = false;
+            this.Setting_groupBox.Text = "Edit Settings";
             // 
-            // Form1
+            // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -1177,30 +1229,30 @@
             this.Controls.Add(this.GenerateAllInOne);
             this.Controls.Add(this.Generate);
             this.Controls.Add(this.menuStrip1);
-            this.Controls.Add(this.groupBox3);
-            this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.groupBox4);
+            this.Controls.Add(this.Motion_groupBox);
+            this.Controls.Add(this.Action_groupBox);
+            this.Controls.Add(this.Setting_groupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.menuStrip1;
             this.MaximumSize = new System.Drawing.Size(1040, 736);
             this.MinimumSize = new System.Drawing.Size(1040, 736);
-            this.Name = "Form1";
+            this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "86Duino Motion Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
+            this.Action_groupBox.ResumeLayout(false);
+            this.Hint_groupBox.ResumeLayout(false);
+            this.action_panel.ResumeLayout(false);
+            this.action_panel.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.Framelist.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.Robot_pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).EndInit();
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
+            this.Motion_groupBox.ResumeLayout(false);
+            this.Motion_groupBox.PerformLayout();
             this.MotionConfig.ResumeLayout(false);
             this.ActionList.ResumeLayout(false);
             this.MotionTrigger.ResumeLayout(false);
@@ -1213,8 +1265,10 @@
             this.Keyboard_groupBox.PerformLayout();
             this.Always_groupBox.ResumeLayout(false);
             this.Always_groupBox.PerformLayout();
-            this.groupBox4.ResumeLayout(false);
-            this.groupBox4.PerformLayout();
+            this.MotionProperty.ResumeLayout(false);
+            this.MotionProperty.PerformLayout();
+            this.Setting_groupBox.ResumeLayout(false);
+            this.Setting_groupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1236,11 +1290,11 @@
         private System.Windows.Forms.ToolStripMenuItem flagToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gotoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem delayToolStripMenuItem;
-        private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.GroupBox Action_groupBox;
+        private System.Windows.Forms.GroupBox Motion_groupBox;
         private System.Windows.Forms.ListBox Motionlist;
         private System.Windows.Forms.ComboBox MotionCombo;
-        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Panel action_panel;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.MaskedTextBox delaytext;
         private System.Windows.Forms.Label label2;
@@ -1252,15 +1306,15 @@
         private System.Windows.Forms.CheckBox autocheck;
         private System.Windows.Forms.Panel Framelist;
         private System.Windows.Forms.Panel panel2;
-        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.GroupBox Hint_groupBox;
         private System.Windows.Forms.Button Generate;
         private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editToolStripMenuItem;
         private System.Windows.Forms.Button GenerateAllInOne;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.TextBox textBox1;
-        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.RichTextBox hint_richTextBox;
+        private System.Windows.Forms.TextBox MotionNameLabel;
+        private System.Windows.Forms.PictureBox Robot_pictureBox;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.Button motorRelease;
         private System.Windows.Forms.Button move_down;
@@ -1272,7 +1326,7 @@
         private System.Windows.Forms.Label fast;
         private System.Windows.Forms.Label slow;
         private System.Windows.Forms.ToolTip ttp;
-        private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.GroupBox Setting_groupBox;
         private System.Windows.Forms.TabControl MotionConfig;
         private System.Windows.Forms.TabPage ActionList;
         private System.Windows.Forms.TabPage MotionTrigger;
@@ -1311,6 +1365,10 @@
         private System.Windows.Forms.Label btBaudLabel;
         private System.Windows.Forms.Button saveFrame;
         private System.Windows.Forms.Button loadFrame;
+        private System.Windows.Forms.TabPage MotionProperty;
+        private System.Windows.Forms.RadioButton NonBlocking;
+        private System.Windows.Forms.RadioButton Blocking;
+        private System.Windows.Forms.Label MotionPropertyLabel;
     }
 }
 

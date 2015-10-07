@@ -19,11 +19,11 @@ namespace _86ME_ver1
             var execute = sform.ShowDialog();
             if (execute == DialogResult.Yes)
             {
-                Form1 f1;
+                Main f1;
                 if (args.Length > 0)
-                    f1 = new Form1(args[0]);
+                    f1 = new Main(args[0]);
                 else
-                    f1 = new Form1();
+                    f1 = new Main();
                 f1.com_port = sform.com_port;
                 f1.connect_comport();
                 Application.Run(f1);

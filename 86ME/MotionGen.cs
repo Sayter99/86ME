@@ -11,6 +11,7 @@ namespace _86ME_ver1
     enum keyboard_method { first, pressed, release };
     enum auto_method { on, off, title };
     enum serial_ports { serial1, serial2, serial3};
+    enum motion_property { blocking, nonblocking };
 
     public class generate_sketches
     {

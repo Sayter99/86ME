@@ -25,7 +25,7 @@ using System.Media;
 
 namespace _86ME_ver1
 {
-    public partial class Form1 : Form
+    public partial class Main : Form
     {
         string bt_port = "Serial1";
         string bt_baud = "9600";
@@ -75,29 +75,29 @@ namespace _86ME_ver1
                                 "Add new action at the first field",
                                 "Insert an intermediate frame"};
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
-        public Form1()
+        public Main()
         {
             InitializeComponent();
             saveFrame.Visible = false;
             loadFrame.Visible = false;
-            groupBox1.Enabled = false;
-            groupBox2.Enabled = false;
-            groupBox3.Enabled = false;
-            groupBox4.Enabled = false;
+            Action_groupBox.Enabled = false;
+            Hint_groupBox.Enabled = false;
+            Motion_groupBox.Enabled = false;
+            Setting_groupBox.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
         }
 
-        public Form1(string filename)
+        public Main(string filename)
         {
             InitializeComponent();
             saveFrame.Visible = false;
             loadFrame.Visible = false;
-            groupBox1.Enabled = false;
-            groupBox2.Enabled = false;
-            groupBox3.Enabled = false;
-            groupBox4.Enabled = false;
+            Action_groupBox.Enabled = false;
+            Hint_groupBox.Enabled = false;
+            Motion_groupBox.Enabled = false;
+            Setting_groupBox.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
@@ -539,8 +539,8 @@ namespace _86ME_ver1
             {
                 load_filename = "";
                 Motion = nMotion;
-                groupBox2.Enabled = true;
-                groupBox3.Enabled = true;
+                Hint_groupBox.Enabled = true;
+                Motion_groupBox.Enabled = true;
                 saveFileToolStripMenuItem.Enabled = true;
                 editToolStripMenuItem.Enabled = true;
                 NewMotion.Enabled = false;
@@ -580,15 +580,15 @@ namespace _86ME_ver1
                     }
                 }
 
-                if(pictureBox1.Image != null)
-                    pictureBox1.Image = null;
+                if(Robot_pictureBox.Image != null)
+                    Robot_pictureBox.Image = null;
                 if (nMotion.picfilename != null)
                 {
                     picture_name = nMotion.picfilename;
                     draw_background();
                 }
                 this.MotionConfig.SelectedIndex = 0;
-                this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
+                this.hint_richTextBox.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
             }
         }
 
@@ -625,7 +625,7 @@ namespace _86ME_ver1
                     picture_name = Motion.picfilename;
                     try
                     {
-                        pictureBox1.Image = Image.FromFile(Motion.picfilename);
+                        Robot_pictureBox.Image = Image.FromFile(Motion.picfilename);
                     }
                     catch
                     {
@@ -830,7 +830,7 @@ namespace _86ME_ver1
 
                     }
                 }
-                writer.Write("MotionEnd " + m.name);
+                writer.Write("MotionEnd " + m.property + " " + m.name);
                 if (i != ME_Motionlist.Count - 1)
                     writer.Write("\n");
             }
@@ -1128,6 +1128,12 @@ namespace _86ME_ver1
                     else if (String.Compare(datas[i], "MotionEnd") == 0)
                     {
                         i++;
+                        int try_out;
+                        if (int.TryParse(datas[i], out try_out) == true)
+                            motiontag.property = try_out;
+                        else
+                            i--;
+                        i++;
                         if (motiontag != null)
                             if (String.Compare(datas[i], motiontag.name) == 0)
                                 motiontag = null;
@@ -1280,7 +1286,7 @@ namespace _86ME_ver1
                 picture_name = nMotion.picfilename;
                 try
                 {
-                    pictureBox1.Image = Image.FromFile(nMotion.picfilename);
+                    Robot_pictureBox.Image = Image.FromFile(nMotion.picfilename);
                 }
                 catch
                 {
@@ -1291,13 +1297,13 @@ namespace _86ME_ver1
             else
             {
                 nMotion.picfilename = null;
-                pictureBox1.Image = null;
+                Robot_pictureBox.Image = null;
             }
 
             initPs2();
 
-            groupBox2.Enabled = true;
-            groupBox3.Enabled = true;
+            Hint_groupBox.Enabled = true;
+            Motion_groupBox.Enabled = true;
             editToolStripMenuItem.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
             NewMotion.Enabled = false;
@@ -1311,7 +1317,7 @@ namespace _86ME_ver1
 
             if (MotionCombo.Items.Count > 0)
                 MotionCombo.SelectedIndex = 0;
-            this.richTextBox1.Text =
+            this.hint_richTextBox.Text =
                             "   ___   __   ____        _\n" +
                             "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
                             "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
@@ -1352,9 +1358,9 @@ namespace _86ME_ver1
                 Update_framelist();
                 new_obj = false;
                 if(Motion.picfilename == null)
-                    this.richTextBox1.Text = "Tune the settings of motors\n↓\n↓\n↓";
+                    this.hint_richTextBox.Text = "Tune the settings of motors\n↓\n↓\n↓";
                 else
-                    this.richTextBox1.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓";
+                    this.hint_richTextBox.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "HomeFrame") == 0)
             {
@@ -1379,7 +1385,7 @@ namespace _86ME_ver1
                 Update_framelist();
                 Framelist.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Homeframe just can be modified by\nOptions -> Robot Configuration";
+                this.hint_richTextBox.Text = "Homeframe just can be modified by\nOptions -> Robot Configuration";
             }
             else if (String.Compare(typecombo.Text, "Delay") == 0)
             {
@@ -1397,7 +1403,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "\n\n\n<--- Set the delay you want";
+                this.hint_richTextBox.Text = "\n\n\n<--- Set the delay you want";
             }
             else if (String.Compare(typecombo.Text, "Sound") == 0)
             {
@@ -1441,7 +1447,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set the name of the flag\n↓\n↓\n↓";
+                this.hint_richTextBox.Text = "Set the name of the flag\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Goto") == 0)
             {
@@ -1459,7 +1465,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.richTextBox1.Text = "Set target Flag Name and the number of loops\n↓\n↓\n↓";
+                this.hint_richTextBox.Text = "Set target Flag Name and the number of loops\n↓\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1535,15 +1541,22 @@ namespace _86ME_ver1
             ps2CLKCombo.Text = ps2pins[3];
             ps2KeyCombo.Text = m.ps2_key;
             ps2TypeCombo.SelectedIndex = m.ps2_type;
+            // Motion Property Part
+            Blocking.Enabled = true;
+            NonBlocking.Enabled = true;
+            if (m.property == (int)motion_property.blocking)
+                Blocking.Checked = true;
+            else if (m.property == (int)motion_property.nonblocking)
+                NonBlocking.Checked = true;
             if (MotionConfig.SelectedIndex == 0)
-                this.richTextBox1.Text =
+                this.hint_richTextBox.Text =
                             "   ___   __   ____        _\n" +
                             "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
                             "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
                             " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
                             "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
             else
-                this.richTextBox1.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
+                this.hint_richTextBox.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1607,8 +1620,8 @@ namespace _86ME_ver1
                 move_up.Enabled = true;
                 move_down.Enabled = true;
                 current_motionlist_idx = Motionlist.SelectedIndex;
-                groupBox1.Enabled = true;
-                groupBox4.Enabled = true;
+                Action_groupBox.Enabled = true;
+                Setting_groupBox.Enabled = true;
                 string[] datas = Motionlist.SelectedItem.ToString().Split(' ');
                 if (String.Compare(datas[0], "[Frame]") == 0)
                 {
@@ -1819,7 +1832,7 @@ namespace _86ME_ver1
                     xtext2.Size = new Size(160, 22);
                     xtext2.Left += 100;
                     xtext2.Top += 62;
-                    this.richTextBox1.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓";
+                    this.hint_richTextBox.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓";
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xlabel2);
@@ -2071,8 +2084,8 @@ namespace _86ME_ver1
                 MotionTest.Enabled = false;
                 motion_pause.Enabled = false;
                 motion_stop.Enabled = false;
-                groupBox1.Enabled = false;
-                groupBox4.Enabled = false;
+                Action_groupBox.Enabled = false;
+                Setting_groupBox.Enabled = false;
             }
             else if (MotionConfig.SelectedIndex == 1)
             {
@@ -2092,8 +2105,8 @@ namespace _86ME_ver1
                 MotionTest.Enabled = false;
                 motion_pause.Enabled = false;
                 motion_stop.Enabled = false;
-                groupBox1.Enabled = false;
-                groupBox4.Enabled = false;
+                Action_groupBox.Enabled = false;
+                Setting_groupBox.Enabled = false;
                 //Motion Config
                 Always_radioButton.Enabled = false;
                 Keyboard_radioButton.Enabled = false;
@@ -2104,7 +2117,30 @@ namespace _86ME_ver1
                 bt_groupBox.Enabled = false;
                 ps2_groupBox.Enabled = false;
             }
-            this.richTextBox1.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
+            else if (MotionConfig.SelectedIndex == 2)
+            {
+                saveFrame.Visible = false;
+                loadFrame.Visible = false;
+                Boolean new_mot = true;
+                NewMotion.Enabled = false;
+                if (String.Compare(MotionCombo.Text, "") == 0)
+                    new_mot = false;
+                for (int i = 0; i < MotionCombo.Items.Count; i++)
+                    if (String.Compare(MotionCombo.Text, MotionCombo.Items[i].ToString()) == 0)
+                        new_mot = false;
+                if (new_mot)
+                {
+                    NewMotion.Enabled = true;
+                }
+                MotionTest.Enabled = false;
+                motion_pause.Enabled = false;
+                motion_stop.Enabled = false;
+                Action_groupBox.Enabled = false;
+                Setting_groupBox.Enabled = false;
+                Blocking.Enabled = false;
+                NonBlocking.Enabled = false;
+            }
+            this.hint_richTextBox.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
         }
 
         private void NewMotion_Click(object sender, EventArgs e)
@@ -2131,7 +2167,7 @@ namespace _86ME_ver1
                 draw_background();
                 MotionConfig.SelectedIndex = 0;
                 Motionlist.Focus();
-                this.richTextBox1.Text = "\n\n\n\nRight click in the white region and add an action --->";
+                this.hint_richTextBox.Text = "\n\n\n\nRight click in the white region and add an action --->";
             }
             else
             {
@@ -2185,7 +2221,7 @@ namespace _86ME_ver1
                 uint[] frame = new uint[45];
                 if (servo_captured() == false)
                 {
-                    this.richTextBox1.Text = "\n\n\n\tThe used motors don't support Capture";
+                    this.hint_richTextBox.Text = "\n\n\n\tThe used motors don't support Capture";
                 }
                 else
                 {
@@ -2283,7 +2319,7 @@ namespace _86ME_ver1
                     motion_stop.Enabled = true;
                     if (sp != null)
                         sp.Stop();
-                    this.richTextBox1.Text =
+                    this.hint_richTextBox.Text =
                             "   ___   __   ____        _\n" +
                             "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
                             "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
@@ -2370,7 +2406,7 @@ namespace _86ME_ver1
             }
             if (sp != null)
                 sp.Stop();
-            this.richTextBox1.Text =
+            this.hint_richTextBox.Text =
                     "   ___   __   ____        _\n" +
                     "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
                     "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
@@ -2411,7 +2447,7 @@ namespace _86ME_ver1
                 Framelist.Enabled = false;
                 MotionCombo.Enabled = true;
                 MotionConfig.Enabled = true;
-                this.richTextBox1.Text =
+                this.hint_richTextBox.Text =
                         "   ___   __   ____        _\n" +
                         "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
                         "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
@@ -2525,14 +2561,14 @@ namespace _86ME_ver1
             {
                 try
                 {
-                    pictureBox1.Image = Image.FromFile(Motion.picfilename);
+                    Robot_pictureBox.Image = Image.FromFile(Motion.picfilename);
                 }
                 catch
                 {
                     MessageBox.Show("Cannot load background image");
                 }
             }
-            Framelist.Controls.Add(pictureBox1);
+            Framelist.Controls.Add(Robot_pictureBox);
         }
 
         private void update_motionlist()
@@ -2541,8 +2577,8 @@ namespace _86ME_ver1
             //{
             //    autocheck.Checked = false;
             //}
-            groupBox1.Enabled = false;
-            groupBox4.Enabled = false;
+            Action_groupBox.Enabled = false;
+            Setting_groupBox.Enabled = false;
             Motionlist.Items.Clear();
             framecount = 0;
             homecount = 0;
@@ -2649,15 +2685,12 @@ namespace _86ME_ver1
         {
             if(MotionConfig.SelectedIndex == 0)
             {
-                //update_motionlist();
-                //move_down.Enabled = true;
-                //move_up.Enabled = true;
                 Motionlist.SelectedIndex = -1;
                 Framelist.Enabled = true;
                 autocheck.Enabled = true;
                 capturebutton.Enabled = true;
                 delaytext.Enabled = true;
-                this.richTextBox1.Text =
+                this.hint_richTextBox.Text =
                     "   ___   __   ____        _\n" +
                     "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
                     "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
@@ -2666,6 +2699,8 @@ namespace _86ME_ver1
             }
             else if(MotionConfig.SelectedIndex == 1)
             {
+                saveFrame.Visible = false;
+                loadFrame.Visible = false;
                 typecombo.Text = "";
                 move_down.Enabled = false;
                 move_up.Enabled = false;
@@ -2719,8 +2754,40 @@ namespace _86ME_ver1
                     ps2ATTCombo.Text = ps2pins[2];
                     ps2CLKCombo.Text = ps2pins[3];
                 }
-                this.richTextBox1.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
+                this.hint_richTextBox.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
             }
+            else if(MotionConfig.SelectedIndex == 2)
+            {
+                saveFrame.Visible = false;
+                loadFrame.Visible = false;
+                typecombo.Text = "";
+                move_down.Enabled = false;
+                move_up.Enabled = false;
+                Framelist.Enabled = false;
+                autocheck.Enabled = false;
+                capturebutton.Enabled = false;
+                delaytext.Enabled = false;
+                if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
+                {
+                    Blocking.Enabled = false;
+                    NonBlocking.Enabled = false;
+                }
+                this.hint_richTextBox.Text = "\n\n\n\n\t      Set properties of the choosed motion --->";
+            }
+        }
+
+        private void NonBlocking_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                if (NonBlocking.Checked == true)
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).property = (int)motion_property.nonblocking;
+        }
+
+        private void Blocking_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                if (Blocking.Checked == true)
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).property = (int)motion_property.blocking;
         }
 
         private void Always_radioButton_CheckedChanged(object sender, EventArgs e)
