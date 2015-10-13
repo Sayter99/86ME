@@ -827,7 +827,11 @@ namespace _86ME_ver1
                     {
                         ME_Flag fl = (ME_Flag)m.Events[j];
                         writer.Write("flag " + fl.name + "\n");
-
+                    }
+                    else if (m.Events[j] is ME_Trigger)
+                    {
+                        ME_Trigger t = (ME_Trigger)m.Events[j];
+                        writer.Write("trigger " + t.name + " " + t.method + "\n");
                     }
                 }
                 writer.Write("MotionEnd " + m.property + " " + m.name);
@@ -1276,6 +1280,13 @@ namespace _86ME_ver1
 
                         motiontag.Events.Add(ngoto);
                     }
+                    else if (String.Compare(datas[i], "trigger") == 0)
+                    {
+                        ME_Trigger ntr = new ME_Trigger();
+                        ntr.name = datas[++i];
+                        ntr.method = int.Parse(datas[++i]);
+                        motiontag.Events.Add(ntr);
+                    }
                 }
             }
 
@@ -1326,7 +1337,7 @@ namespace _86ME_ver1
             MessageBox.Show(filename + " is loaded");
         }
 
-        private void Form1_Load(object sender, EventArgs e)
+        private void Main_Load(object sender, EventArgs e)
         {
             MotionTest.Enabled = false;
             motion_pause.Enabled = false;
@@ -1451,7 +1462,6 @@ namespace _86ME_ver1
             }
             else if (String.Compare(typecombo.Text, "Goto") == 0)
             {
-                
                 if(new_obj){
                     Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Goto]");
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Goto());
@@ -1466,6 +1476,26 @@ namespace _86ME_ver1
                 typecombo.Enabled = false;
                 new_obj = false;
                 this.hint_richTextBox.Text = "Set target Flag Name and the number of loops\n↓\n↓\n↓";
+            }
+            else if (String.Compare(typecombo.Text, "Motion") == 0)
+            {
+                if (new_obj)
+                {
+                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Motion]");
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Trigger());
+                    Motionlist.SelectedIndex++;
+                }
+                delaytext.Text = "";
+                delaytext.Enabled = false;
+                label2.Enabled = false;
+                Framelist.Enabled = true;
+                capturebutton.Enabled = false;
+                autocheck.Enabled = false;
+                typecombo.Enabled = false;
+                new_obj = false;
+                this.hint_richTextBox.Text = "Set the method to trigger this motion. " + 
+                                             "The motion will be effective in generated sketches, INEFFECTIVE in the testing stage." + 
+                                             "\n↓\n↓";
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1571,6 +1601,24 @@ namespace _86ME_ver1
                 ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((MaskedTextBox)sender).Text;
                 Motionlist.Items[current_motionlist_idx] = "[Goto] " + ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
             }
+        }
+
+        private void triggerMotion_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((ComboBox)sender).Text;
+            Motionlist.Items[current_motionlist_idx] = "[Motion] " + ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+        }
+
+        private void callRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if(((RadioButton)sender).Checked == true )
+                ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method = (int)internal_trigger.call;
+        }
+
+        private void jumpRadio_CheckedChanged(object sender, EventArgs e)
+        {
+            if (((RadioButton)sender).Checked == true)
+                ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method = (int)internal_trigger.jump;
         }
 
         private void enable_goto(object sender, EventArgs e)
@@ -1846,6 +1894,59 @@ namespace _86ME_ver1
                     xtext.SelectionStart = xtext.Text.Length;
                     xtext.Focus();
                 }
+                else if (String.Compare(datas[0], "[Motion]") == 0)
+                {
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
+                    this.label2.Text = "Delay:";
+                    typecombo.SelectedIndex = 5;
+                    typecombo.Text = "Motion";
+                    Framelist.Controls.Clear();
+                    Label xlabel = new Label();
+                    xlabel.Text = "Motion: ";
+                    xlabel.Size = new Size(50, 20);
+                    Label xlabel2 = new Label();
+                    xlabel2.Text = "Method: ";
+                    xlabel2.Size = new Size(50, 20);
+
+                    ComboBox xcombo = new ComboBox();
+                    xcombo.Size = new Size(160, 22);
+                    RadioButton call_radio = new RadioButton();
+                    RadioButton jump_radio = new RadioButton();
+                    
+                    for (int i = 0; i < MotionCombo.Items.Count; i++)
+                        xcombo.Items.Add(((ME_Motion)ME_Motionlist[i]).name);
+                    call_radio.Text = "Call";
+                    jump_radio.Text = "Jump";
+
+                    xcombo.Text = ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+                    if (((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method == (int)internal_trigger.call)
+                        call_radio.Checked = true;
+                    else
+                        jump_radio.Checked = true;
+
+                    xcombo.DropDownStyle = ComboBoxStyle.DropDownList;
+
+                    xcombo.SelectedIndexChanged += new EventHandler(triggerMotion_SelectedIndexChanged);
+                    call_radio.CheckedChanged += new EventHandler(callRadio_CheckedChanged);
+                    jump_radio.CheckedChanged += new EventHandler(jumpRadio_CheckedChanged);
+
+                    xlabel.Top += 3;
+                    xlabel2.Top += 25;
+                    xcombo.Left += 50;
+                    call_radio.Top += 45;
+                    call_radio.Left += 10;
+                    jump_radio.Top += 67;
+                    jump_radio.Left += 10;
+                    Framelist.Controls.Add(xlabel);
+                    Framelist.Controls.Add(xcombo);
+                    Framelist.Controls.Add(xlabel2);
+                    Framelist.Controls.Add(jump_radio);
+                    Framelist.Controls.Add(call_radio);
+                    Framelist.Enabled = true;
+
+                    draw_background();
+                }
             }
         }
 
@@ -1883,36 +1984,36 @@ namespace _86ME_ver1
                 if (Motionlist.SelectedItem == null)
                 {
                     motionToolStripMenuItem.Text = "Add new action at the first field";
-                    contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
-                    contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
-                    contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
-                    contextMenuStrip1.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                    Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
+                    Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
+                    Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
+                    Motionlist_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
                     Framelist.Enabled = false;
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
                 {
                     motionToolStripMenuItem.Text = "Add new action at the next field";
-                    contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
+                    Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
 
                     if ((((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count - 1) > Motionlist.SelectedIndex)
                         if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1] is ME_Frame)
-                            contextMenuStrip1.Items.Add("Insert an intermediate frame");
+                            Motionlist_contextMenuStrip.Items.Add("Insert an intermediate frame");
 
                     for (int i = 2; i < motionevent.Length - 2; i++)
-                        contextMenuStrip1.Items.Add(motionevent[i]);
-                    contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
-                    contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
-                    contextMenuStrip1.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                        Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
+                    Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
+                    Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
+                    Motionlist_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
                 }
                 else if (Motionlist.SelectedItem != null)
                 {
                     motionToolStripMenuItem.Text = "Add new action at the next field";
-                    contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
+                    Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
                     for (int i = 2; i < motionevent.Length - 3; i++)
-                        contextMenuStrip1.Items.Add(motionevent[i]);
-                    contextMenuStrip1.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
-                    contextMenuStrip1.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
-                    contextMenuStrip1.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                        Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
+                    Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
+                    Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
+                    Motionlist_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
                 }
             }
         }
@@ -2008,9 +2109,9 @@ namespace _86ME_ver1
 
         private void Motionlistcloseevent(object sender, EventArgs e)
         {
-            contextMenuStrip1.Items.Clear();
-            contextMenuStrip1.ItemClicked -= Motionlistevent;
-            contextMenuStrip1.Closed -= Motionlistcloseevent;
+            Motionlist_contextMenuStrip.Items.Clear();
+            Motionlist_contextMenuStrip.ItemClicked -= Motionlistevent;
+            Motionlist_contextMenuStrip.Closed -= Motionlistcloseevent;
         }
 
         private void frameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2059,6 +2160,14 @@ namespace _86ME_ver1
             d.delay = default_delay;
             Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Delay]");
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, d);
+            Motionlist.SelectedIndex++;
+        }
+
+        private void triggerToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ME_Trigger t = new ME_Trigger();
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Motion]");
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, t);
             Motionlist.SelectedIndex++;
         }
 
@@ -2176,7 +2285,7 @@ namespace _86ME_ver1
             }
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        private void Main_FormClosing(object sender, FormClosingEventArgs e)
         {
             bool close = true;
             if (needToSave() && File.Exists(load_filename))
@@ -2573,10 +2682,6 @@ namespace _86ME_ver1
 
         private void update_motionlist()
         {
-            //if (autocheck.Checked == true)
-            //{
-            //    autocheck.Checked = false;
-            //}
             Action_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
             Motionlist.Items.Clear();
@@ -2630,6 +2735,11 @@ namespace _86ME_ver1
                         {
                             ME_Flag fl = (ME_Flag)m.Events[j];
                             Motionlist.Items.Add("[Flag] " + fl.name);
+                        }
+                        else if (m.Events[j] is ME_Trigger)
+                        {
+                            ME_Trigger t = (ME_Trigger)m.Events[j];
+                            Motionlist.Items.Add("[Motion] " + t.name);
                         }
                     }
                     break;

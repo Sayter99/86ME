@@ -30,7 +30,7 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
-            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.Main_menuStrip = new System.Windows.Forms.MenuStrip();
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.actionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,6 +48,7 @@
             this.flagToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.gotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.delayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.triggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Action_groupBox = new System.Windows.Forms.GroupBox();
             this.Hint_groupBox = new System.Windows.Forms.GroupBox();
             this.hint_richTextBox = new System.Windows.Forms.RichTextBox();
@@ -119,11 +120,11 @@
             this.NewMotion = new System.Windows.Forms.Button();
             this.MotionCombo = new System.Windows.Forms.ComboBox();
             this.Generate = new System.Windows.Forms.Button();
-            this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.Motionlist_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.menuStrip1.SuspendLayout();
+            this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
             this.action_panel.SuspendLayout();
@@ -143,18 +144,18 @@
             this.Setting_groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
-            // menuStrip1
+            // Main_menuStrip
             // 
-            this.menuStrip1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
-            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.Main_menuStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
+            this.Main_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.optionsToolStripMenuItem,
             this.helpToolStripMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
-            this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(1024, 24);
-            this.menuStrip1.TabIndex = 0;
-            this.menuStrip1.Text = "menuStrip1";
+            this.Main_menuStrip.Location = new System.Drawing.Point(0, 0);
+            this.Main_menuStrip.Name = "Main_menuStrip";
+            this.Main_menuStrip.Size = new System.Drawing.Size(1024, 24);
+            this.Main_menuStrip.TabIndex = 0;
+            this.Main_menuStrip.Text = "menuStrip1";
             // 
             // newToolStripMenuItem
             // 
@@ -247,7 +248,8 @@
             this.homeToolStripMenuItem,
             this.flagToolStripMenuItem,
             this.gotoToolStripMenuItem,
-            this.delayToolStripMenuItem});
+            this.delayToolStripMenuItem,
+            this.triggerToolStripMenuItem});
             this.motionToolStripMenuItem.Name = "motionToolStripMenuItem";
             this.motionToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
             this.motionToolStripMenuItem.Text = "Add new action at the first field";
@@ -286,6 +288,13 @@
             this.delayToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
             this.delayToolStripMenuItem.Text = "Delay";
             this.delayToolStripMenuItem.Click += new System.EventHandler(this.delayToolStripMenuItem_Click);
+            // 
+            // triggerToolStripMenuItem
+            // 
+            this.triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
+            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.triggerToolStripMenuItem.Text = "Motion";
+            this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
             // 
             // Action_groupBox
             // 
@@ -397,7 +406,8 @@
             "Delay",
             "Goto",
             "Flag",
-            "HomeFrame"});
+            "HomeFrame",
+            "Motion"});
             this.typecombo.Location = new System.Drawing.Point(84, 10);
             this.typecombo.Name = "typecombo";
             this.typecombo.Size = new System.Drawing.Size(91, 20);
@@ -1179,10 +1189,10 @@
             this.Generate.UseVisualStyleBackColor = true;
             this.Generate.Click += new System.EventHandler(this.Generate_Click);
             // 
-            // contextMenuStrip1
+            // Motionlist_contextMenuStrip
             // 
-            this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(61, 4);
+            this.Motionlist_contextMenuStrip.Name = "contextMenuStrip1";
+            this.Motionlist_contextMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // GenerateAllInOne
             // 
@@ -1228,21 +1238,21 @@
             this.ClientSize = new System.Drawing.Size(1024, 698);
             this.Controls.Add(this.GenerateAllInOne);
             this.Controls.Add(this.Generate);
-            this.Controls.Add(this.menuStrip1);
+            this.Controls.Add(this.Main_menuStrip);
             this.Controls.Add(this.Motion_groupBox);
             this.Controls.Add(this.Action_groupBox);
             this.Controls.Add(this.Setting_groupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MainMenuStrip = this.menuStrip1;
+            this.MainMenuStrip = this.Main_menuStrip;
             this.MaximumSize = new System.Drawing.Size(1040, 736);
             this.MinimumSize = new System.Drawing.Size(1040, 736);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "86Duino Motion Editor";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.menuStrip1.ResumeLayout(false);
-            this.menuStrip1.PerformLayout();
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
+            this.Load += new System.EventHandler(this.Main_Load);
+            this.Main_menuStrip.ResumeLayout(false);
+            this.Main_menuStrip.PerformLayout();
             this.Action_groupBox.ResumeLayout(false);
             this.Hint_groupBox.ResumeLayout(false);
             this.action_panel.ResumeLayout(false);
@@ -1276,7 +1286,7 @@
 
         #endregion
 
-        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.MenuStrip Main_menuStrip;
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem actionToolStripMenuItem;
@@ -1290,6 +1300,7 @@
         private System.Windows.Forms.ToolStripMenuItem flagToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gotoToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem delayToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem triggerToolStripMenuItem;
         private System.Windows.Forms.GroupBox Action_groupBox;
         private System.Windows.Forms.GroupBox Motion_groupBox;
         private System.Windows.Forms.ListBox Motionlist;
@@ -1299,7 +1310,7 @@
         private System.Windows.Forms.MaskedTextBox delaytext;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ComboBox typecombo;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
+        private System.Windows.Forms.ContextMenuStrip Motionlist_contextMenuStrip;
         private System.Windows.Forms.Button NewMotion;
         private System.Windows.Forms.Button capturebutton;
         private System.Windows.Forms.Button MotionTest;

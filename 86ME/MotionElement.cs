@@ -34,6 +34,17 @@ namespace _86ME_ver1
         }
     }
 
+    public class ME_Trigger
+    {
+        public string name;
+        public int method;
+        public ME_Trigger()
+        {
+            this.name = null;
+            this.method = 0;
+        }
+    }
+
     public class ME_Frame
     {
         public int[] frame;

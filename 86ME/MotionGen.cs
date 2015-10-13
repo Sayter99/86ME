@@ -12,6 +12,7 @@ namespace _86ME_ver1
     enum auto_method { on, off, title };
     enum serial_ports { serial1, serial2, serial3};
     enum motion_property { blocking, nonblocking };
+    enum internal_trigger { call, jump };
 
     public class generate_sketches
     {
