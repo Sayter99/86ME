@@ -72,9 +72,10 @@
     <Compile Include="about.Designer.cs">
       <DependentUpon>about.cs</DependentUpon>
     </Compile>
+    <Compile Include="FSMGen.cs" />
     <Compile Include="firmata.cs" />
     <Compile Include="MotionElement.cs" />
-    <Compile Include="MotionGen.cs" />
+    <Compile Include="SketchGen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

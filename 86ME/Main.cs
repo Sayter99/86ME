@@ -2660,7 +2660,9 @@ namespace _86ME_ver1
                 MessageBox.Show("You should add a motion first");
                 return;
             }
-            generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
+            //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
+            //g.generate_AllinOne();
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_AllinOne();
         }
 

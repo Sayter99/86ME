@@ -8,6 +8,7 @@ namespace _86ME_ver1
     public class ME_Motion
     {
         public ArrayList Events;
+        public List<string> goto_var; 
         public string name;
         public int trigger_method;
         public int auto_method;
@@ -31,6 +32,7 @@ namespace _86ME_ver1
             this.ps2_key = "PSB_SELECT";
             this.ps2_type = 1;
             this.property = 0;
+            this.goto_var = new List<string>();
         }
     }
 
