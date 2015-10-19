@@ -121,22 +121,9 @@ namespace _86ME_ver1
                 }
                 else if (m.Events[i] is ME_Flag)
                 {
-                    for (int k = i; k < m.Events.Count; k++)
-                    {
-                        if (m.Events[k] is ME_Goto)
-                        {
-                            if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
-                            {
-                                ME_Goto g = (ME_Goto)m.Events[k];
-                                if (g.is_goto)
-                                {
-                                    writer.Write("FLAG_" + i.ToString());
-                                    if (i != m.Events.Count - 1)
-                                        writer.Write(", ");
-                                }
-                            }
-                        }
-                    }
+                    writer.Write("FLAG_" + i.ToString());
+                    if (i != m.Events.Count - 1)
+                        writer.Write(", ");
                 }
                 else if (m.Events[i] is ME_Goto)
                 {
@@ -179,27 +166,17 @@ namespace _86ME_ver1
 
         private void generate_isBlocked(TextWriter writer)
         {
-            bool have_blocking = false;
+            int space_num = 2;
+            string space = set_space(space_num);
+            writer.WriteLine("bool isBlocked()\n{");
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 if (m.property == (int)motion_property.blocking)
-                    have_blocking = true;
+                    writer.WriteLine(space + "if(external_trigger[_" + m.name.ToUpper() + "]) return true;");
             }
-            int space_num = 2;
-            string space = set_space(space_num);
-            if (have_blocking)
-            {
-                writer.WriteLine("bool isBlocked()\n{");
-                for (int i = 0; i < ME_Motionlist.Count; i++)
-                {
-                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                    if (m.property == (int)motion_property.blocking)
-                        writer.WriteLine(space + "if(external_trigger[_" + m.name.ToUpper() + "]) return true;");
-                }
-                writer.WriteLine(space + "return false;");
-                writer.WriteLine("}");
-            }
+            writer.WriteLine(space + "return false;");
+            writer.WriteLine("}");
         }
 
         private void generate_closeTriggers(TextWriter writer)
@@ -384,6 +361,7 @@ namespace _86ME_ver1
                 }
                 else if (m.Events[i] is ME_Flag)
                 {
+                    writer.WriteLine(space + "case " + m.name + "::FLAG_" + i + ":");
                     for (int k = i; k < m.Events.Count; k++)
                     {
                         if (m.Events[k] is ME_Goto)
@@ -396,17 +374,26 @@ namespace _86ME_ver1
                                     state_counter++;
                                     string for_var = m.name + "_" + g.name + "_" + flag_count.ToString();
                                     ((ME_Flag)m.Events[i]).var = for_var;
-                                    writer.WriteLine(space + "case " + m.name + "::FLAG_" + i + ":");
                                     writer.WriteLine(space4 + "flag_" + for_var + ":");
                                     flag_count++;
                                 }
                             }
                         }
                     }
+                    if (i == m.Events.Count - 1)
+                    {
+                        writer.WriteLine(space4 + m.name + "::state = " + m.name + "::IDLE;");
+                        writer.WriteLine(space4 + "internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                        writer.WriteLine(space4 + "external_trigger[_" + m.name.ToUpper() + "] = false;");
+                        for (int j = 0; j < m.goto_var.Count; j++)
+                            writer.WriteLine(space4 + m.name + "::" + m.goto_var[j] + " = 0;");
+                        writer.WriteLine(space4 + "break;");
+                    }
                 }
                 else if (m.Events[i] is ME_Goto)
                 {
                     ME_Goto g = (ME_Goto)m.Events[i];
+                    writer.WriteLine(space + "case " + m.name + "::GOTO_" + i + ":");
                     if (g.is_goto)
                     {
                         for (int k = 0; k < i; k++)
@@ -416,7 +403,6 @@ namespace _86ME_ver1
                                 if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                 {
                                     string for_var = ((ME_Flag)m.Events[k]).var;
-                                    writer.WriteLine(space + "case " + m.name + "::GOTO_" + i + ":");
                                     if (((ME_Goto)m.Events[i]).infinite == false)
                                     {
                                         writer.WriteLine(space4 + "if(" + m.name + "::" + g.name + "_" + i +
@@ -424,7 +410,7 @@ namespace _86ME_ver1
                                     }
                                     else
                                     {
-                                        writer.WriteLine(space4 + "goto flag_" + for_var + ";");
+                                        writer.WriteLine(space4 + "if(1) goto flag_" + for_var + ";");
                                     }
                                 }
                             }
@@ -433,7 +419,7 @@ namespace _86ME_ver1
                         {
                             state_counter += 1;
                             next_action = state_counter.ToString();
-                            writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
+                            writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
                         }
                         else
                         {
@@ -453,29 +439,54 @@ namespace _86ME_ver1
                 {
                     ME_Trigger t = (ME_Trigger)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::MOTION_" + i + ":");
-                    writer.WriteLine(space4 + "internal_trigger[_" + t.name.ToUpper() + "] = true;");
-                    writer.WriteLine(space4 + m.name + "::state = " + m.name + "::WAIT_MOTION_" + i + ";");
-                    writer.WriteLine(space + "case " + m.name + "::WAIT_MOTION_" + i + ":");
-                    writer.WriteLine(space4 + "if(!internal_trigger[_" + t.name.ToUpper() + "])");
-                    if (i != m.Events.Count - 1)
+                    for (int j = 0; j < ME_Motionlist.Count; j++) //reset goto_var of the triggered motion
                     {
-                        state_counter += 2;
-                        next_action = state_counter.ToString();
-                        writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
+                        ME_Motion tr_m = (ME_Motion)ME_Motionlist[j];
+                        if (tr_m.name == t.name)
+                        {
+                            for (int k = 0; k < tr_m.goto_var.Count; k++)
+                                writer.WriteLine(space4 + tr_m.name + "::" + tr_m.goto_var[k] + " = 0;");
+                        }
                     }
-                    else
+                    if (t.method == (int)internal_trigger.call)
                     {
-                        next_action = m.name + "::IDLE";
-                        writer.WriteLine(space4 + "{\n      " + m.name + "::state = " + next_action + ";");
+                        writer.WriteLine(space4 + m.name + "::state = " + m.name + "::WAIT_MOTION_" + i + ";");
+                        writer.WriteLine(space4 + "internal_trigger[_" + t.name.ToUpper() + "] = true;");
+                        writer.WriteLine(space4 + t.name + "::state = " + t.name + "::IDLE;");
+                        writer.WriteLine(space + "case " + m.name + "::WAIT_MOTION_" + i + ":");
+                        writer.WriteLine(space4 + "if(!internal_trigger[_" + t.name.ToUpper() + "])");
+                        if (i != m.Events.Count - 1)
+                        {
+                            state_counter += 2;
+                            next_action = state_counter.ToString();
+                            writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
+                        }
+                        else
+                        {
+                            next_action = m.name + "::IDLE";
+                            writer.WriteLine(space4 + "{\n      " + m.name + "::state = " + next_action + ";");
+                            for (int j = 0; j < m.goto_var.Count; j++)
+                                writer.WriteLine(space4 + "  " + m.name + "::" + m.goto_var[j] + " = 0;");
+                            writer.WriteLine(space4 + "  internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                            writer.WriteLine(space4 + "  external_trigger[_" + m.name.ToUpper() + "] = false;");
+                            writer.WriteLine(space4 + "}");
+                        }
+                    }
+                    else if (t.method == (int)internal_trigger.jump)
+                    {
+                        writer.WriteLine(space4 + m.name + "::state = " + m.name + "::IDLE;");
+                        writer.WriteLine(space4 + "internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                        writer.WriteLine(space4 + "external_trigger[_" + m.name.ToUpper() + "] = false;");
+                        writer.WriteLine(space4 + "internal_trigger[_" + t.name.ToUpper() + "] = true;");
+                        writer.WriteLine(space4 + t.name + "::state = " + t.name + "::IDLE;");
                         for (int j = 0; j < m.goto_var.Count; j++)
-                            writer.WriteLine(space4 + "  " + m.name + "::" + m.goto_var[j] + " = 0;");
-                        writer.WriteLine(space4 + "  internal_trigger[_" + m.name.ToUpper() + "] = false;");
-                        writer.WriteLine(space4 + "  external_trigger[_" + m.name.ToUpper() + "] = false;");
-                        writer.WriteLine(space4 + "}");
+                            writer.WriteLine(space4 + m.name + "::" + m.goto_var[j] + " = 0;");
                     }
                     writer.WriteLine(space4 + "break;");
                 }
             }
+            writer.WriteLine(space + "default:");
+            writer.WriteLine(space4 + "break;");
             writer.WriteLine("  }"); //switch
             writer.WriteLine("}");
         }
@@ -656,13 +667,217 @@ namespace _86ME_ver1
                     ME_Motion m = (ME_Motion)ME_Motionlist[j];
                     writer.WriteLine("  " + m.name + "Update();");
                 }
-
                 writer.WriteLine("}");
 
                 MessageBox.Show("The sketch is generated in " +
                                 path.SelectedPath + motion_sketch_name + "\\");
                 writer.Dispose();
                 writer.Close();
+            }
+        }
+
+        public void generate_ino(string path, List<int> channels, List<uint> home)
+        {
+            string frm_name = "_frm";
+            string current_motion_name = "";
+            string motion_sketch_name = "\\_86Duino_Motion_Sketch";
+            nfilename = path + motion_sketch_name + motion_sketch_name + ".ino";
+            TextWriter writer = new StreamWriter(nfilename);
+
+            // include and declare
+            writer.WriteLine("#include <Servo86.h>");
+            if (method_flag[1]) // keyboard
+                writer.WriteLine("#include <KeyboardController.h>");
+            if (method_flag[3]) // ps2
+                writer.WriteLine("#include <PS2X_lib.h>");
+            writer.WriteLine();
+
+            for (int i = 0; i < channels.Count; i++)
+                writer.WriteLine("Servo myservo" + channels[i].ToString() + ";");
+
+            writer.WriteLine();
+            writer.Write("enum {");
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+                writer.Write("_" + ((ME_Motion)ME_Motionlist[i]).name.ToUpper() + ", ");
+            writer.Write("_NONE");
+            writer.WriteLine("};");
+            writer.WriteLine("int _last_motion = _NONE;");
+            writer.WriteLine("int _curr_motion = _NONE;");
+            int triggers_num = ME_Motionlist.Count + 1;
+            writer.WriteLine("bool internal_trigger[" + triggers_num + "] = {0};");
+            writer.WriteLine("bool external_trigger[" + triggers_num + "] = {0};");
+            writer.WriteLine();
+            writer.WriteLine("ServoOffset myoffs(\"" + "_86ME_settings\\\\" + "86offset.txt\");");
+            writer.WriteLine();
+            writer.WriteLine("ServoFrame _86ME_HOME;\n");// automatic homeframe
+
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                int frame_count = ((ME_Motion)ME_Motionlist[i]).frames;
+                current_motion_name = ((ME_Motion)ME_Motionlist[i]).name;
+                frm_name = ((ME_Motion)ME_Motionlist[i]).name + "_frm";
+                if (((ME_Motion)ME_Motionlist[i]).trigger_method == (int)mtest_method.always &&
+                        ((ME_Motion)ME_Motionlist[i]).auto_method == (int)auto_method.title)
+                    writer.WriteLine("int " + current_motion_name + "_title = 1;");
+                writer.WriteLine("ServoFrame " + frm_name + "[" + frame_count + "];");
+            }
+            writer.WriteLine();
+
+            if (method_flag[1]) // keyboard
+            {
+                writer.WriteLine("USBHost usb;");
+                writer.WriteLine("KeyboardController keyboard(usb);");
+                writer.WriteLine("char current_key = 0;");
+                writer.WriteLine("void keyPressed(){current_key = keyboard.getOemKey();}");
+                writer.WriteLine("void keyReleased(){current_key = 0;}");
+                writer.WriteLine("static int keys_state[128];");
+                writer.WriteLine("static int key_press[128] = {0};\n" + "int key_state(int k)\n" +
+                                 "{\n  if(current_key==k && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
+                                 "	return 0;\n  }\n" + "  else if(current_key==k && key_press[k])\n  {\n" +
+                                 "    key_press[k] = 1;\n" + "    return 1;\n  }\n" +
+                                 "  else if(current_key!=k && key_press[k])\n  {\n" + "    key_press[k] = 0;\n" +
+                                 "    return 2;\n  }\n" + "  return 3;\n}\n");
+            }
+            if (method_flag[2]) // bt
+                writer.WriteLine("int " + bt_port + "_Command;");
+            if (method_flag[3]) // ps2
+                writer.WriteLine("PS2X ps2x;");
+            writer.WriteLine();
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+                generate_variable((ME_Motion)ME_Motionlist[i], writer);
+            generate_isBlocked(writer);
+            generate_closeTriggers(writer);
+            generate_updateTrigger(writer);
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                frm_name = ((ME_Motion)ME_Motionlist[i]).name.ToString() + "_frm";
+                generate_motion(m, frm_name, writer);
+            }
+            //void setup {}
+            writer.WriteLine("void setup()");
+            writer.WriteLine("{");
+            if (method_flag[2]) // bt
+                writer.WriteLine("  " + bt_port + ".begin(" + bt_baud + ");");
+            writer.WriteLine();
+            if (method_flag[3]) // ps2
+                writer.WriteLine("  ps2x.config_gamepad(" + ps2_pins[3] + ", " + ps2_pins[1] +
+                                 ", " + ps2_pins[2] + ", " + ps2_pins[0] + ", false, false);\n");
+            for (int i = 0; i < channels.Count; i++)
+                writer.WriteLine("  myservo" + channels[i].ToString() + ".attach(" + channels[i].ToString() + ");");
+            writer.WriteLine();
+            for (int j = 0; j < channels.Count; j++)
+                writer.WriteLine("  _86ME_HOME.positions[" + j.ToString() + "] = " + home[j] + ";");
+            writer.WriteLine();
+            writer.WriteLine("  myoffs.setOffsets();");
+            writer.WriteLine();
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                int frame_count = ((ME_Motion)ME_Motionlist[i]).frames;
+                current_motion_name = ((ME_Motion)ME_Motionlist[i]).name;
+                frm_name = ((ME_Motion)ME_Motionlist[i]).name + "_frm";
+                for (int j = 0; j < frame_count; j++)
+                {
+                    writer.WriteLine("  " + frm_name + "[" + j + "].load(\"" + "_86ME_settings\\\\" +
+                                     current_motion_name + "_frm" + j + ".txt\");");
+                }
+            }
+            writer.WriteLine();
+            writer.WriteLine("  _86ME_HOME.playPositions(0);\n}");
+
+            //void loop {}
+            writer.WriteLine("void loop()");
+            writer.WriteLine("{");
+            writer.WriteLine("  updateTrigger();");
+            for (int j = 0; j < ME_Motionlist.Count; j++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[j];
+                writer.WriteLine("  " + m.name + "Update();");
+            }
+            writer.WriteLine("}");
+
+            writer.Dispose();
+            writer.Close();
+        }
+
+        public void generate_withFiles()
+        {
+            FolderBrowserDialog path = new FolderBrowserDialog();
+            var dialogResult = path.ShowDialog();
+            string txtPath = path.SelectedPath;
+            List<int> channels = new List<int>();
+            List<uint> home = new List<uint>();
+            int count = 0;
+            bool add_channel = true;
+            TextWriter writer;
+            string current_motion_name = "";
+
+            if (dialogResult == DialogResult.OK && path.SelectedPath != null)
+            {
+                if (!Directory.Exists(path.SelectedPath))
+                {
+                    MessageBox.Show("The selected directory does not exist, please try again.");
+                    return;
+                }
+                string motion_sketch_name = "\\_86Duino_Motion_Sketch";
+                string motion_settings_path = motion_sketch_name + "\\" + "_86ME_settings";
+                Directory.CreateDirectory(txtPath + motion_sketch_name);
+                Directory.CreateDirectory(txtPath + motion_settings_path);
+                for (int i = 0; i < ME_Motionlist.Count; i++)
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    current_motion_name = ((ME_Motion)ME_Motionlist[i]).name;
+                    count = 0;
+                    for (int j = 0; j < m.Events.Count; j++)
+                    {
+                        if (m.Events[j] is ME_Frame)
+                        {
+                            int ch_count = 0;
+                            nfilename = txtPath + motion_settings_path + "\\" +
+                                        current_motion_name + "_frm" + count.ToString() + ".txt";
+                            writer = new StreamWriter(nfilename);
+                            ME_Frame f = (ME_Frame)m.Events[j];
+                            for (int k = 0; k < 45; k++)
+                            {
+                                if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                                {
+                                    writer.Write("channel");
+                                    writer.Write(ch_count.ToString() + "=");
+                                    if (f.type == 1)
+                                        writer.WriteLine(f.frame[k].ToString());
+                                    else if (f.type == 0)
+                                        writer.WriteLine(Motion.ftext2[k].Text.ToString());
+                                    home.Add(uint.Parse(Motion.ftext2[k].Text));
+                                    if (add_channel)
+                                        channels.Add(k);
+                                    ch_count++;
+                                }
+                            }
+                            ((ME_Frame)m.Events[j]).num = count;
+                            add_channel = false;
+                            writer.Dispose();
+                            writer.Close();
+                            count++;
+                        }
+                    }
+                    m.frames = count;
+                }
+                nfilename = txtPath + motion_settings_path + "\\86offset" + ".txt";
+                writer = new StreamWriter(nfilename);
+                int offset_count = 0;
+                for (int i = 0; i < 45; i++)
+                {
+                    if (offset[i] != 0 && String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        writer.WriteLine("channel" + offset_count.ToString() + "=" + offset[i].ToString());
+                    if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        offset_count++;
+                }
+
+                writer.Dispose();
+                writer.Close();
+                generate_ino(txtPath, channels, home);
+                MessageBox.Show("The sketch and setting files are generated in " +
+                                txtPath + motion_sketch_name + "\\");
             }
         }
     }
