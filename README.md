@@ -1,5 +1,7 @@
 86ME (86Duino Motion Editor)
 ---------
+#### CHANGELOG ####
+
 _VERSION_: v1.6
 
 * Will not check Windows Device Manager if users choose COM port by them self.
