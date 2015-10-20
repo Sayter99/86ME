@@ -1,5 +1,13 @@
 86ME (86Duino Motion Editor)
 ---------
+_VERSION_: v1.6
+
+* Will not check Windows Device Manager if users choose COM port by them self.
+* Upgrade .NET Framework from 3.5 to 4.0.
+* Add a tabpage for setting properties of the choosed motion.
+* Can insert Motion in action list now! It will be effective after sketch generation.
+* Change the method of generating sketches for controlling robots more smoothly.
+
 _VERSION_: v1.5
 
 * A new button to save 86Duino Frame Files.
@@ -55,14 +63,15 @@ _VERSION_: v1.0
 #### INSTALLATION ####
 
 1. System reqirement: Windows XP/Vista/7/8/8.1/10 with .NET framework 4.
-2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.5.zip).
+2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.6.zip).
 3. Unzip 86ME and execute 86ME.exe to start.
 
 #### DOCUMENTS ####
 
 The 86ME tutorial pages for installation instructions and usage.
 
-* [Current Version](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Current Ver](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Version 1.5](http://www.86duino.com/index.php?p=13111&lang=TW)
 * [Version 1.4](http://www.86duino.com/index.php?p=12778&lang=TW)
 * [Version 1.3](http://www.86duino.com/index.php?p=12646&lang=TW)
 * [Version 1.2](http://www.86duino.com/index.php?p=12298&lang=TW)
