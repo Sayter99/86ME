@@ -104,17 +104,23 @@ namespace _86ME_ver1
             if (m.Events.Count > 0)
                 writer.Write(", ");
             m.goto_var.Clear();
+            m.states.Clear();
+            m.states.Add("IDLE");
             for (int i = 0; i < m.Events.Count; i++)
             {
                 if(m.Events[i] is ME_Frame)
                 {
                     writer.Write("FRAME_" + i.ToString() + ", " + "WAIT_FRAME_" + i.ToString());
+                    m.states.Add("FRAME_" + i.ToString());
+                    m.states.Add("WAIT_FRAME_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                 }
                 else if (m.Events[i] is ME_Delay)
                 {
                     writer.Write("DELAY_" + i.ToString() + ", " + "WAIT_DELAY_" + i.ToString());
+                    m.states.Add("DELAY_" + i.ToString());
+                    m.states.Add("WAIT_DELAY_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                     have_delay = true;
@@ -122,12 +128,14 @@ namespace _86ME_ver1
                 else if (m.Events[i] is ME_Flag)
                 {
                     writer.Write("FLAG_" + i.ToString());
+                    m.states.Add("FLAG_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                 }
                 else if (m.Events[i] is ME_Goto)
                 {
                     writer.Write("GOTO_" + i.ToString());
+                    m.states.Add("GOTO_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                     for (int k = 0; k < i; k++)
@@ -151,6 +159,8 @@ namespace _86ME_ver1
                 else if (m.Events[i] is ME_Trigger)
                 {
                     writer.Write("MOTION_" + i.ToString() + ", " + "WAIT_MOTION_" + i.ToString());
+                    m.states.Add("MOTION_" + i.ToString());
+                    m.states.Add("WAIT_MOTION_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                 }
@@ -218,7 +228,7 @@ namespace _86ME_ver1
             if (method_flag[2])
             {
                 writer.WriteLine("  if(" + bt_port + ".available()){ " + bt_port + "_Command = " + bt_port +
-                             ".read(); } else { " + bt_port + "_Command = 0xFFF; }");
+                             ".read(); }"); //else { " + bt_port + "_Command = 0xFFF; }"
             }
             if (method_flag[3])
                 writer.WriteLine("  ps2x.read_gamepad();");
@@ -301,7 +311,7 @@ namespace _86ME_ver1
             writer.WriteLine(space + "switch(" + m.name + "::state)\n  {");
             writer.WriteLine(space + "case " + m.name + "::IDLE:");
             writer.WriteLine(space4 + "if(external_trigger[_" + m.name.ToUpper() + "] || internal_trigger[_" +
-                             m.name.ToUpper() + "]) " + m.name + "::state = 1;");
+                             m.name.ToUpper() + "]) " + m.name + "::state = " + m.name + "::" + m.states[1] + ";");
             writer.WriteLine(space4 + "else break;");
             string next_action = "";
             int state_counter = 1;
@@ -318,7 +328,7 @@ namespace _86ME_ver1
                     if (i != m.Events.Count - 1)
                     {
                         state_counter += 2;
-                        next_action = state_counter.ToString();
+                        next_action = m.name + "::" + m.states[state_counter];
                         writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
                     }
                     else
@@ -344,7 +354,7 @@ namespace _86ME_ver1
                     if (i != m.Events.Count - 1)
                     {
                         state_counter += 2;
-                        next_action = state_counter.ToString();
+                        next_action = m.name + "::" + m.states[state_counter];
                         writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
                     }
                     else
@@ -418,7 +428,7 @@ namespace _86ME_ver1
                         if (i != m.Events.Count - 1)
                         {
                             state_counter += 1;
-                            next_action = state_counter.ToString();
+                            next_action = m.name + "::" + m.states[state_counter];
                             writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
                         }
                         else
@@ -458,7 +468,7 @@ namespace _86ME_ver1
                         if (i != m.Events.Count - 1)
                         {
                             state_counter += 2;
-                            next_action = state_counter.ToString();
+                            next_action = m.name + "::" + m.states[state_counter];
                             writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
                         }
                         else
@@ -597,7 +607,7 @@ namespace _86ME_ver1
                                      "    return 2;\n  }\n" + "  return 3;\n}\n");
                 }
                 if (method_flag[2]) // bt
-                    writer.WriteLine("int " + bt_port + "_Command;");
+                    writer.WriteLine("int " + bt_port + "_Command = 0xFFF;");
                 if (method_flag[3]) // ps2
                     writer.WriteLine("PS2X ps2x;");
                 writer.WriteLine();
@@ -739,7 +749,7 @@ namespace _86ME_ver1
                                  "    return 2;\n  }\n" + "  return 3;\n}\n");
             }
             if (method_flag[2]) // bt
-                writer.WriteLine("int " + bt_port + "_Command;");
+                writer.WriteLine("int " + bt_port + "_Command = 0xFFF;");
             if (method_flag[3]) // ps2
                 writer.WriteLine("PS2X ps2x;");
             writer.WriteLine();
