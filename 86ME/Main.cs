@@ -27,6 +27,7 @@ namespace _86ME_ver1
 {
     public partial class Main : Form
     {
+        string bt_type = "once";
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -722,7 +723,7 @@ namespace _86ME_ver1
             writer.Write("BoardVer ");
             writer.Write(Motion.comboBox1.SelectedItem.ToString());
             writer.Write(" " + ps2pins[0] + " " + ps2pins[1] + " " + ps2pins[2] + " " + ps2pins[3] + " " +
-                         bt_baud + " " + bt_port);
+                         bt_baud + " " + bt_port + " " + bt_type);
             writer.Write("\n");
             writer.Write("Servo ");
             for (int i = 0; i < 45; i++)
@@ -960,6 +961,10 @@ namespace _86ME_ver1
                         {
                             bt_baud = datas[++i];
                             bt_port = datas[++i];
+                        }
+                        if (String.Compare(datas[i + 1], "Servo") != 0)
+                        {
+                            bt_type = datas[++i];
                         }
                     }
                     else if (String.Compare(datas[i], "Offset") == 0)
@@ -1563,6 +1568,7 @@ namespace _86ME_ver1
             KeyboardCombo.SelectedIndex = m.trigger_key;
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
             btKeyText.Text = m.bt_key;
+            btTypeCombo.Text = bt_type;
             btPortCombo.Text = bt_port;
             btBaudCombo.Text = bt_baud;
             ps2DATCombo.Text = ps2pins[0];
@@ -2650,7 +2656,7 @@ namespace _86ME_ver1
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port, bt_type);
             g.generate_withFiles();
         }
 
@@ -2662,7 +2668,7 @@ namespace _86ME_ver1
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port, bt_type);
             g.generate_AllinOne();
         }
 
@@ -2994,6 +3000,11 @@ namespace _86ME_ver1
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_key = btKeyText.Text;
                 btKeyLabel.Text = "Key: " + btKeyText.Text;
             }
+        }
+
+        private void btTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            bt_type = btTypeCombo.Text;
         }
 
         private void btPortCombo_SelectedIndexChanged(object sender, EventArgs e)

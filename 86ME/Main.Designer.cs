@@ -124,6 +124,8 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.btTypeLabel = new System.Windows.Forms.Label();
+            this.btTypeCombo = new System.Windows.Forms.ComboBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -778,6 +780,8 @@
             // 
             // bt_groupBox
             // 
+            this.bt_groupBox.Controls.Add(this.btTypeCombo);
+            this.bt_groupBox.Controls.Add(this.btTypeLabel);
             this.bt_groupBox.Controls.Add(this.btBaudCombo);
             this.bt_groupBox.Controls.Add(this.btBaudLabel);
             this.bt_groupBox.Controls.Add(this.btPortCombo);
@@ -855,7 +859,7 @@
             this.btKeyText.Location = new System.Drawing.Point(16, 29);
             this.btKeyText.MaxLength = 1;
             this.btKeyText.Name = "btKeyText";
-            this.btKeyText.Size = new System.Drawing.Size(170, 22);
+            this.btKeyText.Size = new System.Drawing.Size(78, 22);
             this.btKeyText.TabIndex = 0;
             this.ttp.SetToolTip(this.btKeyText, "Set a character for triggering the selected motion by bluetooth.");
             this.btKeyText.TextChanged += new System.EventHandler(this.btKeyText_TextChanged);
@@ -1230,6 +1234,28 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
+            // btTypeLabel
+            // 
+            this.btTypeLabel.AutoSize = true;
+            this.btTypeLabel.Location = new System.Drawing.Point(103, 14);
+            this.btTypeLabel.Name = "btTypeLabel";
+            this.btTypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.btTypeLabel.TabIndex = 8;
+            this.btTypeLabel.Text = "Type:";
+            // 
+            // btTypeCombo
+            // 
+            this.btTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btTypeCombo.FormattingEnabled = true;
+            this.btTypeCombo.Items.AddRange(new object[] {
+            "Once",
+            "Always"});
+            this.btTypeCombo.Location = new System.Drawing.Point(105, 30);
+            this.btTypeCombo.Name = "btTypeCombo";
+            this.btTypeCombo.Size = new System.Drawing.Size(81, 20);
+            this.btTypeCombo.TabIndex = 9;
+            this.btTypeCombo.SelectedIndexChanged += new System.EventHandler(this.btTypeCombo_SelectedIndexChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1380,6 +1406,8 @@
         private System.Windows.Forms.RadioButton NonBlocking;
         private System.Windows.Forms.RadioButton Blocking;
         private System.Windows.Forms.Label MotionPropertyLabel;
+        private System.Windows.Forms.ComboBox btTypeCombo;
+        private System.Windows.Forms.Label btTypeLabel;
     }
 }
 

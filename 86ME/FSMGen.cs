@@ -17,8 +17,9 @@ namespace _86ME_ver1
         private string[] ps2_pins = new string[4];
         private string bt_baud;
         private string bt_port;
+        private string bt_type;
 
-        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port)
+        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port, string bt_type)
         {
             this.Motion = nMotion;
             this.offset = off;
@@ -26,6 +27,7 @@ namespace _86ME_ver1
             this.ps2_pins = ps2pins;
             this.bt_baud = bt_baud;
             this.bt_port = bt_port;
+            this.bt_type = bt_type;
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 method_flag[((ME_Motion)ME_Motionlist[i]).trigger_method] = true;
@@ -227,8 +229,9 @@ namespace _86ME_ver1
             }
             if (method_flag[2])
             {
-                writer.WriteLine("  if(" + bt_port + ".available()){ " + bt_port + "_Command = " + bt_port +
-                             ".read(); }"); //else { " + bt_port + "_Command = 0xFFF; }"
+                writer.WriteLine("  if(" + bt_port + ".available()){ " + bt_port + "_Command = " + bt_port + ".read(); }");
+                if (String.Compare(bt_type, "Once") == 0)
+                    writer.WriteLine("  else { " + bt_port + "_Command = 0xFFF; }");
             }
             if (method_flag[3])
                 writer.WriteLine("  ps2x.read_gamepad();");
