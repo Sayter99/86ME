@@ -27,7 +27,6 @@ namespace _86ME_ver1
 {
     public partial class Main : Form
     {
-        string bt_type = "OneShot";
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -723,7 +722,7 @@ namespace _86ME_ver1
             writer.Write("BoardVer ");
             writer.Write(Motion.comboBox1.SelectedItem.ToString());
             writer.Write(" " + ps2pins[0] + " " + ps2pins[1] + " " + ps2pins[2] + " " + ps2pins[3] + " " +
-                         bt_baud + " " + bt_port + " " + bt_type);
+                         bt_baud + " " + bt_port);
             writer.Write("\n");
             writer.Write("Servo ");
             for (int i = 0; i < 45; i++)
@@ -783,7 +782,7 @@ namespace _86ME_ver1
                 string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
                 writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
                              m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
-                             " " + m.ps2_type + "\n");
+                             " " + m.ps2_type + " " + m.bt_mode + "\n");
                 for (int j = 0; j < m.Events.Count; j++)
                 {
                     if (m.Events[j] is ME_Frame)
@@ -962,10 +961,6 @@ namespace _86ME_ver1
                             bt_baud = datas[++i];
                             bt_port = datas[++i];
                         }
-                        if (String.Compare(datas[i + 1], "Servo") != 0)
-                        {
-                            bt_type = datas[++i];
-                        }
                     }
                     else if (String.Compare(datas[i], "Offset") == 0)
                     {
@@ -1130,6 +1125,11 @@ namespace _86ME_ver1
                                     i--;
                                 motiontag.ps2_key = datas[++i];
                                 motiontag.ps2_type = int.Parse(datas[++i]);
+                                if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
+                                    String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
+                                    String.Compare("MotionEnd", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
+                                    motiontag.bt_mode = datas[++i];
                             }
                             ME_Motionlist.Add(motiontag);
                         }
@@ -1568,7 +1568,7 @@ namespace _86ME_ver1
             KeyboardCombo.SelectedIndex = m.trigger_key;
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
             btKeyText.Text = m.bt_key;
-            btTypeCombo.Text = bt_type;
+            btModeCombo.Text = m.bt_mode;
             btPortCombo.Text = bt_port;
             btBaudCombo.Text = bt_baud;
             ps2DATCombo.Text = ps2pins[0];
@@ -1914,6 +1914,12 @@ namespace _86ME_ver1
                     Label xlabel2 = new Label();
                     xlabel2.Text = "Method: ";
                     xlabel2.Size = new Size(50, 20);
+                    Label xlabel3 = new Label();
+                    xlabel3.Text = "Jump to the target motion and wait for return.";
+                    xlabel3.Size = new Size(300, 20);
+                    Label xlabel4 = new Label();
+                    xlabel4.Text = "Jump to the target motion and cancel the current motion.";
+                    xlabel4.Size = new Size(300, 20);
 
                     ComboBox xcombo = new ComboBox();
                     xcombo.Size = new Size(160, 22);
@@ -1924,8 +1930,8 @@ namespace _86ME_ver1
                     
                     for (int i = 0; i < MotionCombo.Items.Count; i++)
                         xcombo.Items.Add(((ME_Motion)ME_Motionlist[i]).name);
-                    call_radio.Text = "Call motion --- Jump to motion and wait for return";
-                    jump_radio.Text = "Jump to motion --- Jump to motion and idle";
+                    call_radio.Text = "Call target motion";
+                    jump_radio.Text = "Jump to target motion";
 
                     xcombo.Text = ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
                     if (((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method == (int)internal_trigger.call)
@@ -1941,14 +1947,20 @@ namespace _86ME_ver1
 
                     xlabel.Top += 3;
                     xlabel2.Top += 25;
+                    xlabel3.Top += 65;
+                    xlabel3.Left += 26;
+                    xlabel4.Top += 105;
+                    xlabel4.Left += 26;
                     xcombo.Left += 85;
                     call_radio.Top += 45;
                     call_radio.Left += 10;
-                    jump_radio.Top += 67;
+                    jump_radio.Top += 85;
                     jump_radio.Left += 10;
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xcombo);
                     Framelist.Controls.Add(xlabel2);
+                    Framelist.Controls.Add(xlabel3);
+                    Framelist.Controls.Add(xlabel4);
                     Framelist.Controls.Add(jump_radio);
                     Framelist.Controls.Add(call_radio);
                     Framelist.Enabled = true;
@@ -2658,7 +2670,7 @@ namespace _86ME_ver1
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port, bt_type);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_withFiles();
         }
 
@@ -2670,7 +2682,7 @@ namespace _86ME_ver1
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port, bt_type);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_AllinOne();
         }
 
@@ -3006,7 +3018,8 @@ namespace _86ME_ver1
 
         private void btTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            bt_type = btTypeCombo.Text;
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_mode = btModeCombo.Text;
         }
 
         private void btPortCombo_SelectedIndexChanged(object sender, EventArgs e)

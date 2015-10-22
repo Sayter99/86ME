@@ -89,8 +89,8 @@
             this.ps2KeyCombo = new System.Windows.Forms.ComboBox();
             this.ps2_radioButton = new System.Windows.Forms.RadioButton();
             this.bt_groupBox = new System.Windows.Forms.GroupBox();
-            this.btTypeCombo = new System.Windows.Forms.ComboBox();
-            this.btTypeLabel = new System.Windows.Forms.Label();
+            this.btModeCombo = new System.Windows.Forms.ComboBox();
+            this.btModeLabel = new System.Windows.Forms.Label();
             this.btBaudCombo = new System.Windows.Forms.ComboBox();
             this.btBaudLabel = new System.Windows.Forms.Label();
             this.btPortCombo = new System.Windows.Forms.ComboBox();
@@ -261,42 +261,42 @@
             // frameToolStripMenuItem
             // 
             this.frameToolStripMenuItem.Name = "frameToolStripMenuItem";
-            this.frameToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.frameToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.frameToolStripMenuItem.Text = "Frame";
             this.frameToolStripMenuItem.Click += new System.EventHandler(this.frameToolStripMenuItem_Click);
             // 
             // homeToolStripMenuItem
             // 
             this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
-            this.homeToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.homeToolStripMenuItem.Text = "HomeFrame";
             this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
             // 
             // flagToolStripMenuItem
             // 
             this.flagToolStripMenuItem.Name = "flagToolStripMenuItem";
-            this.flagToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.flagToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.flagToolStripMenuItem.Text = "Flag";
             this.flagToolStripMenuItem.Click += new System.EventHandler(this.flagToolStripMenuItem_Click);
             // 
             // gotoToolStripMenuItem
             // 
             this.gotoToolStripMenuItem.Name = "gotoToolStripMenuItem";
-            this.gotoToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.gotoToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.gotoToolStripMenuItem.Text = "Goto";
             this.gotoToolStripMenuItem.Click += new System.EventHandler(this.gotoToolStripMenuItem_Click);
             // 
             // delayToolStripMenuItem
             // 
             this.delayToolStripMenuItem.Name = "delayToolStripMenuItem";
-            this.delayToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.delayToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.delayToolStripMenuItem.Text = "Delay";
             this.delayToolStripMenuItem.Click += new System.EventHandler(this.delayToolStripMenuItem_Click);
             // 
             // triggerToolStripMenuItem
             // 
             this.triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
-            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
+            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.triggerToolStripMenuItem.Text = "GotoMotion";
             this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
             // 
@@ -782,8 +782,8 @@
             // 
             // bt_groupBox
             // 
-            this.bt_groupBox.Controls.Add(this.btTypeCombo);
-            this.bt_groupBox.Controls.Add(this.btTypeLabel);
+            this.bt_groupBox.Controls.Add(this.btModeCombo);
+            this.bt_groupBox.Controls.Add(this.btModeLabel);
             this.bt_groupBox.Controls.Add(this.btBaudCombo);
             this.bt_groupBox.Controls.Add(this.btBaudLabel);
             this.bt_groupBox.Controls.Add(this.btPortCombo);
@@ -797,27 +797,27 @@
             this.bt_groupBox.TabStop = false;
             this.bt_groupBox.Text = "Bluetooth";
             // 
-            // btTypeCombo
+            // btModeCombo
             // 
-            this.btTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.btTypeCombo.FormattingEnabled = true;
-            this.btTypeCombo.Items.AddRange(new object[] {
+            this.btModeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btModeCombo.FormattingEnabled = true;
+            this.btModeCombo.Items.AddRange(new object[] {
             "OneShot",
             "Continuous"});
-            this.btTypeCombo.Location = new System.Drawing.Point(105, 30);
-            this.btTypeCombo.Name = "btTypeCombo";
-            this.btTypeCombo.Size = new System.Drawing.Size(81, 20);
-            this.btTypeCombo.TabIndex = 9;
-            this.btTypeCombo.SelectedIndexChanged += new System.EventHandler(this.btTypeCombo_SelectedIndexChanged);
+            this.btModeCombo.Location = new System.Drawing.Point(105, 30);
+            this.btModeCombo.Name = "btModeCombo";
+            this.btModeCombo.Size = new System.Drawing.Size(81, 20);
+            this.btModeCombo.TabIndex = 9;
+            this.btModeCombo.SelectedIndexChanged += new System.EventHandler(this.btTypeCombo_SelectedIndexChanged);
             // 
-            // btTypeLabel
+            // btModeLabel
             // 
-            this.btTypeLabel.AutoSize = true;
-            this.btTypeLabel.Location = new System.Drawing.Point(103, 14);
-            this.btTypeLabel.Name = "btTypeLabel";
-            this.btTypeLabel.Size = new System.Drawing.Size(35, 12);
-            this.btTypeLabel.TabIndex = 8;
-            this.btTypeLabel.Text = "Mode:";
+            this.btModeLabel.AutoSize = true;
+            this.btModeLabel.Location = new System.Drawing.Point(103, 14);
+            this.btModeLabel.Name = "btModeLabel";
+            this.btModeLabel.Size = new System.Drawing.Size(35, 12);
+            this.btModeLabel.TabIndex = 8;
+            this.btModeLabel.Text = "Mode:";
             // 
             // btBaudCombo
             // 
@@ -1084,7 +1084,7 @@
             this.nonblockinExplanation.Name = "nonblockinExplanation";
             this.nonblockinExplanation.Size = new System.Drawing.Size(202, 39);
             this.nonblockinExplanation.TabIndex = 4;
-            this.nonblockinExplanation.Text = "This motion will be interrupted while another motion is triggered.";
+            this.nonblockinExplanation.Text = "This motion can be interrupted while another motion is triggered.";
             // 
             // blockingExplaination
             // 
@@ -1093,7 +1093,7 @@
             this.blockingExplaination.Name = "blockingExplaination";
             this.blockingExplaination.Size = new System.Drawing.Size(202, 39);
             this.blockingExplaination.TabIndex = 3;
-            this.blockingExplaination.Text = "This motion will NOT be interrupted by another motion.";
+            this.blockingExplaination.Text = "This motion can NOT be interrupted by another motion.";
             // 
             // NonBlocking
             // 
@@ -1428,8 +1428,8 @@
         private System.Windows.Forms.RadioButton NonBlocking;
         private System.Windows.Forms.RadioButton Blocking;
         private System.Windows.Forms.Label MotionPropertyLabel;
-        private System.Windows.Forms.ComboBox btTypeCombo;
-        private System.Windows.Forms.Label btTypeLabel;
+        private System.Windows.Forms.ComboBox btModeCombo;
+        private System.Windows.Forms.Label btModeLabel;
         private System.Windows.Forms.RichTextBox nonblockinExplanation;
         private System.Windows.Forms.RichTextBox blockingExplaination;
     }

@@ -17,9 +17,8 @@ namespace _86ME_ver1
         private string[] ps2_pins = new string[4];
         private string bt_baud;
         private string bt_port;
-        private string bt_type;
 
-        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port, string bt_type)
+        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port)
         {
             this.Motion = nMotion;
             this.offset = off;
@@ -27,7 +26,6 @@ namespace _86ME_ver1
             this.ps2_pins = ps2pins;
             this.bt_baud = bt_baud;
             this.bt_port = bt_port;
-            this.bt_type = bt_type;
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 method_flag[((ME_Motion)ME_Motionlist[i]).trigger_method] = true;
@@ -230,8 +228,7 @@ namespace _86ME_ver1
             if (method_flag[2])
             {
                 writer.WriteLine("  if(" + bt_port + ".available()){ " + bt_port + "_Command = " + bt_port + ".read(); }");
-                if (String.Compare(bt_type, "OneShot") == 0)
-                    writer.WriteLine("  else { " + bt_port + "_Command = 0xFFF; }");
+                writer.WriteLine("  else { if(renew_bt) " + bt_port + "_Command = 0xFFF; }");
             }
             if (method_flag[3])
                 writer.WriteLine("  ps2x.read_gamepad();");
@@ -255,11 +252,35 @@ namespace _86ME_ver1
                                          m.name + "_title--;}");
                 }
             }
+            for (int i = 0; i < ME_Motionlist.Count; i++) //bt
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (m.trigger_method == (int)mtest_method.bluetooth)
+                {
+                    string renew_bt = "";
+                    if (String.Compare(m.bt_mode, "OneShot") == 0)
+                        renew_bt = "renew_bt = true;";
+                    else
+                        renew_bt = "renew_bt = false;";
+                    if (first)
+                    {
+                        writer.WriteLine(space + "if(" + trigger_condition(m) + ") " +
+                                            "{_curr_motion = _" + m.name.ToUpper() + ";" +
+                                            renew_bt + "}");
+                        first = false;
+                    }
+                    else
+                        writer.WriteLine(space + "else if(" + trigger_condition(m) + ") " +
+                                            "{_curr_motion = _" + m.name.ToUpper() + ";" +
+                                            renew_bt + "}");
+                }
+            }
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 if (!(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.on) &&
-                    !(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title))
+                    !(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title) &&
+                    !(m.trigger_method == (int)mtest_method.bluetooth))
                 {
                     if (first)
                     {
@@ -621,7 +642,7 @@ namespace _86ME_ver1
                     writer.WriteLine("KeyboardController keyboard(usb);");
                     writer.WriteLine("char current_key = 0;");
                     writer.WriteLine("void keyPressed(){current_key = keyboard.getOemKey();}");
-                    writer.WriteLine("void keyReleased(){current_key = 0;}");
+                    writer.WriteLine("void keyReleased(){if(current_key == keyboard.getOemKey()) current_key = 0;}");
                     writer.WriteLine("static int keys_state[128];");
                     writer.WriteLine("static int key_press[128] = {0};\n" + "int key_state(int k)\n" +
                                      "{\n  if(current_key==k && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
@@ -631,7 +652,10 @@ namespace _86ME_ver1
                                      "    return 2;\n  }\n" + "  return 3;\n}\n");
                 }
                 if (method_flag[2]) // bt
+                {
                     writer.WriteLine("int " + bt_port + "_Command = 0xFFF;");
+                    writer.WriteLine("bool renew_bt = true;");
+                }
                 if (method_flag[3]) // ps2
                     writer.WriteLine("PS2X ps2x;");
                 writer.WriteLine();
@@ -763,7 +787,7 @@ namespace _86ME_ver1
                 writer.WriteLine("KeyboardController keyboard(usb);");
                 writer.WriteLine("char current_key = 0;");
                 writer.WriteLine("void keyPressed(){current_key = keyboard.getOemKey();}");
-                writer.WriteLine("void keyReleased(){current_key = 0;}");
+                writer.WriteLine("void keyReleased(){if(current_key == keyboard.getOemKey()) current_key = 0;}");
                 writer.WriteLine("static int keys_state[128];");
                 writer.WriteLine("static int key_press[128] = {0};\n" + "int key_state(int k)\n" +
                                  "{\n  if(current_key==k && !key_press[k])\n  {\n" + "	key_press[k] = 1;\n" +
@@ -773,7 +797,10 @@ namespace _86ME_ver1
                                  "    return 2;\n  }\n" + "  return 3;\n}\n");
             }
             if (method_flag[2]) // bt
+            {
                 writer.WriteLine("int " + bt_port + "_Command = 0xFFF;");
+                writer.WriteLine("bool renew_bt = true;");
+            }
             if (method_flag[3]) // ps2
                 writer.WriteLine("PS2X ps2x;");
             writer.WriteLine();
