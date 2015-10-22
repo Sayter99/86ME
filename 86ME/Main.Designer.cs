@@ -89,6 +89,8 @@
             this.ps2KeyCombo = new System.Windows.Forms.ComboBox();
             this.ps2_radioButton = new System.Windows.Forms.RadioButton();
             this.bt_groupBox = new System.Windows.Forms.GroupBox();
+            this.btTypeCombo = new System.Windows.Forms.ComboBox();
+            this.btTypeLabel = new System.Windows.Forms.Label();
             this.btBaudCombo = new System.Windows.Forms.ComboBox();
             this.btBaudLabel = new System.Windows.Forms.Label();
             this.btPortCombo = new System.Windows.Forms.ComboBox();
@@ -108,6 +110,8 @@
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.MotionProperty = new System.Windows.Forms.TabPage();
+            this.nonblockinExplanation = new System.Windows.Forms.RichTextBox();
+            this.blockingExplaination = new System.Windows.Forms.RichTextBox();
             this.NonBlocking = new System.Windows.Forms.RadioButton();
             this.Blocking = new System.Windows.Forms.RadioButton();
             this.MotionPropertyLabel = new System.Windows.Forms.Label();
@@ -124,8 +128,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.btTypeLabel = new System.Windows.Forms.Label();
-            this.btTypeCombo = new System.Windows.Forms.ComboBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -295,7 +297,7 @@
             // 
             this.triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
             this.triggerToolStripMenuItem.Size = new System.Drawing.Size(146, 22);
-            this.triggerToolStripMenuItem.Text = "Motion";
+            this.triggerToolStripMenuItem.Text = "GotoMotion";
             this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
             // 
             // Action_groupBox
@@ -795,6 +797,28 @@
             this.bt_groupBox.TabStop = false;
             this.bt_groupBox.Text = "Bluetooth";
             // 
+            // btTypeCombo
+            // 
+            this.btTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.btTypeCombo.FormattingEnabled = true;
+            this.btTypeCombo.Items.AddRange(new object[] {
+            "OneShot",
+            "Continuous"});
+            this.btTypeCombo.Location = new System.Drawing.Point(105, 30);
+            this.btTypeCombo.Name = "btTypeCombo";
+            this.btTypeCombo.Size = new System.Drawing.Size(81, 20);
+            this.btTypeCombo.TabIndex = 9;
+            this.btTypeCombo.SelectedIndexChanged += new System.EventHandler(this.btTypeCombo_SelectedIndexChanged);
+            // 
+            // btTypeLabel
+            // 
+            this.btTypeLabel.AutoSize = true;
+            this.btTypeLabel.Location = new System.Drawing.Point(103, 14);
+            this.btTypeLabel.Name = "btTypeLabel";
+            this.btTypeLabel.Size = new System.Drawing.Size(35, 12);
+            this.btTypeLabel.TabIndex = 8;
+            this.btTypeLabel.Text = "Mode:";
+            // 
             // btBaudCombo
             // 
             this.btBaudCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
@@ -1040,6 +1064,8 @@
             // 
             // MotionProperty
             // 
+            this.MotionProperty.Controls.Add(this.nonblockinExplanation);
+            this.MotionProperty.Controls.Add(this.blockingExplaination);
             this.MotionProperty.Controls.Add(this.NonBlocking);
             this.MotionProperty.Controls.Add(this.Blocking);
             this.MotionProperty.Controls.Add(this.MotionPropertyLabel);
@@ -1051,10 +1077,28 @@
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
             // 
+            // nonblockinExplanation
+            // 
+            this.nonblockinExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.nonblockinExplanation.Location = new System.Drawing.Point(15, 112);
+            this.nonblockinExplanation.Name = "nonblockinExplanation";
+            this.nonblockinExplanation.Size = new System.Drawing.Size(202, 39);
+            this.nonblockinExplanation.TabIndex = 4;
+            this.nonblockinExplanation.Text = "This motion will be interrupted while another motion is triggered.";
+            // 
+            // blockingExplaination
+            // 
+            this.blockingExplaination.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.blockingExplaination.Location = new System.Drawing.Point(15, 45);
+            this.blockingExplaination.Name = "blockingExplaination";
+            this.blockingExplaination.Size = new System.Drawing.Size(202, 39);
+            this.blockingExplaination.TabIndex = 3;
+            this.blockingExplaination.Text = "This motion will NOT be interrupted by another motion.";
+            // 
             // NonBlocking
             // 
             this.NonBlocking.AutoSize = true;
-            this.NonBlocking.Location = new System.Drawing.Point(15, 45);
+            this.NonBlocking.Location = new System.Drawing.Point(15, 90);
             this.NonBlocking.Name = "NonBlocking";
             this.NonBlocking.Size = new System.Drawing.Size(88, 16);
             this.NonBlocking.TabIndex = 2;
@@ -1080,9 +1124,9 @@
             this.MotionPropertyLabel.AutoSize = true;
             this.MotionPropertyLabel.Location = new System.Drawing.Point(7, 4);
             this.MotionPropertyLabel.Name = "MotionPropertyLabel";
-            this.MotionPropertyLabel.Size = new System.Drawing.Size(181, 12);
+            this.MotionPropertyLabel.Size = new System.Drawing.Size(192, 12);
             this.MotionPropertyLabel.TabIndex = 0;
-            this.MotionPropertyLabel.Text = "Set properties of the choosed motion :";
+            this.MotionPropertyLabel.Text = "Set the property of the choosed motion :";
             // 
             // motion_stop
             // 
@@ -1233,28 +1277,6 @@
             this.Setting_groupBox.TabIndex = 15;
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
-            // 
-            // btTypeLabel
-            // 
-            this.btTypeLabel.AutoSize = true;
-            this.btTypeLabel.Location = new System.Drawing.Point(103, 14);
-            this.btTypeLabel.Name = "btTypeLabel";
-            this.btTypeLabel.Size = new System.Drawing.Size(32, 12);
-            this.btTypeLabel.TabIndex = 8;
-            this.btTypeLabel.Text = "Type:";
-            // 
-            // btTypeCombo
-            // 
-            this.btTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.btTypeCombo.FormattingEnabled = true;
-            this.btTypeCombo.Items.AddRange(new object[] {
-            "Once",
-            "Always"});
-            this.btTypeCombo.Location = new System.Drawing.Point(105, 30);
-            this.btTypeCombo.Name = "btTypeCombo";
-            this.btTypeCombo.Size = new System.Drawing.Size(81, 20);
-            this.btTypeCombo.TabIndex = 9;
-            this.btTypeCombo.SelectedIndexChanged += new System.EventHandler(this.btTypeCombo_SelectedIndexChanged);
             // 
             // Main
             // 
@@ -1408,6 +1430,8 @@
         private System.Windows.Forms.Label MotionPropertyLabel;
         private System.Windows.Forms.ComboBox btTypeCombo;
         private System.Windows.Forms.Label btTypeLabel;
+        private System.Windows.Forms.RichTextBox nonblockinExplanation;
+        private System.Windows.Forms.RichTextBox blockingExplaination;
     }
 }
 

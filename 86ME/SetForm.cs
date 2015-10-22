@@ -32,9 +32,13 @@ namespace _86ME_ver1
                     this.com_port = "OFF";
             }
             else if (string.Compare(ComboBox0.Text, "--offline--") == 0)
+            {
                 this.com_port = "OFF";
+            }
             else
+            {
                 this.com_port = ComboBox0.Text;
+            }
         }
 
         private void Exit_Click(object sender, EventArgs e)

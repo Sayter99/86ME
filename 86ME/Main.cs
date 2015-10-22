@@ -27,7 +27,7 @@ namespace _86ME_ver1
 {
     public partial class Main : Form
     {
-        string bt_type = "once";
+        string bt_type = "OneShot";
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -1482,11 +1482,11 @@ namespace _86ME_ver1
                 new_obj = false;
                 this.hint_richTextBox.Text = "Set target Flag Name and the number of loops\n↓\n↓\n↓";
             }
-            else if (String.Compare(typecombo.Text, "Motion") == 0)
+            else if (String.Compare(typecombo.Text, "GotoMotion") == 0)
             {
                 if (new_obj)
                 {
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Motion]");
+                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[GotoMotion]");
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Trigger());
                     Motionlist.SelectedIndex++;
                 }
@@ -1500,7 +1500,7 @@ namespace _86ME_ver1
                 new_obj = false;
                 this.hint_richTextBox.Text = "Set the method to trigger this motion. " + 
                                              "The motion will be effective in generated sketches, INEFFECTIVE in the testing stage." + 
-                                             "\n↓\n↓";
+                                             "\n!!! WARNING: NOT SUPPORT RECURSIVE CALL !!!\n↓";
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1612,7 +1612,7 @@ namespace _86ME_ver1
         private void triggerMotion_SelectedIndexChanged(object sender, EventArgs e)
         {
             ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((ComboBox)sender).Text;
-            Motionlist.Items[current_motionlist_idx] = "[Motion] " + ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+            Motionlist.Items[current_motionlist_idx] = "[GotoMotion] " + ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
         }
 
         private void callRadio_CheckedChanged(object sender, EventArgs e)
@@ -1900,17 +1900,17 @@ namespace _86ME_ver1
                     xtext.SelectionStart = xtext.Text.Length;
                     xtext.Focus();
                 }
-                else if (String.Compare(datas[0], "[Motion]") == 0)
+                else if (String.Compare(datas[0], "[GotoMotion]") == 0)
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     this.label2.Text = "Delay:";
                     typecombo.SelectedIndex = 5;
-                    typecombo.Text = "Motion";
+                    typecombo.Text = "GotoMotion";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = "Motion: ";
-                    xlabel.Size = new Size(50, 20);
+                    xlabel.Text = "Target Motion: ";
+                    xlabel.Size = new Size(85, 20);
                     Label xlabel2 = new Label();
                     xlabel2.Text = "Method: ";
                     xlabel2.Size = new Size(50, 20);
@@ -1919,11 +1919,13 @@ namespace _86ME_ver1
                     xcombo.Size = new Size(160, 22);
                     RadioButton call_radio = new RadioButton();
                     RadioButton jump_radio = new RadioButton();
+                    call_radio.Size = new Size(300, 20);
+                    jump_radio.Size = new Size(300, 20);
                     
                     for (int i = 0; i < MotionCombo.Items.Count; i++)
                         xcombo.Items.Add(((ME_Motion)ME_Motionlist[i]).name);
-                    call_radio.Text = "Call";
-                    jump_radio.Text = "Jump";
+                    call_radio.Text = "Call motion --- Jump to motion and wait for return";
+                    jump_radio.Text = "Jump to motion --- Jump to motion and idle";
 
                     xcombo.Text = ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
                     if (((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method == (int)internal_trigger.call)
@@ -1939,7 +1941,7 @@ namespace _86ME_ver1
 
                     xlabel.Top += 3;
                     xlabel2.Top += 25;
-                    xcombo.Left += 50;
+                    xcombo.Left += 85;
                     call_radio.Top += 45;
                     call_radio.Left += 10;
                     jump_radio.Top += 67;
@@ -2172,7 +2174,7 @@ namespace _86ME_ver1
         private void triggerToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ME_Trigger t = new ME_Trigger();
-            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Motion]");
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[GotoMotion]");
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, t);
             Motionlist.SelectedIndex++;
         }
@@ -2747,7 +2749,7 @@ namespace _86ME_ver1
                         else if (m.Events[j] is ME_Trigger)
                         {
                             ME_Trigger t = (ME_Trigger)m.Events[j];
-                            Motionlist.Items.Add("[Motion] " + t.name);
+                            Motionlist.Items.Add("[GotoMotion] " + t.name);
                         }
                     }
                     break;

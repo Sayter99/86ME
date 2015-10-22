@@ -230,7 +230,7 @@ namespace _86ME_ver1
             if (method_flag[2])
             {
                 writer.WriteLine("  if(" + bt_port + ".available()){ " + bt_port + "_Command = " + bt_port + ".read(); }");
-                if (String.Compare(bt_type, "Once") == 0)
+                if (String.Compare(bt_type, "OneShot") == 0)
                     writer.WriteLine("  else { " + bt_port + "_Command = 0xFFF; }");
             }
             if (method_flag[3])
@@ -375,6 +375,7 @@ namespace _86ME_ver1
                 else if (m.Events[i] is ME_Flag)
                 {
                     writer.WriteLine(space + "case " + m.name + "::FLAG_" + i + ":");
+                    state_counter++;
                     for (int k = i; k < m.Events.Count; k++)
                     {
                         if (m.Events[k] is ME_Goto)
@@ -384,7 +385,6 @@ namespace _86ME_ver1
                                 ME_Goto g = (ME_Goto)m.Events[k];
                                 if (g.is_goto)
                                 {
-                                    state_counter++;
                                     string for_var = m.name + "_" + g.name + "_" + flag_count.ToString();
                                     ((ME_Flag)m.Events[i]).var = for_var;
                                     writer.WriteLine(space4 + "flag_" + for_var + ":");
@@ -407,6 +407,7 @@ namespace _86ME_ver1
                 {
                     ME_Goto g = (ME_Goto)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::GOTO_" + i + ":");
+                    state_counter++;
                     if (g.is_goto)
                     {
                         for (int k = 0; k < i; k++)
@@ -430,7 +431,6 @@ namespace _86ME_ver1
                         }
                         if (i != m.Events.Count - 1)
                         {
-                            state_counter += 1;
                             next_action = m.name + "::" + m.states[state_counter];
                             writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
                         }
@@ -452,16 +452,37 @@ namespace _86ME_ver1
                 {
                     ME_Trigger t = (ME_Trigger)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::MOTION_" + i + ":");
-                    for (int j = 0; j < ME_Motionlist.Count; j++) //reset goto_var of the triggered motion
+                    if (String.Compare(t.name, "") != 0)
                     {
-                        ME_Motion tr_m = (ME_Motion)ME_Motionlist[j];
-                        if (tr_m.name == t.name)
+                        for (int j = 0; j < ME_Motionlist.Count; j++) //reset goto_var of the triggered motion
                         {
-                            for (int k = 0; k < tr_m.goto_var.Count; k++)
-                                writer.WriteLine(space4 + tr_m.name + "::" + tr_m.goto_var[k] + " = 0;");
+                            ME_Motion tr_m = (ME_Motion)ME_Motionlist[j];
+                            if (tr_m.name == t.name)
+                            {
+                                for (int k = 0; k < tr_m.goto_var.Count; k++)
+                                    writer.WriteLine(space4 + tr_m.name + "::" + tr_m.goto_var[k] + " = 0;");
+                            }
                         }
                     }
-                    if (t.method == (int)internal_trigger.call)
+                    if (String.Compare(t.name, "") == 0)
+                    {
+                        if (i != m.Events.Count - 1)
+                        {
+                            state_counter += 2;
+                            next_action = m.name + "::" + m.states[state_counter];
+                            writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                        }
+                        else
+                        {
+                            next_action = m.name + "::IDLE";
+                            writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                            for (int j = 0; j < m.goto_var.Count; j++)
+                                writer.WriteLine(space4 + m.name + "::" + m.goto_var[j] + " = 0;");
+                            writer.WriteLine(space4 + "internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                            writer.WriteLine(space4 + "external_trigger[_" + m.name.ToUpper() + "] = false;");
+                        }
+                    }
+                    else if (t.method == (int)internal_trigger.call)
                     {
                         writer.WriteLine(space4 + m.name + "::state = " + m.name + "::WAIT_MOTION_" + i + ";");
                         writer.WriteLine(space4 + "internal_trigger[_" + t.name.ToUpper() + "] = true;");
