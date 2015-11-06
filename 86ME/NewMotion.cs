@@ -11,6 +11,7 @@ namespace _86ME_ver1
 {
     public partial class NewMotion : Form
     {
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(NewMotion));
         public Arduino arduino = null;
         public Panel[] fpanel = new Panel[45];
         public Label[] flabel = new Label[45];
@@ -195,7 +196,7 @@ namespace _86ME_ver1
                 fcheck[i].Top += 24;
                 fcheck[i].Left += 125;
                 fcheck[i].Size = new Size(75, 22);
-                fcheck[i].Text = "Sync";
+                fcheck[i].Text = resources.GetString("fcheckText");
                 fcheck[i].Name = i.ToString();
                 fcheck[i].Checked = false;
                 fcheck[i].Enabled = false;

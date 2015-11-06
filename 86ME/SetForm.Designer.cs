@@ -37,66 +37,47 @@
             // 
             // button2
             // 
+            resources.ApplyResources(this.button2, "button2");
             this.button2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button2.Location = new System.Drawing.Point(57, 60);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(112, 33);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Start";
             this.button2.UseVisualStyleBackColor = true;
             this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // ComboBox0
             // 
-            this.ComboBox0.Font = new System.Drawing.Font("PMingLiU", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            resources.ApplyResources(this.ComboBox0, "ComboBox0");
             this.ComboBox0.FormattingEnabled = true;
             this.ComboBox0.Items.AddRange(new object[] {
-            "--auto--",
-            "--offline--"});
-            this.ComboBox0.Location = new System.Drawing.Point(26, 29);
+            resources.GetString("ComboBox0.Items"),
+            resources.GetString("ComboBox0.Items1")});
             this.ComboBox0.Name = "ComboBox0";
-            this.ComboBox0.Size = new System.Drawing.Size(212, 27);
-            this.ComboBox0.TabIndex = 3;
             // 
             // textBox1
             // 
+            resources.ApplyResources(this.textBox1, "textBox1");
             this.textBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.textBox1.Location = new System.Drawing.Point(26, 8);
             this.textBox1.Name = "textBox1";
             this.textBox1.ReadOnly = true;
-            this.textBox1.Size = new System.Drawing.Size(170, 15);
-            this.textBox1.TabIndex = 4;
-            this.textBox1.Text = "Select the COM port 86Duino used:";
             // 
             // Exit
             // 
+            resources.ApplyResources(this.Exit, "Exit");
             this.Exit.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Exit.Location = new System.Drawing.Point(175, 60);
             this.Exit.Name = "Exit";
-            this.Exit.Size = new System.Drawing.Size(47, 33);
-            this.Exit.TabIndex = 5;
-            this.Exit.Text = "Exit";
             this.Exit.UseVisualStyleBackColor = true;
             this.Exit.Click += new System.EventHandler(this.Exit_Click);
             // 
             // SetForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(259, 97);
             this.ControlBox = false;
             this.Controls.Add(this.Exit);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.ComboBox0);
             this.Controls.Add(this.button2);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(275, 135);
-            this.MinimumSize = new System.Drawing.Size(275, 135);
             this.Name = "SetForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "86ME";
             this.ResumeLayout(false);
             this.PerformLayout();
 

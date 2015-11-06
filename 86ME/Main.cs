@@ -22,11 +22,13 @@ using System.IO.Ports;
 using System.Collections;
 using System.Threading;
 using System.Media;
+using System.Globalization;
 
 namespace _86ME_ver1
 {
     public partial class Main : Form
     {
+        ComponentResourceManager resources = new ComponentResourceManager(typeof(Main));
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -66,14 +68,7 @@ namespace _86ME_ver1
         bool freshflag;
         bool picmode_move = false;
         bool[] captured = new bool[45];
-        string[] motionevent = {"Add new action at the next field",
-                                "Add homeframe",
-                                "Delete action",
-                                "Move action UP",
-                                "Move action DOWN",
-                                "Duplicate frame",
-                                "Add new action at the first field",
-                                "Insert an intermediate frame"};
+        string[] motionevent = new string[8];
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
         public Main()
         {
@@ -87,6 +82,14 @@ namespace _86ME_ver1
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
+            motionevent[0] = resources.GetString("AddNewAction_N");
+            motionevent[1] = resources.GetString("AddHomeframe");
+            motionevent[2] = resources.GetString("DeleteAction");
+            motionevent[3] = resources.GetString("MoveActionUP");
+            motionevent[4] = resources.GetString("MoveActionDOWN");
+            motionevent[5] = resources.GetString("DuplicateFrame");
+            motionevent[6] = resources.GetString("AddNewAction_F");
+            motionevent[7] = resources.GetString("InsertIntermediateFrame");
         }
 
         public Main(string filename)
@@ -101,6 +104,14 @@ namespace _86ME_ver1
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
+            motionevent[0] = resources.GetString("AddNewAction_N");
+            motionevent[1] = resources.GetString("AddHomeframe");
+            motionevent[2] = resources.GetString("DeleteAction");
+            motionevent[3] = resources.GetString("MoveActionUP");
+            motionevent[4] = resources.GetString("MoveActionDOWN");
+            motionevent[5] = resources.GetString("DuplicateFrame");
+            motionevent[6] = resources.GetString("AddNewAction_F");
+            motionevent[7] = resources.GetString("InsertIntermediateFrame");
             init_load_file = filename;
             Application.Idle += new EventHandler(init_load);
         }
@@ -1667,7 +1678,7 @@ namespace _86ME_ver1
                 loadFrame.Visible = false;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
-                this.label2.Text = "Delay:";
+                this.label2.Text = resources.GetString("Label2TextDelay");
             }
             if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
             {
@@ -1681,7 +1692,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = true;
                     loadFrame.Visible = true;
-                    this.label2.Text = "Play Time:";
+                    this.label2.Text = resources.GetString("Label2TextPlayTime");
                     typecombo.SelectedIndex = 0;
                     typecombo.Text = "Frame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1735,7 +1746,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = "Play Time:";
+                    this.label2.Text = resources.GetString("Label2TextPlayTime");
                     typecombo.SelectedIndex = 4;
                     typecombo.Text = "HomeFrame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1789,7 +1800,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = "Delay:";
+                    this.label2.Text = resources.GetString("Label2TextDelay");
                     typecombo.SelectedIndex = 1;
                     typecombo.Text = "Delay";
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1799,7 +1810,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = "Play Time:";
+                    this.label2.Text = resources.GetString("Label2TextPlayTime");
                     typecombo.SelectedIndex = 2;
                     typecombo.Text = "Sound";
                     delaytext.Text = ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1809,12 +1820,12 @@ namespace _86ME_ver1
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     typecombo.SelectedIndex = 3;
-                    this.label2.Text = "Delay:";
+                    this.label2.Text = resources.GetString("Label2TextDelay");
                     typecombo.Text = "Flag";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = "Name: ";
-                    xlabel.Size = new Size(40, 22);
+                    xlabel.Text = resources.GetString("flag_xlabel");
+                    xlabel.Size = new Size(45, 22);
 
                     MaskedTextBox xtext = new MaskedTextBox();
                     
@@ -1834,11 +1845,11 @@ namespace _86ME_ver1
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     typecombo.SelectedIndex = 2;
-                    this.label2.Text = "Delay:";
+                    this.label2.Text = resources.GetString("Label2TextDelay");
                     typecombo.Text = "Goto";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = "Target Flag Name: ";
+                    xlabel.Text = resources.GetString("goto_xlabel");
                     xlabel.Size = new Size(95, 22);
                     MaskedTextBox xtext = new MaskedTextBox();
                     xtext.Text = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
@@ -1846,7 +1857,7 @@ namespace _86ME_ver1
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 100;
                     Label xlabel2 = new Label();
-                    xlabel2.Text = "Enable Goto ";
+                    xlabel2.Text = resources.GetString("goto_xlabel2");
                     xlabel2.Size = new Size(65, 22);
                     xlabel2.Top += 32;
                     CheckBox xcheckbox = new CheckBox();
@@ -1858,7 +1869,7 @@ namespace _86ME_ver1
                     Label xlabel4 = new Label();
                     xlabel4.Name = "loop_inf_l";
                     xlabel4.Enabled = xcheckbox.Checked;
-                    xlabel4.Text = "Loop Infinitely ";
+                    xlabel4.Text = resources.GetString("goto_xlabel4");
                     xlabel4.Size = new Size(80, 22);
                     xlabel4.Top += 32;
                     xlabel4.Left += 85;
@@ -1871,7 +1882,7 @@ namespace _86ME_ver1
                     xcheckbox2.Top += 32;
                     xcheckbox2.Left += 165;
                     Label xlabel3 = new Label();
-                    xlabel3.Text = "Number of loops: ";
+                    xlabel3.Text = resources.GetString("goto_xlabel3");
                     xlabel3.Size = new Size(95, 22);
                     xlabel3.Top += 62;
                     MaskedTextBox xtext2 = new MaskedTextBox();
@@ -1904,21 +1915,21 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = "Delay:";
+                    this.label2.Text = resources.GetString("Label2TextDelay");
                     typecombo.SelectedIndex = 5;
                     typecombo.Text = "GotoMotion";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = "Target Motion: ";
+                    xlabel.Text = resources.GetString("gotoMotion_xlabel");
                     xlabel.Size = new Size(85, 20);
                     Label xlabel2 = new Label();
-                    xlabel2.Text = "Method: ";
+                    xlabel2.Text = resources.GetString("gotoMotion_xlabel2");
                     xlabel2.Size = new Size(50, 20);
                     Label xlabel3 = new Label();
-                    xlabel3.Text = "Jump to the target motion and wait for return.";
+                    xlabel3.Text = resources.GetString("gotoMotion_xlabel3");
                     xlabel3.Size = new Size(300, 20);
                     Label xlabel4 = new Label();
-                    xlabel4.Text = "Jump to the target motion and cancel the current motion.";
+                    xlabel4.Text = resources.GetString("gotoMotion_xlabel4");
                     xlabel4.Size = new Size(300, 20);
 
                     ComboBox xcombo = new ComboBox();
@@ -1930,8 +1941,8 @@ namespace _86ME_ver1
                     
                     for (int i = 0; i < MotionCombo.Items.Count; i++)
                         xcombo.Items.Add(((ME_Motion)ME_Motionlist[i]).name);
-                    call_radio.Text = "Call target motion";
-                    jump_radio.Text = "Jump to target motion";
+                    call_radio.Text = resources.GetString("call_radioText");
+                    jump_radio.Text = resources.GetString("jump_radioText");
 
                     xcombo.Text = ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
                     if (((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method == (int)internal_trigger.call)
@@ -2003,7 +2014,7 @@ namespace _86ME_ver1
                 Motionlist.SelectedIndex = Motionlist.IndexFromPoint(e.X, e.Y);
                 if (Motionlist.SelectedItem == null)
                 {
-                    motionToolStripMenuItem.Text = "Add new action at the first field";
+                    motionToolStripMenuItem.Text = resources.GetString("AddNewAction_F");
                     Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
                     Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -2012,12 +2023,12 @@ namespace _86ME_ver1
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
                 {
-                    motionToolStripMenuItem.Text = "Add new action at the next field";
+                    motionToolStripMenuItem.Text = resources.GetString("AddNewAction_N");
                     Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
 
                     if ((((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count - 1) > Motionlist.SelectedIndex)
                         if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1] is ME_Frame)
-                            Motionlist_contextMenuStrip.Items.Add("Insert an intermediate frame");
+                            Motionlist_contextMenuStrip.Items.Add(resources.GetString("InsertIntermediateFrame"));
 
                     for (int i = 2; i < motionevent.Length - 2; i++)
                         Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
@@ -2027,7 +2038,7 @@ namespace _86ME_ver1
                 }
                 else if (Motionlist.SelectedItem != null)
                 {
-                    motionToolStripMenuItem.Text = "Add new action at the next field";
+                    motionToolStripMenuItem.Text = resources.GetString("AddNewAction_N");
                     Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
                     for (int i = 2; i < motionevent.Length - 3; i++)
                         Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
@@ -3136,6 +3147,36 @@ namespace _86ME_ver1
                 }
             }
             Update_framelist();
+        }
+
+        private void englishToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
+            writer.Write("en");
+            writer.Dispose();
+            writer.Close();
+            MessageBox.Show("The change will be effective after restart.");
+        }
+
+        private void zhToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
+            writer.Write("zh-TW");
+            writer.Dispose();
+            writer.Close();
+            MessageBox.Show("變更的設定會在重新啟動後生效");
+        }
+
+        private void 簡體中文ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
+            writer.Write("zh-Hans");
+            writer.Dispose();
+            writer.Close();
+            MessageBox.Show("变更的设定会在重新启动後生效");
         }
 
     }
