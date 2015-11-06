@@ -222,13 +222,13 @@
     <value>65, 12</value>
   </data>
   <data name="label1.Text" xml:space="preserve">
-    <value>元素类别：</value>
+    <value>指令类别：</value>
   </data>
   <data name="Robot_pictureBox.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="Action_groupBox.Text" xml:space="preserve">
-    <value>动作元素</value>
+    <value>动作指令</value>
   </data>
   <data name="fast.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -294,7 +294,7 @@
     <value>注意！这个操作会先释放所有马达并抓取马达的读数。目前只支援 Kondo丶Hitec丶Futaba 之马达</value>
   </data>
   <data name="ActionList.Text" xml:space="preserve">
-    <value>元素列表</value>
+    <value>指令列表</value>
   </data>
   <data name="ps2CLKLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -379,7 +379,7 @@ Release: 放开按键时触发</value>
     <value>永远触发所选动作</value>
   </data>
   <data name="MotionTrigger.Text" xml:space="preserve">
-    <value>触发</value>
+    <value>触发条件</value>
   </data>
   <data name="nonblockinExplanation.Text" xml:space="preserve">
     <value>此动作会被其他动作所中断</value>
@@ -421,13 +421,13 @@ Release: 放开按键时触发</value>
     <value>NoControl</value>
   </data>
   <data name="move_down.ToolTip" xml:space="preserve">
-    <value>下移所选元素</value>
+    <value>下移所选指令</value>
   </data>
   <data name="move_up.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
   <data name="move_up.ToolTip" xml:space="preserve">
-    <value>上移所选元素</value>
+    <value>上移所选指令</value>
   </data>
   <data name="MotionNameLabel.Text" xml:space="preserve">
     <value>动作名称：</value>
@@ -2141,10 +2141,10 @@ Release: 放开按键时触发</value>
     <value>加入 Homeframe</value>
   </data>
   <data name="AddNewAction_F" xml:space="preserve">
-    <value>在第一位加入新元素</value>
+    <value>在第一位加入新指令</value>
   </data>
   <data name="AddNewAction_N" xml:space="preserve">
-    <value>在下一位加入新元素</value>
+    <value>在下一位加入新指令</value>
   </data>
   <data name="call_radioText" xml:space="preserve">
     <value>呼叫目标动作</value>
@@ -2199,5 +2199,136 @@ Release: 放开按键时触发</value>
   </data>
   <data name="MoveActionUP" xml:space="preserve">
     <value>上移</value>
+  </data>
+  <data name="errorMsg1" xml:space="preserve">
+    <value>无法传送讯息，请确认连线并重新启动</value>
+  </data>
+  <data name="errorMsg10" xml:space="preserve">
+    <value>损毁的档案，请确认 frame 相关设定</value>
+  </data>
+  <data name="errorMsg11" xml:space="preserve">
+    <value>损毁的档案，请确认延迟相关设定</value>
+  </data>
+  <data name="errorMsg12" xml:space="preserve">
+    <value>名称须以英文开头，并且不可输入特殊符号</value>
+  </data>
+  <data name="errorMsg13" xml:space="preserve">
+    <value>名称不可超过20字元</value>
+  </data>
+  <data name="errorMsg14" xml:space="preserve">
+    <value>名称不可含空白键</value>
+  </data>
+  <data name="errorMsg15" xml:space="preserve">
+    <value>请设定正确的延迟时间</value>
+  </data>
+  <data name="errorMsg16" xml:space="preserve">
+    <value>请先加入一个动作</value>
+  </data>
+  <data name="errorMsg17" xml:space="preserve">
+    <value>无法读取背景图片</value>
+  </data>
+  <data name="errorMsg2" xml:space="preserve">
+    <value>无法开启 86Duino，进入离线模式</value>
+  </data>
+  <data name="errorMsg3" xml:space="preserve">
+    <value>无法读取图档，请确认档案</value>
+  </data>
+  <data name="errorMsg4" xml:space="preserve">
+    <value>开启档案并非 .rmb 档，无法开启</value>
+  </data>
+  <data name="errorMsg5" xml:space="preserve">
+    <value>损毁的档案，无法读取</value>
+  </data>
+  <data name="errorMsg6" xml:space="preserve">
+    <value>损毁的档案，请确认偏差值格式</value>
+  </data>
+  <data name="errorMsg7" xml:space="preserve">
+    <value>损毁的档案，请确认 Homeframe 格式</value>
+  </data>
+  <data name="errorMsg8" xml:space="preserve">
+    <value>损毁的档案，请确认马达范围</value>
+  </data>
+  <data name="errorMsg9" xml:space="preserve">
+    <value>损毁的档案，请确认马达设定</value>
+  </data>
+  <data name="hint1" xml:space="preserve">
+    <value>1. 输入动作名称 2. 按下新增动作钮</value>
+  </data>
+  <data name="hint10" xml:space="preserve">
+    <value>设定目标旗标名称
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint11" xml:space="preserve">
+    <value>
+
+
+
+在空白处按下右键并加入新指令 ---&gt;</value>
+  </data>
+  <data name="hint12" xml:space="preserve">
+    <value>
+
+
+      所使用的马达并不支援这项功能</value>
+  </data>
+  <data name="hint13" xml:space="preserve">
+    <value>
+
+
+
+            设定属性 ---&gt;</value>
+  </data>
+  <data name="hint2" xml:space="preserve">
+    <value>调整马达数值
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint3" xml:space="preserve">
+    <value>1.左键点击标签 \"Ch XX\" 并拖曳至想要的位置
+2. 调整马达数值
+↓
+↓</value>
+  </data>
+  <data name="hint4" xml:space="preserve">
+    <value>Homeframe 只能在 编辑-&gt;机器人组态 中设定</value>
+  </data>
+  <data name="hint5" xml:space="preserve">
+    <value>
+
+
+&lt;--- 设定延迟</value>
+  </data>
+  <data name="hint6" xml:space="preserve">
+    <value>设定旗标名称
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint7" xml:space="preserve">
+    <value>设定目标旗标名称与跳转次数
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint8" xml:space="preserve">
+    <value>设定跳转至动作的方式，这项设定会在产生出来的程式生效。但在 86ME 播放时并不会生效。
+!!! 警告：不支援递回呼叫 !!!
+↓</value>
+  </data>
+  <data name="hint9" xml:space="preserve">
+    <value>
+
+
+
+           设定触发条件 ---&gt;</value>
+  </data>
+  <data name="saveMsg" xml:space="preserve">
+    <value>储存变更？</value>
+  </data>
+  <data name="saveMsg2" xml:space="preserve">
+    <value>储存此专案？</value>
   </data>
 </root>

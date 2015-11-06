@@ -1983,4 +1983,136 @@
   <data name="MoveActionUP" xml:space="preserve">
     <value>Move action UP</value>
   </data>
+  <data name="errorMsg1" xml:space="preserve">
+    <value>Failed to send messages. Please check the connection and restart.</value>
+  </data>
+  <data name="errorMsg10" xml:space="preserve">
+    <value>The loaded file is corrupt. Please check the format of frame.</value>
+  </data>
+  <data name="errorMsg11" xml:space="preserve">
+    <value>The loaded file is corrupt. Please check the format of delay.</value>
+  </data>
+  <data name="errorMsg12" xml:space="preserve">
+    <value>Please enter a name starting in English and without special characters</value>
+  </data>
+  <data name="errorMsg13" xml:space="preserve">
+    <value>Please enter a name less than 20 letters</value>
+  </data>
+  <data name="errorMsg14" xml:space="preserve">
+    <value>Motion name should without space.</value>
+  </data>
+  <data name="errorMsg15" xml:space="preserve">
+    <value>Please set the correct delay time.</value>
+  </data>
+  <data name="errorMsg16" xml:space="preserve">
+    <value>You should add a motion first</value>
+  </data>
+  <data name="errorMsg17" xml:space="preserve">
+    <value>Cannot load background image</value>
+  </data>
+  <data name="errorMsg2" xml:space="preserve">
+    <value>Cannot open 86Duino, entering offline mode</value>
+  </data>
+  <data name="errorMsg3" xml:space="preserve">
+    <value>Cannot load the picture. Please check the file</value>
+  </data>
+  <data name="errorMsg4" xml:space="preserve">
+    <value>The opened file isn't .rbm file.</value>
+  </data>
+  <data name="errorMsg5" xml:space="preserve">
+    <value>The loaded file is corrupt. It will not be loaded.</value>
+  </data>
+  <data name="errorMsg6" xml:space="preserve">
+    <value>The loaded file is corrupt. Please check the format of Offset.</value>
+  </data>
+  <data name="errorMsg7" xml:space="preserve">
+    <value>The loaded file is corrupt. Please check the format of Homeframe.</value>
+  </data>
+  <data name="errorMsg8" xml:space="preserve">
+    <value>The loaded file is corrupt. Please check the format of Range.</value>
+  </data>
+  <data name="errorMsg9" xml:space="preserve">
+    <value>The loaded file is corrupt. Please check the format of Servo.</value>
+  </data>
+  <data name="hint1" xml:space="preserve">
+    <value>      1.Enter a Motion Name and 2.Press Add Motion ---&gt;</value>
+  </data>
+  <data name="hint10" xml:space="preserve">
+    <value>Set target Flag Name of the Goto
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint11" xml:space="preserve">
+    <value>
+
+
+
+Right click in the white region and add an action ---&gt;</value>
+  </data>
+  <data name="hint12" xml:space="preserve">
+    <value>
+
+
+      The used motors don't support Capture</value>
+  </data>
+  <data name="hint13" xml:space="preserve">
+    <value>
+
+
+
+            Set properties of the choosed motion ---&gt;</value>
+  </data>
+  <data name="hint2" xml:space="preserve">
+    <value>Tune the settings of motors
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint3" xml:space="preserve">
+    <value>1.Left click on tag \"Ch XX\" and drag to move it
+2.Tune the settings of motors
+↓
+↓</value>
+  </data>
+  <data name="hint4" xml:space="preserve">
+    <value>Homeframe just can be modified by
+Options -&gt; Robot Configuration</value>
+  </data>
+  <data name="hint5" xml:space="preserve">
+    <value>
+
+
+&lt;--- Set the delay you want</value>
+  </data>
+  <data name="hint6" xml:space="preserve">
+    <value>Set the name of the flag
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint7" xml:space="preserve">
+    <value>Set target Flag Name and the number of loops
+↓
+↓
+↓</value>
+  </data>
+  <data name="hint8" xml:space="preserve">
+    <value>Set the method to trigger this motion. The motion will be effective in generated sketches, INEFFECTIVE in the testing stage.
+!!! WARNING: NOT SUPPORT RECURSIVE CALL !!!
+↓</value>
+  </data>
+  <data name="hint9" xml:space="preserve">
+    <value>
+
+
+
+           Set the trigger of the choosed motion ---&gt;</value>
+  </data>
+  <data name="saveMsg" xml:space="preserve">
+    <value>Save changes?</value>
+  </data>
+  <data name="saveMsg2" xml:space="preserve">
+    <value>Save this project?</value>
+  </data>
 </root>

@@ -283,7 +283,7 @@ namespace _86ME_ver1
                     catch
                     {
                         com_port = "OFF";
-                        MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                        MessageBox.Show(resources.GetString("errorMsg1"));
                     }
                 }
                 autocheck.Enabled = true;
@@ -389,7 +389,7 @@ namespace _86ME_ver1
                             catch
                             {
                                 com_port = "OFF";
-                                MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                                MessageBox.Show(resources.GetString("errorMsg1"));
                             }
                         }
                     }
@@ -527,7 +527,7 @@ namespace _86ME_ver1
         {
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show("Save changes?", "Exit", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg"), "Exit", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     save_project(load_filename);
@@ -535,7 +535,7 @@ namespace _86ME_ver1
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show("Save this project?", "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg2"), "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -599,7 +599,7 @@ namespace _86ME_ver1
                     draw_background();
                 }
                 this.MotionConfig.SelectedIndex = 0;
-                this.hint_richTextBox.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
+                this.hint_richTextBox.Text = resources.GetString("hint1");
             }
         }
 
@@ -615,7 +615,7 @@ namespace _86ME_ver1
                 catch
                 {
                     com_port = "OFF";
-                    MessageBox.Show("Cannot open 86Duino, entering offline mode", "",
+                    MessageBox.Show(resources.GetString("errorMsg2"), "",
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -641,7 +641,7 @@ namespace _86ME_ver1
                     catch
                     {
                         Motion.picfilename = null;
-                        MessageBox.Show("Cannot load the picture. Please check the file");
+                        MessageBox.Show(resources.GetString("errorMsg3"));
                     }
                 }
                 for (int i = 0; i < 45; i++)
@@ -858,7 +858,7 @@ namespace _86ME_ver1
         {
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show("Save changes?", "Exit", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg"), "Exit", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     save_project(load_filename);
@@ -866,7 +866,7 @@ namespace _86ME_ver1
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show("Save this project?", "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg2"), "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -881,7 +881,7 @@ namespace _86ME_ver1
                 return;
             if( String.Compare(Path.GetExtension(filename), ".rbm") != 0 )
             {
-                MessageBox.Show("The opened " + Path.GetExtension(filename) + " file isn't .rbm file.");
+                MessageBox.Show(resources.GetString("errorMsg4"));
                 return;
             }
             load_project(filename);
@@ -929,12 +929,12 @@ namespace _86ME_ver1
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
                 if (datas.Length < 239)
                 {
-                    MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
+                    MessageBox.Show(resources.GetString("errorMsg5"));
                     return;
                 }
                 if (datas[0] != "BoardVer")
                 {
-                    MessageBox.Show("The loaded file is corrupt. It will not be loaded.");
+                    MessageBox.Show(resources.GetString("errorMsg5"));
                     return;
                 }
 
@@ -987,7 +987,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext[k].Text = "0";
                                 offset[k] = 0;
-                                MessageBox.Show("The loaded file is corrupt. Please check the format of Offset.");
+                                MessageBox.Show(resources.GetString("errorMsg6"));
                             }
                         }
                     }
@@ -1005,7 +1005,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext2[k].Text = "1500";
                                 homeframe[k] = 1500;
-                                MessageBox.Show("The loaded file is corrupt. Please check the format of Homeframe.");
+                                MessageBox.Show(resources.GetString("errorMsg7"));
                             }
                         }
                     }
@@ -1023,7 +1023,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext3[k].Text = "600";
                                 min[k] = 600;
-                                MessageBox.Show("The loaded file is corrupt. Please check the format of Range.");
+                                MessageBox.Show(resources.GetString("errorMsg8"));
                             }
                         }
                         for (int k = 0; k < 45; k++)
@@ -1038,7 +1038,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext4[k].Text = "2400";
                                 Max[k] = 2400;
-                                MessageBox.Show("The loaded file is corrupt. Please check the format of Range.");
+                                MessageBox.Show(resources.GetString("errorMsg8"));
                             }
                         }
                     }
@@ -1095,7 +1095,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.fbox[k].SelectedIndex = 0;
                                 motor_info[k] = 0;
-                                MessageBox.Show("The loaded file is corrupt. Please check the format of Servo.");
+                                MessageBox.Show(resources.GetString("errorMsg9"));
                                 i--;
                                 break;
                             }
@@ -1170,7 +1170,7 @@ namespace _86ME_ver1
                         catch
                         {
                             nframe.delay = default_delay;
-                            MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                            MessageBox.Show(resources.GetString("errorMsg10"));
                         }
                         int j = 0;
                         while (j < 45)
@@ -1185,7 +1185,7 @@ namespace _86ME_ver1
                                 catch
                                 {
                                     nframe.frame[j] = 0;
-                                    MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                                    MessageBox.Show(resources.GetString("errorMsg10"));
                                 }
                             }
                             else
@@ -1208,7 +1208,7 @@ namespace _86ME_ver1
                         catch
                         {
                             nframe.delay = default_delay;
-                            MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                            MessageBox.Show(resources.GetString("errorMsg10"));
                         }
                         int j = 0;
                         while (j < 45)
@@ -1223,7 +1223,7 @@ namespace _86ME_ver1
                                 catch
                                 {
                                     nframe.frame[j] = 0;
-                                    MessageBox.Show("The loaded file is corrupt. Please check the format of frame.");
+                                    MessageBox.Show(resources.GetString("errorMsg10"));
                                 }
                             }
                             else
@@ -1245,7 +1245,7 @@ namespace _86ME_ver1
                         catch
                         {
                             ndelay.delay = default_delay;
-                            MessageBox.Show("The loaded file is corrupt. Please check the format of delay.");
+                            MessageBox.Show(resources.GetString("errorMsg11"));
                         }
                         motiontag.Events.Add(ndelay);
                     }
@@ -1318,7 +1318,7 @@ namespace _86ME_ver1
                 catch
                 {
                     nMotion.picfilename = null;
-                    MessageBox.Show("Cannot load the picture. Please check the file");
+                    MessageBox.Show(resources.GetString("errorMsg3"));
                 }
             }
             else
@@ -1385,9 +1385,9 @@ namespace _86ME_ver1
                 Update_framelist();
                 new_obj = false;
                 if(Motion.picfilename == null)
-                    this.hint_richTextBox.Text = "Tune the settings of motors\n↓\n↓\n↓";
+                    this.hint_richTextBox.Text = resources.GetString("hint2");
                 else
-                    this.hint_richTextBox.Text = "1.Left click on tag \"Ch XX\" and drag to move it\n2.Tune the settings of motors\n↓\n↓";
+                    this.hint_richTextBox.Text = resources.GetString("hint3");
             }
             else if (String.Compare(typecombo.Text, "HomeFrame") == 0)
             {
@@ -1412,7 +1412,7 @@ namespace _86ME_ver1
                 Update_framelist();
                 Framelist.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = "Homeframe just can be modified by\nOptions -> Robot Configuration";
+                this.hint_richTextBox.Text = resources.GetString("hint4");
             }
             else if (String.Compare(typecombo.Text, "Delay") == 0)
             {
@@ -1430,7 +1430,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = "\n\n\n<--- Set the delay you want";
+                this.hint_richTextBox.Text = resources.GetString("hint5");
             }
             else if (String.Compare(typecombo.Text, "Sound") == 0)
             {
@@ -1474,7 +1474,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = "Set the name of the flag\n↓\n↓\n↓";
+                this.hint_richTextBox.Text = resources.GetString("hint6");
             }
             else if (String.Compare(typecombo.Text, "Goto") == 0)
             {
@@ -1491,7 +1491,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = "Set target Flag Name and the number of loops\n↓\n↓\n↓";
+                this.hint_richTextBox.Text = resources.GetString("hint7");
             }
             else if (String.Compare(typecombo.Text, "GotoMotion") == 0)
             {
@@ -1509,9 +1509,7 @@ namespace _86ME_ver1
                 autocheck.Enabled = false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = "Set the method to trigger this motion. " + 
-                                             "The motion will be effective in generated sketches, INEFFECTIVE in the testing stage." + 
-                                             "\n!!! WARNING: NOT SUPPORT RECURSIVE CALL !!!\n↓";
+                this.hint_richTextBox.Text = resources.GetString("hint8");
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1603,7 +1601,7 @@ namespace _86ME_ver1
                             " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
                             "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
             else
-                this.hint_richTextBox.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
+                this.hint_richTextBox.Text = resources.GetString("hint9");
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1715,7 +1713,7 @@ namespace _86ME_ver1
                             catch
                             {
                                 com_port = "OFF";
-                                MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                                MessageBox.Show(resources.GetString("errorMsg1"));
                             }
                         }
                         autocheck.Enabled = true;
@@ -1769,7 +1767,7 @@ namespace _86ME_ver1
                             catch
                             {
                                 com_port = "OFF";
-                                MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                                MessageBox.Show(resources.GetString("errorMsg1"));
                             }
                         }
                         autocheck.Enabled = true;
@@ -1897,7 +1895,7 @@ namespace _86ME_ver1
                     xtext2.Size = new Size(160, 22);
                     xtext2.Left += 100;
                     xtext2.Top += 62;
-                    this.hint_richTextBox.Text = "Set target Flag Name of the Goto\n↓\n↓\n↓";
+                    this.hint_richTextBox.Text = resources.GetString("hint10");
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xlabel2);
@@ -2280,7 +2278,7 @@ namespace _86ME_ver1
                 Blocking.Enabled = false;
                 NonBlocking.Enabled = false;
             }
-            this.hint_richTextBox.Text = "      1.Enter a Motion Name and 2.Press Add Motion --->";
+            this.hint_richTextBox.Text = resources.GetString("hint1");
         }
 
         private void NewMotion_Click(object sender, EventArgs e)
@@ -2288,9 +2286,9 @@ namespace _86ME_ver1
             if (!(new System.Text.RegularExpressions.Regex("^[a-zA-Z][a-zA-Z0-9_]{0,20}$")).IsMatch(MotionCombo.Text))
             {
                 if (MotionCombo.Text.Length < 20)
-                    MessageBox.Show("Please enter a name starting in English and without special characters");
+                    MessageBox.Show(resources.GetString("errorMsg12"));
                 else
-                    MessageBox.Show("Please enter a name less than 20 letters");
+                    MessageBox.Show(resources.GetString("errorMsg13"));
                 MotionCombo.Focus();
             }
             else if (MotionCombo.Text.IndexOf(" ") == -1) // add new motion successfully
@@ -2307,11 +2305,11 @@ namespace _86ME_ver1
                 draw_background();
                 MotionConfig.SelectedIndex = 0;
                 Motionlist.Focus();
-                this.hint_richTextBox.Text = "\n\n\n\nRight click in the white region and add an action --->";
+                this.hint_richTextBox.Text = resources.GetString("hint11");
             }
             else
             {
-                MessageBox.Show("Motion name should without space.");
+                MessageBox.Show(resources.GetString("errorMsg14"));
                 MotionCombo.Focus();
             }
         }
@@ -2321,7 +2319,7 @@ namespace _86ME_ver1
             bool close = true;
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show("Save changes?", "Exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg"), "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                 {
                     save_project(load_filename);
@@ -2334,7 +2332,7 @@ namespace _86ME_ver1
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show("Save this project?", "Exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg2"), "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -2361,7 +2359,7 @@ namespace _86ME_ver1
                 uint[] frame = new uint[45];
                 if (servo_captured() == false)
                 {
-                    this.hint_richTextBox.Text = "\n\n\n\tThe used motors don't support Capture";
+                    this.hint_richTextBox.Text = resources.GetString("hint12");
                 }
                 else
                 {
@@ -2486,7 +2484,7 @@ namespace _86ME_ver1
                         catch
                         {
                             com_port = "OFF";
-                            MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                            MessageBox.Show(resources.GetString("errorMsg1"));
                         }
                     }
                 }
@@ -2613,7 +2611,7 @@ namespace _86ME_ver1
             {
                 if (autocheck.Checked == true && int.Parse(delaytext.Text) < 0)
                 {
-                    MessageBox.Show("Please set the correct delay time.");
+                    MessageBox.Show(resources.GetString("errorMsg15"));
                     autocheck.Checked = false;
                 }
                 else if (autocheck.Checked == true)
@@ -2648,7 +2646,7 @@ namespace _86ME_ver1
                         catch
                         {
                             com_port = "OFF";
-                            MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                            MessageBox.Show(resources.GetString("errorMsg1"));
                         }
                     }
                     autocheck.Enabled = true;
@@ -2677,7 +2675,7 @@ namespace _86ME_ver1
         {
             if (ME_Motionlist.Count == 0)
             {
-                MessageBox.Show("You should add a motion first");
+                MessageBox.Show(resources.GetString("errorMsg16"));
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
@@ -2689,7 +2687,7 @@ namespace _86ME_ver1
         {
             if (ME_Motionlist.Count == 0)
             {
-                MessageBox.Show("You should add a motion first");
+                MessageBox.Show(resources.GetString("errorMsg16"));
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
@@ -2707,7 +2705,7 @@ namespace _86ME_ver1
                 }
                 catch
                 {
-                    MessageBox.Show("Cannot load background image");
+                    MessageBox.Show(resources.GetString("errorMsg17"));
                 }
             }
             Framelist.Controls.Add(Robot_pictureBox);
@@ -2897,7 +2895,7 @@ namespace _86ME_ver1
                     ps2ATTCombo.Text = ps2pins[2];
                     ps2CLKCombo.Text = ps2pins[3];
                 }
-                this.hint_richTextBox.Text = "\n\n\n\n\t     Set the trigger of the choosed motion --->";
+                this.hint_richTextBox.Text = resources.GetString("hint9");
             }
             else if(MotionConfig.SelectedIndex == 2)
             {
@@ -2915,7 +2913,7 @@ namespace _86ME_ver1
                     Blocking.Enabled = false;
                     NonBlocking.Enabled = false;
                 }
-                this.hint_richTextBox.Text = "\n\n\n\n\t      Set properties of the choosed motion --->";
+                this.hint_richTextBox.Text = resources.GetString("hint13");
             }
         }
 
