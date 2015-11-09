@@ -145,7 +145,4 @@
   <data name="$this.Text" xml:space="preserve">
     <value>机器人组态</value>
   </data>
-  <data name="fcheckText" xml:space="preserve">
-    <value>同步</value>
-  </data>
 </root>

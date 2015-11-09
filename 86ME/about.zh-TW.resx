@@ -119,17 +119,22 @@
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="richTextBox1.Font" type="System.Drawing.Font, System.Drawing">
-    <value>PMingLiU, 9.75pt</value>
+    <value>Consolas, 9.75pt</value>
   </data>
   <data name="richTextBox1.Text" xml:space="preserve">
-    <value>86ME 為一開源專案，由 RoBoard 魔人之 RoBoME 衍生而來。(https://github.com/RoBoardGod/RoBoME)
-
-作者： Sayter
-    Github：
-    https://github.com/Sayter99
-
-86Duino 網站： www.86duino.com
-86Duino 粉絲專頁： https://www.facebook.com/groups/164926427017235/</value>
+    <value>86ME 為一開源專案，由 RoBoard 魔人之 RoBoME 衍生而來。(https://github.com/RoBoardGod/RoBoME)</value>
+  </data>
+  <data name="author_label.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 14</value>
+  </data>
+  <data name="author_label.Text" xml:space="preserve">
+    <value>作者：Sayter</value>
+  </data>
+  <data name="license_label.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 14</value>
+  </data>
+  <data name="license_label.Text" xml:space="preserve">
+    <value>授權方式：GNU GPL V2</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -203,8 +203,8 @@
   <data name="Setting_groupBox.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="AlwaysOn.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="panel2.TabIndex" type="System.Int32, mscorlib">
+    <value>6</value>
   </data>
   <data name="&gt;&gt;saveFrame.ZOrder" xml:space="preserve">
     <value>1</value>
@@ -266,8 +266,8 @@
   <data name="ps2KeyCombo.Items11" xml:space="preserve">
     <value>PSB_R1</value>
   </data>
-  <data name="Always_groupBox.Size" type="System.Drawing.Size, System.Drawing">
-    <value>192, 56</value>
+  <data name="AlwaysOn.Size" type="System.Drawing.Size, System.Drawing">
+    <value>74, 16</value>
   </data>
   <data name="&gt;&gt;slow.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -281,14 +281,14 @@
   <data name="&gt;&gt;NewMotion.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="ps2KeyCombo.Items2" xml:space="preserve">
-    <value>PSB_R3</value>
+  <data name="btPortCombo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>81, 20</value>
   </data>
   <data name="newToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>39, 20</value>
   </data>
-  <data name="&gt;&gt;helpToolStripMenuItem.Name" xml:space="preserve">
-    <value>helpToolStripMenuItem</value>
+  <data name="label3.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="&gt;&gt;move_down.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -351,9 +351,6 @@ This operation cannot be recovered, so the next play will start from the first i
   <data name="MotionPropertyLabel.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 4</value>
   </data>
-  <data name="&gt;&gt;MotionConfig.Type" xml:space="preserve">
-    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
   <data name="&gt;&gt;fast.Name" xml:space="preserve">
     <value>fast</value>
   </data>
@@ -404,9 +401,6 @@ This operation cannot be recovered, so the next play will start from the first i
   </data>
   <data name="ps2CMDLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>37, 12</value>
-  </data>
-  <data name="&gt;&gt;capturebutton.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="&gt;&gt;hint_richTextBox.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -579,9 +573,6 @@ This operation cannot be recovered, so the next play will start from the first i
   <data name="&gt;&gt;ActionList.Parent" xml:space="preserve">
     <value>MotionConfig</value>
   </data>
-  <data name="blockingExplaination.Location" type="System.Drawing.Point, System.Drawing">
-    <value>15, 45</value>
-  </data>
   <data name="Keyboard_groupBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>192, 58</value>
   </data>
@@ -637,8 +628,8 @@ This operation cannot be recovered, so the next play will start from the first i
   <data name="&gt;&gt;gotoToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="&gt;&gt;AlwaysOn.Name" xml:space="preserve">
-    <value>AlwaysOn</value>
+  <data name="&gt;&gt;ps2TypeCombo.Name" xml:space="preserve">
+    <value>ps2TypeCombo</value>
   </data>
   <data name="&gt;&gt;KeyboardTypeCombo.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -657,9 +648,6 @@ This operation cannot be recovered, so the next play will start from the first i
   </data>
   <data name="KeyboardCombo.Items" xml:space="preserve">
     <value>KEY_A</value>
-  </data>
-  <data name="Generate.Location" type="System.Drawing.Point, System.Drawing">
-    <value>746, 635</value>
   </data>
   <data name="&gt;&gt;Always_radioButton.ZOrder" xml:space="preserve">
     <value>5</value>
@@ -688,9 +676,6 @@ This operation cannot be recovered, so the next play will start from the first i
   <data name="ps2KeyCombo.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="btPortLabel.Size" type="System.Drawing.Size, System.Drawing">
-    <value>53, 12</value>
-  </data>
   <data name="saveFileToolStripMenuItem.Text" xml:space="preserve">
     <value>Save Project</value>
   </data>
@@ -703,8 +688,8 @@ This operation cannot be recovered, so the next play will start from the first i
   <data name="&gt;&gt;btModeCombo.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
-  <data name="label3.TabIndex" type="System.Int32, mscorlib">
-    <value>11</value>
+  <data name="panel2.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
+    <value>Stretch</value>
   </data>
   <data name="fast.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -717,6 +702,9 @@ This operation cannot be recovered, so the next play will start from the first i
   </data>
   <data name="&gt;&gt;btBaudCombo.Name" xml:space="preserve">
     <value>btBaudCombo</value>
+  </data>
+  <data name="sync_speed.Location" type="System.Drawing.Point, System.Drawing">
+    <value>77, 11</value>
   </data>
   <data name="&gt;&gt;motion_pause.ZOrder" xml:space="preserve">
     <value>2</value>
@@ -747,9 +735,6 @@ This operation cannot be recovered, so the next play will start from the first i
   </data>
   <data name="Motionlist.Size" type="System.Drawing.Size, System.Drawing">
     <value>219, 456</value>
-  </data>
-  <data name="ps2KeyCombo.Location" type="System.Drawing.Point, System.Drawing">
-    <value>16, 33</value>
   </data>
   <data name="btBaudCombo.Location" type="System.Drawing.Point, System.Drawing">
     <value>16, 70</value>
@@ -816,9 +801,6 @@ This operation cannot be recovered, so the next play will start from the first i
   </data>
   <data name="ps2KeyCombo.Items19" xml:space="preserve">
     <value>PSB_SQUARE</value>
-  </data>
-  <data name="Action_groupBox.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="ps2DATLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -921,9 +903,6 @@ the paused process can be continue by clicking "Play" again.</value>
   <data name="keyboardTypeLabel.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
-  <data name="TitleMotion.Location" type="System.Drawing.Point, System.Drawing">
-    <value>105, 13</value>
-  </data>
   <data name="slow.TabIndex" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
@@ -936,8 +915,8 @@ the paused process can be continue by clicking "Play" again.</value>
   <data name="MotionTest.ToolTip" xml:space="preserve">
     <value>Play the current motion list from the first item to the end.</value>
   </data>
-  <data name="NewMotion.ToolTip" xml:space="preserve">
-    <value>Create a new motion list for editing.</value>
+  <data name="fast.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="ps2ATTCombo.ToolTip" xml:space="preserve">
     <value>Set used pin of ATT.</value>
@@ -1008,9 +987,6 @@ the paused process can be continue by clicking "Play" again.</value>
   <data name="&gt;&gt;blockingExplaination.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
-  <data name="KeyboardCombo.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
-  </data>
   <data name="capturebutton.Size" type="System.Drawing.Size, System.Drawing">
     <value>76, 23</value>
   </data>
@@ -1049,6 +1025,9 @@ the paused process can be continue by clicking "Play" again.</value>
   </data>
   <data name="ps2ATTLabel.ToolTip" xml:space="preserve">
     <value />
+  </data>
+  <data name="&gt;&gt;Hint_groupBox.Parent" xml:space="preserve">
+    <value>Action_groupBox</value>
   </data>
   <data name="bt_groupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>27, 132</value>
@@ -1089,6 +1068,9 @@ the paused process can be continue by clicking "Play" again.</value>
   <data name="Blocking.Size" type="System.Drawing.Size, System.Drawing">
     <value>66, 16</value>
   </data>
+  <data name="hint_richTextBox.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
+  </data>
   <data name="&gt;&gt;MotionCombo.Parent" xml:space="preserve">
     <value>Motion_groupBox</value>
   </data>
@@ -1115,6 +1097,9 @@ the paused process can be continue by clicking "Play" again.</value>
   </data>
   <data name="&gt;&gt;NonBlocking.ZOrder" xml:space="preserve">
     <value>2</value>
+  </data>
+  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
+    <value>CenterScreen</value>
   </data>
   <data name="ps2KeyCombo.Size" type="System.Drawing.Size, System.Drawing">
     <value>95, 20</value>
@@ -1172,9 +1157,6 @@ the paused process can be continue by clicking "Play" again.</value>
   </data>
   <data name="&gt;&gt;btKeyText.Name" xml:space="preserve">
     <value>btKeyText</value>
-  </data>
-  <data name="label3.ToolTip" xml:space="preserve">
-    <value />
   </data>
   <data name="&gt;&gt;Motionlist.Parent" xml:space="preserve">
     <value>ActionList</value>
@@ -1266,9 +1248,6 @@ the paused process can be continue by clicking "Play" again.</value>
   <data name="ps2KeyCombo.Items10" xml:space="preserve">
     <value>PSB_L1</value>
   </data>
-  <data name="&gt;&gt;Action_groupBox.Name" xml:space="preserve">
-    <value>Action_groupBox</value>
-  </data>
   <data name="&gt;&gt;loadFrame.Parent" xml:space="preserve">
     <value>action_panel</value>
   </data>
@@ -1287,6 +1266,9 @@ the paused process can be continue by clicking "Play" again.</value>
   <data name="TitleMotion.ToolTip" xml:space="preserve">
     <value>Let the selected motion perfom once in the begining.</value>
   </data>
+  <data name="&gt;&gt;ps2CLKLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
   <data name="&gt;&gt;homeToolStripMenuItem.Name" xml:space="preserve">
     <value>homeToolStripMenuItem</value>
   </data>
@@ -1300,8 +1282,11 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="&gt;&gt;Keyboard_groupBox.Name" xml:space="preserve">
     <value>Keyboard_groupBox</value>
   </data>
-  <data name="&gt;&gt;KeyboardTypeCombo.Name" xml:space="preserve">
-    <value>KeyboardTypeCombo</value>
+  <data name="btPortLabel.Size" type="System.Drawing.Size, System.Drawing">
+    <value>53, 12</value>
+  </data>
+  <data name="&gt;&gt;ps2DATLabel.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="bt_radioButton.Size" type="System.Drawing.Size, System.Drawing">
     <value>14, 13</value>
@@ -1375,6 +1360,9 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="slow.Text" xml:space="preserve">
     <value>slow</value>
   </data>
+  <data name="label3.TabIndex" type="System.Int32, mscorlib">
+    <value>11</value>
+  </data>
   <data name="&gt;&gt;Motion_groupBox.Type" xml:space="preserve">
     <value>System.Windows.Forms.GroupBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -1398,9 +1386,6 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   </data>
   <data name="&gt;&gt;MotionProperty.Type" xml:space="preserve">
     <value>System.Windows.Forms.TabPage, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="delaytext.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
-    <value>Right</value>
   </data>
   <data name="&gt;&gt;zhSToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1432,8 +1417,14 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="btModeLabel.Size" type="System.Drawing.Size, System.Drawing">
     <value>35, 12</value>
   </data>
+  <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
+    <value>Options</value>
+  </data>
   <data name="Motionlist_contextMenuStrip.ToolTip" xml:space="preserve">
     <value />
+  </data>
+  <data name="&gt;&gt;Generate.Parent" xml:space="preserve">
+    <value>$this</value>
   </data>
   <data name="KeyboardKeyLabel.ToolTip" xml:space="preserve">
     <value />
@@ -1441,8 +1432,8 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="&gt;&gt;ps2CMDLabel.Name" xml:space="preserve">
     <value>ps2CMDLabel</value>
   </data>
-  <data name="$this.StartPosition" type="System.Windows.Forms.FormStartPosition, System.Windows.Forms">
-    <value>CenterScreen</value>
+  <data name="triggerToolStripMenuItem.Text" xml:space="preserve">
+    <value>GotoMotion</value>
   </data>
   <data name="Action_groupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>13, 94</value>
@@ -1465,8 +1456,8 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="&gt;&gt;btBaudLabel.Parent" xml:space="preserve">
     <value>bt_groupBox</value>
   </data>
-  <data name="&gt;&gt;MotionTrigger.Parent" xml:space="preserve">
-    <value>MotionConfig</value>
+  <data name="btPortLabel.TabIndex" type="System.Int32, mscorlib">
+    <value>5</value>
   </data>
   <data name="&gt;&gt;nonblockinExplanation.Name" xml:space="preserve">
     <value>nonblockinExplanation</value>
@@ -1546,9 +1537,6 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="&gt;&gt;label2.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="AlwaysOn.Size" type="System.Drawing.Size, System.Drawing">
-    <value>74, 16</value>
-  </data>
   <data name="ps2CMDCombo.Location" type="System.Drawing.Point, System.Drawing">
     <value>59, 73</value>
   </data>
@@ -1578,9 +1566,6 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   </data>
   <data name="&gt;&gt;zhToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
-  </data>
-  <data name="&gt;&gt;ps2TypeCombo.Name" xml:space="preserve">
-    <value>ps2TypeCombo</value>
   </data>
   <data name="MotionPropertyLabel.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
@@ -1660,11 +1645,8 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="&gt;&gt;motorRelease.Parent" xml:space="preserve">
     <value>Setting_groupBox</value>
   </data>
-  <data name="typecombo.Items2" xml:space="preserve">
-    <value>Goto</value>
-  </data>
-  <data name="KeyboardCombo.Items30" xml:space="preserve">
-    <value>KEY_DOWN</value>
+  <data name="englishToolStripMenuItem.Text" xml:space="preserve">
+    <value>English</value>
   </data>
   <data name="&gt;&gt;aboutToolStripMenuItem.Type" xml:space="preserve">
     <value>System.Windows.Forms.ToolStripMenuItem, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -1711,11 +1693,6 @@ The motors will act faster when the setting is closer to fast, and vice versa.</
   <data name="&gt;&gt;bt_radioButton.ZOrder" xml:space="preserve">
     <value>3</value>
   </data>
-  <data name="KeyboardTypeCombo.ToolTip" xml:space="preserve">
-    <value>First Press: Perform the selected motion while pressing the choosed key first time.
-Pressed: Perform the selected motion if the choosed key is pressed continuosly.
-Release: Perform the selected motion after the choosed key is released.</value>
-  </data>
   <data name="&gt;&gt;MotionConfig.ZOrder" xml:space="preserve">
     <value>0</value>
   </data>
@@ -1747,7 +1724,7 @@ Release: Perform the selected motion after the choosed key is released.</value>
     <value>2</value>
   </data>
   <data name="zhToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>124, 22</value>
   </data>
   <data name="ps2_groupBox.Location" type="System.Drawing.Point, System.Drawing">
     <value>27, 240</value>
@@ -1768,7 +1745,7 @@ Release: Perform the selected motion after the choosed key is released.</value>
     <value>0</value>
   </data>
   <data name="zhSToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>124, 22</value>
   </data>
   <data name="ps2TypeCombo.Items" xml:space="preserve">
     <value>First Press</value>
@@ -1779,8 +1756,8 @@ Release: Perform the selected motion after the choosed key is released.</value>
   <data name="KeyboardCombo.Location" type="System.Drawing.Point, System.Drawing">
     <value>16, 32</value>
   </data>
-  <data name="Blocking.Text" xml:space="preserve">
-    <value>Blocking</value>
+  <data name="KeyboardCombo.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
   <data name="&gt;&gt;delaytext.Name" xml:space="preserve">
     <value>delaytext</value>
@@ -1796,6 +1773,9 @@ Release: Perform the selected motion after the choosed key is released.</value>
   </data>
   <data name="&gt;&gt;delaytext.Type" xml:space="preserve">
     <value>System.Windows.Forms.MaskedTextBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="typecombo.Items2" xml:space="preserve">
+    <value>Goto</value>
   </data>
   <data name="Always_radioButton.Location" type="System.Drawing.Point, System.Drawing">
     <value>7, 7</value>
@@ -1818,8 +1798,8 @@ Release: Perform the selected motion after the choosed key is released.</value>
   <data name="&gt;&gt;aboutToolStripMenuItem.Name" xml:space="preserve">
     <value>aboutToolStripMenuItem</value>
   </data>
-  <data name="&gt;&gt;ps2TypeLabel.Parent" xml:space="preserve">
-    <value>ps2_groupBox</value>
+  <data name="Motion_groupBox.Text" xml:space="preserve">
+    <value>Motion</value>
   </data>
   <data name="&gt;&gt;newToolStripMenuItem.Name" xml:space="preserve">
     <value>newToolStripMenuItem</value>
@@ -1859,6 +1839,9 @@ Release: Perform the selected motion after the choosed key is released.</value>
   </data>
   <data name="sync_speed.TabIndex" type="System.Int32, mscorlib">
     <value>12</value>
+  </data>
+  <data name="KeyboardCombo.Items8" xml:space="preserve">
+    <value>KEY_I</value>
   </data>
   <data name="&gt;&gt;Robot_pictureBox.ZOrder" xml:space="preserve">
     <value>0</value>
@@ -1932,8 +1915,8 @@ Release: Perform the selected motion after the choosed key is released.</value>
   <data name="flagToolStripMenuItem.Text" xml:space="preserve">
     <value>Flag</value>
   </data>
-  <data name="btPortLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>5</value>
+  <data name="&gt;&gt;ps2TypeLabel.Parent" xml:space="preserve">
+    <value>ps2_groupBox</value>
   </data>
   <data name="ps2CLKLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -1981,6 +1964,12 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="ActionList.Padding" type="System.Windows.Forms.Padding, System.Windows.Forms">
     <value>3, 3, 3, 3</value>
   </data>
+  <data name="&gt;&gt;KeyboardTypeCombo.Name" xml:space="preserve">
+    <value>KeyboardTypeCombo</value>
+  </data>
+  <data name="Motion_groupBox.Location" type="System.Drawing.Point, System.Drawing">
+    <value>739, 28</value>
+  </data>
   <data name="&gt;&gt;motorRelease.Type" xml:space="preserve">
     <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
@@ -2002,9 +1991,6 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="motion_stop.TabIndex" type="System.Int32, mscorlib">
     <value>9</value>
   </data>
-  <data name="panel2.TabIndex" type="System.Int32, mscorlib">
-    <value>6</value>
-  </data>
   <data name="ps2CMDCombo.Size" type="System.Drawing.Size, System.Drawing">
     <value>41, 20</value>
   </data>
@@ -2024,9 +2010,6 @@ All of the settings will be stored in the generated sketch.</value>
     <value>3, 3, 3, 3</value>
   </data>
   <data name="KeyboardKeyLabel.TabIndex" type="System.Int32, mscorlib">
-    <value>1</value>
-  </data>
-  <data name="&gt;&gt;motorRelease.ZOrder" xml:space="preserve">
     <value>1</value>
   </data>
   <data name="&gt;&gt;homeToolStripMenuItem.Type" xml:space="preserve">
@@ -2068,8 +2051,8 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="MotionTest.Size" type="System.Drawing.Size, System.Drawing">
     <value>43, 35</value>
   </data>
-  <data name="&gt;&gt;motion_pause.Parent" xml:space="preserve">
-    <value>Motion_groupBox</value>
+  <data name="&gt;&gt;motorRelease.ZOrder" xml:space="preserve">
+    <value>1</value>
   </data>
   <data name="exitToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>147, 22</value>
@@ -2077,14 +2060,11 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="&gt;&gt;MotionPropertyLabel.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="hint_richTextBox.TabIndex" type="System.Int32, mscorlib">
-    <value>0</value>
+  <data name="TitleMotion.Location" type="System.Drawing.Point, System.Drawing">
+    <value>105, 13</value>
   </data>
   <data name="AlwaysOn.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
-  </data>
-  <data name="triggerToolStripMenuItem.Text" xml:space="preserve">
-    <value>GotoMotion</value>
   </data>
   <data name="Keyboard_radioButton.TabIndex" type="System.Int32, mscorlib">
     <value>3</value>
@@ -2095,8 +2075,10 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="&gt;&gt;capturebutton.Name" xml:space="preserve">
     <value>capturebutton</value>
   </data>
-  <data name="&gt;&gt;ps2DATLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="KeyboardTypeCombo.ToolTip" xml:space="preserve">
+    <value>First Press: Perform the selected motion while pressing the choosed key first time.
+Pressed: Perform the selected motion if the choosed key is pressed continuosly.
+Release: Perform the selected motion after the choosed key is released.</value>
   </data>
   <data name="KeyboardTypeCombo.Location" type="System.Drawing.Point, System.Drawing">
     <value>117, 32</value>
@@ -2105,7 +2087,7 @@ All of the settings will be stored in the generated sketch.</value>
     <value>5</value>
   </data>
   <data name="aboutToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>124, 22</value>
   </data>
   <data name="GenerateAllInOne.Location" type="System.Drawing.Point, System.Drawing">
     <value>746, 665</value>
@@ -2122,8 +2104,8 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="KeyboardCombo.Items31" xml:space="preserve">
     <value>KEY_ESC</value>
   </data>
-  <data name="KeyboardCombo.Items8" xml:space="preserve">
-    <value>KEY_I</value>
+  <data name="KeyboardCombo.Items30" xml:space="preserve">
+    <value>KEY_DOWN</value>
   </data>
   <data name="btKeyText.Size" type="System.Drawing.Size, System.Drawing">
     <value>78, 22</value>
@@ -2151,6 +2133,18 @@ All of the settings will be stored in the generated sketch.</value>
   </data>
   <data name="btModeCombo.ToolTip" xml:space="preserve">
     <value />
+  </data>
+  <data name="&gt;&gt;MotionTrigger.Parent" xml:space="preserve">
+    <value>MotionConfig</value>
+  </data>
+  <data name="&gt;&gt;helpToolStripMenuItem.Name" xml:space="preserve">
+    <value>helpToolStripMenuItem</value>
+  </data>
+  <data name="&gt;&gt;motion_pause.Parent" xml:space="preserve">
+    <value>Motion_groupBox</value>
+  </data>
+  <data name="Always_groupBox.Size" type="System.Drawing.Size, System.Drawing">
+    <value>192, 56</value>
   </data>
   <data name="Setting_groupBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>720, 60</value>
@@ -3930,7 +3924,7 @@ All of the settings will be stored in the generated sketch.</value>
     <value>DAT:</value>
   </data>
   <data name="englishToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>124, 22</value>
   </data>
   <data name="btModeLabel.ToolTip" xml:space="preserve">
     <value />
@@ -3938,8 +3932,8 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="aboutToolStripMenuItem.Text" xml:space="preserve">
     <value>About</value>
   </data>
-  <data name="panel2.BackgroundImageLayout" type="System.Windows.Forms.ImageLayout, System.Windows.Forms">
-    <value>Stretch</value>
+  <data name="&gt;&gt;Action_groupBox.Name" xml:space="preserve">
+    <value>Action_groupBox</value>
   </data>
   <data name="&gt;&gt;AlwaysOn.Parent" xml:space="preserve">
     <value>Always_groupBox</value>
@@ -3971,9 +3965,6 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="$this.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="fast.ToolTip" xml:space="preserve">
-    <value />
-  </data>
   <data name="NewMotion.Text" xml:space="preserve">
     <value>Add Motion</value>
   </data>
@@ -3995,8 +3986,10 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="&gt;&gt;ps2KeyLabel.Name" xml:space="preserve">
     <value>ps2KeyLabel</value>
   </data>
-  <data name="Motion_groupBox.Text" xml:space="preserve">
-    <value>Motion</value>
+  <data name="ps2TypeCombo.ToolTip" xml:space="preserve">
+    <value>First Press: Perform the selected motion while pressing the choosed key first time.
+Pressed: Perform the selected motion if the choosed key is pressed continuosly.
+Release: Perform the selected motion after the choosed key is released.</value>
   </data>
   <data name="btPortCombo.Items1" xml:space="preserve">
     <value>Serial2</value>
@@ -4088,6 +4081,9 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="nonblockinExplanation.Size" type="System.Drawing.Size, System.Drawing">
     <value>202, 39</value>
   </data>
+  <data name="btBaudCombo.Size" type="System.Drawing.Size, System.Drawing">
+    <value>78, 20</value>
+  </data>
   <data name="ps2KeyLabel.Text" xml:space="preserve">
     <value>Key: </value>
   </data>
@@ -4121,8 +4117,8 @@ All of the settings will be stored in the generated sketch.</value>
   <data name="ps2KeyLabel.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="&gt;&gt;btModeCombo.Parent" xml:space="preserve">
-    <value>bt_groupBox</value>
+  <data name="Generate.Location" type="System.Drawing.Point, System.Drawing">
+    <value>746, 635</value>
   </data>
   <data name="&gt;&gt;fast.Type" xml:space="preserve">
     <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
@@ -4195,7 +4191,7 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
     <value>System.Windows.Forms.ComboBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="howToUseToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>124, 22</value>
   </data>
   <data name="Robot_pictureBox.Size" type="System.Drawing.Size, System.Drawing">
     <value>694, 470</value>
@@ -4213,14 +4209,17 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="preferenceToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>80, 20</value>
   </data>
-  <data name="blockingExplaination.Size" type="System.Drawing.Size, System.Drawing">
-    <value>202, 39</value>
+  <data name="Action_groupBox.ToolTip" xml:space="preserve">
+    <value />
   </data>
   <data name="move_up.Location" type="System.Drawing.Point, System.Drawing">
     <value>244, 273</value>
   </data>
   <data name="&gt;&gt;ps2DATCombo.Name" xml:space="preserve">
     <value>ps2DATCombo</value>
+  </data>
+  <data name="&gt;&gt;btModeCombo.Parent" xml:space="preserve">
+    <value>bt_groupBox</value>
   </data>
   <data name="&gt;&gt;slow.Parent" xml:space="preserve">
     <value>Setting_groupBox</value>
@@ -4231,8 +4230,8 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="&gt;&gt;sync_speed.ZOrder" xml:space="preserve">
     <value>4</value>
   </data>
-  <data name="btBaudCombo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>78, 20</value>
+  <data name="blockingExplaination.Location" type="System.Drawing.Point, System.Drawing">
+    <value>15, 45</value>
   </data>
   <data name="Hint_groupBox.ToolTip" xml:space="preserve">
     <value />
@@ -4252,11 +4251,11 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="&gt;&gt;Motionlist.Type" xml:space="preserve">
     <value>System.Windows.Forms.ListBox, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
-  <data name="btPortCombo.Size" type="System.Drawing.Size, System.Drawing">
-    <value>81, 20</value>
+  <data name="Blocking.Text" xml:space="preserve">
+    <value>Blocking</value>
   </data>
-  <data name="&gt;&gt;ps2CLKLabel.Type" xml:space="preserve">
-    <value>System.Windows.Forms.Label, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  <data name="NewMotion.ToolTip" xml:space="preserve">
+    <value>Create a new motion list for editing.</value>
   </data>
   <data name="&gt;&gt;$this.Name" xml:space="preserve">
     <value>Main</value>
@@ -4271,7 +4270,7 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
     <value>18, 12</value>
   </data>
   <data name="languageToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>152, 22</value>
+    <value>133, 22</value>
   </data>
   <data name="ps2KeyCombo.Items17" xml:space="preserve">
     <value>PSB_CIRCLE</value>
@@ -4297,8 +4296,8 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="move_up.ToolTip" xml:space="preserve">
     <value>Move up the selected item of the motion list.</value>
   </data>
-  <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
-    <value>Options</value>
+  <data name="AlwaysOn.TabIndex" type="System.Int32, mscorlib">
+    <value>0</value>
   </data>
   <data name="KeyboardKeyLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4336,6 +4335,9 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="btKeyLabel.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
   </data>
+  <data name="blockingExplaination.Size" type="System.Drawing.Size, System.Drawing">
+    <value>202, 39</value>
+  </data>
   <data name="TitleMotion.TabIndex" type="System.Int32, mscorlib">
     <value>2</value>
   </data>
@@ -4345,14 +4347,14 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="&gt;&gt;languageToolStripMenuItem.Name" xml:space="preserve">
     <value>languageToolStripMenuItem</value>
   </data>
-  <data name="sync_speed.Location" type="System.Drawing.Point, System.Drawing">
-    <value>77, 11</value>
+  <data name="ps2KeyCombo.Items2" xml:space="preserve">
+    <value>PSB_R3</value>
   </data>
   <data name="optionsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>65, 20</value>
   </data>
-  <data name="Motion_groupBox.Location" type="System.Drawing.Point, System.Drawing">
-    <value>739, 28</value>
+  <data name="&gt;&gt;MotionConfig.Type" xml:space="preserve">
+    <value>System.Windows.Forms.TabControl, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="bt_groupBox.ToolTip" xml:space="preserve">
     <value />
@@ -4360,8 +4362,8 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="panel2.ToolTip" xml:space="preserve">
     <value />
   </data>
-  <data name="englishToolStripMenuItem.Text" xml:space="preserve">
-    <value>English</value>
+  <data name="ps2KeyCombo.Location" type="System.Drawing.Point, System.Drawing">
+    <value>16, 33</value>
   </data>
   <data name="AlwaysOff.AutoSize" type="System.Boolean, mscorlib">
     <value>True</value>
@@ -4372,10 +4374,8 @@ The value of frames and offsets will be stored in files out of the sketch.</valu
   <data name="&gt;&gt;frameToolStripMenuItem.Name" xml:space="preserve">
     <value>frameToolStripMenuItem</value>
   </data>
-  <data name="ps2TypeCombo.ToolTip" xml:space="preserve">
-    <value>First Press: Perform the selected motion while pressing the choosed key first time.
-Pressed: Perform the selected motion if the choosed key is pressed continuosly.
-Release: Perform the selected motion after the choosed key is released.</value>
+  <data name="delaytext.TextAlign" type="System.Windows.Forms.HorizontalAlignment, System.Windows.Forms">
+    <value>Right</value>
   </data>
   <data name="motion_stop.Location" type="System.Drawing.Point, System.Drawing">
     <value>166, 560</value>
@@ -4458,8 +4458,8 @@ Release: Perform the selected motion after the choosed key is released.</value>
   <data name="&gt;&gt;Always_radioButton.Parent" xml:space="preserve">
     <value>MotionTrigger</value>
   </data>
-  <data name="&gt;&gt;Hint_groupBox.Parent" xml:space="preserve">
-    <value>Action_groupBox</value>
+  <data name="&gt;&gt;AlwaysOn.Name" xml:space="preserve">
+    <value>AlwaysOn</value>
   </data>
   <data name="&gt;&gt;NonBlocking.Parent" xml:space="preserve">
     <value>MotionProperty</value>
@@ -4467,8 +4467,8 @@ Release: Perform the selected motion after the choosed key is released.</value>
   <data name="ps2KeyCombo.Items3" xml:space="preserve">
     <value>PSB_START</value>
   </data>
-  <data name="&gt;&gt;Generate.Parent" xml:space="preserve">
-    <value>$this</value>
+  <data name="&gt;&gt;capturebutton.Type" xml:space="preserve">
+    <value>System.Windows.Forms.Button, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </data>
   <data name="ps2_groupBox.ToolTip" xml:space="preserve">
     <value />
@@ -4511,8 +4511,5 @@ Release: Perform the selected motion after the choosed key is released.</value>
   </metadata>
   <metadata name="ttp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
-  </metadata>
-  <metadata name="$this.Language" type="System.Globalization.CultureInfo, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>zh-TW</value>
   </metadata>
 </root>

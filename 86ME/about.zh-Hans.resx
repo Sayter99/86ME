@@ -118,17 +118,21 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="richTextBox1.Text" xml:space="preserve">
-    <value>86ME 为一开源专案，由 RoBoard 魔人之 RoBoME 衍生而来。 (https://github.com/RoBoardGod/RoBoME)
-
-作者：
-  Sayter
-    Github:
-    https://github.com/Sayter99
-
-86Duino Website: www.86duino.com
-86Duino Facebook: https://www.facebook.com/groups/164926427017235/</value>
+    <value>86ME 为一开源专案，由 RoBoard 魔人之 RoBoME 衍生而来。 (https://github.com/RoBoardGod/RoBoME)</value>
   </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="author_label.Size" type="System.Drawing.Size, System.Drawing">
+    <value>91, 14</value>
+  </data>
+  <data name="author_label.Text" xml:space="preserve">
+    <value>作者：Sayter</value>
+  </data>
+  <data name="license_label.Size" type="System.Drawing.Size, System.Drawing">
+    <value>147, 14</value>
+  </data>
+  <data name="license_label.Text" xml:space="preserve">
+    <value>授权方式：GNU GPL V2</value>
+  </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         AAABAAUAEBAAAAAAIABoBAAAVgAAACAgAAAAACAAqBAAAL4EAAAwMAAAAAAgAKglAABmFQAAQEAAAAAA

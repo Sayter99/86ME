@@ -25,5 +25,20 @@ namespace _86ME_ver1
             // with link text as URL.
             p = System.Diagnostics.Process.Start(e.LinkText);
         }
+
+        private void fb_button_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://www.facebook.com/groups/164926427017235/");
+        }
+
+        private void web_button_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.86duino.com");
+        }
+
+        private void github_button_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("https://github.com/Sayter99");
+        }
     }
 }

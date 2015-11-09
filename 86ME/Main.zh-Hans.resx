@@ -160,6 +160,9 @@
   <data name="optionsToolStripMenuItem.Text" xml:space="preserve">
     <value>编辑</value>
   </data>
+  <data name="languageToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>100, 22</value>
+  </data>
   <data name="languageToolStripMenuItem.Text" xml:space="preserve">
     <value>语言</value>
   </data>
@@ -319,6 +322,9 @@ Release: 放开按键时触发</value>
   <data name="ps2TypeLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
+  <data name="ps2_groupBox.Text" xml:space="preserve">
+    <value>PS2 摇杆</value>
+  </data>
   <data name="ps2_radioButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -340,6 +346,9 @@ Release: 放开按键时触发</value>
   <data name="btKeyLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
+  <data name="bt_groupBox.Text" xml:space="preserve">
+    <value>蓝芽</value>
+  </data>
   <data name="bt_radioButton.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
   </data>
@@ -359,6 +368,9 @@ Release: 放开按键时触发</value>
   </data>
   <data name="KeyboardKeyLabel.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
+  </data>
+  <data name="Keyboard_groupBox.Text" xml:space="preserve">
+    <value>键盘</value>
   </data>
   <data name="TitleMotion.ImeMode" type="System.Windows.Forms.ImeMode, System.Windows.Forms">
     <value>NoControl</value>
@@ -2136,199 +2148,5 @@ Release: 放开按键时触发</value>
         AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
         AAAAAAAAAAAAAAAAAAAAAAAA
 </value>
-  </data>
-  <data name="AddHomeframe" xml:space="preserve">
-    <value>加入 Homeframe</value>
-  </data>
-  <data name="AddNewAction_F" xml:space="preserve">
-    <value>在第一位加入新指令</value>
-  </data>
-  <data name="AddNewAction_N" xml:space="preserve">
-    <value>在下一位加入新指令</value>
-  </data>
-  <data name="call_radioText" xml:space="preserve">
-    <value>呼叫目标动作</value>
-  </data>
-  <data name="DeleteAction" xml:space="preserve">
-    <value>删除</value>
-  </data>
-  <data name="DuplicateFrame" xml:space="preserve">
-    <value>复制并插入</value>
-  </data>
-  <data name="flag_xlabel" xml:space="preserve">
-    <value>名称：</value>
-  </data>
-  <data name="gotoMotion_xlabel" xml:space="preserve">
-    <value>目标动作：</value>
-  </data>
-  <data name="gotoMotion_xlabel2" xml:space="preserve">
-    <value>方式：</value>
-  </data>
-  <data name="gotoMotion_xlabel3" xml:space="preserve">
-    <value>跳至目标动作并等待回传</value>
-  </data>
-  <data name="gotoMotion_xlabel4" xml:space="preserve">
-    <value>跳至目标动作并取消目前动作</value>
-  </data>
-  <data name="goto_xlabel" xml:space="preserve">
-    <value>目标旗标：</value>
-  </data>
-  <data name="goto_xlabel2" xml:space="preserve">
-    <value>        启用</value>
-  </data>
-  <data name="goto_xlabel3" xml:space="preserve">
-    <value>跳转次数</value>
-  </data>
-  <data name="goto_xlabel4" xml:space="preserve">
-    <value>        无线跳转</value>
-  </data>
-  <data name="InsertIntermediateFrame" xml:space="preserve">
-    <value>插入均值 Frame</value>
-  </data>
-  <data name="jump_radioText" xml:space="preserve">
-    <value>跳至目标动作</value>
-  </data>
-  <data name="Label2TextDelay" xml:space="preserve">
-    <value>延迟：</value>
-  </data>
-  <data name="Label2TextPlayTime" xml:space="preserve">
-    <value>动作时间：</value>
-  </data>
-  <data name="MoveActionDOWN" xml:space="preserve">
-    <value>下移</value>
-  </data>
-  <data name="MoveActionUP" xml:space="preserve">
-    <value>上移</value>
-  </data>
-  <data name="errorMsg1" xml:space="preserve">
-    <value>无法传送讯息，请确认连线并重新启动</value>
-  </data>
-  <data name="errorMsg10" xml:space="preserve">
-    <value>损毁的档案，请确认 frame 相关设定</value>
-  </data>
-  <data name="errorMsg11" xml:space="preserve">
-    <value>损毁的档案，请确认延迟相关设定</value>
-  </data>
-  <data name="errorMsg12" xml:space="preserve">
-    <value>名称须以英文开头，并且不可输入特殊符号</value>
-  </data>
-  <data name="errorMsg13" xml:space="preserve">
-    <value>名称不可超过20字元</value>
-  </data>
-  <data name="errorMsg14" xml:space="preserve">
-    <value>名称不可含空白键</value>
-  </data>
-  <data name="errorMsg15" xml:space="preserve">
-    <value>请设定正确的延迟时间</value>
-  </data>
-  <data name="errorMsg16" xml:space="preserve">
-    <value>请先加入一个动作</value>
-  </data>
-  <data name="errorMsg17" xml:space="preserve">
-    <value>无法读取背景图片</value>
-  </data>
-  <data name="errorMsg2" xml:space="preserve">
-    <value>无法开启 86Duino，进入离线模式</value>
-  </data>
-  <data name="errorMsg3" xml:space="preserve">
-    <value>无法读取图档，请确认档案</value>
-  </data>
-  <data name="errorMsg4" xml:space="preserve">
-    <value>开启档案并非 .rmb 档，无法开启</value>
-  </data>
-  <data name="errorMsg5" xml:space="preserve">
-    <value>损毁的档案，无法读取</value>
-  </data>
-  <data name="errorMsg6" xml:space="preserve">
-    <value>损毁的档案，请确认偏差值格式</value>
-  </data>
-  <data name="errorMsg7" xml:space="preserve">
-    <value>损毁的档案，请确认 Homeframe 格式</value>
-  </data>
-  <data name="errorMsg8" xml:space="preserve">
-    <value>损毁的档案，请确认马达范围</value>
-  </data>
-  <data name="errorMsg9" xml:space="preserve">
-    <value>损毁的档案，请确认马达设定</value>
-  </data>
-  <data name="hint1" xml:space="preserve">
-    <value>1. 输入动作名称 2. 按下新增动作钮</value>
-  </data>
-  <data name="hint10" xml:space="preserve">
-    <value>设定目标旗标名称
-↓
-↓
-↓</value>
-  </data>
-  <data name="hint11" xml:space="preserve">
-    <value>
-
-
-
-在空白处按下右键并加入新指令 ---&gt;</value>
-  </data>
-  <data name="hint12" xml:space="preserve">
-    <value>
-
-
-      所使用的马达并不支援这项功能</value>
-  </data>
-  <data name="hint13" xml:space="preserve">
-    <value>
-
-
-
-            设定属性 ---&gt;</value>
-  </data>
-  <data name="hint2" xml:space="preserve">
-    <value>调整马达数值
-↓
-↓
-↓</value>
-  </data>
-  <data name="hint3" xml:space="preserve">
-    <value>1.左键点击标签 \"Ch XX\" 并拖曳至想要的位置
-2. 调整马达数值
-↓
-↓</value>
-  </data>
-  <data name="hint4" xml:space="preserve">
-    <value>Homeframe 只能在 编辑-&gt;机器人组态 中设定</value>
-  </data>
-  <data name="hint5" xml:space="preserve">
-    <value>
-
-
-&lt;--- 设定延迟</value>
-  </data>
-  <data name="hint6" xml:space="preserve">
-    <value>设定旗标名称
-↓
-↓
-↓</value>
-  </data>
-  <data name="hint7" xml:space="preserve">
-    <value>设定目标旗标名称与跳转次数
-↓
-↓
-↓</value>
-  </data>
-  <data name="hint8" xml:space="preserve">
-    <value>设定跳转至动作的方式，这项设定会在产生出来的程式生效。但在 86ME 播放时并不会生效。
-!!! 警告：不支援递回呼叫 !!!
-↓</value>
-  </data>
-  <data name="hint9" xml:space="preserve">
-    <value>
-
-
-
-           设定触发条件 ---&gt;</value>
-  </data>
-  <data name="saveMsg" xml:space="preserve">
-    <value>储存变更？</value>
-  </data>
-  <data name="saveMsg2" xml:space="preserve">
-    <value>储存此专案？</value>
   </data>
 </root>

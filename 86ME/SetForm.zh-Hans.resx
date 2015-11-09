@@ -121,7 +121,7 @@
     <value>开始</value>
   </data>
   <data name="textBox1.Text" xml:space="preserve">
-    <value>选择 86Duino 所在的阜</value>
+    <value>选择 86Duino 所在的连接埠：</value>
   </data>
   <data name="Exit.Text" xml:space="preserve">
     <value>离开</value>

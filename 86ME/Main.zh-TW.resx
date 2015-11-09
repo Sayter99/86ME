@@ -2331,4 +2331,13 @@ Release: 放開按鍵時觸發</value>
   <data name="saveMsg2" xml:space="preserve">
     <value>儲存此專案？</value>
   </data>
+  <data name="bt_groupBox.Text" xml:space="preserve">
+    <value>藍芽</value>
+  </data>
+  <data name="Keyboard_groupBox.Text" xml:space="preserve">
+    <value>鍵盤</value>
+  </data>
+  <data name="ps2_groupBox.Text" xml:space="preserve">
+    <value>PS2 搖桿</value>
+  </data>
 </root>
