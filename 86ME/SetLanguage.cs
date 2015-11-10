@@ -51,12 +51,10 @@ namespace _86ME_ver1
                 {
                     if (i + 1 < input.Length)
                     {
-                        if (input[++i] == 'n')
+                        ++i;
+                        if (input[i] == 'n')
                             output += '\n';
-                    }
-                    else if (i + 1 < input.Length)
-                    {
-                        if (input[++i] == 't')
+                        else if (input[i] == 't')
                             output += '\t';
                     }
                 }
