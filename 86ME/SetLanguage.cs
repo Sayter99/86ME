@@ -31,7 +31,14 @@ namespace _86ME_ver1
                     if (data[0] == '#')
                         continue;
                     string[] cmd = data.Split(delimiterChar);
-                    lang_dic.Add(cmd[0], convertNewLine(cmd[1]));
+                    string rstring = "";
+                    for (int i = 1; i < cmd.Length; i++)
+                    {
+                        if (i != 1)
+                            rstring += '=';
+                        rstring += cmd[i];
+                    }
+                    lang_dic.Add(cmd[0], convertNewLine(rstring));
                 }
             }
         }
@@ -46,6 +53,11 @@ namespace _86ME_ver1
                     {
                         if (input[++i] == 'n')
                             output += '\n';
+                    }
+                    else if (i + 1 < input.Length)
+                    {
+                        if (input[++i] == 't')
+                            output += '\t';
                     }
                 }
                 else

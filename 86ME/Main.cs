@@ -1374,10 +1374,6 @@ namespace _86ME_ver1
                 typecombo.Enabled = false;
                 Update_framelist();
                 new_obj = false;
-                if(Motion.picfilename == null)
-                    this.hint_richTextBox.Text = Main_lang_dic["hint2"];
-                else
-                    this.hint_richTextBox.Text = Main_lang_dic["hint3"];
             }
             else if (String.Compare(typecombo.Text, "HomeFrame") == 0)
             {
@@ -1402,7 +1398,6 @@ namespace _86ME_ver1
                 Update_framelist();
                 Framelist.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = Main_lang_dic["hint4"];
             }
             else if (String.Compare(typecombo.Text, "Delay") == 0)
             {
@@ -1420,7 +1415,6 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = Main_lang_dic["hint5"];
             }
             else if (String.Compare(typecombo.Text, "Sound") == 0)
             {
@@ -1464,7 +1458,6 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = Main_lang_dic["hint6"];
             }
             else if (String.Compare(typecombo.Text, "Goto") == 0)
             {
@@ -1481,7 +1474,6 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = Main_lang_dic["hint7"];
             }
             else if (String.Compare(typecombo.Text, "GotoMotion") == 0)
             {
@@ -1499,7 +1491,6 @@ namespace _86ME_ver1
                 autocheck.Enabled = false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = Main_lang_dic["hint8"];
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1729,6 +1720,10 @@ namespace _86ME_ver1
                     freshflag = false;
                     Framelist.Enabled = true;
                     draw_background();
+                    if (Motion.picfilename == null)
+                        this.hint_richTextBox.Text = Main_lang_dic["hint2"];
+                    else
+                        this.hint_richTextBox.Text = Main_lang_dic["hint3"];
                 }
                 else if (String.Compare(datas[0], "[Home]") == 0)
                 {
@@ -1783,6 +1778,7 @@ namespace _86ME_ver1
                     freshflag = false;
                     Framelist.Enabled = false;
                     draw_background();
+                    this.hint_richTextBox.Text = Main_lang_dic["hint4"];
                 }
                 else if (String.Compare(datas[0], "[Delay]") == 0)
                 {
@@ -1793,6 +1789,7 @@ namespace _86ME_ver1
                     typecombo.Text = "Delay";
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
                     draw_background();
+                    this.hint_richTextBox.Text = Main_lang_dic["hint5"];
                 }
                 else if (String.Compare(datas[0], "[Sound]") == 0)
                 {
@@ -1825,6 +1822,7 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(xtext);
                     Framelist.Enabled = true;
                     draw_background();
+                    this.hint_richTextBox.Text = Main_lang_dic["hint6"];
                     xtext.SelectionStart = xtext.Text.Length;
                     xtext.Focus();
                 }
@@ -1896,6 +1894,7 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(xcheckbox2);
                     Framelist.Enabled = true;
                     draw_background();
+                    this.hint_richTextBox.Text = Main_lang_dic["hint7"];
                     xtext.SelectionStart = xtext.Text.Length;
                     xtext.Focus();
                 }
@@ -1965,6 +1964,7 @@ namespace _86ME_ver1
                     Framelist.Enabled = true;
 
                     draw_background();
+                    this.hint_richTextBox.Text = Main_lang_dic["hint8"];
                 }
             }
         }
@@ -3210,6 +3210,20 @@ namespace _86ME_ver1
             ttp.SetToolTip(saveFrame, Main_lang_dic["saveFrame_ToolTip"]);
             ttp.SetToolTip(sync_speed, Main_lang_dic["sync_speed_ToolTip"]);
             ttp.SetToolTip(TitleMotion, Main_lang_dic["TitleMotion_ToolTip"]);
+
+            if (Motionlist != null)
+            {
+                Motionlist.SelectedIndex = -1;
+                Framelist.Controls.Clear();
+                typecombo.Text = "";
+            }
+
+            this.hint_richTextBox.Text =
+                "   ___   __   ____        _\n" +
+                "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
+                "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
+                " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
+                "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
         }
 
         private void englishToolStripMenuItem_Click(object sender, EventArgs e)
