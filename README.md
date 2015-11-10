@@ -10,6 +10,7 @@ _VERSION_: v1.6
 * Can insert Motion in action list now! It will be effective after sketch generation.
 * Change the method of generating sketches for controlling robots more smoothly.
 * Make the controlling method by bluetooth can be choosen.
+* Support for multiple language(English, Chinese Traditional and Chinese Simplified) now.
 
 _VERSION_: v1.5
 
