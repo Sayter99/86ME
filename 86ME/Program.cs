@@ -4,7 +4,6 @@ using System.Windows.Forms;
 using System.Threading;
 using System.IO;
 using System.Globalization;
-using System.Threading;
 
 namespace _86ME_ver1
 {
@@ -32,18 +31,17 @@ namespace _86ME_ver1
                 if (!(String.Compare(lang, "en") == 0 || String.Compare(lang, "zh-TW") == 0 || String.Compare(lang, "zh-Hans")==0))
                     lang = "en";
             }
-            CultureInfo ci = new CultureInfo(lang);
-            Thread.CurrentThread.CurrentCulture = ci;
-            Thread.CurrentThread.CurrentUICulture = ci;
-            SetForm sform = new SetForm();
+            lang = Application.StartupPath + "\\locales\\" + lang + ".ini";
+            SetLanguage sl = new SetLanguage(lang);
+            SetForm sform = new SetForm(sl.lang_dic);
             var execute = sform.ShowDialog();
             if (execute == DialogResult.Yes)
             {
                 Main f1;
                 if (args.Length > 0)
-                    f1 = new Main(args[0]);
+                    f1 = new Main(args[0], sl.lang_dic);
                 else
-                    f1 = new Main();
+                    f1 = new Main(sl.lang_dic);
                 f1.com_port = sform.com_port;
                 f1.connect_comport();
                 Application.Run(f1);

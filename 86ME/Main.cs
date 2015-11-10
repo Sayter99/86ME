@@ -28,7 +28,7 @@ namespace _86ME_ver1
 {
     public partial class Main : Form
     {
-        ComponentResourceManager resources = new ComponentResourceManager(typeof(Main));
+        Dictionary<string, string> Main_lang_dic;
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -70,7 +70,7 @@ namespace _86ME_ver1
         bool[] captured = new bool[45];
         string[] motionevent = new string[8];
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
-        public Main()
+        public Main(Dictionary<string, string> lang_dic)
         {
             InitializeComponent();
             saveFrame.Visible = false;
@@ -82,17 +82,11 @@ namespace _86ME_ver1
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
-            motionevent[0] = resources.GetString("AddNewAction_N");
-            motionevent[1] = resources.GetString("AddHomeframe");
-            motionevent[2] = resources.GetString("DeleteAction");
-            motionevent[3] = resources.GetString("MoveActionUP");
-            motionevent[4] = resources.GetString("MoveActionDOWN");
-            motionevent[5] = resources.GetString("DuplicateFrame");
-            motionevent[6] = resources.GetString("AddNewAction_F");
-            motionevent[7] = resources.GetString("InsertIntermediateFrame");
+            Main_lang_dic = lang_dic;
+            applyLang();
         }
 
-        public Main(string filename)
+        public Main(string filename, Dictionary<string, string> lang_dic)
         {
             InitializeComponent();
             saveFrame.Visible = false;
@@ -104,14 +98,8 @@ namespace _86ME_ver1
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
-            motionevent[0] = resources.GetString("AddNewAction_N");
-            motionevent[1] = resources.GetString("AddHomeframe");
-            motionevent[2] = resources.GetString("DeleteAction");
-            motionevent[3] = resources.GetString("MoveActionUP");
-            motionevent[4] = resources.GetString("MoveActionDOWN");
-            motionevent[5] = resources.GetString("DuplicateFrame");
-            motionevent[6] = resources.GetString("AddNewAction_F");
-            motionevent[7] = resources.GetString("InsertIntermediateFrame");
+            Main_lang_dic = lang_dic;
+            applyLang();
             init_load_file = filename;
             Application.Idle += new EventHandler(init_load);
         }
@@ -283,7 +271,7 @@ namespace _86ME_ver1
                     catch
                     {
                         com_port = "OFF";
-                        MessageBox.Show(resources.GetString("errorMsg1"));
+                        MessageBox.Show(Main_lang_dic["errorMsg1"]);
                     }
                 }
                 autocheck.Enabled = true;
@@ -389,7 +377,7 @@ namespace _86ME_ver1
                             catch
                             {
                                 com_port = "OFF";
-                                MessageBox.Show(resources.GetString("errorMsg1"));
+                                MessageBox.Show(Main_lang_dic["errorMsg1"]);
                             }
                         }
                     }
@@ -527,7 +515,7 @@ namespace _86ME_ver1
         {
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg"), "Exit", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     save_project(load_filename);
@@ -535,14 +523,14 @@ namespace _86ME_ver1
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg2"), "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
                 }
             }
 
-            NewMotion nMotion = new NewMotion();
+            NewMotion nMotion = new NewMotion(Main_lang_dic);
             if (string.Compare(com_port, "OFF") != 0)
                 nMotion.arduino = arduino;
             nMotion.ShowDialog();
@@ -599,7 +587,7 @@ namespace _86ME_ver1
                     draw_background();
                 }
                 this.MotionConfig.SelectedIndex = 0;
-                this.hint_richTextBox.Text = resources.GetString("hint1");
+                this.hint_richTextBox.Text = Main_lang_dic["hint1"];
             }
         }
 
@@ -615,7 +603,7 @@ namespace _86ME_ver1
                 catch
                 {
                     com_port = "OFF";
-                    MessageBox.Show(resources.GetString("errorMsg2"), "",
+                    MessageBox.Show(Main_lang_dic["errorMsg2"], "",
                                     MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
@@ -623,6 +611,8 @@ namespace _86ME_ver1
 
         private void optionToolStripMenuItem_Click(object sender, EventArgs e)  //option
         {
+            Motion.NewMotion_lang_dic = Main_lang_dic;
+            Motion.applyLang();
             for (int i = 0; i < 45; i++)
                 Motion.fcheck[i].Checked = false;
             autocheck.Checked = false;
@@ -641,7 +631,7 @@ namespace _86ME_ver1
                     catch
                     {
                         Motion.picfilename = null;
-                        MessageBox.Show(resources.GetString("errorMsg3"));
+                        MessageBox.Show(Main_lang_dic["errorMsg3"]);
                     }
                 }
                 for (int i = 0; i < 45; i++)
@@ -858,7 +848,7 @@ namespace _86ME_ver1
         {
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg"), "Exit", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     save_project(load_filename);
@@ -866,7 +856,7 @@ namespace _86ME_ver1
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg2"), "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "", MessageBoxButtons.YesNo);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -881,7 +871,7 @@ namespace _86ME_ver1
                 return;
             if( String.Compare(Path.GetExtension(filename), ".rbm") != 0 )
             {
-                MessageBox.Show(resources.GetString("errorMsg4"));
+                MessageBox.Show(Main_lang_dic["errorMsg4"]);
                 return;
             }
             load_project(filename);
@@ -891,7 +881,7 @@ namespace _86ME_ver1
         public void load_project(string filename)
         {
             bool picmode = false;
-            NewMotion nMotion = new NewMotion();
+            NewMotion nMotion = new NewMotion(Main_lang_dic);
             string[] rbver = new string[] { "---unset---",
                                             "RB_100b1",
                                             "RB_100b2",
@@ -929,12 +919,12 @@ namespace _86ME_ver1
                 string[] datas = reader.ReadToEnd().Split(delimiterChars);
                 if (datas.Length < 239)
                 {
-                    MessageBox.Show(resources.GetString("errorMsg5"));
+                    MessageBox.Show(Main_lang_dic["errorMsg5"]);
                     return;
                 }
                 if (datas[0] != "BoardVer")
                 {
-                    MessageBox.Show(resources.GetString("errorMsg5"));
+                    MessageBox.Show(Main_lang_dic["errorMsg5"]);
                     return;
                 }
 
@@ -987,7 +977,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext[k].Text = "0";
                                 offset[k] = 0;
-                                MessageBox.Show(resources.GetString("errorMsg6"));
+                                MessageBox.Show(Main_lang_dic["errorMsg6"]);
                             }
                         }
                     }
@@ -1005,7 +995,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext2[k].Text = "1500";
                                 homeframe[k] = 1500;
-                                MessageBox.Show(resources.GetString("errorMsg7"));
+                                MessageBox.Show(Main_lang_dic["errorMsg7"]);
                             }
                         }
                     }
@@ -1023,7 +1013,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext3[k].Text = "600";
                                 min[k] = 600;
-                                MessageBox.Show(resources.GetString("errorMsg8"));
+                                MessageBox.Show(Main_lang_dic["errorMsg8"]);
                             }
                         }
                         for (int k = 0; k < 45; k++)
@@ -1038,7 +1028,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.ftext4[k].Text = "2400";
                                 Max[k] = 2400;
-                                MessageBox.Show(resources.GetString("errorMsg8"));
+                                MessageBox.Show(Main_lang_dic["errorMsg8"]);
                             }
                         }
                     }
@@ -1095,7 +1085,7 @@ namespace _86ME_ver1
                             {
                                 nMotion.fbox[k].SelectedIndex = 0;
                                 motor_info[k] = 0;
-                                MessageBox.Show(resources.GetString("errorMsg9"));
+                                MessageBox.Show(Main_lang_dic["errorMsg9"]);
                                 i--;
                                 break;
                             }
@@ -1170,7 +1160,7 @@ namespace _86ME_ver1
                         catch
                         {
                             nframe.delay = default_delay;
-                            MessageBox.Show(resources.GetString("errorMsg10"));
+                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
                         }
                         int j = 0;
                         while (j < 45)
@@ -1185,7 +1175,7 @@ namespace _86ME_ver1
                                 catch
                                 {
                                     nframe.frame[j] = 0;
-                                    MessageBox.Show(resources.GetString("errorMsg10"));
+                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
                                 }
                             }
                             else
@@ -1208,7 +1198,7 @@ namespace _86ME_ver1
                         catch
                         {
                             nframe.delay = default_delay;
-                            MessageBox.Show(resources.GetString("errorMsg10"));
+                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
                         }
                         int j = 0;
                         while (j < 45)
@@ -1223,7 +1213,7 @@ namespace _86ME_ver1
                                 catch
                                 {
                                     nframe.frame[j] = 0;
-                                    MessageBox.Show(resources.GetString("errorMsg10"));
+                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
                                 }
                             }
                             else
@@ -1245,7 +1235,7 @@ namespace _86ME_ver1
                         catch
                         {
                             ndelay.delay = default_delay;
-                            MessageBox.Show(resources.GetString("errorMsg11"));
+                            MessageBox.Show(Main_lang_dic["errorMsg11"]);
                         }
                         motiontag.Events.Add(ndelay);
                     }
@@ -1318,7 +1308,7 @@ namespace _86ME_ver1
                 catch
                 {
                     nMotion.picfilename = null;
-                    MessageBox.Show(resources.GetString("errorMsg3"));
+                    MessageBox.Show(Main_lang_dic["errorMsg3"]);
                 }
             }
             else
@@ -1350,7 +1340,7 @@ namespace _86ME_ver1
                             "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
                             " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
                             "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
-            MessageBox.Show(filename + " is loaded");
+            MessageBox.Show(filename + Main_lang_dic["loadedText"]);
         }
 
         private void Main_Load(object sender, EventArgs e)
@@ -1385,9 +1375,9 @@ namespace _86ME_ver1
                 Update_framelist();
                 new_obj = false;
                 if(Motion.picfilename == null)
-                    this.hint_richTextBox.Text = resources.GetString("hint2");
+                    this.hint_richTextBox.Text = Main_lang_dic["hint2"];
                 else
-                    this.hint_richTextBox.Text = resources.GetString("hint3");
+                    this.hint_richTextBox.Text = Main_lang_dic["hint3"];
             }
             else if (String.Compare(typecombo.Text, "HomeFrame") == 0)
             {
@@ -1412,7 +1402,7 @@ namespace _86ME_ver1
                 Update_framelist();
                 Framelist.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = resources.GetString("hint4");
+                this.hint_richTextBox.Text = Main_lang_dic["hint4"];
             }
             else if (String.Compare(typecombo.Text, "Delay") == 0)
             {
@@ -1430,7 +1420,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = resources.GetString("hint5");
+                this.hint_richTextBox.Text = Main_lang_dic["hint5"];
             }
             else if (String.Compare(typecombo.Text, "Sound") == 0)
             {
@@ -1474,7 +1464,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = resources.GetString("hint6");
+                this.hint_richTextBox.Text = Main_lang_dic["hint6"];
             }
             else if (String.Compare(typecombo.Text, "Goto") == 0)
             {
@@ -1491,7 +1481,7 @@ namespace _86ME_ver1
                 autocheck.Enabled= false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = resources.GetString("hint7");
+                this.hint_richTextBox.Text = Main_lang_dic["hint7"];
             }
             else if (String.Compare(typecombo.Text, "GotoMotion") == 0)
             {
@@ -1509,7 +1499,7 @@ namespace _86ME_ver1
                 autocheck.Enabled = false;
                 typecombo.Enabled = false;
                 new_obj = false;
-                this.hint_richTextBox.Text = resources.GetString("hint8");
+                this.hint_richTextBox.Text = Main_lang_dic["hint8"];
             }
             else if (String.Compare(typecombo.Text, "Select type") == 0)
             {
@@ -1601,7 +1591,7 @@ namespace _86ME_ver1
                             " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
                             "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
             else
-                this.hint_richTextBox.Text = resources.GetString("hint9");
+                this.hint_richTextBox.Text = Main_lang_dic["hint9"];
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1676,7 +1666,7 @@ namespace _86ME_ver1
                 loadFrame.Visible = false;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
-                this.label2.Text = resources.GetString("Label2TextDelay");
+                this.label2.Text = Main_lang_dic["Label2TextDelay"];
             }
             if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
             {
@@ -1690,7 +1680,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = true;
                     loadFrame.Visible = true;
-                    this.label2.Text = resources.GetString("Label2TextPlayTime");
+                    this.label2.Text = Main_lang_dic["Label2TextPlayTime"];
                     typecombo.SelectedIndex = 0;
                     typecombo.Text = "Frame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1713,7 +1703,7 @@ namespace _86ME_ver1
                             catch
                             {
                                 com_port = "OFF";
-                                MessageBox.Show(resources.GetString("errorMsg1"));
+                                MessageBox.Show(Main_lang_dic["errorMsg1"]);
                             }
                         }
                         autocheck.Enabled = true;
@@ -1744,7 +1734,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = resources.GetString("Label2TextPlayTime");
+                    this.label2.Text = Main_lang_dic["Label2TextPlayTime"];
                     typecombo.SelectedIndex = 4;
                     typecombo.Text = "HomeFrame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1767,7 +1757,7 @@ namespace _86ME_ver1
                             catch
                             {
                                 com_port = "OFF";
-                                MessageBox.Show(resources.GetString("errorMsg1"));
+                                MessageBox.Show(Main_lang_dic["errorMsg1"]);
                             }
                         }
                         autocheck.Enabled = true;
@@ -1798,7 +1788,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = resources.GetString("Label2TextDelay");
+                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.SelectedIndex = 1;
                     typecombo.Text = "Delay";
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1808,7 +1798,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = resources.GetString("Label2TextPlayTime");
+                    this.label2.Text = Main_lang_dic["Label2TextPlayTime"];
                     typecombo.SelectedIndex = 2;
                     typecombo.Text = "Sound";
                     delaytext.Text = ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1818,11 +1808,11 @@ namespace _86ME_ver1
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     typecombo.SelectedIndex = 3;
-                    this.label2.Text = resources.GetString("Label2TextDelay");
+                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.Text = "Flag";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = resources.GetString("flag_xlabel");
+                    xlabel.Text = Main_lang_dic["flag_xlabel"];
                     xlabel.Size = new Size(45, 22);
 
                     MaskedTextBox xtext = new MaskedTextBox();
@@ -1843,11 +1833,11 @@ namespace _86ME_ver1
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     typecombo.SelectedIndex = 2;
-                    this.label2.Text = resources.GetString("Label2TextDelay");
+                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.Text = "Goto";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = resources.GetString("goto_xlabel");
+                    xlabel.Text = Main_lang_dic["goto_xlabel"];
                     xlabel.Size = new Size(95, 22);
                     MaskedTextBox xtext = new MaskedTextBox();
                     xtext.Text = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
@@ -1855,7 +1845,7 @@ namespace _86ME_ver1
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 100;
                     Label xlabel2 = new Label();
-                    xlabel2.Text = resources.GetString("goto_xlabel2");
+                    xlabel2.Text = Main_lang_dic["goto_xlabel2"];
                     xlabel2.Size = new Size(65, 22);
                     xlabel2.Top += 32;
                     CheckBox xcheckbox = new CheckBox();
@@ -1867,7 +1857,7 @@ namespace _86ME_ver1
                     Label xlabel4 = new Label();
                     xlabel4.Name = "loop_inf_l";
                     xlabel4.Enabled = xcheckbox.Checked;
-                    xlabel4.Text = resources.GetString("goto_xlabel4");
+                    xlabel4.Text = Main_lang_dic["goto_xlabel4"];
                     xlabel4.Size = new Size(80, 22);
                     xlabel4.Top += 32;
                     xlabel4.Left += 85;
@@ -1880,7 +1870,7 @@ namespace _86ME_ver1
                     xcheckbox2.Top += 32;
                     xcheckbox2.Left += 165;
                     Label xlabel3 = new Label();
-                    xlabel3.Text = resources.GetString("goto_xlabel3");
+                    xlabel3.Text = Main_lang_dic["goto_xlabel3"];
                     xlabel3.Size = new Size(95, 22);
                     xlabel3.Top += 62;
                     MaskedTextBox xtext2 = new MaskedTextBox();
@@ -1895,7 +1885,7 @@ namespace _86ME_ver1
                     xtext2.Size = new Size(160, 22);
                     xtext2.Left += 100;
                     xtext2.Top += 62;
-                    this.hint_richTextBox.Text = resources.GetString("hint10");
+                    this.hint_richTextBox.Text = Main_lang_dic["hint10"];
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Controls.Add(xlabel2);
@@ -1913,21 +1903,21 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = resources.GetString("Label2TextDelay");
+                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.SelectedIndex = 5;
                     typecombo.Text = "GotoMotion";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
-                    xlabel.Text = resources.GetString("gotoMotion_xlabel");
+                    xlabel.Text = Main_lang_dic["gotoMotion_xlabel"];
                     xlabel.Size = new Size(85, 20);
                     Label xlabel2 = new Label();
-                    xlabel2.Text = resources.GetString("gotoMotion_xlabel2");
+                    xlabel2.Text = Main_lang_dic["gotoMotion_xlabel2"];
                     xlabel2.Size = new Size(50, 20);
                     Label xlabel3 = new Label();
-                    xlabel3.Text = resources.GetString("gotoMotion_xlabel3");
+                    xlabel3.Text = Main_lang_dic["gotoMotion_xlabel3"];
                     xlabel3.Size = new Size(300, 20);
                     Label xlabel4 = new Label();
-                    xlabel4.Text = resources.GetString("gotoMotion_xlabel4");
+                    xlabel4.Text = Main_lang_dic["gotoMotion_xlabel4"];
                     xlabel4.Size = new Size(300, 20);
 
                     ComboBox xcombo = new ComboBox();
@@ -1939,8 +1929,8 @@ namespace _86ME_ver1
                     
                     for (int i = 0; i < MotionCombo.Items.Count; i++)
                         xcombo.Items.Add(((ME_Motion)ME_Motionlist[i]).name);
-                    call_radio.Text = resources.GetString("call_radioText");
-                    jump_radio.Text = resources.GetString("jump_radioText");
+                    call_radio.Text = Main_lang_dic["call_radioText"];
+                    jump_radio.Text = Main_lang_dic["jump_radioText"];
 
                     xcombo.Text = ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
                     if (((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method == (int)internal_trigger.call)
@@ -2012,7 +2002,7 @@ namespace _86ME_ver1
                 Motionlist.SelectedIndex = Motionlist.IndexFromPoint(e.X, e.Y);
                 if (Motionlist.SelectedItem == null)
                 {
-                    motionToolStripMenuItem.Text = resources.GetString("AddNewAction_F");
+                    motionToolStripMenuItem.Text = Main_lang_dic["AddNewAction_F"];
                     Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
                     Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
@@ -2021,12 +2011,12 @@ namespace _86ME_ver1
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
                 {
-                    motionToolStripMenuItem.Text = resources.GetString("AddNewAction_N");
+                    motionToolStripMenuItem.Text = Main_lang_dic["AddNewAction_N"];
                     Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
 
                     if ((((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count - 1) > Motionlist.SelectedIndex)
                         if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1] is ME_Frame)
-                            Motionlist_contextMenuStrip.Items.Add(resources.GetString("InsertIntermediateFrame"));
+                            Motionlist_contextMenuStrip.Items.Add(Main_lang_dic["InsertIntermediateFrame"]);
 
                     for (int i = 2; i < motionevent.Length - 2; i++)
                         Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
@@ -2036,7 +2026,7 @@ namespace _86ME_ver1
                 }
                 else if (Motionlist.SelectedItem != null)
                 {
-                    motionToolStripMenuItem.Text = resources.GetString("AddNewAction_N");
+                    motionToolStripMenuItem.Text = Main_lang_dic["AddNewAction_N"];
                     Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
                     for (int i = 2; i < motionevent.Length - 3; i++)
                         Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
@@ -2278,7 +2268,7 @@ namespace _86ME_ver1
                 Blocking.Enabled = false;
                 NonBlocking.Enabled = false;
             }
-            this.hint_richTextBox.Text = resources.GetString("hint1");
+            this.hint_richTextBox.Text = Main_lang_dic["hint1"];
         }
 
         private void NewMotion_Click(object sender, EventArgs e)
@@ -2286,9 +2276,9 @@ namespace _86ME_ver1
             if (!(new System.Text.RegularExpressions.Regex("^[a-zA-Z][a-zA-Z0-9_]{0,20}$")).IsMatch(MotionCombo.Text))
             {
                 if (MotionCombo.Text.Length < 20)
-                    MessageBox.Show(resources.GetString("errorMsg12"));
+                    MessageBox.Show(Main_lang_dic["errorMsg12"]);
                 else
-                    MessageBox.Show(resources.GetString("errorMsg13"));
+                    MessageBox.Show(Main_lang_dic["errorMsg13"]);
                 MotionCombo.Focus();
             }
             else if (MotionCombo.Text.IndexOf(" ") == -1) // add new motion successfully
@@ -2305,11 +2295,11 @@ namespace _86ME_ver1
                 draw_background();
                 MotionConfig.SelectedIndex = 0;
                 Motionlist.Focus();
-                this.hint_richTextBox.Text = resources.GetString("hint11");
+                this.hint_richTextBox.Text = Main_lang_dic["hint11"];
             }
             else
             {
-                MessageBox.Show(resources.GetString("errorMsg14"));
+                MessageBox.Show(Main_lang_dic["errorMsg14"]);
                 MotionCombo.Focus();
             }
         }
@@ -2319,7 +2309,7 @@ namespace _86ME_ver1
             bool close = true;
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg"), "Exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                 {
                     save_project(load_filename);
@@ -2332,7 +2322,7 @@ namespace _86ME_ver1
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show(resources.GetString("saveMsg2"), "Exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                 {
                     saveFileToolStripMenuItem_Click(sender, e);
@@ -2359,7 +2349,7 @@ namespace _86ME_ver1
                 uint[] frame = new uint[45];
                 if (servo_captured() == false)
                 {
-                    this.hint_richTextBox.Text = resources.GetString("hint12");
+                    this.hint_richTextBox.Text = Main_lang_dic["hint12"];
                 }
                 else
                 {
@@ -2484,7 +2474,7 @@ namespace _86ME_ver1
                         catch
                         {
                             com_port = "OFF";
-                            MessageBox.Show(resources.GetString("errorMsg1"));
+                            MessageBox.Show(Main_lang_dic["errorMsg1"]);
                         }
                     }
                 }
@@ -2544,7 +2534,7 @@ namespace _86ME_ver1
             }
             if (sp != null)
                 sp.Stop();
-            this.hint_richTextBox.Text =
+            hint_richTextBox.Text =
                     "   ___   __   ____        _\n" +
                     "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
                     "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
@@ -2611,7 +2601,7 @@ namespace _86ME_ver1
             {
                 if (autocheck.Checked == true && int.Parse(delaytext.Text) < 0)
                 {
-                    MessageBox.Show(resources.GetString("errorMsg15"));
+                    MessageBox.Show(Main_lang_dic["errorMsg15"]);
                     autocheck.Checked = false;
                 }
                 else if (autocheck.Checked == true)
@@ -2646,7 +2636,7 @@ namespace _86ME_ver1
                         catch
                         {
                             com_port = "OFF";
-                            MessageBox.Show(resources.GetString("errorMsg1"));
+                            MessageBox.Show(Main_lang_dic["errorMsg1"]);
                         }
                     }
                     autocheck.Enabled = true;
@@ -2667,7 +2657,7 @@ namespace _86ME_ver1
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            about a = new about();
+            about a = new about(Main_lang_dic);
             a.ShowDialog();
         }
 
@@ -2675,7 +2665,7 @@ namespace _86ME_ver1
         {
             if (ME_Motionlist.Count == 0)
             {
-                MessageBox.Show(resources.GetString("errorMsg16"));
+                MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
@@ -2687,7 +2677,7 @@ namespace _86ME_ver1
         {
             if (ME_Motionlist.Count == 0)
             {
-                MessageBox.Show(resources.GetString("errorMsg16"));
+                MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
             //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
@@ -2705,7 +2695,7 @@ namespace _86ME_ver1
                 }
                 catch
                 {
-                    MessageBox.Show(resources.GetString("errorMsg17"));
+                    MessageBox.Show(Main_lang_dic["errorMsg17"]);
                 }
             }
             Framelist.Controls.Add(Robot_pictureBox);
@@ -2895,7 +2885,7 @@ namespace _86ME_ver1
                     ps2ATTCombo.Text = ps2pins[2];
                     ps2CLKCombo.Text = ps2pins[3];
                 }
-                this.hint_richTextBox.Text = resources.GetString("hint9");
+                this.hint_richTextBox.Text = Main_lang_dic["hint9"];
             }
             else if(MotionConfig.SelectedIndex == 2)
             {
@@ -2913,7 +2903,7 @@ namespace _86ME_ver1
                     Blocking.Enabled = false;
                     NonBlocking.Enabled = false;
                 }
-                this.hint_richTextBox.Text = resources.GetString("hint13");
+                this.hint_richTextBox.Text = Main_lang_dic["hint13"];
             }
         }
 
@@ -3147,6 +3137,81 @@ namespace _86ME_ver1
             Update_framelist();
         }
 
+        private void applyLang()
+        {
+            hint_richTextBox.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+            nonblockinExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+            blockingExplaination.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+
+            motionevent[0] = Main_lang_dic["AddNewAction_N"];
+            motionevent[1] = Main_lang_dic["AddHomeframe"];
+            motionevent[2] = Main_lang_dic["DeleteAction"];
+            motionevent[3] = Main_lang_dic["MoveActionUP"];
+            motionevent[4] = Main_lang_dic["MoveActionDOWN"];
+            motionevent[5] = Main_lang_dic["DuplicateFrame"];
+            motionevent[6] = Main_lang_dic["AddNewAction_F"];
+            motionevent[7] = Main_lang_dic["InsertIntermediateFrame"];
+
+            aboutToolStripMenuItem.Text = Main_lang_dic["aboutToolStripMenuItem_Text"];
+            Action_groupBox.Text = Main_lang_dic["Action_groupBox_Text"];
+            ActionList.Text = Main_lang_dic["ActionList_Text"];
+            actionToolStripMenuItem.Text = Main_lang_dic["actionToolStripMenuItem_Text"];
+            autocheck.Text = Main_lang_dic["autocheck_Text"];
+            ttp.SetToolTip(autocheck, Main_lang_dic["autocheck_ToolTip"]);
+            blockingExplaination.Text = Main_lang_dic["blockingExplaination_Text"];
+            bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];
+            capturebutton.Text = Main_lang_dic["capturebutton_Text"];
+            editToolStripMenuItem.Text = Main_lang_dic["editToolStripMenuItem_Text"];
+            exitToolStripMenuItem.Text = Main_lang_dic["exitToolStripMenuItem_Text"];
+            fast.Text = Main_lang_dic["fast_Text"];
+            fileToolStripMenuItem.Text = Main_lang_dic["fileToolStripMenuItem_Text"];
+            Generate.Text = Main_lang_dic["Generate_Text"];
+            GenerateAllInOne.Text = Main_lang_dic["GenerateAllInOne_Text"];
+            helpToolStripMenuItem.Text = Main_lang_dic["helpToolStripMenuItem_Text"];
+            Hint_groupBox.Text = Main_lang_dic["Hint_groupBox_Text"];
+            howToUseToolStripMenuItem.Text = Main_lang_dic["howToUseToolStripMenuItem_Text"];
+            Keyboard_groupBox.Text = Main_lang_dic["Keyboard_groupBox_Text"];
+            label1.Text = Main_lang_dic["Main_label1_Text"];
+            label2.Text = Main_lang_dic["Main_label2_Text"];
+            languageToolStripMenuItem.Text = Main_lang_dic["languageToolStripMenuItem_Text"];
+            Motion_groupBox.Text = Main_lang_dic["Motion_groupBox_Text"];
+            MotionNameLabel.Text = Main_lang_dic["MotionNameLabel_Text"];
+            MotionProperty.Text = Main_lang_dic["MotionProperty_Text"];
+            MotionPropertyLabel.Text = Main_lang_dic["MotionPropertyLabel_Text"];
+            MotionTrigger.Text = Main_lang_dic["MotionTrigger_Text"];
+            motorRelease.Text = Main_lang_dic["motorRelease_Text"];
+            NewMotion.Text = Main_lang_dic["NewMotion_Text"];
+            newToolStripMenuItem.Text = Main_lang_dic["newToolStripMenuItem_Text"];
+            nonblockinExplanation.Text = Main_lang_dic["nonblockinExplanation_Text"];
+            optionsToolStripMenuItem.Text = Main_lang_dic["optionsToolStripMenuItem_Text"];
+            preferenceToolStripMenuItem.Text = Main_lang_dic["preferenceToolStripMenuItem_Text"];
+            ps2_groupBox.Text = Main_lang_dic["ps2_groupBox_Text"];
+            saveFileToolStripMenuItem.Text = Main_lang_dic["saveFileToolStripMenuItem_Text"];
+            Setting_groupBox.Text = Main_lang_dic["Setting_groupBox_Text"];
+            slow.Text = Main_lang_dic["slow_Text"];
+
+            ttp.SetToolTip(AlwaysOff, Main_lang_dic["AlwaysOff_ToolTip"]);
+            ttp.SetToolTip(AlwaysOn, Main_lang_dic["AlwaysOn_ToolTip"]);
+            ttp.SetToolTip(btBaudCombo, Main_lang_dic["btBaudCombo_ToolTip"]);
+            ttp.SetToolTip(btPortCombo, Main_lang_dic["btPortCombo_ToolTip"]);
+            ttp.SetToolTip(capturebutton, Main_lang_dic["capturebutton_ToolTip"]);
+            ttp.SetToolTip(Generate, Main_lang_dic["Generate_ToolTip"]);
+            ttp.SetToolTip(GenerateAllInOne, Main_lang_dic["GenerateAllInOne_ToolTip"]);
+            ttp.SetToolTip(KeyboardTypeCombo, Main_lang_dic["KeyboardTypeCombo_ToolTip"]);
+            ttp.SetToolTip(loadFrame, Main_lang_dic["loadFrame_ToolTip"]);
+            ttp.SetToolTip(motion_pause, Main_lang_dic["motion_pause_ToolTip"]);
+            ttp.SetToolTip(motion_stop, Main_lang_dic["motion_stop_ToolTip"]);
+            ttp.SetToolTip(MotionTest, Main_lang_dic["MotionTest_ToolTip"]);
+            ttp.SetToolTip(motorRelease, Main_lang_dic["motorRelease_ToolTip"]);
+            ttp.SetToolTip(move_down, Main_lang_dic["move_down_ToolTip"]);
+            ttp.SetToolTip(move_up, Main_lang_dic["move_up_ToolTip"]);
+            ttp.SetToolTip(NewMotion, Main_lang_dic["NewMotion_ToolTip"]);
+            ttp.SetToolTip(ps2TypeCombo, Main_lang_dic["ps2TypeCombo_ToolTip"]);
+            ttp.SetToolTip(saveFrame, Main_lang_dic["saveFrame_ToolTip"]);
+            ttp.SetToolTip(sync_speed, Main_lang_dic["sync_speed_ToolTip"]);
+            ttp.SetToolTip(TitleMotion, Main_lang_dic["TitleMotion_ToolTip"]);
+        }
+
         private void englishToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string _86ME_path = System.Windows.Forms.Application.StartupPath;
@@ -3154,7 +3219,9 @@ namespace _86ME_ver1
             writer.Write("en");
             writer.Dispose();
             writer.Close();
-            MessageBox.Show("The change will be effective after restart.");
+            SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\en.ini");
+            Main_lang_dic = sl.lang_dic;
+            applyLang();
         }
 
         private void zhToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3164,17 +3231,21 @@ namespace _86ME_ver1
             writer.Write("zh-TW");
             writer.Dispose();
             writer.Close();
-            MessageBox.Show("變更的設定會在重新啟動後生效");
+            SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\zh-TW.ini");
+            Main_lang_dic = sl.lang_dic;
+            applyLang();
         }
 
-        private void 簡體中文ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void zhHToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string _86ME_path = System.Windows.Forms.Application.StartupPath;
             TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
             writer.Write("zh-Hans");
             writer.Dispose();
             writer.Close();
-            MessageBox.Show("变更的设定会在重新启动後生效");
+            SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\zh-Hans.ini");
+            Main_lang_dic = sl.lang_dic;
+            applyLang();
         }
 
     }

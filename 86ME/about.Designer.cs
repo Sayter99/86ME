@@ -39,56 +39,86 @@
             // 
             // richTextBox1
             // 
-            resources.ApplyResources(this.richTextBox1, "richTextBox1");
             this.richTextBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 9.75F);
+            this.richTextBox1.Location = new System.Drawing.Point(0, 51);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
+            this.richTextBox1.Size = new System.Drawing.Size(284, 170);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "86ME is an open source project and it is derived from RoboME of RBgod. (https://g" +
+    "ithub.com/RoBoardGod/RoBoME)";
             this.richTextBox1.LinkClicked += new System.Windows.Forms.LinkClickedEventHandler(this.richTextBox1_LinkClicked);
             // 
             // fb_button
             // 
-            resources.ApplyResources(this.fb_button, "fb_button");
+            this.fb_button.Location = new System.Drawing.Point(12, 227);
             this.fb_button.Name = "fb_button";
+            this.fb_button.Size = new System.Drawing.Size(75, 23);
+            this.fb_button.TabIndex = 1;
+            this.fb_button.Text = "FaceBook";
             this.fb_button.UseVisualStyleBackColor = true;
             this.fb_button.Click += new System.EventHandler(this.fb_button_Click);
             // 
             // web_button
             // 
-            resources.ApplyResources(this.web_button, "web_button");
+            this.web_button.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.web_button.Location = new System.Drawing.Point(105, 227);
             this.web_button.Name = "web_button";
+            this.web_button.Size = new System.Drawing.Size(75, 23);
+            this.web_button.TabIndex = 2;
+            this.web_button.Text = "86Duino";
             this.web_button.UseVisualStyleBackColor = true;
             this.web_button.Click += new System.EventHandler(this.web_button_Click);
             // 
             // github_button
             // 
-            resources.ApplyResources(this.github_button, "github_button");
+            this.github_button.ImeMode = System.Windows.Forms.ImeMode.NoControl;
+            this.github_button.Location = new System.Drawing.Point(197, 227);
             this.github_button.Name = "github_button";
+            this.github_button.Size = new System.Drawing.Size(75, 23);
+            this.github_button.TabIndex = 3;
+            this.github_button.Text = "GitHub";
             this.github_button.UseVisualStyleBackColor = true;
             this.github_button.Click += new System.EventHandler(this.github_button_Click);
             // 
             // author_label
             // 
-            resources.ApplyResources(this.author_label, "author_label");
+            this.author_label.AutoSize = true;
+            this.author_label.Font = new System.Drawing.Font("Consolas", 9F);
+            this.author_label.Location = new System.Drawing.Point(10, 9);
             this.author_label.Name = "author_label";
+            this.author_label.Size = new System.Drawing.Size(105, 14);
+            this.author_label.TabIndex = 4;
+            this.author_label.Text = "Author: Sayter";
             // 
             // license_label
             // 
-            resources.ApplyResources(this.license_label, "license_label");
+            this.license_label.AutoSize = true;
+            this.license_label.Font = new System.Drawing.Font("Consolas", 9F);
+            this.license_label.Location = new System.Drawing.Point(10, 30);
             this.license_label.Name = "license_label";
+            this.license_label.Size = new System.Drawing.Size(140, 14);
+            this.license_label.TabIndex = 5;
+            this.license_label.Text = "License: GNU GPL V2";
             // 
             // about
             // 
-            resources.ApplyResources(this, "$this");
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
+            this.ClientSize = new System.Drawing.Size(284, 262);
             this.Controls.Add(this.license_label);
             this.Controls.Add(this.author_label);
             this.Controls.Add(this.github_button);
             this.Controls.Add(this.web_button);
             this.Controls.Add(this.fb_button);
             this.Controls.Add(this.richTextBox1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "about";
             this.ShowInTaskbar = false;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "About";
             this.ResumeLayout(false);
             this.PerformLayout();
 

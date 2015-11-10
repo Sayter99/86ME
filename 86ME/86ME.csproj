@@ -75,6 +75,7 @@
     <Compile Include="FSMGen.cs" />
     <Compile Include="firmata.cs" />
     <Compile Include="MotionElement.cs" />
+    <Compile Include="SetLanguage.cs" />
     <Compile Include="SketchGen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs">
@@ -90,49 +91,19 @@
       <DependentUpon>NewMotion.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="about.en.resx">
-      <DependentUpon>about.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="about.resx">
       <DependentUpon>about.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="about.zh-Hans.resx">
-      <DependentUpon>about.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="about.zh-TW.resx">
-      <DependentUpon>about.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main.en.resx">
-      <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Main.zh-Hans.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Main.zh-TW.resx">
-      <DependentUpon>Main.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewMotion.en.resx">
-      <DependentUpon>NewMotion.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="NewMotion.resx">
-      <DependentUpon>NewMotion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewMotion.zh-Hans.resx">
-      <DependentUpon>NewMotion.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="NewMotion.zh-TW.resx">
       <DependentUpon>NewMotion.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SetForm.en.resx">
-      <DependentUpon>SetForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="SetForm.resx">
       <DependentUpon>SetForm.cs</DependentUpon>
@@ -142,12 +113,6 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
-    <EmbeddedResource Include="SetForm.zh-Hans.resx">
-      <DependentUpon>SetForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="SetForm.zh-TW.resx">
-      <DependentUpon>SetForm.cs</DependentUpon>
-    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

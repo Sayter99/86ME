@@ -13,10 +13,14 @@ namespace _86ME_ver1
     public partial class SetForm : Form
     {
         string[] serialPorts;
-
-        public SetForm()
+        string errMsg;
+        public SetForm(Dictionary<string, string> lang_dic)
         {
             InitializeComponent();
+            button2.Text = lang_dic["SetForm_button2_Text"];
+            Exit.Text = lang_dic["SetForm_Exit_Text"];
+            textBox1.Text = lang_dic["SetForm_textBox1_Text"];
+            errMsg = lang_dic["errorMsg18"];
             serialPorts = SerialPort.GetPortNames();
             ComboBox0.SelectedIndex = 0;
             foreach (string serialPort in serialPorts)
@@ -62,8 +66,7 @@ namespace _86ME_ver1
                     return true;
                 }
             }
-            MessageBox.Show("Cannot find 86Duino, entering offline mode", "",
-                            MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            MessageBox.Show(errMsg, "", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             return false;
         }
     }

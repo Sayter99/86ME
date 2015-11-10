@@ -11,7 +11,7 @@ namespace _86ME_ver1
 {
     public partial class NewMotion : Form
     {
-        ComponentResourceManager resources = new ComponentResourceManager(typeof(NewMotion));
+        public Dictionary<string, string> NewMotion_lang_dic;
         public Arduino arduino = null;
         public Panel[] fpanel = new Panel[45];
         public Label[] flabel = new Label[45];
@@ -34,10 +34,10 @@ namespace _86ME_ver1
         public int[] channely = new int[45];
         public bool newflag = false;
         string last_picfilename = null;
-        public NewMotion()
+        public NewMotion(Dictionary<string, string> lang_dic)
         {
             InitializeComponent();
-
+            NewMotion_lang_dic = lang_dic;
             comboBox1.Items.AddRange(new object[] { "86Duino_One",
                                                     "86Duino_Zero",
                                                     "86Duino_EduCake",
@@ -54,6 +54,18 @@ namespace _86ME_ver1
                 channely[i] = 0;
             }
             create_panel(0, 45, 0);
+            applyLang();
+        }
+
+        public void applyLang()
+        {
+            this.Text = NewMotion_lang_dic["NewMotion_title"];
+            checkBox2.Text = NewMotion_lang_dic["NewMotion_checkBox2_Text"];
+            label1.Text = NewMotion_lang_dic["NewMotion_label1_Text"];
+            label2.Text = NewMotion_lang_dic["NewMotion_label2_Text"];
+            label3.Text = NewMotion_lang_dic["NewMotion_label3_Text"];
+            for (int i = 0; i < 45; i++)
+                fcheck[i].Text = NewMotion_lang_dic["NewMotion_fcheckText"];
         }
 
         public void numbercheck(object sender, KeyPressEventArgs e) //Text number check
@@ -85,7 +97,7 @@ namespace _86ME_ver1
         private void button1_Click(object sender, EventArgs e)
         {
             if (String.Compare(comboBox1.SelectedItem.ToString(), "---unset---") == 0)
-                MessageBox.Show("Error:\nYou have not choice your Board version.");
+                MessageBox.Show(NewMotion_lang_dic["NewMotion_err1"]);
             else
                 this.DialogResult = DialogResult.OK;
         }
@@ -196,12 +208,12 @@ namespace _86ME_ver1
                 fcheck[i].Top += 24;
                 fcheck[i].Left += 125;
                 fcheck[i].Size = new Size(75, 22);
-                fcheck[i].Text = resources.GetString("fcheckText");
+                fcheck[i].Text = NewMotion_lang_dic["NewMotion_fcheckText"];
                 fcheck[i].Name = i.ToString();
                 fcheck[i].Checked = false;
                 fcheck[i].Enabled = false;
                 fcheck[i].CheckedChanged += new EventHandler(autocheck_changed);
-                ttp.SetToolTip(fcheck[i], "Synchronize the choosed motor with following values.");
+                ttp.SetToolTip(fcheck[i], NewMotion_lang_dic["NewMotion_ttp1"]);
 
                 ftext[i].Name = i.ToString();
                 ftext[i].Text = offset[i].ToString();
@@ -454,7 +466,7 @@ namespace _86ME_ver1
                     }
                     catch
                     {
-                        MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                        MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
                     }
                 }
             }
@@ -482,7 +494,7 @@ namespace _86ME_ver1
                         }
                         catch
                         {
-                            MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                            MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
                         }
                     }
                 }
@@ -519,7 +531,7 @@ namespace _86ME_ver1
                     }
                     catch
                     {
-                        MessageBox.Show("Failed to send messages. Please check the connection and restart.");
+                        MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
                     }
                 }
             }

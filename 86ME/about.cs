@@ -13,9 +13,16 @@ namespace _86ME_ver1
     {
         public System.Diagnostics.Process p = new System.Diagnostics.Process();
 
-        public about()
+        public about(Dictionary<string, string> lang_dic)
         {
             InitializeComponent();
+            if (lang_dic.Count > 0)
+            {
+                this.Text = lang_dic["about_title"];
+                richTextBox1.Text = lang_dic["content"];
+                author_label.Text = lang_dic["author_label_Text"];
+                license_label.Text = lang_dic["license_label_Text"];
+            }
         }
 
         private void richTextBox1_LinkClicked(object sender,

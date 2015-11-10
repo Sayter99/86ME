@@ -155,126 +155,143 @@
             // 
             // Main_menuStrip
             // 
-            resources.ApplyResources(this.Main_menuStrip, "Main_menuStrip");
             this.Main_menuStrip.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(192)))), ((int)(((byte)(192)))), ((int)(((byte)(255)))));
             this.Main_menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newToolStripMenuItem,
             this.optionsToolStripMenuItem,
             this.preferenceToolStripMenuItem,
             this.helpToolStripMenuItem});
+            this.Main_menuStrip.Location = new System.Drawing.Point(0, 0);
             this.Main_menuStrip.Name = "Main_menuStrip";
-            this.ttp.SetToolTip(this.Main_menuStrip, resources.GetString("Main_menuStrip.ToolTip"));
+            this.Main_menuStrip.Size = new System.Drawing.Size(1024, 24);
+            this.Main_menuStrip.TabIndex = 0;
+            this.Main_menuStrip.Text = "menuStrip1";
             // 
             // newToolStripMenuItem
             // 
-            resources.ApplyResources(this.newToolStripMenuItem, "newToolStripMenuItem");
             this.newToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
             this.actionToolStripMenuItem,
             this.saveFileToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.newToolStripMenuItem.Text = "File";
             // 
             // fileToolStripMenuItem
             // 
-            resources.ApplyResources(this.fileToolStripMenuItem, "fileToolStripMenuItem");
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.fileToolStripMenuItem.Text = "New Project";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // actionToolStripMenuItem
             // 
-            resources.ApplyResources(this.actionToolStripMenuItem, "actionToolStripMenuItem");
             this.actionToolStripMenuItem.Name = "actionToolStripMenuItem";
+            this.actionToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.actionToolStripMenuItem.Text = "Load Project";
             this.actionToolStripMenuItem.Click += new System.EventHandler(this.actionToolStripMenuItem_Click);
             // 
             // saveFileToolStripMenuItem
             // 
-            resources.ApplyResources(this.saveFileToolStripMenuItem, "saveFileToolStripMenuItem");
             this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
+            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.saveFileToolStripMenuItem.Text = "Save Project";
             this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
-            resources.ApplyResources(this.exitToolStripMenuItem, "exitToolStripMenuItem");
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
             // optionsToolStripMenuItem
             // 
-            resources.ApplyResources(this.optionsToolStripMenuItem, "optionsToolStripMenuItem");
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(65, 20);
+            this.optionsToolStripMenuItem.Text = "Options";
             // 
             // editToolStripMenuItem
             // 
-            resources.ApplyResources(this.editToolStripMenuItem, "editToolStripMenuItem");
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(193, 22);
+            this.editToolStripMenuItem.Text = "Robot Configuration";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.optionToolStripMenuItem_Click);
             // 
             // preferenceToolStripMenuItem
             // 
-            resources.ApplyResources(this.preferenceToolStripMenuItem, "preferenceToolStripMenuItem");
             this.preferenceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.languageToolStripMenuItem});
             this.preferenceToolStripMenuItem.Name = "preferenceToolStripMenuItem";
+            this.preferenceToolStripMenuItem.Size = new System.Drawing.Size(80, 20);
+            this.preferenceToolStripMenuItem.Text = "Preference";
             // 
             // languageToolStripMenuItem
             // 
-            resources.ApplyResources(this.languageToolStripMenuItem, "languageToolStripMenuItem");
             this.languageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.englishToolStripMenuItem,
             this.zhToolStripMenuItem,
             this.zhSToolStripMenuItem});
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
+            this.languageToolStripMenuItem.Text = "Language";
             // 
             // englishToolStripMenuItem
             // 
-            resources.ApplyResources(this.englishToolStripMenuItem, "englishToolStripMenuItem");
             this.englishToolStripMenuItem.Name = "englishToolStripMenuItem";
+            this.englishToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.englishToolStripMenuItem.Text = "English";
             this.englishToolStripMenuItem.Click += new System.EventHandler(this.englishToolStripMenuItem_Click);
             // 
             // zhToolStripMenuItem
             // 
-            resources.ApplyResources(this.zhToolStripMenuItem, "zhToolStripMenuItem");
             this.zhToolStripMenuItem.Name = "zhToolStripMenuItem";
+            this.zhToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.zhToolStripMenuItem.Text = "繁體中文";
             this.zhToolStripMenuItem.Click += new System.EventHandler(this.zhToolStripMenuItem_Click);
             // 
             // zhSToolStripMenuItem
             // 
-            resources.ApplyResources(this.zhSToolStripMenuItem, "zhSToolStripMenuItem");
             this.zhSToolStripMenuItem.Name = "zhSToolStripMenuItem";
-            this.zhSToolStripMenuItem.Click += new System.EventHandler(this.簡體中文ToolStripMenuItem_Click);
+            this.zhSToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.zhSToolStripMenuItem.Text = "简体中文";
+            this.zhSToolStripMenuItem.Click += new System.EventHandler(this.zhHToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
-            resources.ApplyResources(this.helpToolStripMenuItem, "helpToolStripMenuItem");
             this.helpToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.howToUseToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(47, 20);
+            this.helpToolStripMenuItem.Text = "Help";
             // 
             // howToUseToolStripMenuItem
             // 
-            resources.ApplyResources(this.howToUseToolStripMenuItem, "howToUseToolStripMenuItem");
             this.howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
+            this.howToUseToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.howToUseToolStripMenuItem.Text = "Tutorials";
             this.howToUseToolStripMenuItem.Click += new System.EventHandler(this.howToUseToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
-            resources.ApplyResources(this.aboutToolStripMenuItem, "aboutToolStripMenuItem");
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // optionToolStripMenuItem
             // 
-            resources.ApplyResources(this.optionToolStripMenuItem, "optionToolStripMenuItem");
             this.optionToolStripMenuItem.Name = "optionToolStripMenuItem";
+            this.optionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.optionToolStripMenuItem.Text = "Options";
             this.optionToolStripMenuItem.Click += new System.EventHandler(this.optionToolStripMenuItem_Click);
             // 
             // motionToolStripMenuItem
             // 
-            resources.ApplyResources(this.motionToolStripMenuItem, "motionToolStripMenuItem");
             this.motionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.frameToolStripMenuItem,
             this.homeToolStripMenuItem,
@@ -283,73 +300,90 @@
             this.delayToolStripMenuItem,
             this.triggerToolStripMenuItem});
             this.motionToolStripMenuItem.Name = "motionToolStripMenuItem";
+            this.motionToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.motionToolStripMenuItem.Text = "Add new action at the first field";
             // 
             // frameToolStripMenuItem
             // 
-            resources.ApplyResources(this.frameToolStripMenuItem, "frameToolStripMenuItem");
             this.frameToolStripMenuItem.Name = "frameToolStripMenuItem";
+            this.frameToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.frameToolStripMenuItem.Text = "Frame";
             this.frameToolStripMenuItem.Click += new System.EventHandler(this.frameToolStripMenuItem_Click);
             // 
             // homeToolStripMenuItem
             // 
-            resources.ApplyResources(this.homeToolStripMenuItem, "homeToolStripMenuItem");
             this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.homeToolStripMenuItem.Text = "HomeFrame";
             this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
             // 
             // flagToolStripMenuItem
             // 
-            resources.ApplyResources(this.flagToolStripMenuItem, "flagToolStripMenuItem");
             this.flagToolStripMenuItem.Name = "flagToolStripMenuItem";
+            this.flagToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.flagToolStripMenuItem.Text = "Flag";
             this.flagToolStripMenuItem.Click += new System.EventHandler(this.flagToolStripMenuItem_Click);
             // 
             // gotoToolStripMenuItem
             // 
-            resources.ApplyResources(this.gotoToolStripMenuItem, "gotoToolStripMenuItem");
             this.gotoToolStripMenuItem.Name = "gotoToolStripMenuItem";
+            this.gotoToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.gotoToolStripMenuItem.Text = "Goto";
             this.gotoToolStripMenuItem.Click += new System.EventHandler(this.gotoToolStripMenuItem_Click);
             // 
             // delayToolStripMenuItem
             // 
-            resources.ApplyResources(this.delayToolStripMenuItem, "delayToolStripMenuItem");
             this.delayToolStripMenuItem.Name = "delayToolStripMenuItem";
+            this.delayToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.delayToolStripMenuItem.Text = "Delay";
             this.delayToolStripMenuItem.Click += new System.EventHandler(this.delayToolStripMenuItem_Click);
             // 
             // triggerToolStripMenuItem
             // 
-            resources.ApplyResources(this.triggerToolStripMenuItem, "triggerToolStripMenuItem");
             this.triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
+            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.triggerToolStripMenuItem.Text = "GotoMotion";
             this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
             // 
             // Action_groupBox
             // 
-            resources.ApplyResources(this.Action_groupBox, "Action_groupBox");
             this.Action_groupBox.BackColor = System.Drawing.SystemColors.Control;
             this.Action_groupBox.Controls.Add(this.Hint_groupBox);
             this.Action_groupBox.Controls.Add(this.action_panel);
             this.Action_groupBox.Controls.Add(this.panel2);
+            this.Action_groupBox.Location = new System.Drawing.Point(13, 94);
             this.Action_groupBox.Name = "Action_groupBox";
+            this.Action_groupBox.Size = new System.Drawing.Size(720, 594);
+            this.Action_groupBox.TabIndex = 1;
             this.Action_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.Action_groupBox, resources.GetString("Action_groupBox.ToolTip"));
+            this.Action_groupBox.Text = "Action";
             // 
             // Hint_groupBox
             // 
-            resources.ApplyResources(this.Hint_groupBox, "Hint_groupBox");
             this.Hint_groupBox.Controls.Add(this.hint_richTextBox);
+            this.Hint_groupBox.Location = new System.Drawing.Point(321, 0);
             this.Hint_groupBox.Name = "Hint_groupBox";
+            this.Hint_groupBox.Size = new System.Drawing.Size(399, 106);
+            this.Hint_groupBox.TabIndex = 2;
             this.Hint_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.Hint_groupBox, resources.GetString("Hint_groupBox.ToolTip"));
+            this.Hint_groupBox.Text = "Hint";
             // 
             // hint_richTextBox
             // 
-            resources.ApplyResources(this.hint_richTextBox, "hint_richTextBox");
+            this.hint_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.hint_richTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
             this.hint_richTextBox.ForeColor = System.Drawing.SystemColors.HotTrack;
+            this.hint_richTextBox.Location = new System.Drawing.Point(3, 18);
             this.hint_richTextBox.Name = "hint_richTextBox";
             this.hint_richTextBox.ReadOnly = true;
-            this.ttp.SetToolTip(this.hint_richTextBox, resources.GetString("hint_richTextBox.ToolTip"));
+            this.hint_richTextBox.Size = new System.Drawing.Size(393, 85);
+            this.hint_richTextBox.TabIndex = 0;
+            this.hint_richTextBox.Text = "   ___   __   ____        _\n  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n  / _ \\| \'_ \\|" +
+    " | | | | | | | \'_ \\ / _ \\\n | (_) | (_) | |_| | |_| | | | | | (_) |\n  \\___/ \\___/" +
+    "|____/ \\__,_|_|_| |_|\\___/";
             // 
             // action_panel
             // 
-            resources.ApplyResources(this.action_panel, "action_panel");
             this.action_panel.Controls.Add(this.loadFrame);
             this.action_panel.Controls.Add(this.saveFrame);
             this.action_panel.Controls.Add(this.label3);
@@ -357,145 +391,192 @@
             this.action_panel.Controls.Add(this.label2);
             this.action_panel.Controls.Add(this.typecombo);
             this.action_panel.Controls.Add(this.label1);
+            this.action_panel.Location = new System.Drawing.Point(12, 21);
             this.action_panel.Name = "action_panel";
-            this.ttp.SetToolTip(this.action_panel, resources.GetString("action_panel.ToolTip"));
+            this.action_panel.Size = new System.Drawing.Size(303, 85);
+            this.action_panel.TabIndex = 4;
             // 
             // loadFrame
             // 
-            resources.ApplyResources(this.loadFrame, "loadFrame");
             this.loadFrame.Image = global::_86ME_ver1.Properties.Resources.load_frame;
+            this.loadFrame.Location = new System.Drawing.Point(218, 7);
             this.loadFrame.Name = "loadFrame";
-            this.ttp.SetToolTip(this.loadFrame, resources.GetString("loadFrame.ToolTip"));
+            this.loadFrame.Size = new System.Drawing.Size(28, 26);
+            this.loadFrame.TabIndex = 13;
+            this.ttp.SetToolTip(this.loadFrame, "Load a frame from file to set servos.");
             this.loadFrame.UseVisualStyleBackColor = true;
             this.loadFrame.Click += new System.EventHandler(this.loadFrame_Click);
             // 
             // saveFrame
             // 
-            resources.ApplyResources(this.saveFrame, "saveFrame");
             this.saveFrame.Image = global::_86ME_ver1.Properties.Resources.save_frame;
+            this.saveFrame.Location = new System.Drawing.Point(184, 7);
             this.saveFrame.Name = "saveFrame";
-            this.ttp.SetToolTip(this.saveFrame, resources.GetString("saveFrame.ToolTip"));
+            this.saveFrame.Size = new System.Drawing.Size(28, 26);
+            this.saveFrame.TabIndex = 12;
+            this.ttp.SetToolTip(this.saveFrame, "Save current frame as a txt file.");
             this.saveFrame.UseVisualStyleBackColor = true;
             this.saveFrame.Click += new System.EventHandler(this.saveFrame_Click);
             // 
             // label3
             // 
-            resources.ApplyResources(this.label3, "label3");
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(184, 46);
             this.label3.Name = "label3";
-            this.ttp.SetToolTip(this.label3, resources.GetString("label3.ToolTip"));
+            this.label3.Size = new System.Drawing.Size(18, 12);
+            this.label3.TabIndex = 11;
+            this.label3.Text = "ms";
             // 
             // delaytext
             // 
-            resources.ApplyResources(this.delaytext, "delaytext");
+            this.delaytext.Location = new System.Drawing.Point(84, 42);
             this.delaytext.Name = "delaytext";
-            this.ttp.SetToolTip(this.delaytext, resources.GetString("delaytext.ToolTip"));
+            this.delaytext.Size = new System.Drawing.Size(91, 22);
+            this.delaytext.TabIndex = 6;
+            this.delaytext.Text = "0";
+            this.delaytext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.delaytext.TextChanged += new System.EventHandler(this.delaytext_TextChanged);
             this.delaytext.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.delaytext_KeyPress);
             // 
             // label2
             // 
-            resources.ApplyResources(this.label2, "label2");
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(13, 46);
             this.label2.Name = "label2";
-            this.ttp.SetToolTip(this.label2, resources.GetString("label2.ToolTip"));
+            this.label2.Size = new System.Drawing.Size(35, 12);
+            this.label2.TabIndex = 5;
+            this.label2.Text = "Delay:";
             // 
             // typecombo
             // 
-            resources.ApplyResources(this.typecombo, "typecombo");
             this.typecombo.FormattingEnabled = true;
             this.typecombo.Items.AddRange(new object[] {
-            resources.GetString("typecombo.Items"),
-            resources.GetString("typecombo.Items1"),
-            resources.GetString("typecombo.Items2"),
-            resources.GetString("typecombo.Items3"),
-            resources.GetString("typecombo.Items4"),
-            resources.GetString("typecombo.Items5")});
+            "Frame",
+            "Delay",
+            "Goto",
+            "Flag",
+            "HomeFrame",
+            "Motion"});
+            this.typecombo.Location = new System.Drawing.Point(84, 10);
             this.typecombo.Name = "typecombo";
-            this.ttp.SetToolTip(this.typecombo, resources.GetString("typecombo.ToolTip"));
+            this.typecombo.Size = new System.Drawing.Size(91, 20);
+            this.typecombo.TabIndex = 0;
             this.typecombo.TextChanged += new System.EventHandler(this.typecombo_TextChanged);
             // 
             // label1
             // 
-            resources.ApplyResources(this.label1, "label1");
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(13, 14);
             this.label1.Name = "label1";
-            this.ttp.SetToolTip(this.label1, resources.GetString("label1.ToolTip"));
+            this.label1.Size = new System.Drawing.Size(66, 12);
+            this.label1.TabIndex = 3;
+            this.label1.Text = "Action Type:";
             // 
             // panel2
             // 
-            resources.ApplyResources(this.panel2, "panel2");
+            this.panel2.AutoScroll = true;
             this.panel2.BackColor = System.Drawing.SystemColors.Window;
+            this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel2.Controls.Add(this.Framelist);
+            this.panel2.Location = new System.Drawing.Point(12, 112);
             this.panel2.Name = "panel2";
-            this.ttp.SetToolTip(this.panel2, resources.GetString("panel2.ToolTip"));
+            this.panel2.Size = new System.Drawing.Size(700, 476);
+            this.panel2.TabIndex = 6;
             // 
             // Framelist
             // 
-            resources.ApplyResources(this.Framelist, "Framelist");
+            this.Framelist.AutoScroll = true;
             this.Framelist.BackColor = System.Drawing.Color.Transparent;
+            this.Framelist.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.Framelist.Controls.Add(this.Robot_pictureBox);
+            this.Framelist.Location = new System.Drawing.Point(3, 3);
             this.Framelist.Name = "Framelist";
-            this.ttp.SetToolTip(this.Framelist, resources.GetString("Framelist.ToolTip"));
+            this.Framelist.Size = new System.Drawing.Size(694, 470);
+            this.Framelist.TabIndex = 5;
             // 
             // Robot_pictureBox
             // 
-            resources.ApplyResources(this.Robot_pictureBox, "Robot_pictureBox");
             this.Robot_pictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.Robot_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Robot_pictureBox.Location = new System.Drawing.Point(0, 0);
             this.Robot_pictureBox.Name = "Robot_pictureBox";
+            this.Robot_pictureBox.Size = new System.Drawing.Size(694, 470);
+            this.Robot_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Robot_pictureBox.TabIndex = 0;
             this.Robot_pictureBox.TabStop = false;
-            this.ttp.SetToolTip(this.Robot_pictureBox, resources.GetString("Robot_pictureBox.ToolTip"));
             // 
             // fast
             // 
-            resources.ApplyResources(this.fast, "fast");
+            this.fast.AutoSize = true;
+            this.fast.Location = new System.Drawing.Point(160, 37);
             this.fast.Name = "fast";
-            this.ttp.SetToolTip(this.fast, resources.GetString("fast.ToolTip"));
+            this.fast.Size = new System.Drawing.Size(21, 12);
+            this.fast.TabIndex = 14;
+            this.fast.Text = "fast";
             // 
             // slow
             // 
-            resources.ApplyResources(this.slow, "slow");
+            this.slow.AutoSize = true;
+            this.slow.Location = new System.Drawing.Point(80, 37);
             this.slow.Name = "slow";
-            this.ttp.SetToolTip(this.slow, resources.GetString("slow.ToolTip"));
+            this.slow.Size = new System.Drawing.Size(26, 12);
+            this.slow.TabIndex = 13;
+            this.slow.Text = "slow";
             // 
             // sync_speed
             // 
-            resources.ApplyResources(this.sync_speed, "sync_speed");
             this.sync_speed.LargeChange = 1;
+            this.sync_speed.Location = new System.Drawing.Point(77, 11);
             this.sync_speed.Maximum = 5;
             this.sync_speed.Minimum = 1;
             this.sync_speed.Name = "sync_speed";
-            this.ttp.SetToolTip(this.sync_speed, resources.GetString("sync_speed.ToolTip"));
+            this.sync_speed.Size = new System.Drawing.Size(104, 45);
+            this.sync_speed.TabIndex = 12;
+            this.ttp.SetToolTip(this.sync_speed, "Set the speed of sychronizing motors.\nThe motors will act faster when the setting" +
+        " is closer to fast, and vice versa.");
             this.sync_speed.Value = 5;
             this.sync_speed.ValueChanged += new System.EventHandler(this.SyncSpeed);
             // 
             // motorRelease
             // 
-            resources.ApplyResources(this.motorRelease, "motorRelease");
             this.motorRelease.Cursor = System.Windows.Forms.Cursors.Default;
+            this.motorRelease.Location = new System.Drawing.Point(198, 18);
             this.motorRelease.Name = "motorRelease";
-            this.ttp.SetToolTip(this.motorRelease, resources.GetString("motorRelease.ToolTip"));
+            this.motorRelease.Size = new System.Drawing.Size(117, 23);
+            this.motorRelease.TabIndex = 10;
+            this.motorRelease.Text = "Free Motors";
+            this.ttp.SetToolTip(this.motorRelease, "Caution! It will release all motors.");
             this.motorRelease.UseVisualStyleBackColor = true;
             this.motorRelease.Click += new System.EventHandler(this.motorRelease_Click);
             // 
             // autocheck
             // 
-            resources.ApplyResources(this.autocheck, "autocheck");
+            this.autocheck.AutoSize = true;
+            this.autocheck.Location = new System.Drawing.Point(30, 23);
             this.autocheck.Name = "autocheck";
-            this.ttp.SetToolTip(this.autocheck, resources.GetString("autocheck.ToolTip"));
+            this.autocheck.Size = new System.Drawing.Size(47, 16);
+            this.autocheck.TabIndex = 9;
+            this.autocheck.Text = "Sync";
+            this.ttp.SetToolTip(this.autocheck, "Synchronize the current frame to motors.");
             this.autocheck.UseVisualStyleBackColor = true;
             this.autocheck.CheckedChanged += new System.EventHandler(this.autocheck_CheckedChanged);
             // 
             // capturebutton
             // 
-            resources.ApplyResources(this.capturebutton, "capturebutton");
             this.capturebutton.Cursor = System.Windows.Forms.Cursors.Default;
+            this.capturebutton.Location = new System.Drawing.Point(337, 18);
             this.capturebutton.Name = "capturebutton";
-            this.ttp.SetToolTip(this.capturebutton, resources.GetString("capturebutton.ToolTip"));
+            this.capturebutton.Size = new System.Drawing.Size(117, 23);
+            this.capturebutton.TabIndex = 7;
+            this.capturebutton.Text = "Capture";
+            this.ttp.SetToolTip(this.capturebutton, "Caution! It will release all motors first and get the positions of motors to curr" +
+        "ent frame.\nThis function only support Kondo, Hitec, Futaba motors.");
             this.capturebutton.UseMnemonic = false;
             this.capturebutton.UseVisualStyleBackColor = true;
             this.capturebutton.Click += new System.EventHandler(this.capturebutton_Click);
             // 
             // Motion_groupBox
             // 
-            resources.ApplyResources(this.Motion_groupBox, "Motion_groupBox");
             this.Motion_groupBox.Controls.Add(this.MotionConfig);
             this.Motion_groupBox.Controls.Add(this.motion_stop);
             this.Motion_groupBox.Controls.Add(this.motion_pause);
@@ -505,41 +586,53 @@
             this.Motion_groupBox.Controls.Add(this.MotionTest);
             this.Motion_groupBox.Controls.Add(this.NewMotion);
             this.Motion_groupBox.Controls.Add(this.MotionCombo);
+            this.Motion_groupBox.Location = new System.Drawing.Point(739, 28);
             this.Motion_groupBox.Name = "Motion_groupBox";
+            this.Motion_groupBox.Size = new System.Drawing.Size(273, 601);
+            this.Motion_groupBox.TabIndex = 3;
             this.Motion_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.Motion_groupBox, resources.GetString("Motion_groupBox.ToolTip"));
+            this.Motion_groupBox.Text = "Motion";
             // 
             // MotionConfig
             // 
-            resources.ApplyResources(this.MotionConfig, "MotionConfig");
             this.MotionConfig.Controls.Add(this.ActionList);
             this.MotionConfig.Controls.Add(this.MotionTrigger);
             this.MotionConfig.Controls.Add(this.MotionProperty);
+            this.MotionConfig.Location = new System.Drawing.Point(7, 66);
             this.MotionConfig.Name = "MotionConfig";
             this.MotionConfig.SelectedIndex = 0;
-            this.ttp.SetToolTip(this.MotionConfig, resources.GetString("MotionConfig.ToolTip"));
+            this.MotionConfig.Size = new System.Drawing.Size(231, 488);
+            this.MotionConfig.TabIndex = 10;
             this.MotionConfig.SelectedIndexChanged += new System.EventHandler(this.MotionConfig_SelectedIndexChanged);
             // 
             // ActionList
             // 
-            resources.ApplyResources(this.ActionList, "ActionList");
             this.ActionList.Controls.Add(this.Motionlist);
+            this.ActionList.Location = new System.Drawing.Point(4, 22);
             this.ActionList.Name = "ActionList";
-            this.ttp.SetToolTip(this.ActionList, resources.GetString("ActionList.ToolTip"));
+            this.ActionList.Padding = new System.Windows.Forms.Padding(3);
+            this.ActionList.Size = new System.Drawing.Size(223, 462);
+            this.ActionList.TabIndex = 0;
+            this.ActionList.Text = "Action List";
             this.ActionList.UseVisualStyleBackColor = true;
             // 
             // Motionlist
             // 
-            resources.ApplyResources(this.Motionlist, "Motionlist");
+            this.Motionlist.Font = new System.Drawing.Font("PMingLiU", 14F);
             this.Motionlist.FormattingEnabled = true;
+            this.Motionlist.IntegralHeight = false;
+            this.Motionlist.ItemHeight = 19;
+            this.Motionlist.Location = new System.Drawing.Point(1, 3);
             this.Motionlist.Name = "Motionlist";
-            this.ttp.SetToolTip(this.Motionlist, resources.GetString("Motionlist.ToolTip"));
+            this.Motionlist.ScrollAlwaysVisible = true;
+            this.Motionlist.Size = new System.Drawing.Size(219, 456);
+            this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Motionlist_MouseDown);
             // 
             // MotionTrigger
             // 
-            resources.ApplyResources(this.MotionTrigger, "MotionTrigger");
+            this.MotionTrigger.AutoScroll = true;
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
             this.MotionTrigger.Controls.Add(this.ps2_groupBox);
             this.MotionTrigger.Controls.Add(this.ps2_radioButton);
@@ -549,12 +642,15 @@
             this.MotionTrigger.Controls.Add(this.Always_radioButton);
             this.MotionTrigger.Controls.Add(this.Keyboard_groupBox);
             this.MotionTrigger.Controls.Add(this.Always_groupBox);
+            this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
             this.MotionTrigger.Name = "MotionTrigger";
-            this.ttp.SetToolTip(this.MotionTrigger, resources.GetString("MotionTrigger.ToolTip"));
+            this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
+            this.MotionTrigger.Size = new System.Drawing.Size(223, 462);
+            this.MotionTrigger.TabIndex = 1;
+            this.MotionTrigger.Text = "Trigger";
             // 
             // ps2_groupBox
             // 
-            resources.ApplyResources(this.ps2_groupBox, "ps2_groupBox");
             this.ps2_groupBox.Controls.Add(this.ps2CLKCombo);
             this.ps2_groupBox.Controls.Add(this.ps2ATTCombo);
             this.ps2_groupBox.Controls.Add(this.ps2CMDCombo);
@@ -567,137 +663,170 @@
             this.ps2_groupBox.Controls.Add(this.ps2KeyLabel);
             this.ps2_groupBox.Controls.Add(this.ps2TypeLabel);
             this.ps2_groupBox.Controls.Add(this.ps2KeyCombo);
+            this.ps2_groupBox.Location = new System.Drawing.Point(27, 240);
             this.ps2_groupBox.Name = "ps2_groupBox";
+            this.ps2_groupBox.Size = new System.Drawing.Size(192, 102);
+            this.ps2_groupBox.TabIndex = 6;
             this.ps2_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.ps2_groupBox, resources.GetString("ps2_groupBox.ToolTip"));
+            this.ps2_groupBox.Text = "PS2 Controller";
             // 
             // ps2CLKCombo
             // 
-            resources.ApplyResources(this.ps2CLKCombo, "ps2CLKCombo");
             this.ps2CLKCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2CLKCombo.FormattingEnabled = true;
+            this.ps2CLKCombo.Location = new System.Drawing.Point(145, 73);
             this.ps2CLKCombo.Name = "ps2CLKCombo";
-            this.ttp.SetToolTip(this.ps2CLKCombo, resources.GetString("ps2CLKCombo.ToolTip"));
+            this.ps2CLKCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2CLKCombo.TabIndex = 13;
+            this.ttp.SetToolTip(this.ps2CLKCombo, "Set used pin of CLK.");
             this.ps2CLKCombo.SelectedIndexChanged += new System.EventHandler(this.ps2CLKCombo_SelectedIndexChanged);
             // 
             // ps2ATTCombo
             // 
-            resources.ApplyResources(this.ps2ATTCombo, "ps2ATTCombo");
             this.ps2ATTCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2ATTCombo.FormattingEnabled = true;
+            this.ps2ATTCombo.Location = new System.Drawing.Point(102, 73);
             this.ps2ATTCombo.Name = "ps2ATTCombo";
-            this.ttp.SetToolTip(this.ps2ATTCombo, resources.GetString("ps2ATTCombo.ToolTip"));
+            this.ps2ATTCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2ATTCombo.TabIndex = 12;
+            this.ttp.SetToolTip(this.ps2ATTCombo, "Set used pin of ATT.");
             this.ps2ATTCombo.SelectedIndexChanged += new System.EventHandler(this.ps2ATTCombo_SelectedIndexChanged);
             // 
             // ps2CMDCombo
             // 
-            resources.ApplyResources(this.ps2CMDCombo, "ps2CMDCombo");
             this.ps2CMDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2CMDCombo.FormattingEnabled = true;
+            this.ps2CMDCombo.Location = new System.Drawing.Point(59, 73);
             this.ps2CMDCombo.Name = "ps2CMDCombo";
-            this.ttp.SetToolTip(this.ps2CMDCombo, resources.GetString("ps2CMDCombo.ToolTip"));
+            this.ps2CMDCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2CMDCombo.TabIndex = 11;
+            this.ttp.SetToolTip(this.ps2CMDCombo, "Set used pin of CMD.");
             this.ps2CMDCombo.SelectedIndexChanged += new System.EventHandler(this.ps2CMDCombo_SelectedIndexChanged);
             // 
             // ps2DATCombo
             // 
-            resources.ApplyResources(this.ps2DATCombo, "ps2DATCombo");
             this.ps2DATCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2DATCombo.FormattingEnabled = true;
+            this.ps2DATCombo.Location = new System.Drawing.Point(16, 73);
             this.ps2DATCombo.Name = "ps2DATCombo";
-            this.ttp.SetToolTip(this.ps2DATCombo, resources.GetString("ps2DATCombo.ToolTip"));
+            this.ps2DATCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2DATCombo.TabIndex = 6;
+            this.ttp.SetToolTip(this.ps2DATCombo, "Set used pin of DAT.");
             this.ps2DATCombo.SelectedIndexChanged += new System.EventHandler(this.ps2DATCombo_SelectedIndexChanged);
             // 
             // ps2CLKLabel
             // 
-            resources.ApplyResources(this.ps2CLKLabel, "ps2CLKLabel");
+            this.ps2CLKLabel.AutoSize = true;
+            this.ps2CLKLabel.Location = new System.Drawing.Point(143, 58);
             this.ps2CLKLabel.Name = "ps2CLKLabel";
-            this.ttp.SetToolTip(this.ps2CLKLabel, resources.GetString("ps2CLKLabel.ToolTip"));
+            this.ps2CLKLabel.Size = new System.Drawing.Size(34, 12);
+            this.ps2CLKLabel.TabIndex = 10;
+            this.ps2CLKLabel.Text = "CLK: ";
             // 
             // ps2ATTLabel
             // 
-            resources.ApplyResources(this.ps2ATTLabel, "ps2ATTLabel");
+            this.ps2ATTLabel.AutoSize = true;
+            this.ps2ATTLabel.Location = new System.Drawing.Point(100, 58);
             this.ps2ATTLabel.Name = "ps2ATTLabel";
-            this.ttp.SetToolTip(this.ps2ATTLabel, resources.GetString("ps2ATTLabel.ToolTip"));
+            this.ps2ATTLabel.Size = new System.Drawing.Size(33, 12);
+            this.ps2ATTLabel.TabIndex = 9;
+            this.ps2ATTLabel.Text = "ATT: ";
             // 
             // ps2CMDLabel
             // 
-            resources.ApplyResources(this.ps2CMDLabel, "ps2CMDLabel");
+            this.ps2CMDLabel.AutoSize = true;
+            this.ps2CMDLabel.Location = new System.Drawing.Point(57, 58);
             this.ps2CMDLabel.Name = "ps2CMDLabel";
-            this.ttp.SetToolTip(this.ps2CMDLabel, resources.GetString("ps2CMDLabel.ToolTip"));
+            this.ps2CMDLabel.Size = new System.Drawing.Size(37, 12);
+            this.ps2CMDLabel.TabIndex = 8;
+            this.ps2CMDLabel.Text = "CMD: ";
             // 
             // ps2DATLabel
             // 
-            resources.ApplyResources(this.ps2DATLabel, "ps2DATLabel");
+            this.ps2DATLabel.AutoSize = true;
+            this.ps2DATLabel.Location = new System.Drawing.Point(14, 58);
             this.ps2DATLabel.Name = "ps2DATLabel";
-            this.ttp.SetToolTip(this.ps2DATLabel, resources.GetString("ps2DATLabel.ToolTip"));
+            this.ps2DATLabel.Size = new System.Drawing.Size(31, 12);
+            this.ps2DATLabel.TabIndex = 7;
+            this.ps2DATLabel.Text = "DAT:";
             // 
             // ps2TypeCombo
             // 
-            resources.ApplyResources(this.ps2TypeCombo, "ps2TypeCombo");
             this.ps2TypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2TypeCombo.FormattingEnabled = true;
             this.ps2TypeCombo.Items.AddRange(new object[] {
-            resources.GetString("ps2TypeCombo.Items"),
-            resources.GetString("ps2TypeCombo.Items1"),
-            resources.GetString("ps2TypeCombo.Items2")});
+            "First Press",
+            "Pressed",
+            "Release"});
+            this.ps2TypeCombo.Location = new System.Drawing.Point(117, 33);
             this.ps2TypeCombo.Name = "ps2TypeCombo";
+            this.ps2TypeCombo.Size = new System.Drawing.Size(69, 20);
+            this.ps2TypeCombo.TabIndex = 6;
             this.ttp.SetToolTip(this.ps2TypeCombo, resources.GetString("ps2TypeCombo.ToolTip"));
             this.ps2TypeCombo.SelectedIndexChanged += new System.EventHandler(this.ps2TypeCombo_SelectedIndexChanged);
             // 
             // ps2KeyLabel
             // 
-            resources.ApplyResources(this.ps2KeyLabel, "ps2KeyLabel");
+            this.ps2KeyLabel.AutoSize = true;
+            this.ps2KeyLabel.Location = new System.Drawing.Point(14, 18);
             this.ps2KeyLabel.Name = "ps2KeyLabel";
-            this.ttp.SetToolTip(this.ps2KeyLabel, resources.GetString("ps2KeyLabel.ToolTip"));
+            this.ps2KeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.ps2KeyLabel.TabIndex = 4;
+            this.ps2KeyLabel.Text = "Key: ";
             // 
             // ps2TypeLabel
             // 
-            resources.ApplyResources(this.ps2TypeLabel, "ps2TypeLabel");
+            this.ps2TypeLabel.AutoSize = true;
+            this.ps2TypeLabel.Location = new System.Drawing.Point(115, 18);
             this.ps2TypeLabel.Name = "ps2TypeLabel";
-            this.ttp.SetToolTip(this.ps2TypeLabel, resources.GetString("ps2TypeLabel.ToolTip"));
+            this.ps2TypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.ps2TypeLabel.TabIndex = 5;
+            this.ps2TypeLabel.Text = "Type:";
             // 
             // ps2KeyCombo
             // 
-            resources.ApplyResources(this.ps2KeyCombo, "ps2KeyCombo");
             this.ps2KeyCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2KeyCombo.FormattingEnabled = true;
             this.ps2KeyCombo.Items.AddRange(new object[] {
-            resources.GetString("ps2KeyCombo.Items"),
-            resources.GetString("ps2KeyCombo.Items1"),
-            resources.GetString("ps2KeyCombo.Items2"),
-            resources.GetString("ps2KeyCombo.Items3"),
-            resources.GetString("ps2KeyCombo.Items4"),
-            resources.GetString("ps2KeyCombo.Items5"),
-            resources.GetString("ps2KeyCombo.Items6"),
-            resources.GetString("ps2KeyCombo.Items7"),
-            resources.GetString("ps2KeyCombo.Items8"),
-            resources.GetString("ps2KeyCombo.Items9"),
-            resources.GetString("ps2KeyCombo.Items10"),
-            resources.GetString("ps2KeyCombo.Items11"),
-            resources.GetString("ps2KeyCombo.Items12"),
-            resources.GetString("ps2KeyCombo.Items13"),
-            resources.GetString("ps2KeyCombo.Items14"),
-            resources.GetString("ps2KeyCombo.Items15"),
-            resources.GetString("ps2KeyCombo.Items16"),
-            resources.GetString("ps2KeyCombo.Items17"),
-            resources.GetString("ps2KeyCombo.Items18"),
-            resources.GetString("ps2KeyCombo.Items19")});
+            "PSB_SELECT",
+            "PSB_L3",
+            "PSB_R3",
+            "PSB_START",
+            "PSB_PAD_UP",
+            "PSB_PAD_RIGHT",
+            "PSB_PAD_DOWN",
+            "PSB_PAD_LEFT",
+            "PSB_L2",
+            "PSB_R2",
+            "PSB_L1",
+            "PSB_R1",
+            "PSB_GREEN",
+            "PSB_RED",
+            "PSB_BLUE",
+            "PSB_PINK",
+            "PSB_TRIANGLE",
+            "PSB_CIRCLE",
+            "PSB_CROSS",
+            "PSB_SQUARE"});
+            this.ps2KeyCombo.Location = new System.Drawing.Point(16, 33);
             this.ps2KeyCombo.Name = "ps2KeyCombo";
-            this.ttp.SetToolTip(this.ps2KeyCombo, resources.GetString("ps2KeyCombo.ToolTip"));
+            this.ps2KeyCombo.Size = new System.Drawing.Size(95, 20);
+            this.ps2KeyCombo.TabIndex = 4;
             this.ps2KeyCombo.SelectedIndexChanged += new System.EventHandler(this.ps2KeyCombo_SelectedIndexChanged);
             // 
             // ps2_radioButton
             // 
-            resources.ApplyResources(this.ps2_radioButton, "ps2_radioButton");
+            this.ps2_radioButton.AutoSize = true;
+            this.ps2_radioButton.Location = new System.Drawing.Point(7, 240);
             this.ps2_radioButton.Name = "ps2_radioButton";
+            this.ps2_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.ps2_radioButton.TabIndex = 6;
             this.ps2_radioButton.TabStop = true;
-            this.ttp.SetToolTip(this.ps2_radioButton, resources.GetString("ps2_radioButton.ToolTip"));
             this.ps2_radioButton.UseVisualStyleBackColor = true;
             this.ps2_radioButton.CheckedChanged += new System.EventHandler(this.ps2_radioButton_CheckedChanged);
             // 
             // bt_groupBox
             // 
-            resources.ApplyResources(this.bt_groupBox, "bt_groupBox");
             this.bt_groupBox.Controls.Add(this.btModeCombo);
             this.bt_groupBox.Controls.Add(this.btModeLabel);
             this.bt_groupBox.Controls.Add(this.btBaudCombo);
@@ -706,371 +835,468 @@
             this.bt_groupBox.Controls.Add(this.btPortLabel);
             this.bt_groupBox.Controls.Add(this.btKeyLabel);
             this.bt_groupBox.Controls.Add(this.btKeyText);
+            this.bt_groupBox.Location = new System.Drawing.Point(27, 132);
             this.bt_groupBox.Name = "bt_groupBox";
+            this.bt_groupBox.Size = new System.Drawing.Size(192, 102);
+            this.bt_groupBox.TabIndex = 5;
             this.bt_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.bt_groupBox, resources.GetString("bt_groupBox.ToolTip"));
+            this.bt_groupBox.Text = "Bluetooth";
             // 
             // btModeCombo
             // 
-            resources.ApplyResources(this.btModeCombo, "btModeCombo");
             this.btModeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.btModeCombo.FormattingEnabled = true;
             this.btModeCombo.Items.AddRange(new object[] {
-            resources.GetString("btModeCombo.Items"),
-            resources.GetString("btModeCombo.Items1")});
+            "OneShot",
+            "Continuous"});
+            this.btModeCombo.Location = new System.Drawing.Point(105, 30);
             this.btModeCombo.Name = "btModeCombo";
-            this.ttp.SetToolTip(this.btModeCombo, resources.GetString("btModeCombo.ToolTip"));
+            this.btModeCombo.Size = new System.Drawing.Size(81, 20);
+            this.btModeCombo.TabIndex = 9;
             this.btModeCombo.SelectedIndexChanged += new System.EventHandler(this.btTypeCombo_SelectedIndexChanged);
             // 
             // btModeLabel
             // 
-            resources.ApplyResources(this.btModeLabel, "btModeLabel");
+            this.btModeLabel.AutoSize = true;
+            this.btModeLabel.Location = new System.Drawing.Point(103, 14);
             this.btModeLabel.Name = "btModeLabel";
-            this.ttp.SetToolTip(this.btModeLabel, resources.GetString("btModeLabel.ToolTip"));
+            this.btModeLabel.Size = new System.Drawing.Size(35, 12);
+            this.btModeLabel.TabIndex = 8;
+            this.btModeLabel.Text = "Mode:";
             // 
             // btBaudCombo
             // 
-            resources.ApplyResources(this.btBaudCombo, "btBaudCombo");
             this.btBaudCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.btBaudCombo.FormattingEnabled = true;
             this.btBaudCombo.Items.AddRange(new object[] {
-            resources.GetString("btBaudCombo.Items"),
-            resources.GetString("btBaudCombo.Items1"),
-            resources.GetString("btBaudCombo.Items2"),
-            resources.GetString("btBaudCombo.Items3"),
-            resources.GetString("btBaudCombo.Items4")});
+            "9600",
+            "19200",
+            "38400",
+            "57600",
+            "115200"});
+            this.btBaudCombo.Location = new System.Drawing.Point(16, 70);
             this.btBaudCombo.Name = "btBaudCombo";
-            this.ttp.SetToolTip(this.btBaudCombo, resources.GetString("btBaudCombo.ToolTip"));
+            this.btBaudCombo.Size = new System.Drawing.Size(78, 20);
+            this.btBaudCombo.TabIndex = 7;
+            this.ttp.SetToolTip(this.btBaudCombo, "Set used baudrate of connected bluetooth.");
             this.btBaudCombo.SelectedIndexChanged += new System.EventHandler(this.btBaudCombo_SelectedIndexChanged);
             // 
             // btBaudLabel
             // 
-            resources.ApplyResources(this.btBaudLabel, "btBaudLabel");
+            this.btBaudLabel.AutoSize = true;
+            this.btBaudLabel.Location = new System.Drawing.Point(14, 54);
             this.btBaudLabel.Name = "btBaudLabel";
-            this.ttp.SetToolTip(this.btBaudLabel, resources.GetString("btBaudLabel.ToolTip"));
+            this.btBaudLabel.Size = new System.Drawing.Size(57, 12);
+            this.btBaudLabel.TabIndex = 6;
+            this.btBaudLabel.Text = "Baud Rate:";
             // 
             // btPortCombo
             // 
-            resources.ApplyResources(this.btPortCombo, "btPortCombo");
             this.btPortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.btPortCombo.FormattingEnabled = true;
             this.btPortCombo.Items.AddRange(new object[] {
-            resources.GetString("btPortCombo.Items"),
-            resources.GetString("btPortCombo.Items1"),
-            resources.GetString("btPortCombo.Items2")});
+            "Serial1",
+            "Serial2",
+            "Serial3"});
+            this.btPortCombo.Location = new System.Drawing.Point(105, 69);
             this.btPortCombo.Name = "btPortCombo";
-            this.ttp.SetToolTip(this.btPortCombo, resources.GetString("btPortCombo.ToolTip"));
+            this.btPortCombo.Size = new System.Drawing.Size(81, 20);
+            this.btPortCombo.TabIndex = 4;
+            this.ttp.SetToolTip(this.btPortCombo, "Set used port for connecting bluetooth.");
             this.btPortCombo.SelectedIndexChanged += new System.EventHandler(this.btPortCombo_SelectedIndexChanged);
             // 
             // btPortLabel
             // 
-            resources.ApplyResources(this.btPortLabel, "btPortLabel");
+            this.btPortLabel.AutoSize = true;
+            this.btPortLabel.Location = new System.Drawing.Point(103, 54);
             this.btPortLabel.Name = "btPortLabel";
-            this.ttp.SetToolTip(this.btPortLabel, resources.GetString("btPortLabel.ToolTip"));
+            this.btPortLabel.Size = new System.Drawing.Size(53, 12);
+            this.btPortLabel.TabIndex = 5;
+            this.btPortLabel.Text = "Used Port:";
             // 
             // btKeyLabel
             // 
-            resources.ApplyResources(this.btKeyLabel, "btKeyLabel");
+            this.btKeyLabel.AutoSize = true;
+            this.btKeyLabel.Location = new System.Drawing.Point(14, 14);
             this.btKeyLabel.Name = "btKeyLabel";
-            this.ttp.SetToolTip(this.btKeyLabel, resources.GetString("btKeyLabel.ToolTip"));
+            this.btKeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.btKeyLabel.TabIndex = 4;
+            this.btKeyLabel.Text = "Key: ";
             // 
             // btKeyText
             // 
-            resources.ApplyResources(this.btKeyText, "btKeyText");
+            this.btKeyText.Location = new System.Drawing.Point(16, 29);
+            this.btKeyText.MaxLength = 1;
             this.btKeyText.Name = "btKeyText";
-            this.ttp.SetToolTip(this.btKeyText, resources.GetString("btKeyText.ToolTip"));
+            this.btKeyText.Size = new System.Drawing.Size(78, 22);
+            this.btKeyText.TabIndex = 0;
+            this.ttp.SetToolTip(this.btKeyText, "Set a character for triggering the selected motion by bluetooth.");
             this.btKeyText.TextChanged += new System.EventHandler(this.btKeyText_TextChanged);
             // 
             // bt_radioButton
             // 
-            resources.ApplyResources(this.bt_radioButton, "bt_radioButton");
+            this.bt_radioButton.AutoSize = true;
+            this.bt_radioButton.Location = new System.Drawing.Point(7, 132);
             this.bt_radioButton.Name = "bt_radioButton";
+            this.bt_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.bt_radioButton.TabIndex = 4;
             this.bt_radioButton.TabStop = true;
-            this.ttp.SetToolTip(this.bt_radioButton, resources.GetString("bt_radioButton.ToolTip"));
             this.bt_radioButton.UseVisualStyleBackColor = true;
             this.bt_radioButton.CheckedChanged += new System.EventHandler(this.bt_radioButton_CheckedChanged);
             // 
             // Keyboard_radioButton
             // 
-            resources.ApplyResources(this.Keyboard_radioButton, "Keyboard_radioButton");
+            this.Keyboard_radioButton.AutoSize = true;
+            this.Keyboard_radioButton.Location = new System.Drawing.Point(7, 68);
             this.Keyboard_radioButton.Name = "Keyboard_radioButton";
+            this.Keyboard_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.Keyboard_radioButton.TabIndex = 3;
             this.Keyboard_radioButton.TabStop = true;
-            this.ttp.SetToolTip(this.Keyboard_radioButton, resources.GetString("Keyboard_radioButton.ToolTip"));
             this.Keyboard_radioButton.UseVisualStyleBackColor = true;
             this.Keyboard_radioButton.CheckedChanged += new System.EventHandler(this.Keyboard_radioButton_CheckedChanged);
             // 
             // Always_radioButton
             // 
-            resources.ApplyResources(this.Always_radioButton, "Always_radioButton");
+            this.Always_radioButton.AutoSize = true;
             this.Always_radioButton.Checked = true;
+            this.Always_radioButton.Location = new System.Drawing.Point(7, 7);
             this.Always_radioButton.Name = "Always_radioButton";
+            this.Always_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.Always_radioButton.TabIndex = 2;
             this.Always_radioButton.TabStop = true;
-            this.ttp.SetToolTip(this.Always_radioButton, resources.GetString("Always_radioButton.ToolTip"));
             this.Always_radioButton.UseVisualStyleBackColor = true;
             this.Always_radioButton.CheckedChanged += new System.EventHandler(this.Always_radioButton_CheckedChanged);
             // 
             // Keyboard_groupBox
             // 
-            resources.ApplyResources(this.Keyboard_groupBox, "Keyboard_groupBox");
             this.Keyboard_groupBox.Controls.Add(this.KeyboardTypeCombo);
             this.Keyboard_groupBox.Controls.Add(this.keyboardTypeLabel);
             this.Keyboard_groupBox.Controls.Add(this.KeyboardKeyLabel);
             this.Keyboard_groupBox.Controls.Add(this.KeyboardCombo);
+            this.Keyboard_groupBox.Location = new System.Drawing.Point(27, 68);
             this.Keyboard_groupBox.Name = "Keyboard_groupBox";
+            this.Keyboard_groupBox.Size = new System.Drawing.Size(192, 58);
+            this.Keyboard_groupBox.TabIndex = 1;
             this.Keyboard_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.Keyboard_groupBox, resources.GetString("Keyboard_groupBox.ToolTip"));
+            this.Keyboard_groupBox.Text = "Keyboard";
             // 
             // KeyboardTypeCombo
             // 
-            resources.ApplyResources(this.KeyboardTypeCombo, "KeyboardTypeCombo");
             this.KeyboardTypeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.KeyboardTypeCombo.FormattingEnabled = true;
             this.KeyboardTypeCombo.Items.AddRange(new object[] {
-            resources.GetString("KeyboardTypeCombo.Items"),
-            resources.GetString("KeyboardTypeCombo.Items1"),
-            resources.GetString("KeyboardTypeCombo.Items2")});
+            "First Press",
+            "Pressed",
+            "Release"});
+            this.KeyboardTypeCombo.Location = new System.Drawing.Point(117, 32);
             this.KeyboardTypeCombo.Name = "KeyboardTypeCombo";
+            this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 20);
+            this.KeyboardTypeCombo.TabIndex = 3;
             this.ttp.SetToolTip(this.KeyboardTypeCombo, resources.GetString("KeyboardTypeCombo.ToolTip"));
             this.KeyboardTypeCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardTypeCombo_SelectedIndexChanged);
             // 
             // keyboardTypeLabel
             // 
-            resources.ApplyResources(this.keyboardTypeLabel, "keyboardTypeLabel");
+            this.keyboardTypeLabel.AutoSize = true;
+            this.keyboardTypeLabel.Location = new System.Drawing.Point(115, 17);
             this.keyboardTypeLabel.Name = "keyboardTypeLabel";
-            this.ttp.SetToolTip(this.keyboardTypeLabel, resources.GetString("keyboardTypeLabel.ToolTip"));
+            this.keyboardTypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.keyboardTypeLabel.TabIndex = 2;
+            this.keyboardTypeLabel.Text = "Type:";
             // 
             // KeyboardKeyLabel
             // 
-            resources.ApplyResources(this.KeyboardKeyLabel, "KeyboardKeyLabel");
+            this.KeyboardKeyLabel.AutoSize = true;
+            this.KeyboardKeyLabel.Location = new System.Drawing.Point(14, 17);
             this.KeyboardKeyLabel.Name = "KeyboardKeyLabel";
-            this.ttp.SetToolTip(this.KeyboardKeyLabel, resources.GetString("KeyboardKeyLabel.ToolTip"));
+            this.KeyboardKeyLabel.Size = new System.Drawing.Size(27, 12);
+            this.KeyboardKeyLabel.TabIndex = 1;
+            this.KeyboardKeyLabel.Text = "Key:";
             // 
             // KeyboardCombo
             // 
-            resources.ApplyResources(this.KeyboardCombo, "KeyboardCombo");
             this.KeyboardCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.KeyboardCombo.FormattingEnabled = true;
             this.KeyboardCombo.Items.AddRange(new object[] {
-            resources.GetString("KeyboardCombo.Items"),
-            resources.GetString("KeyboardCombo.Items1"),
-            resources.GetString("KeyboardCombo.Items2"),
-            resources.GetString("KeyboardCombo.Items3"),
-            resources.GetString("KeyboardCombo.Items4"),
-            resources.GetString("KeyboardCombo.Items5"),
-            resources.GetString("KeyboardCombo.Items6"),
-            resources.GetString("KeyboardCombo.Items7"),
-            resources.GetString("KeyboardCombo.Items8"),
-            resources.GetString("KeyboardCombo.Items9"),
-            resources.GetString("KeyboardCombo.Items10"),
-            resources.GetString("KeyboardCombo.Items11"),
-            resources.GetString("KeyboardCombo.Items12"),
-            resources.GetString("KeyboardCombo.Items13"),
-            resources.GetString("KeyboardCombo.Items14"),
-            resources.GetString("KeyboardCombo.Items15"),
-            resources.GetString("KeyboardCombo.Items16"),
-            resources.GetString("KeyboardCombo.Items17"),
-            resources.GetString("KeyboardCombo.Items18"),
-            resources.GetString("KeyboardCombo.Items19"),
-            resources.GetString("KeyboardCombo.Items20"),
-            resources.GetString("KeyboardCombo.Items21"),
-            resources.GetString("KeyboardCombo.Items22"),
-            resources.GetString("KeyboardCombo.Items23"),
-            resources.GetString("KeyboardCombo.Items24"),
-            resources.GetString("KeyboardCombo.Items25"),
-            resources.GetString("KeyboardCombo.Items26"),
-            resources.GetString("KeyboardCombo.Items27"),
-            resources.GetString("KeyboardCombo.Items28"),
-            resources.GetString("KeyboardCombo.Items29"),
-            resources.GetString("KeyboardCombo.Items30"),
-            resources.GetString("KeyboardCombo.Items31")});
+            "KEY_A",
+            "KEY_B",
+            "KEY_C",
+            "KEY_D",
+            "KEY_E",
+            "KEY_F",
+            "KEY_G",
+            "KEY_H",
+            "KEY_I",
+            "KEY_J",
+            "KEY_K",
+            "KEY_L",
+            "KEY_M",
+            "KEY_N",
+            "KEY_O",
+            "KEY_P",
+            "KEY_Q",
+            "KEY_R",
+            "KEY_S",
+            "KEY_T",
+            "KEY_U",
+            "KEY_V",
+            "KEY_W",
+            "KEY_X",
+            "KEY_Y",
+            "KEY_Z",
+            "KEY_SPACE",
+            "KEY_LEFT",
+            "KEY_RIGHT",
+            "KEY_UP",
+            "KEY_DOWN",
+            "KEY_ESC"});
+            this.KeyboardCombo.Location = new System.Drawing.Point(16, 32);
             this.KeyboardCombo.Name = "KeyboardCombo";
-            this.ttp.SetToolTip(this.KeyboardCombo, resources.GetString("KeyboardCombo.ToolTip"));
+            this.KeyboardCombo.Size = new System.Drawing.Size(95, 20);
+            this.KeyboardCombo.TabIndex = 0;
             this.KeyboardCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardCombo_SelectedIndexChanged);
             // 
             // Always_groupBox
             // 
-            resources.ApplyResources(this.Always_groupBox, "Always_groupBox");
             this.Always_groupBox.Controls.Add(this.TitleMotion);
             this.Always_groupBox.Controls.Add(this.AlwaysOff);
             this.Always_groupBox.Controls.Add(this.AlwaysOn);
+            this.Always_groupBox.Location = new System.Drawing.Point(27, 6);
             this.Always_groupBox.Name = "Always_groupBox";
+            this.Always_groupBox.Size = new System.Drawing.Size(192, 56);
+            this.Always_groupBox.TabIndex = 0;
             this.Always_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.Always_groupBox, resources.GetString("Always_groupBox.ToolTip"));
+            this.Always_groupBox.Text = "Auto";
             // 
             // TitleMotion
             // 
-            resources.ApplyResources(this.TitleMotion, "TitleMotion");
+            this.TitleMotion.AutoSize = true;
+            this.TitleMotion.Location = new System.Drawing.Point(105, 13);
             this.TitleMotion.Name = "TitleMotion";
+            this.TitleMotion.Size = new System.Drawing.Size(61, 16);
+            this.TitleMotion.TabIndex = 2;
             this.TitleMotion.TabStop = true;
-            this.ttp.SetToolTip(this.TitleMotion, resources.GetString("TitleMotion.ToolTip"));
+            this.TitleMotion.Text = "Start Up";
+            this.ttp.SetToolTip(this.TitleMotion, "Let the selected motion perfom once in the begining.");
             this.TitleMotion.UseVisualStyleBackColor = true;
             this.TitleMotion.CheckedChanged += new System.EventHandler(this.TitleMotion_CheckedChanged);
             // 
             // AlwaysOff
             // 
-            resources.ApplyResources(this.AlwaysOff, "AlwaysOff");
+            this.AlwaysOff.AutoSize = true;
+            this.AlwaysOff.Location = new System.Drawing.Point(16, 30);
             this.AlwaysOff.Name = "AlwaysOff";
-            this.ttp.SetToolTip(this.AlwaysOff, resources.GetString("AlwaysOff.ToolTip"));
+            this.AlwaysOff.Size = new System.Drawing.Size(76, 16);
+            this.AlwaysOff.TabIndex = 1;
+            this.AlwaysOff.Text = "Always Off";
+            this.ttp.SetToolTip(this.AlwaysOff, "Let the selected motion NEVER perform.");
             this.AlwaysOff.UseVisualStyleBackColor = true;
             this.AlwaysOff.CheckedChanged += new System.EventHandler(this.AlwaysOff_CheckedChanged);
             // 
             // AlwaysOn
             // 
-            resources.ApplyResources(this.AlwaysOn, "AlwaysOn");
+            this.AlwaysOn.AutoSize = true;
             this.AlwaysOn.Checked = true;
+            this.AlwaysOn.Location = new System.Drawing.Point(16, 13);
             this.AlwaysOn.Name = "AlwaysOn";
+            this.AlwaysOn.Size = new System.Drawing.Size(74, 16);
+            this.AlwaysOn.TabIndex = 0;
             this.AlwaysOn.TabStop = true;
-            this.ttp.SetToolTip(this.AlwaysOn, resources.GetString("AlwaysOn.ToolTip"));
+            this.AlwaysOn.Text = "Always On";
+            this.ttp.SetToolTip(this.AlwaysOn, "Let the selected motion always perform.");
             this.AlwaysOn.UseVisualStyleBackColor = true;
             this.AlwaysOn.CheckedChanged += new System.EventHandler(this.AlwaysOn_CheckedChanged);
             // 
             // MotionProperty
             // 
-            resources.ApplyResources(this.MotionProperty, "MotionProperty");
             this.MotionProperty.Controls.Add(this.nonblockinExplanation);
             this.MotionProperty.Controls.Add(this.blockingExplaination);
             this.MotionProperty.Controls.Add(this.NonBlocking);
             this.MotionProperty.Controls.Add(this.Blocking);
             this.MotionProperty.Controls.Add(this.MotionPropertyLabel);
+            this.MotionProperty.Location = new System.Drawing.Point(4, 22);
             this.MotionProperty.Name = "MotionProperty";
-            this.ttp.SetToolTip(this.MotionProperty, resources.GetString("MotionProperty.ToolTip"));
+            this.MotionProperty.Padding = new System.Windows.Forms.Padding(3);
+            this.MotionProperty.Size = new System.Drawing.Size(223, 462);
+            this.MotionProperty.TabIndex = 2;
+            this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
             // 
             // nonblockinExplanation
             // 
-            resources.ApplyResources(this.nonblockinExplanation, "nonblockinExplanation");
             this.nonblockinExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.nonblockinExplanation.Location = new System.Drawing.Point(15, 112);
             this.nonblockinExplanation.Name = "nonblockinExplanation";
-            this.ttp.SetToolTip(this.nonblockinExplanation, resources.GetString("nonblockinExplanation.ToolTip"));
+            this.nonblockinExplanation.Size = new System.Drawing.Size(202, 56);
+            this.nonblockinExplanation.TabIndex = 4;
+            this.nonblockinExplanation.Text = "This motion can be interrupted while another motion is triggered.";
             // 
             // blockingExplaination
             // 
-            resources.ApplyResources(this.blockingExplaination, "blockingExplaination");
             this.blockingExplaination.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.blockingExplaination.Location = new System.Drawing.Point(15, 45);
             this.blockingExplaination.Name = "blockingExplaination";
-            this.ttp.SetToolTip(this.blockingExplaination, resources.GetString("blockingExplaination.ToolTip"));
+            this.blockingExplaination.Size = new System.Drawing.Size(202, 39);
+            this.blockingExplaination.TabIndex = 3;
+            this.blockingExplaination.Text = "This motion can NOT be interrupted by another motion.";
             // 
             // NonBlocking
             // 
-            resources.ApplyResources(this.NonBlocking, "NonBlocking");
+            this.NonBlocking.AutoSize = true;
+            this.NonBlocking.Location = new System.Drawing.Point(15, 90);
             this.NonBlocking.Name = "NonBlocking";
+            this.NonBlocking.Size = new System.Drawing.Size(88, 16);
+            this.NonBlocking.TabIndex = 2;
             this.NonBlocking.TabStop = true;
-            this.ttp.SetToolTip(this.NonBlocking, resources.GetString("NonBlocking.ToolTip"));
+            this.NonBlocking.Text = "Non-blocking";
             this.NonBlocking.UseVisualStyleBackColor = true;
             this.NonBlocking.CheckedChanged += new System.EventHandler(this.NonBlocking_CheckedChanged);
             // 
             // Blocking
             // 
-            resources.ApplyResources(this.Blocking, "Blocking");
+            this.Blocking.AutoSize = true;
+            this.Blocking.Location = new System.Drawing.Point(15, 23);
             this.Blocking.Name = "Blocking";
+            this.Blocking.Size = new System.Drawing.Size(66, 16);
+            this.Blocking.TabIndex = 1;
             this.Blocking.TabStop = true;
-            this.ttp.SetToolTip(this.Blocking, resources.GetString("Blocking.ToolTip"));
+            this.Blocking.Text = "Blocking";
             this.Blocking.UseVisualStyleBackColor = true;
             this.Blocking.CheckedChanged += new System.EventHandler(this.Blocking_CheckedChanged);
             // 
             // MotionPropertyLabel
             // 
-            resources.ApplyResources(this.MotionPropertyLabel, "MotionPropertyLabel");
+            this.MotionPropertyLabel.AutoSize = true;
+            this.MotionPropertyLabel.Location = new System.Drawing.Point(7, 4);
             this.MotionPropertyLabel.Name = "MotionPropertyLabel";
-            this.ttp.SetToolTip(this.MotionPropertyLabel, resources.GetString("MotionPropertyLabel.ToolTip"));
+            this.MotionPropertyLabel.Size = new System.Drawing.Size(192, 12);
+            this.MotionPropertyLabel.TabIndex = 0;
+            this.MotionPropertyLabel.Text = "Set the property of the choosed motion :";
             // 
             // motion_stop
             // 
-            resources.ApplyResources(this.motion_stop, "motion_stop");
             this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
             this.motion_stop.Image = global::_86ME_ver1.Properties.Resources.stop;
+            this.motion_stop.Location = new System.Drawing.Point(166, 560);
             this.motion_stop.Name = "motion_stop";
-            this.ttp.SetToolTip(this.motion_stop, resources.GetString("motion_stop.ToolTip"));
+            this.motion_stop.Size = new System.Drawing.Size(43, 35);
+            this.motion_stop.TabIndex = 9;
+            this.ttp.SetToolTip(this.motion_stop, "Stop the process of playing frames.\nThis operation cannot be recovered, so the ne" +
+        "xt play will start from the first item.");
             this.motion_stop.UseVisualStyleBackColor = true;
             this.motion_stop.Click += new System.EventHandler(this.motion_stop_Click);
             // 
             // motion_pause
             // 
-            resources.ApplyResources(this.motion_pause, "motion_pause");
             this.motion_pause.Cursor = System.Windows.Forms.Cursors.Default;
             this.motion_pause.Image = global::_86ME_ver1.Properties.Resources.pause;
+            this.motion_pause.Location = new System.Drawing.Point(117, 560);
             this.motion_pause.Name = "motion_pause";
-            this.ttp.SetToolTip(this.motion_pause, resources.GetString("motion_pause.ToolTip"));
+            this.motion_pause.Size = new System.Drawing.Size(43, 35);
+            this.motion_pause.TabIndex = 8;
+            this.ttp.SetToolTip(this.motion_pause, "Pause the process of playing frames,\nthe paused process can be continue by clicki" +
+        "ng \"Play\" again.");
             this.motion_pause.UseVisualStyleBackColor = true;
             this.motion_pause.Click += new System.EventHandler(this.motion_pause_Click);
             // 
             // move_down
             // 
-            resources.ApplyResources(this.move_down, "move_down");
             this.move_down.Cursor = System.Windows.Forms.Cursors.Default;
+            this.move_down.Enabled = false;
             this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
+            this.move_down.Location = new System.Drawing.Point(244, 316);
             this.move_down.Name = "move_down";
-            this.ttp.SetToolTip(this.move_down, resources.GetString("move_down.ToolTip"));
+            this.move_down.Size = new System.Drawing.Size(23, 37);
+            this.move_down.TabIndex = 7;
+            this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
             this.move_down.UseVisualStyleBackColor = true;
             this.move_down.Click += new System.EventHandler(this.motionlist_down);
             // 
             // move_up
             // 
-            resources.ApplyResources(this.move_up, "move_up");
             this.move_up.Cursor = System.Windows.Forms.Cursors.Default;
+            this.move_up.Enabled = false;
             this.move_up.Image = global::_86ME_ver1.Properties.Resources.up_arrow;
+            this.move_up.Location = new System.Drawing.Point(244, 273);
             this.move_up.Name = "move_up";
-            this.ttp.SetToolTip(this.move_up, resources.GetString("move_up.ToolTip"));
+            this.move_up.Size = new System.Drawing.Size(23, 37);
+            this.move_up.TabIndex = 6;
+            this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
             this.move_up.UseVisualStyleBackColor = true;
             this.move_up.Click += new System.EventHandler(this.motionlist_up);
             // 
             // MotionNameLabel
             // 
-            resources.ApplyResources(this.MotionNameLabel, "MotionNameLabel");
             this.MotionNameLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.MotionNameLabel.Location = new System.Drawing.Point(7, 18);
             this.MotionNameLabel.Name = "MotionNameLabel";
             this.MotionNameLabel.ReadOnly = true;
-            this.ttp.SetToolTip(this.MotionNameLabel, resources.GetString("MotionNameLabel.ToolTip"));
+            this.MotionNameLabel.Size = new System.Drawing.Size(100, 15);
+            this.MotionNameLabel.TabIndex = 4;
+            this.MotionNameLabel.Text = "Motion Name:";
             // 
             // MotionTest
             // 
-            resources.ApplyResources(this.MotionTest, "MotionTest");
             this.MotionTest.Cursor = System.Windows.Forms.Cursors.Default;
             this.MotionTest.Image = global::_86ME_ver1.Properties.Resources.play;
+            this.MotionTest.Location = new System.Drawing.Point(68, 560);
             this.MotionTest.Name = "MotionTest";
-            this.ttp.SetToolTip(this.MotionTest, resources.GetString("MotionTest.ToolTip"));
+            this.MotionTest.Size = new System.Drawing.Size(43, 35);
+            this.MotionTest.TabIndex = 3;
+            this.ttp.SetToolTip(this.MotionTest, "Play the current motion list from the first item to the end.");
             this.MotionTest.UseVisualStyleBackColor = true;
             this.MotionTest.Click += new System.EventHandler(this.MotionTest_Click);
             // 
             // NewMotion
             // 
-            resources.ApplyResources(this.NewMotion, "NewMotion");
             this.NewMotion.Cursor = System.Windows.Forms.Cursors.Default;
+            this.NewMotion.Location = new System.Drawing.Point(196, 36);
             this.NewMotion.Name = "NewMotion";
-            this.ttp.SetToolTip(this.NewMotion, resources.GetString("NewMotion.ToolTip"));
+            this.NewMotion.Size = new System.Drawing.Size(71, 23);
+            this.NewMotion.TabIndex = 2;
+            this.NewMotion.Text = "Add Motion";
+            this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
             this.NewMotion.UseVisualStyleBackColor = true;
             this.NewMotion.Click += new System.EventHandler(this.NewMotion_Click);
             // 
             // MotionCombo
             // 
-            resources.ApplyResources(this.MotionCombo, "MotionCombo");
             this.MotionCombo.FormattingEnabled = true;
+            this.MotionCombo.Location = new System.Drawing.Point(7, 39);
             this.MotionCombo.Name = "MotionCombo";
-            this.ttp.SetToolTip(this.MotionCombo, resources.GetString("MotionCombo.ToolTip"));
+            this.MotionCombo.Size = new System.Drawing.Size(183, 20);
+            this.MotionCombo.TabIndex = 0;
             this.MotionCombo.SelectedIndexChanged += new System.EventHandler(this.MotionCombo_SelectedIndexChanged);
             this.MotionCombo.TextChanged += new System.EventHandler(this.MotionCombo_TextChanged);
             // 
             // Generate
             // 
-            resources.ApplyResources(this.Generate, "Generate");
             this.Generate.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Generate.Location = new System.Drawing.Point(746, 635);
             this.Generate.Name = "Generate";
-            this.ttp.SetToolTip(this.Generate, resources.GetString("Generate.ToolTip"));
+            this.Generate.Size = new System.Drawing.Size(267, 23);
+            this.Generate.TabIndex = 4;
+            this.Generate.Text = "Generate 86Duino Sketch (with Frame Files)";
+            this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will b" +
+        "e stored in files out of the sketch.");
             this.Generate.UseVisualStyleBackColor = true;
             this.Generate.Click += new System.EventHandler(this.Generate_Click);
             // 
             // Motionlist_contextMenuStrip
             // 
-            resources.ApplyResources(this.Motionlist_contextMenuStrip, "Motionlist_contextMenuStrip");
             this.Motionlist_contextMenuStrip.Name = "contextMenuStrip1";
-            this.ttp.SetToolTip(this.Motionlist_contextMenuStrip, resources.GetString("Motionlist_contextMenuStrip.ToolTip"));
+            this.Motionlist_contextMenuStrip.Size = new System.Drawing.Size(61, 4);
             // 
             // GenerateAllInOne
             // 
-            resources.ApplyResources(this.GenerateAllInOne, "GenerateAllInOne");
             this.GenerateAllInOne.Cursor = System.Windows.Forms.Cursors.Default;
+            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 665);
             this.GenerateAllInOne.Name = "GenerateAllInOne";
-            this.ttp.SetToolTip(this.GenerateAllInOne, resources.GetString("GenerateAllInOne.ToolTip"));
+            this.GenerateAllInOne.Size = new System.Drawing.Size(267, 23);
+            this.GenerateAllInOne.TabIndex = 5;
+            this.GenerateAllInOne.Text = "Generate 86Duino Sketch (All in One)";
+            this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in " +
+        "the generated sketch.");
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
             // 
@@ -1084,31 +1310,38 @@
             // 
             // Setting_groupBox
             // 
-            resources.ApplyResources(this.Setting_groupBox, "Setting_groupBox");
             this.Setting_groupBox.Controls.Add(this.fast);
             this.Setting_groupBox.Controls.Add(this.motorRelease);
             this.Setting_groupBox.Controls.Add(this.slow);
             this.Setting_groupBox.Controls.Add(this.capturebutton);
             this.Setting_groupBox.Controls.Add(this.sync_speed);
             this.Setting_groupBox.Controls.Add(this.autocheck);
+            this.Setting_groupBox.Location = new System.Drawing.Point(13, 28);
             this.Setting_groupBox.Name = "Setting_groupBox";
+            this.Setting_groupBox.Size = new System.Drawing.Size(720, 60);
+            this.Setting_groupBox.TabIndex = 15;
             this.Setting_groupBox.TabStop = false;
-            this.ttp.SetToolTip(this.Setting_groupBox, resources.GetString("Setting_groupBox.ToolTip"));
+            this.Setting_groupBox.Text = "Edit Settings";
             // 
             // Main
             // 
-            resources.ApplyResources(this, "$this");
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
+            this.ClientSize = new System.Drawing.Size(1024, 698);
             this.Controls.Add(this.GenerateAllInOne);
             this.Controls.Add(this.Generate);
             this.Controls.Add(this.Main_menuStrip);
             this.Controls.Add(this.Motion_groupBox);
             this.Controls.Add(this.Action_groupBox);
             this.Controls.Add(this.Setting_groupBox);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.Main_menuStrip;
+            this.MaximumSize = new System.Drawing.Size(1040, 736);
+            this.MinimumSize = new System.Drawing.Size(1040, 736);
             this.Name = "Main";
-            this.ttp.SetToolTip(this, resources.GetString("$this.ToolTip"));
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "86Duino Motion Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
             this.Main_menuStrip.ResumeLayout(false);
