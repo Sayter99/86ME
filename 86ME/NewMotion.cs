@@ -64,8 +64,13 @@ namespace _86ME_ver1
             label1.Text = NewMotion_lang_dic["NewMotion_label1_Text"];
             label2.Text = NewMotion_lang_dic["NewMotion_label2_Text"];
             label3.Text = NewMotion_lang_dic["NewMotion_label3_Text"];
+            ttp.SetToolTip(button3, NewMotion_lang_dic["NewMotion_loadpic_ToolTip"]);
+            ttp.SetToolTip(checkBox2, NewMotion_lang_dic["NewMotion_minMax_ToolTip"]);
             for (int i = 0; i < 45; i++)
+            {
                 fcheck[i].Text = NewMotion_lang_dic["NewMotion_fcheckText"];
+                ttp.SetToolTip(fcheck[i], NewMotion_lang_dic["NewMotion_fcheck_ToolTip"]);
+            }
         }
 
         public void numbercheck(object sender, KeyPressEventArgs e) //Text number check
@@ -213,7 +218,7 @@ namespace _86ME_ver1
                 fcheck[i].Checked = false;
                 fcheck[i].Enabled = false;
                 fcheck[i].CheckedChanged += new EventHandler(autocheck_changed);
-                ttp.SetToolTip(fcheck[i], NewMotion_lang_dic["NewMotion_ttp1"]);
+                ttp.SetToolTip(fcheck[i], NewMotion_lang_dic["NewMotion_fcheck_ToolTip"]);
 
                 ftext[i].Name = i.ToString();
                 ftext[i].Text = offset[i].ToString();

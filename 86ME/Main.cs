@@ -3193,6 +3193,7 @@ namespace _86ME_ver1
             ttp.SetToolTip(AlwaysOff, Main_lang_dic["AlwaysOff_ToolTip"]);
             ttp.SetToolTip(AlwaysOn, Main_lang_dic["AlwaysOn_ToolTip"]);
             ttp.SetToolTip(btBaudCombo, Main_lang_dic["btBaudCombo_ToolTip"]);
+            ttp.SetToolTip(btKeyText, Main_lang_dic["btKeyText_ToolTip"]);
             ttp.SetToolTip(btPortCombo, Main_lang_dic["btPortCombo_ToolTip"]);
             ttp.SetToolTip(capturebutton, Main_lang_dic["capturebutton_ToolTip"]);
             ttp.SetToolTip(Generate, Main_lang_dic["Generate_ToolTip"]);
