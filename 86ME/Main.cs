@@ -515,19 +515,19 @@ namespace _86ME_ver1
         {
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
-                {
                     save_project(load_filename);
-                }
+                else if (dialogResult == DialogResult.Cancel)
+                    return ;
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
-                {
                     saveFileToolStripMenuItem_Click(sender, e);
-                }
+                else if (dialogResult == DialogResult.Cancel)
+                    return ;
             }
 
             NewMotion nMotion = new NewMotion(Main_lang_dic);
@@ -588,6 +588,7 @@ namespace _86ME_ver1
                 }
                 this.MotionConfig.SelectedIndex = 0;
                 this.hint_richTextBox.Text = Main_lang_dic["hint1"];
+                this.MotionConfig.Enabled = false;
             }
         }
 
@@ -848,19 +849,19 @@ namespace _86ME_ver1
         {
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
-                {
                     save_project(load_filename);
-                }
+                else if (dialogResult == DialogResult.Cancel)
+                    return ;
             }
             else if (needToSave())
             {
-                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "", MessageBoxButtons.YesNo);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
-                {
                     saveFileToolStripMenuItem_Click(sender, e);
-                }
+                else if (dialogResult == DialogResult.Cancel)
+                    return ;
             }
 
             OpenFileDialog dialog = new OpenFileDialog();
@@ -1507,6 +1508,7 @@ namespace _86ME_ver1
 
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            MotionConfig.Enabled = true;
             update_motionlist();
             move_up.Enabled = false;
             move_down.Enabled = false;
@@ -1911,13 +1913,13 @@ namespace _86ME_ver1
                     xlabel.Size = new Size(85, 20);
                     Label xlabel2 = new Label();
                     xlabel2.Text = Main_lang_dic["gotoMotion_xlabel2"];
-                    xlabel2.Size = new Size(50, 20);
+                    xlabel2.Size = new Size(80, 20);
                     Label xlabel3 = new Label();
                     xlabel3.Text = Main_lang_dic["gotoMotion_xlabel3"];
-                    xlabel3.Size = new Size(300, 20);
+                    xlabel3.Size = new Size(450, 20);
                     Label xlabel4 = new Label();
                     xlabel4.Text = Main_lang_dic["gotoMotion_xlabel4"];
-                    xlabel4.Size = new Size(300, 20);
+                    xlabel4.Size = new Size(450, 20);
 
                     ComboBox xcombo = new ComboBox();
                     xcombo.Size = new Size(160, 22);
@@ -1945,14 +1947,14 @@ namespace _86ME_ver1
 
                     xlabel.Top += 3;
                     xlabel2.Top += 25;
-                    xlabel3.Top += 65;
+                    xlabel3.Top += 105;
                     xlabel3.Left += 26;
-                    xlabel4.Top += 105;
+                    xlabel4.Top += 65;
                     xlabel4.Left += 26;
                     xcombo.Left += 85;
-                    call_radio.Top += 45;
+                    call_radio.Top += 85;
                     call_radio.Left += 10;
-                    jump_radio.Top += 85;
+                    jump_radio.Top += 45;
                     jump_radio.Left += 10;
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xcombo);
@@ -2269,6 +2271,7 @@ namespace _86ME_ver1
                 NonBlocking.Enabled = false;
             }
             this.hint_richTextBox.Text = Main_lang_dic["hint1"];
+            MotionConfig.Enabled = false;
         }
 
         private void NewMotion_Click(object sender, EventArgs e)
@@ -2292,6 +2295,7 @@ namespace _86ME_ver1
                 current_motionlist_idx = -1;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
+                MotionConfig.Enabled = true;
                 draw_background();
                 MotionConfig.SelectedIndex = 0;
                 Motionlist.Focus();
@@ -3194,6 +3198,7 @@ namespace _86ME_ver1
             ttp.SetToolTip(AlwaysOn, Main_lang_dic["AlwaysOn_ToolTip"]);
             ttp.SetToolTip(btBaudCombo, Main_lang_dic["btBaudCombo_ToolTip"]);
             ttp.SetToolTip(btKeyText, Main_lang_dic["btKeyText_ToolTip"]);
+            ttp.SetToolTip(btModeCombo, Main_lang_dic["btModeCombo_ToolTip"]);
             ttp.SetToolTip(btPortCombo, Main_lang_dic["btPortCombo_ToolTip"]);
             ttp.SetToolTip(capturebutton, Main_lang_dic["capturebutton_ToolTip"]);
             ttp.SetToolTip(Generate, Main_lang_dic["Generate_ToolTip"]);
@@ -3207,6 +3212,10 @@ namespace _86ME_ver1
             ttp.SetToolTip(move_down, Main_lang_dic["move_down_ToolTip"]);
             ttp.SetToolTip(move_up, Main_lang_dic["move_up_ToolTip"]);
             ttp.SetToolTip(NewMotion, Main_lang_dic["NewMotion_ToolTip"]);
+            ttp.SetToolTip(ps2ATTCombo, Main_lang_dic["ps2ATTCombo_Text"]);
+            ttp.SetToolTip(ps2CLKCombo, Main_lang_dic["ps2CLKCombo_Text"]);
+            ttp.SetToolTip(ps2CMDCombo, Main_lang_dic["ps2CMDCombo_Text"]);
+            ttp.SetToolTip(ps2DATCombo, Main_lang_dic["ps2DATCombo_Text"]);
             ttp.SetToolTip(ps2TypeCombo, Main_lang_dic["ps2TypeCombo_ToolTip"]);
             ttp.SetToolTip(saveFrame, Main_lang_dic["saveFrame_ToolTip"]);
             ttp.SetToolTip(sync_speed, Main_lang_dic["sync_speed_ToolTip"]);

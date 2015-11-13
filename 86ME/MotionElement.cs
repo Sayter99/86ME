@@ -47,7 +47,7 @@ namespace _86ME_ver1
         public ME_Trigger()
         {
             this.name = "";
-            this.method = 0;
+            this.method = 1;
         }
     }
 

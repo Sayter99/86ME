@@ -64,6 +64,7 @@ namespace _86ME_ver1
             label1.Text = NewMotion_lang_dic["NewMotion_label1_Text"];
             label2.Text = NewMotion_lang_dic["NewMotion_label2_Text"];
             label3.Text = NewMotion_lang_dic["NewMotion_label3_Text"];
+            button3.Text = NewMotion_lang_dic["NewMotion_button3_Text"];
             ttp.SetToolTip(button3, NewMotion_lang_dic["NewMotion_loadpic_ToolTip"]);
             ttp.SetToolTip(checkBox2, NewMotion_lang_dic["NewMotion_minMax_ToolTip"]);
             for (int i = 0; i < 45; i++)
