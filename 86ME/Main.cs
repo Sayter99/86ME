@@ -2421,6 +2421,11 @@ namespace _86ME_ver1
 
         public void MotionOnTest(ME_Motion m)
         {
+            optionsToolStripMenuItem.Enabled = false;
+            saveFileToolStripMenuItem.Enabled = false;
+            fileToolStripMenuItem.Enabled = false;
+            actionToolStripMenuItem.Enabled = false;
+
             saveFrame.Enabled = false;
             loadFrame.Enabled = false;
             move_down.Enabled = false;
@@ -2520,6 +2525,12 @@ namespace _86ME_ver1
             
             mtest_start_pos = 0;
             typecombo.Text = "";
+
+            optionsToolStripMenuItem.Enabled = true;
+            saveFileToolStripMenuItem.Enabled = true;
+            fileToolStripMenuItem.Enabled = true;
+            actionToolStripMenuItem.Enabled = true;
+
             saveFrame.Enabled = true;
             loadFrame.Enabled = true;
             motion_pause.Enabled = false;
@@ -2571,6 +2582,10 @@ namespace _86ME_ver1
             {
                 mtest_start_pos = 0;
                 typecombo.Text = "";
+                optionsToolStripMenuItem.Enabled = true;
+                saveFileToolStripMenuItem.Enabled = true;
+                fileToolStripMenuItem.Enabled = true;
+                actionToolStripMenuItem.Enabled = true;
                 saveFrame.Enabled = true;
                 loadFrame.Enabled = true;
                 MotionTest.Enabled = true;
