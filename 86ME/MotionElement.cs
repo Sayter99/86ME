@@ -10,6 +10,7 @@ namespace _86ME_ver1
         public ArrayList Events;
         public List<string> states;
         public List<string> goto_var; 
+        public List<int> used_servos;
         public string name;
         public int trigger_method;
         public int auto_method;
@@ -21,6 +22,7 @@ namespace _86ME_ver1
         public string ps2_key;
         public int ps2_type;
         public int property;
+        public int moton_layer;
         public ME_Motion()
         {
             this.name = null;
@@ -35,8 +37,10 @@ namespace _86ME_ver1
             this.ps2_key = "PSB_SELECT";
             this.ps2_type = 1;
             this.property = 0;
+            this.moton_layer = 0;
             this.goto_var = new List<string>();
             this.states = new List<string>();
+            this.used_servos = new List<int>();
         }
     }
 

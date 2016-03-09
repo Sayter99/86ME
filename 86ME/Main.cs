@@ -48,7 +48,6 @@ namespace _86ME_ver1
         Label[] flabel = new Label[45];
         MaskedTextBox[] ftext = new MaskedTextBox[45];
         CheckBox[] fcheck = new CheckBox[45];
-        private bool[] sync_list = new bool[45];
         HScrollBar[] fbar = new HScrollBar[45];
         NewMotion Motion;
         public ArrayList ME_Motionlist;
@@ -154,10 +153,11 @@ namespace _86ME_ver1
                     fcheck[i].Size = new Size(15, 15);
                     fcheck[i].Top += 3;
                     fcheck[i].Left += 5;
-                    fcheck[i].Checked = sync_list[i];
-                    fcheck[i].CheckedChanged += new EventHandler(sync_CheckedChanged);
+                    fcheck[i].Checked = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).used_servos.Contains(i);
+                    fcheck[i].CheckedChanged += new EventHandler(used_CheckedChanged);
                     fcheck[i].Name = i.ToString();
-                    fcheck[i].Visible = false; // remove fcheck[i]
+                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).moton_layer == 0)
+                        fcheck[i].Visible = false;
                     flabel[i].Size = new Size(40, 18);
                     flabel[i].BackColor = Color.White;
                     flabel[i].Top += 3;
@@ -221,7 +221,13 @@ namespace _86ME_ver1
                     else
                         flabel[i].Text = "CH" + i.ToString() + ":";
 
-                    ttp.SetToolTip(fcheck[i], "Sychronize the selected motor.");
+                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).moton_layer != 0 && fcheck[i].Checked == false)
+                    {
+                        ftext[i].Enabled = false;
+                        fbar[i].Enabled = false;
+                    }
+
+                    //ttp.SetToolTip(fcheck[i], Main_lang_dic["fcheck_ToolTip"]);
                     fpanel[i].Controls.Add(fcheck[i]);
                     fpanel[i].Controls.Add(flabel[i]);
                     fpanel[i].Controls.Add(ftext[i]);
@@ -233,54 +239,21 @@ namespace _86ME_ver1
             }
         }
 
-        private bool sync_list_empty()
-        {
-            for (int i = 0; i < 45; i++)
-                if (sync_list[i] == true)
-                    return false;
-
-            return true;
-        }
-
-        public void sync_CheckedChanged(object sender, EventArgs e) //sender -> fcheck[i]
+        public void used_CheckedChanged(object sender, EventArgs e) //sender -> fcheck[i]
         {
             int index = int.Parse(((CheckBox)sender).Name);
-            if (((CheckBox)sender).Checked == true && autocheck.Checked == false)
+            ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
+            if (((CheckBox)sender).Checked == true)
             {
-                sync_list[index] = true;
-                autocheck.Checked = true;
-            }
-            else if (((CheckBox)sender).Checked == true && autocheck.Checked == true && sync_list[index] == false)
-            {
-                sync_list[index] = true;
-                for (int i = 0; i < 45; i++)
-                {
-                    if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
-                        autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                    else if (sync_list[i] == false)
-                        autoframe[i] = 0;
-                }
-                autocheck.Enabled = false;
-
-                if (string.Compare(com_port, "OFF") != 0)
-                {
-                    try
-                    {
-                        arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
-                    }
-                    catch
-                    {
-                        com_port = "OFF";
-                        MessageBox.Show(Main_lang_dic["errorMsg1"]);
-                    }
-                }
-                autocheck.Enabled = true;
+                m.used_servos.Add(index);
+                ftext[index].Enabled = true;
+                fbar[index].Enabled = true;
             }
             else if (((CheckBox)sender).Checked == false)
             {
-                sync_list[index] = false;
-                if (sync_list_empty())
-                    autocheck.Checked = false;
+                m.used_servos.Remove(index);
+                ftext[index].Enabled = false;
+                fbar[index].Enabled = false;
             }
         }
 
@@ -356,6 +329,7 @@ namespace _86ME_ver1
             }
             else if (int.Parse(((MaskedTextBox)sender).Text) <= Max[int.Parse(((MaskedTextBox)sender).Name)] && int.Parse(((MaskedTextBox)sender).Text) >= min[int.Parse(((MaskedTextBox)sender).Name)])
             {
+                ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
                 this.fbar[int.Parse(((MaskedTextBox)sender).Name)].Value = int.Parse(((MaskedTextBox)sender).Text);
                 if (autocheck.Checked == true)
                 {
@@ -363,9 +337,13 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                            {
                                 autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                            else if (sync_list[i] == false)
+                                if (m.moton_layer != 0 && !m.used_servos.Contains(i))
+                                    autoframe[i] = 0;
+                            }
+                            else
                                 autoframe[i] = 0;
                         }
                         if (string.Compare(com_port, "OFF") != 0)
@@ -777,7 +755,6 @@ namespace _86ME_ver1
             }
             // save sync_speed
             writer.WriteLine("Sync " + sync_speed.Value.ToString());
-            //
             for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -785,6 +762,14 @@ namespace _86ME_ver1
                 writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
                              m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
                              " " + m.ps2_type + " " + m.bt_mode + "\n");
+                writer.Write("Layer " + m.moton_layer + " ");
+                for (int j = 0; j < m.used_servos.Count; j++)
+                {
+                    writer.Write(m.used_servos[j]);
+                    if (j != m.used_servos.Count - 1)
+                        writer.Write(" ");       
+                }
+                writer.WriteLine();
                 for (int j = 0; j < m.Events.Count; j++)
                 {
                     if (m.Events[j] is ME_Frame)
@@ -796,11 +781,14 @@ namespace _86ME_ver1
                             writer.Write("home " + f.delay.ToString() + " ");
                         int count = 0;
                         for (int k = 0; k < 45; k++)
+                        {
                             if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
                             {
                                 count++;
                             }
+                        }
                         for (int k = 0; k < 45; k++)
+                        {
                             if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
                             {
                                 count--;
@@ -808,6 +796,7 @@ namespace _86ME_ver1
                                 if (count != 0)
                                     writer.Write(" ");
                             }
+                        }
                         writer.Write("\n");
                     }
                     else if (m.Events[j] is ME_Delay)
@@ -1134,6 +1123,21 @@ namespace _86ME_ver1
                                     motiontag.bt_mode = datas[++i];
                             }
                             ME_Motionlist.Add(motiontag);
+                        }
+                    }
+                    else if (String.Compare(datas[i], "Layer") == 0)
+                    {
+                        i++;
+                        int try_out;
+                        if (int.TryParse(datas[i], out try_out) == true)
+                            motiontag.moton_layer = try_out;
+                        while (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
+                            String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
+                            String.Compare("MotionEnd", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
+                        {
+                            i++;
+                            motiontag.used_servos.Add(try_out);
                         }
                     }
                     else if (String.Compare(datas[i], "MotionEnd") == 0)
@@ -1576,6 +1580,8 @@ namespace _86ME_ver1
                 Blocking.Checked = true;
             else if (m.property == (int)motion_property.nonblocking)
                 NonBlocking.Checked = true;
+            MotionLayerCombo.SelectedIndex = m.moton_layer;
+            Update_framelist();
             if (MotionConfig.SelectedIndex == 0)
                 this.hint_richTextBox.Text =
                             "   ___   __   ____        _\n" +
@@ -1583,8 +1589,8 @@ namespace _86ME_ver1
                             "  / _ \\| '_ \\| | | | | | | | '_ \\ / _ \\\n" +
                             " | (_) | (_) | |_| | |_| | | | | | (_) |\n" +
                             "  \\___/ \\___/|____/ \\__,_|_|_| |_|\\___/";
-            else
-                this.hint_richTextBox.Text = Main_lang_dic["hint9"];
+                else
+                    this.hint_richTextBox.Text = Main_lang_dic["hint9"];
         }
 
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
@@ -1681,9 +1687,13 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                            {
                                 autoframe[i] = (int)(((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i] + offset[i]);
-                            else if (sync_list[i] == false)
+                                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).moton_layer != 0 && !((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).used_servos.Contains(i))
+                                    autoframe[i] = 0;
+                            }
+                            else
                                 autoframe[i] = 0;
                         }
                         autocheck.Enabled = false;
@@ -1739,9 +1749,9 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                         {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                                 autoframe[i] = (int)homeframe[i] + offset[i];
-                            else if (sync_list[i] == false)
+                            else
                                 autoframe[i] = 0;
                         }
                         autocheck.Enabled = false;
@@ -2471,6 +2481,8 @@ namespace _86ME_ver1
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                         {
                             autoframe[i] = (((ME_Frame)m.Events[j]).frame[i] + offset[i]);
+                            if (m.moton_layer != 0 && !m.used_servos.Contains(i))
+                                autoframe[i] = 0;
                         }
                     }
                     if (string.Compare(com_port, "OFF") != 0)
@@ -2607,11 +2619,12 @@ namespace _86ME_ver1
 
         private void autocheck_CheckedChanged(object sender, EventArgs e)
         {
+            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
             bool active_autocheck = false;
             if (MotionCombo.SelectedItem != null)
                 if (ME_Motionlist != null)
-                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Capacity - 1 >= Motionlist.SelectedIndex && Motionlist.SelectedIndex >= 0)
-                        if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
+                    if (m.Events.Capacity - 1 >= Motionlist.SelectedIndex && Motionlist.SelectedIndex >= 0)
+                        if (m.Events[Motionlist.SelectedIndex] is ME_Frame)
                             active_autocheck = true;
 
             if (String.Compare(delaytext.Text, "") == 0)
@@ -2625,22 +2638,15 @@ namespace _86ME_ver1
                 }
                 else if (autocheck.Checked == true)
                 {
-                    if (sync_list_empty())
-                    {
-                        for (int i = 0; i < 45; i++)
-                        {
-                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            {
-                                sync_list[i] = true;
-                                fcheck[i].Checked = true;
-                            }
-                        }
-                    }
                     for (int i = 0; i < 45; i++)
                     {
-                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        {
                             autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                        else if (sync_list[i] == false)
+                            if (m.moton_layer != 0 && !m.used_servos.Contains(i))
+                                autoframe[i] = 0;
+                        }
+                        else
                             autoframe[i] = 0;
                     }
 
@@ -2660,18 +2666,12 @@ namespace _86ME_ver1
                     }
                     autocheck.Enabled = true;
                 }
-                else if(autocheck.Checked == false)
-                {
-                    for(int i = 0; i < 45; i++)
-                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && sync_list[i] == true)
-                            fcheck[i].Checked = false;
-                }
             }
         }
 
         private void howToUseToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start("http://www.86duino.com/?p=11544");
+            System.Diagnostics.Process.Start("http://www.86duino.com/index.php?p=11544&lang=TW");
         }
 
         private void aboutToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2682,24 +2682,26 @@ namespace _86ME_ver1
 
         private void Generate_Click(object sender, EventArgs e)
         {
+            if (ME_Motionlist == null)
+                return;
             if (ME_Motionlist.Count == 0)
             {
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_withFiles();
         }
 
         private void GenerateAllInOne_Click(object sender, EventArgs e)
         {
+            if (ME_Motionlist == null)
+                return;
             if (ME_Motionlist.Count == 0)
             {
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            //generate_sketches g = new generate_sketches(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, ps2pins, bt_baud, bt_port);
             g.generate_AllinOne();
         }
@@ -3082,6 +3084,12 @@ namespace _86ME_ver1
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).ps2_type = ps2TypeCombo.SelectedIndex;
         }
 
+        private void MotionLayerCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).moton_layer = MotionLayerCombo.SelectedIndex;
+        }
+
         private void saveFrame_Click(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
@@ -3226,6 +3234,7 @@ namespace _86ME_ver1
             ttp.SetToolTip(motorRelease, Main_lang_dic["motorRelease_ToolTip"]);
             ttp.SetToolTip(move_down, Main_lang_dic["move_down_ToolTip"]);
             ttp.SetToolTip(move_up, Main_lang_dic["move_up_ToolTip"]);
+            ttp.SetToolTip(MotionLayerCombo, Main_lang_dic["MotionLayer_ToolTip"]);
             ttp.SetToolTip(NewMotion, Main_lang_dic["NewMotion_ToolTip"]);
             ttp.SetToolTip(ps2ATTCombo, Main_lang_dic["ps2ATTCombo_Text"]);
             ttp.SetToolTip(ps2CLKCombo, Main_lang_dic["ps2CLKCombo_Text"]);
@@ -3254,38 +3263,61 @@ namespace _86ME_ver1
         private void englishToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string _86ME_path = System.Windows.Forms.Application.StartupPath;
-            TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
-            writer.Write("en");
-            writer.Dispose();
-            writer.Close();
-            SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\en.ini");
-            Main_lang_dic = sl.lang_dic;
-            applyLang();
+            if (File.Exists(_86ME_path + "\\locales\\en.ini"))
+            {
+                TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
+                writer.Write("en");
+                writer.Dispose();
+                writer.Close();
+                SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\en.ini");
+                Main_lang_dic = sl.lang_dic;
+                applyLang();
+            }
         }
 
         private void zhToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string _86ME_path = System.Windows.Forms.Application.StartupPath;
-            TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
-            writer.Write("zh-TW");
-            writer.Dispose();
-            writer.Close();
-            SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\zh-TW.ini");
-            Main_lang_dic = sl.lang_dic;
-            applyLang();
+            if (File.Exists(_86ME_path + "\\locales\\zh-TW.ini"))
+            {
+                TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
+                writer.Write("zh-TW");
+                writer.Dispose();
+                writer.Close();
+                SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\zh-TW.ini");
+                Main_lang_dic = sl.lang_dic;
+                applyLang();
+            }
         }
 
         private void zhHToolStripMenuItem_Click(object sender, EventArgs e)
         {
             string _86ME_path = System.Windows.Forms.Application.StartupPath;
-            TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
-            writer.Write("zh-Hans");
-            writer.Dispose();
-            writer.Close();
-            SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\zh-Hans.ini");
-            Main_lang_dic = sl.lang_dic;
-            applyLang();
+            if (File.Exists(_86ME_path + "\\locales\\zh-Hans.ini"))
+            {
+                TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
+                writer.Write("zh-Hans");
+                writer.Dispose();
+                writer.Close();
+                SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\zh-Hans.ini");
+                Main_lang_dic = sl.lang_dic;
+                applyLang();
+            }
         }
 
+        private void jaToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            if (File.Exists(_86ME_path + "\\locales\\ja.ini"))
+            {
+                TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
+                writer.Write("ja");
+                writer.Dispose();
+                writer.Close();
+                SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\ja.ini");
+                Main_lang_dic = sl.lang_dic;
+                applyLang();
+            }
+        }
     }
 }

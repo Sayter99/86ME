@@ -43,6 +43,7 @@
             this.englishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zhToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.zhSToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.jaToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.howToUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -115,6 +116,7 @@
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.MotionProperty = new System.Windows.Forms.TabPage();
+            this.MotionLayer = new System.Windows.Forms.Label();
             this.nonblockinExplanation = new System.Windows.Forms.RichTextBox();
             this.blockingExplaination = new System.Windows.Forms.RichTextBox();
             this.NonBlocking = new System.Windows.Forms.RadioButton();
@@ -133,6 +135,7 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.MotionLayerCombo = new System.Windows.Forms.ComboBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -234,7 +237,8 @@
             this.languageToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.englishToolStripMenuItem,
             this.zhToolStripMenuItem,
-            this.zhSToolStripMenuItem});
+            this.zhSToolStripMenuItem,
+            this.jaToolStripMenuItem});
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
             this.languageToolStripMenuItem.Size = new System.Drawing.Size(133, 22);
             this.languageToolStripMenuItem.Text = "Language";
@@ -259,6 +263,13 @@
             this.zhSToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.zhSToolStripMenuItem.Text = "简体中文";
             this.zhSToolStripMenuItem.Click += new System.EventHandler(this.zhHToolStripMenuItem_Click);
+            // 
+            // jaToolStripMenuItem
+            // 
+            this.jaToolStripMenuItem.Name = "jaToolStripMenuItem";
+            this.jaToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.jaToolStripMenuItem.Text = "日本語";
+            this.jaToolStripMenuItem.Click += new System.EventHandler(this.jaToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
@@ -1109,6 +1120,8 @@
             // 
             // MotionProperty
             // 
+            this.MotionProperty.Controls.Add(this.MotionLayerCombo);
+            this.MotionProperty.Controls.Add(this.MotionLayer);
             this.MotionProperty.Controls.Add(this.nonblockinExplanation);
             this.MotionProperty.Controls.Add(this.blockingExplaination);
             this.MotionProperty.Controls.Add(this.NonBlocking);
@@ -1121,6 +1134,16 @@
             this.MotionProperty.TabIndex = 2;
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
+            // 
+            // MotionLayer
+            // 
+            this.MotionLayer.AutoSize = true;
+            this.MotionLayer.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MotionLayer.Location = new System.Drawing.Point(13, 159);
+            this.MotionLayer.Name = "MotionLayer";
+            this.MotionLayer.Size = new System.Drawing.Size(85, 12);
+            this.MotionLayer.TabIndex = 5;
+            this.MotionLayer.Text = "Motion Layer:";
             // 
             // nonblockinExplanation
             // 
@@ -1143,11 +1166,11 @@
             // NonBlocking
             // 
             this.NonBlocking.AutoSize = true;
+            this.NonBlocking.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.NonBlocking.Location = new System.Drawing.Point(15, 90);
             this.NonBlocking.Name = "NonBlocking";
-            this.NonBlocking.Size = new System.Drawing.Size(88, 16);
+            this.NonBlocking.Size = new System.Drawing.Size(100, 16);
             this.NonBlocking.TabIndex = 2;
-            this.NonBlocking.TabStop = true;
             this.NonBlocking.Text = "Non-blocking";
             this.NonBlocking.UseVisualStyleBackColor = true;
             this.NonBlocking.CheckedChanged += new System.EventHandler(this.NonBlocking_CheckedChanged);
@@ -1155,9 +1178,11 @@
             // Blocking
             // 
             this.Blocking.AutoSize = true;
+            this.Blocking.Checked = true;
+            this.Blocking.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
             this.Blocking.Location = new System.Drawing.Point(15, 23);
             this.Blocking.Name = "Blocking";
-            this.Blocking.Size = new System.Drawing.Size(66, 16);
+            this.Blocking.Size = new System.Drawing.Size(74, 16);
             this.Blocking.TabIndex = 1;
             this.Blocking.TabStop = true;
             this.Blocking.Text = "Blocking";
@@ -1323,6 +1348,19 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
+            // MotionLayerCombo
+            // 
+            this.MotionLayerCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MotionLayerCombo.FormattingEnabled = true;
+            this.MotionLayerCombo.Items.AddRange(new object[] {
+            "0",
+            "1"});
+            this.MotionLayerCombo.Location = new System.Drawing.Point(105, 156);
+            this.MotionLayerCombo.Name = "MotionLayerCombo";
+            this.MotionLayerCombo.Size = new System.Drawing.Size(74, 20);
+            this.MotionLayerCombo.TabIndex = 6;
+            this.MotionLayerCombo.SelectedIndexChanged += new System.EventHandler(this.MotionLayerCombo_SelectedIndexChanged);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1482,6 +1520,9 @@
         private System.Windows.Forms.ToolStripMenuItem englishToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zhToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem zhSToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem jaToolStripMenuItem;
+        private System.Windows.Forms.Label MotionLayer;
+        private System.Windows.Forms.ComboBox MotionLayerCombo;
     }
 }
 
