@@ -116,8 +116,11 @@
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.MotionProperty = new System.Windows.Forms.TabPage();
+            this.motionLayerExplanation = new System.Windows.Forms.RichTextBox();
+            this.separateLine = new System.Windows.Forms.Label();
+            this.MotionLayerCombo = new System.Windows.Forms.ComboBox();
             this.MotionLayer = new System.Windows.Forms.Label();
-            this.nonblockinExplanation = new System.Windows.Forms.RichTextBox();
+            this.nonblockingExplanation = new System.Windows.Forms.RichTextBox();
             this.blockingExplaination = new System.Windows.Forms.RichTextBox();
             this.NonBlocking = new System.Windows.Forms.RadioButton();
             this.Blocking = new System.Windows.Forms.RadioButton();
@@ -135,7 +138,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.MotionLayerCombo = new System.Windows.Forms.ComboBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -1120,9 +1122,11 @@
             // 
             // MotionProperty
             // 
+            this.MotionProperty.Controls.Add(this.motionLayerExplanation);
+            this.MotionProperty.Controls.Add(this.separateLine);
             this.MotionProperty.Controls.Add(this.MotionLayerCombo);
             this.MotionProperty.Controls.Add(this.MotionLayer);
-            this.MotionProperty.Controls.Add(this.nonblockinExplanation);
+            this.MotionProperty.Controls.Add(this.nonblockingExplanation);
             this.MotionProperty.Controls.Add(this.blockingExplaination);
             this.MotionProperty.Controls.Add(this.NonBlocking);
             this.MotionProperty.Controls.Add(this.Blocking);
@@ -1135,24 +1139,55 @@
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
             // 
+            // motionLayerExplanation
+            // 
+            this.motionLayerExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.motionLayerExplanation.Location = new System.Drawing.Point(15, 198);
+            this.motionLayerExplanation.Name = "motionLayerExplanation";
+            this.motionLayerExplanation.Size = new System.Drawing.Size(202, 67);
+            this.motionLayerExplanation.TabIndex = 8;
+            this.motionLayerExplanation.Text = "This feature makes motions can be triggered parallelly in different layers. And L" +
+    "ayer 1\'s priority is higher than 0\'s.";
+            // 
+            // separateLine
+            // 
+            this.separateLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.separateLine.Location = new System.Drawing.Point(0, 158);
+            this.separateLine.Name = "separateLine";
+            this.separateLine.Size = new System.Drawing.Size(220, 2);
+            this.separateLine.TabIndex = 7;
+            // 
+            // MotionLayerCombo
+            // 
+            this.MotionLayerCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MotionLayerCombo.FormattingEnabled = true;
+            this.MotionLayerCombo.Items.AddRange(new object[] {
+            "0",
+            "1"});
+            this.MotionLayerCombo.Location = new System.Drawing.Point(105, 172);
+            this.MotionLayerCombo.Name = "MotionLayerCombo";
+            this.MotionLayerCombo.Size = new System.Drawing.Size(74, 20);
+            this.MotionLayerCombo.TabIndex = 6;
+            this.MotionLayerCombo.SelectedIndexChanged += new System.EventHandler(this.MotionLayerCombo_SelectedIndexChanged);
+            // 
             // MotionLayer
             // 
             this.MotionLayer.AutoSize = true;
             this.MotionLayer.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MotionLayer.Location = new System.Drawing.Point(13, 159);
+            this.MotionLayer.Location = new System.Drawing.Point(13, 175);
             this.MotionLayer.Name = "MotionLayer";
             this.MotionLayer.Size = new System.Drawing.Size(85, 12);
             this.MotionLayer.TabIndex = 5;
             this.MotionLayer.Text = "Motion Layer:";
             // 
-            // nonblockinExplanation
+            // nonblockingExplanation
             // 
-            this.nonblockinExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.nonblockinExplanation.Location = new System.Drawing.Point(15, 112);
-            this.nonblockinExplanation.Name = "nonblockinExplanation";
-            this.nonblockinExplanation.Size = new System.Drawing.Size(202, 56);
-            this.nonblockinExplanation.TabIndex = 4;
-            this.nonblockinExplanation.Text = "This motion can be interrupted while another motion is triggered.";
+            this.nonblockingExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.nonblockingExplanation.Location = new System.Drawing.Point(15, 112);
+            this.nonblockingExplanation.Name = "nonblockingExplanation";
+            this.nonblockingExplanation.Size = new System.Drawing.Size(202, 54);
+            this.nonblockingExplanation.TabIndex = 4;
+            this.nonblockingExplanation.Text = "This motion can be interrupted while another motion is triggered.";
             // 
             // blockingExplaination
             // 
@@ -1348,19 +1383,6 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
-            // MotionLayerCombo
-            // 
-            this.MotionLayerCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.MotionLayerCombo.FormattingEnabled = true;
-            this.MotionLayerCombo.Items.AddRange(new object[] {
-            "0",
-            "1"});
-            this.MotionLayerCombo.Location = new System.Drawing.Point(105, 156);
-            this.MotionLayerCombo.Name = "MotionLayerCombo";
-            this.MotionLayerCombo.Size = new System.Drawing.Size(74, 20);
-            this.MotionLayerCombo.TabIndex = 6;
-            this.MotionLayerCombo.SelectedIndexChanged += new System.EventHandler(this.MotionLayerCombo_SelectedIndexChanged);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1513,7 +1535,7 @@
         private System.Windows.Forms.Label MotionPropertyLabel;
         private System.Windows.Forms.ComboBox btModeCombo;
         private System.Windows.Forms.Label btModeLabel;
-        private System.Windows.Forms.RichTextBox nonblockinExplanation;
+        private System.Windows.Forms.RichTextBox nonblockingExplanation;
         private System.Windows.Forms.RichTextBox blockingExplaination;
         private System.Windows.Forms.ToolStripMenuItem preferenceToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem languageToolStripMenuItem;
@@ -1523,6 +1545,8 @@
         private System.Windows.Forms.ToolStripMenuItem jaToolStripMenuItem;
         private System.Windows.Forms.Label MotionLayer;
         private System.Windows.Forms.ComboBox MotionLayerCombo;
+        private System.Windows.Forms.Label separateLine;
+        private System.Windows.Forms.RichTextBox motionLayerExplanation;
     }
 }
 

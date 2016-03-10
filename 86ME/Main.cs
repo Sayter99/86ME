@@ -1930,6 +1930,9 @@ namespace _86ME_ver1
                     Label xlabel4 = new Label();
                     xlabel4.Text = Main_lang_dic["gotoMotion_xlabel4"];
                     xlabel4.Size = new Size(450, 20);
+                    Label xlabel5 = new Label();
+                    xlabel5.Text = Main_lang_dic["gotoMotion_xlabel5"];
+                    xlabel5.Size = new Size(650, 20);
 
                     ComboBox xcombo = new ComboBox();
                     xcombo.Size = new Size(160, 22);
@@ -1961,6 +1964,7 @@ namespace _86ME_ver1
                     xlabel3.Left += 26;
                     xlabel4.Top += 65;
                     xlabel4.Left += 26;
+                    xlabel5.Top += 135;
                     xcombo.Left += 85;
                     call_radio.Top += 85;
                     call_radio.Left += 10;
@@ -1971,6 +1975,7 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(xlabel2);
                     Framelist.Controls.Add(xlabel3);
                     Framelist.Controls.Add(xlabel4);
+                    Framelist.Controls.Add(xlabel5);
                     Framelist.Controls.Add(jump_radio);
                     Framelist.Controls.Add(call_radio);
                     Framelist.Enabled = true;
@@ -3167,7 +3172,7 @@ namespace _86ME_ver1
         private void applyLang()
         {
             hint_richTextBox.LanguageOption = RichTextBoxLanguageOptions.DualFont;
-            nonblockinExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+            nonblockingExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
             blockingExplaination.LanguageOption = RichTextBoxLanguageOptions.DualFont;
 
             motionevent[0] = Main_lang_dic["AddNewAction_N"];
@@ -3202,6 +3207,7 @@ namespace _86ME_ver1
             label2.Text = Main_lang_dic["Main_label2_Text"];
             languageToolStripMenuItem.Text = Main_lang_dic["languageToolStripMenuItem_Text"];
             Motion_groupBox.Text = Main_lang_dic["Motion_groupBox_Text"];
+            motionLayerExplanation.Text = Main_lang_dic["motionLayerExplanation_Text"];
             MotionNameLabel.Text = Main_lang_dic["MotionNameLabel_Text"];
             MotionProperty.Text = Main_lang_dic["MotionProperty_Text"];
             MotionPropertyLabel.Text = Main_lang_dic["MotionPropertyLabel_Text"];
@@ -3209,7 +3215,7 @@ namespace _86ME_ver1
             motorRelease.Text = Main_lang_dic["motorRelease_Text"];
             NewMotion.Text = Main_lang_dic["NewMotion_Text"];
             newToolStripMenuItem.Text = Main_lang_dic["newToolStripMenuItem_Text"];
-            nonblockinExplanation.Text = Main_lang_dic["nonblockinExplanation_Text"];
+            nonblockingExplanation.Text = Main_lang_dic["nonblockinExplanation_Text"];
             optionsToolStripMenuItem.Text = Main_lang_dic["optionsToolStripMenuItem_Text"];
             preferenceToolStripMenuItem.Text = Main_lang_dic["preferenceToolStripMenuItem_Text"];
             ps2_groupBox.Text = Main_lang_dic["ps2_groupBox_Text"];
@@ -3234,7 +3240,6 @@ namespace _86ME_ver1
             ttp.SetToolTip(motorRelease, Main_lang_dic["motorRelease_ToolTip"]);
             ttp.SetToolTip(move_down, Main_lang_dic["move_down_ToolTip"]);
             ttp.SetToolTip(move_up, Main_lang_dic["move_up_ToolTip"]);
-            ttp.SetToolTip(MotionLayerCombo, Main_lang_dic["MotionLayer_ToolTip"]);
             ttp.SetToolTip(NewMotion, Main_lang_dic["NewMotion_ToolTip"]);
             ttp.SetToolTip(ps2ATTCombo, Main_lang_dic["ps2ATTCombo_Text"]);
             ttp.SetToolTip(ps2CLKCombo, Main_lang_dic["ps2CLKCombo_Text"]);

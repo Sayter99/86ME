@@ -682,13 +682,13 @@ namespace _86ME_ver1
                 writer.WriteLine("static int keys_pressed[128] = {0};");
                 writer.WriteLine("void keyPressed(){keys_pressed[keyboard.getOemKey()] = 1;}");
                 writer.WriteLine("void keyReleased(){keys_pressed[keyboard.getOemKey()] = 0;}");
-                writer.Write("int key_state(int k)\n{\n  if(keys_pressed[k] == 1 && (keys_state[k]&2) != 2)\n" +
-		                     "  {\n    keys_state[k] = 2;\n    return 2;\n  }\n" +
-                             "  else if(keys_pressed[k] == 1 && (keys_state[k]&2) == 2)\n  {\n" +
-                             "    keys_state[k] = 3;\n    return 3;\n  }\n" +
-                             "  else if(keys_pressed[k] == 0 && (keys_state[k]&2) == 2)\n  {\n" +
-                             "    keys_state[k] = 1;\n    return 1;\n  }\n" +
-                             "  else\n  {\n    keys_state[k] = 0;\n    return 0;\n  }\n}");
+                writer.WriteLine("int key_state(int k)\n{\n  if(keys_pressed[k] == 1 && (keys_state[k]&2) != 2)\n" +
+		                         "  {\n    keys_state[k] = 2;\n    return 2;\n  }\n" +
+                                 "  else if(keys_pressed[k] == 1 && (keys_state[k]&2) == 2)\n  {\n" +
+                                 "    keys_state[k] = 3;\n    return 3;\n  }\n" +
+                                 "  else if(keys_pressed[k] == 0 && (keys_state[k]&2) == 2)\n  {\n" +
+                                 "    keys_state[k] = 1;\n    return 1;\n  }\n" +
+                                 "  else\n  {\n    keys_state[k] = 0;\n    return 0;\n  }\n}");
             }
             if (method_flag[2]) // bt
             {

@@ -2,6 +2,11 @@
 ---------
 #### CHANGELOG ####
 
+_VERSION_: v1.7
+
+* Add a new property named "Motion Layer". This feature makes motions can be triggered parallelly in different layers. And Layer 1's priority is higher than 0's.
+* Support Japanese now.
+
 _VERSION_: v1.6
 
 * Will not check Windows Device Manager if users choose COM port by them self.
