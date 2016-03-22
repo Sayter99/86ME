@@ -90,6 +90,6 @@ The 86ME tutorial pages for installation instructions and usage.
 #### CREDITS ####
 
 * 86ME is an open source project. 86ME is derived from RoboME of [RBgod](https://github.com/RoBoardGod/RoBoME) and is developed by [Sayter](sayter@dmp.com.tw).
-* All of them are members of the RoBoard team in DMP Electronic Inc.
+* All of them are members of the Tesla Lab in DMP Electronic Inc.
 
 **If you find any bug, or want to provide software patches or to request enhancements about 86ME, please report to the 86Duino [forum](http://www.86duino.com/?page_id=85).**
