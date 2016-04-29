@@ -7,13 +7,6 @@ using System.IO;
 
 namespace _86ME_ver1
 {
-    enum mtest_method { always, keyboard, bluetooth, ps2 };
-    enum keyboard_method { first, pressed, release };
-    enum auto_method { on, off, title };
-    enum serial_ports { serial1, serial2, serial3};
-    enum motion_property { blocking, nonblocking };
-    enum internal_trigger { call, jump };
-
     public class generate_sketches
     {
         private string nfilename = "";

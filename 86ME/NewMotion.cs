@@ -44,6 +44,12 @@ namespace _86ME_ver1
                                                     });
             comboBox1.SelectedIndex = 0;
 
+            comboBox2.Items.AddRange(new object[] { "NONE",
+                                                    "LSM330DLC",
+                                                    "RM-G146",
+                                                    });
+            comboBox2.SelectedIndex = 0;
+
             for (int i = 0; i < 45; i++)
             {
                 offset[i] = 0;
@@ -84,11 +90,11 @@ namespace _86ME_ver1
 
         public void numbercheck_offset(object sender, KeyPressEventArgs e) //Text number check
         {
-            if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & e.KeyChar != (char)('-'))
+            if (e.KeyChar == (char)('-') && ((MaskedTextBox)sender).Text.IndexOf('-') != -1)
             {
                 e.Handled = true;
             }
-            if (((MaskedTextBox)sender).Text == "-" && e.KeyChar == (char)('-'))
+            if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8 & e.KeyChar != (char)('-'))
             {
                 e.Handled = true;
             }
@@ -201,7 +207,7 @@ namespace _86ME_ver1
                 fbar_home[i] = new HScrollBar();
 
                 fpanel[i].Size = new Size(520, 50);
-                fpanel[i].Top += start_pos * 50;
+                fpanel[i].Top += 5 + start_pos * 50;
 
                 flabel[i].Size = new Size(65, 18);
                 flabel[i].Top += 5;

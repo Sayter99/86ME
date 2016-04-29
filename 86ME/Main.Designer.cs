@@ -61,11 +61,11 @@
             this.action_panel = new System.Windows.Forms.Panel();
             this.loadFrame = new System.Windows.Forms.Button();
             this.saveFrame = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.delayUnitLabel = new System.Windows.Forms.Label();
             this.delaytext = new System.Windows.Forms.MaskedTextBox();
-            this.label2 = new System.Windows.Forms.Label();
+            this.DelayLabel = new System.Windows.Forms.Label();
             this.typecombo = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
+            this.ActionTypeLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Framelist = new System.Windows.Forms.Panel();
             this.Robot_pictureBox = new System.Windows.Forms.PictureBox();
@@ -80,6 +80,23 @@
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
+            this.acc_groupBox = new System.Windows.Forms.GroupBox();
+            this.accDurationUnit = new System.Windows.Forms.Label();
+            this.accDurationText = new System.Windows.Forms.MaskedTextBox();
+            this.accw3 = new System.Windows.Forms.Label();
+            this.accHZText = new System.Windows.Forms.MaskedTextBox();
+            this.accLZText = new System.Windows.Forms.MaskedTextBox();
+            this.accZLabel = new System.Windows.Forms.Label();
+            this.accw2 = new System.Windows.Forms.Label();
+            this.accHYText = new System.Windows.Forms.MaskedTextBox();
+            this.accLYText = new System.Windows.Forms.MaskedTextBox();
+            this.accYLabel = new System.Windows.Forms.Label();
+            this.accDurationLabel = new System.Windows.Forms.Label();
+            this.accw1 = new System.Windows.Forms.Label();
+            this.accHXText = new System.Windows.Forms.MaskedTextBox();
+            this.accLXText = new System.Windows.Forms.MaskedTextBox();
+            this.accXLabel = new System.Windows.Forms.Label();
+            this.acc_radioButton = new System.Windows.Forms.RadioButton();
             this.ps2_groupBox = new System.Windows.Forms.GroupBox();
             this.ps2CLKCombo = new System.Windows.Forms.ComboBox();
             this.ps2ATTCombo = new System.Windows.Forms.ComboBox();
@@ -150,6 +167,7 @@
             this.MotionConfig.SuspendLayout();
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
+            this.acc_groupBox.SuspendLayout();
             this.ps2_groupBox.SuspendLayout();
             this.bt_groupBox.SuspendLayout();
             this.Keyboard_groupBox.SuspendLayout();
@@ -168,7 +186,7 @@
             this.helpToolStripMenuItem});
             this.Main_menuStrip.Location = new System.Drawing.Point(0, 0);
             this.Main_menuStrip.Name = "Main_menuStrip";
-            this.Main_menuStrip.Size = new System.Drawing.Size(1024, 24);
+            this.Main_menuStrip.Size = new System.Drawing.Size(1040, 24);
             this.Main_menuStrip.TabIndex = 0;
             this.Main_menuStrip.Text = "menuStrip1";
             // 
@@ -399,11 +417,11 @@
             // 
             this.action_panel.Controls.Add(this.loadFrame);
             this.action_panel.Controls.Add(this.saveFrame);
-            this.action_panel.Controls.Add(this.label3);
+            this.action_panel.Controls.Add(this.delayUnitLabel);
             this.action_panel.Controls.Add(this.delaytext);
-            this.action_panel.Controls.Add(this.label2);
+            this.action_panel.Controls.Add(this.DelayLabel);
             this.action_panel.Controls.Add(this.typecombo);
-            this.action_panel.Controls.Add(this.label1);
+            this.action_panel.Controls.Add(this.ActionTypeLabel);
             this.action_panel.Location = new System.Drawing.Point(12, 21);
             this.action_panel.Name = "action_panel";
             this.action_panel.Size = new System.Drawing.Size(303, 85);
@@ -431,14 +449,14 @@
             this.saveFrame.UseVisualStyleBackColor = true;
             this.saveFrame.Click += new System.EventHandler(this.saveFrame_Click);
             // 
-            // label3
+            // delayUnitLabel
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(184, 46);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(18, 12);
-            this.label3.TabIndex = 11;
-            this.label3.Text = "ms";
+            this.delayUnitLabel.AutoSize = true;
+            this.delayUnitLabel.Location = new System.Drawing.Point(184, 46);
+            this.delayUnitLabel.Name = "delayUnitLabel";
+            this.delayUnitLabel.Size = new System.Drawing.Size(18, 12);
+            this.delayUnitLabel.TabIndex = 11;
+            this.delayUnitLabel.Text = "ms";
             // 
             // delaytext
             // 
@@ -451,14 +469,14 @@
             this.delaytext.TextChanged += new System.EventHandler(this.delaytext_TextChanged);
             this.delaytext.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.delaytext_KeyPress);
             // 
-            // label2
+            // DelayLabel
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(13, 46);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(35, 12);
-            this.label2.TabIndex = 5;
-            this.label2.Text = "Delay:";
+            this.DelayLabel.AutoSize = true;
+            this.DelayLabel.Location = new System.Drawing.Point(13, 46);
+            this.DelayLabel.Name = "DelayLabel";
+            this.DelayLabel.Size = new System.Drawing.Size(35, 12);
+            this.DelayLabel.TabIndex = 5;
+            this.DelayLabel.Text = "Delay:";
             // 
             // typecombo
             // 
@@ -476,14 +494,14 @@
             this.typecombo.TabIndex = 0;
             this.typecombo.TextChanged += new System.EventHandler(this.typecombo_TextChanged);
             // 
-            // label1
+            // ActionTypeLabel
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(13, 14);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(66, 12);
-            this.label1.TabIndex = 3;
-            this.label1.Text = "Action Type:";
+            this.ActionTypeLabel.AutoSize = true;
+            this.ActionTypeLabel.Location = new System.Drawing.Point(13, 14);
+            this.ActionTypeLabel.Name = "ActionTypeLabel";
+            this.ActionTypeLabel.Size = new System.Drawing.Size(66, 12);
+            this.ActionTypeLabel.TabIndex = 3;
+            this.ActionTypeLabel.Text = "Action Type:";
             // 
             // panel2
             // 
@@ -577,7 +595,7 @@
             // capturebutton
             // 
             this.capturebutton.Cursor = System.Windows.Forms.Cursors.Default;
-            this.capturebutton.Location = new System.Drawing.Point(337, 18);
+            this.capturebutton.Location = new System.Drawing.Point(324, 18);
             this.capturebutton.Name = "capturebutton";
             this.capturebutton.Size = new System.Drawing.Size(117, 23);
             this.capturebutton.TabIndex = 7;
@@ -601,7 +619,7 @@
             this.Motion_groupBox.Controls.Add(this.MotionCombo);
             this.Motion_groupBox.Location = new System.Drawing.Point(739, 28);
             this.Motion_groupBox.Name = "Motion_groupBox";
-            this.Motion_groupBox.Size = new System.Drawing.Size(273, 601);
+            this.Motion_groupBox.Size = new System.Drawing.Size(289, 601);
             this.Motion_groupBox.TabIndex = 3;
             this.Motion_groupBox.TabStop = false;
             this.Motion_groupBox.Text = "Motion";
@@ -614,7 +632,7 @@
             this.MotionConfig.Location = new System.Drawing.Point(7, 66);
             this.MotionConfig.Name = "MotionConfig";
             this.MotionConfig.SelectedIndex = 0;
-            this.MotionConfig.Size = new System.Drawing.Size(231, 488);
+            this.MotionConfig.Size = new System.Drawing.Size(247, 488);
             this.MotionConfig.TabIndex = 10;
             this.MotionConfig.SelectedIndexChanged += new System.EventHandler(this.MotionConfig_SelectedIndexChanged);
             // 
@@ -624,7 +642,7 @@
             this.ActionList.Location = new System.Drawing.Point(4, 22);
             this.ActionList.Name = "ActionList";
             this.ActionList.Padding = new System.Windows.Forms.Padding(3);
-            this.ActionList.Size = new System.Drawing.Size(223, 462);
+            this.ActionList.Size = new System.Drawing.Size(239, 462);
             this.ActionList.TabIndex = 0;
             this.ActionList.Text = "Action List";
             this.ActionList.UseVisualStyleBackColor = true;
@@ -638,7 +656,7 @@
             this.Motionlist.Location = new System.Drawing.Point(1, 3);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
-            this.Motionlist.Size = new System.Drawing.Size(219, 456);
+            this.Motionlist.Size = new System.Drawing.Size(235, 456);
             this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Motionlist_MouseDown);
@@ -647,6 +665,8 @@
             // 
             this.MotionTrigger.AutoScroll = true;
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
+            this.MotionTrigger.Controls.Add(this.acc_groupBox);
+            this.MotionTrigger.Controls.Add(this.acc_radioButton);
             this.MotionTrigger.Controls.Add(this.ps2_groupBox);
             this.MotionTrigger.Controls.Add(this.ps2_radioButton);
             this.MotionTrigger.Controls.Add(this.bt_groupBox);
@@ -658,9 +678,179 @@
             this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
             this.MotionTrigger.Name = "MotionTrigger";
             this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionTrigger.Size = new System.Drawing.Size(223, 462);
+            this.MotionTrigger.Size = new System.Drawing.Size(239, 462);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
+            // 
+            // acc_groupBox
+            // 
+            this.acc_groupBox.Controls.Add(this.accDurationUnit);
+            this.acc_groupBox.Controls.Add(this.accDurationText);
+            this.acc_groupBox.Controls.Add(this.accw3);
+            this.acc_groupBox.Controls.Add(this.accHZText);
+            this.acc_groupBox.Controls.Add(this.accLZText);
+            this.acc_groupBox.Controls.Add(this.accZLabel);
+            this.acc_groupBox.Controls.Add(this.accw2);
+            this.acc_groupBox.Controls.Add(this.accHYText);
+            this.acc_groupBox.Controls.Add(this.accLYText);
+            this.acc_groupBox.Controls.Add(this.accYLabel);
+            this.acc_groupBox.Controls.Add(this.accDurationLabel);
+            this.acc_groupBox.Controls.Add(this.accw1);
+            this.acc_groupBox.Controls.Add(this.accHXText);
+            this.acc_groupBox.Controls.Add(this.accLXText);
+            this.acc_groupBox.Controls.Add(this.accXLabel);
+            this.acc_groupBox.Location = new System.Drawing.Point(27, 348);
+            this.acc_groupBox.Name = "acc_groupBox";
+            this.acc_groupBox.Size = new System.Drawing.Size(192, 138);
+            this.acc_groupBox.TabIndex = 14;
+            this.acc_groupBox.TabStop = false;
+            this.acc_groupBox.Text = "Accelerometer";
+            // 
+            // accDurationUnit
+            // 
+            this.accDurationUnit.AutoSize = true;
+            this.accDurationUnit.Location = new System.Drawing.Point(168, 112);
+            this.accDurationUnit.Name = "accDurationUnit";
+            this.accDurationUnit.Size = new System.Drawing.Size(18, 12);
+            this.accDurationUnit.TabIndex = 14;
+            this.accDurationUnit.Text = "ms";
+            // 
+            // accDurationText
+            // 
+            this.accDurationText.Location = new System.Drawing.Point(69, 106);
+            this.accDurationText.Name = "6";
+            this.accDurationText.Size = new System.Drawing.Size(93, 22);
+            this.accDurationText.TabIndex = 41;
+            this.accDurationText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(numbercheck);
+            this.accDurationText.TextChanged += new System.EventHandler(accDurationText_Changed);
+            // 
+            // accw3
+            // 
+            this.accw3.AutoSize = true;
+            this.accw3.Location = new System.Drawing.Point(103, 80);
+            this.accw3.Name = "accw3";
+            this.accw3.Size = new System.Drawing.Size(11, 12);
+            this.accw3.TabIndex = 40;
+            this.accw3.Text = "~";
+            // 
+            // accHZText
+            // 
+            this.accHZText.Location = new System.Drawing.Point(122, 77);
+            this.accHZText.Name = "5";
+            this.accHZText.Size = new System.Drawing.Size(62, 22);
+            this.accHZText.TabIndex = 39;
+            this.accHZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
+            this.accHZText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            // 
+            // accLZText
+            // 
+            this.accLZText.Location = new System.Drawing.Point(32, 77);
+            this.accLZText.Name = "4";
+            this.accLZText.Size = new System.Drawing.Size(62, 22);
+            this.accLZText.TabIndex = 38;
+            this.accLZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
+            this.accLZText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            // 
+            // accZLabel
+            // 
+            this.accZLabel.AutoSize = true;
+            this.accZLabel.Location = new System.Drawing.Point(14, 80);
+            this.accZLabel.Name = "accZLabel";
+            this.accZLabel.Size = new System.Drawing.Size(18, 12);
+            this.accZLabel.TabIndex = 37;
+            this.accZLabel.Text = "Z: ";
+            // 
+            // accw2
+            // 
+            this.accw2.AutoSize = true;
+            this.accw2.Location = new System.Drawing.Point(103, 52);
+            this.accw2.Name = "accw2";
+            this.accw2.Size = new System.Drawing.Size(11, 12);
+            this.accw2.TabIndex = 36;
+            this.accw2.Text = "~";
+            // 
+            // accHYText
+            // 
+            this.accHYText.Location = new System.Drawing.Point(122, 49);
+            this.accHYText.Name = "3";
+            this.accHYText.Size = new System.Drawing.Size(62, 22);
+            this.accHYText.TabIndex = 35;
+            this.accHYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
+            this.accHYText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            // 
+            // accLYText
+            // 
+            this.accLYText.Location = new System.Drawing.Point(32, 49);
+            this.accLYText.Name = "2";
+            this.accLYText.Size = new System.Drawing.Size(62, 22);
+            this.accLYText.TabIndex = 34;
+            this.accLYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
+            this.accLYText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            // 
+            // accYLabel
+            // 
+            this.accYLabel.AutoSize = true;
+            this.accYLabel.Location = new System.Drawing.Point(14, 52);
+            this.accYLabel.Name = "accYLabel";
+            this.accYLabel.Size = new System.Drawing.Size(19, 12);
+            this.accYLabel.TabIndex = 33;
+            this.accYLabel.Text = "Y: ";
+            // 
+            // accDurationLabel
+            // 
+            this.accDurationLabel.AutoSize = true;
+            this.accDurationLabel.Location = new System.Drawing.Point(14, 109);
+            this.accDurationLabel.Name = "accDurationLabel";
+            this.accDurationLabel.Size = new System.Drawing.Size(49, 12);
+            this.accDurationLabel.TabIndex = 32;
+            this.accDurationLabel.Text = "Duration:";
+            // 
+            // accw1
+            // 
+            this.accw1.AutoSize = true;
+            this.accw1.Location = new System.Drawing.Point(103, 24);
+            this.accw1.Name = "accw1";
+            this.accw1.Size = new System.Drawing.Size(11, 12);
+            this.accw1.TabIndex = 29;
+            this.accw1.Text = "~";
+            // 
+            // accHXText
+            // 
+            this.accHXText.Location = new System.Drawing.Point(122, 21);
+            this.accHXText.Name = "1";
+            this.accHXText.Size = new System.Drawing.Size(62, 22);
+            this.accHXText.TabIndex = 26;
+            this.accHXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
+            this.accHXText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            // 
+            // accLXText
+            // 
+            this.accLXText.Location = new System.Drawing.Point(32, 21);
+            this.accLXText.Name = "0";
+            this.accLXText.Size = new System.Drawing.Size(62, 22);
+            this.accLXText.TabIndex = 16;
+            this.accLXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
+            this.accLXText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            // 
+            // accXLabel
+            // 
+            this.accXLabel.AutoSize = true;
+            this.accXLabel.Location = new System.Drawing.Point(14, 24);
+            this.accXLabel.Name = "accXLabel";
+            this.accXLabel.Size = new System.Drawing.Size(19, 12);
+            this.accXLabel.TabIndex = 15;
+            this.accXLabel.Text = "X: ";
+            // 
+            // acc_radioButton
+            // 
+            this.acc_radioButton.AutoSize = true;
+            this.acc_radioButton.Location = new System.Drawing.Point(6, 348);
+            this.acc_radioButton.Name = "acc_radioButton";
+            this.acc_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.acc_radioButton.TabIndex = 7;
+            this.acc_radioButton.TabStop = true;
+            this.acc_radioButton.UseVisualStyleBackColor = true;
+            this.acc_radioButton.CheckedChanged += new System.EventHandler(this.acc_radioButton_CheckedChanged);
             // 
             // ps2_groupBox
             // 
@@ -1134,7 +1324,7 @@
             this.MotionProperty.Location = new System.Drawing.Point(4, 22);
             this.MotionProperty.Name = "MotionProperty";
             this.MotionProperty.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionProperty.Size = new System.Drawing.Size(223, 462);
+            this.MotionProperty.Size = new System.Drawing.Size(239, 462);
             this.MotionProperty.TabIndex = 2;
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
@@ -1144,7 +1334,7 @@
             this.motionLayerExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.motionLayerExplanation.Location = new System.Drawing.Point(15, 198);
             this.motionLayerExplanation.Name = "motionLayerExplanation";
-            this.motionLayerExplanation.Size = new System.Drawing.Size(202, 67);
+            this.motionLayerExplanation.Size = new System.Drawing.Size(218, 67);
             this.motionLayerExplanation.TabIndex = 8;
             this.motionLayerExplanation.Text = "This feature makes motions can be triggered parallelly in different layers. And L" +
     "ayer 1\'s priority is higher than 0\'s.";
@@ -1152,9 +1342,9 @@
             // separateLine
             // 
             this.separateLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine.Location = new System.Drawing.Point(0, 158);
+            this.separateLine.Location = new System.Drawing.Point(-2, 158);
             this.separateLine.Name = "separateLine";
-            this.separateLine.Size = new System.Drawing.Size(220, 2);
+            this.separateLine.Size = new System.Drawing.Size(243, 1);
             this.separateLine.TabIndex = 7;
             // 
             // MotionLayerCombo
@@ -1185,7 +1375,7 @@
             this.nonblockingExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.nonblockingExplanation.Location = new System.Drawing.Point(15, 112);
             this.nonblockingExplanation.Name = "nonblockingExplanation";
-            this.nonblockingExplanation.Size = new System.Drawing.Size(202, 54);
+            this.nonblockingExplanation.Size = new System.Drawing.Size(218, 54);
             this.nonblockingExplanation.TabIndex = 4;
             this.nonblockingExplanation.Text = "This motion can be interrupted while another motion is triggered.";
             // 
@@ -1194,7 +1384,7 @@
             this.blockingExplaination.BorderStyle = System.Windows.Forms.BorderStyle.None;
             this.blockingExplaination.Location = new System.Drawing.Point(15, 45);
             this.blockingExplaination.Name = "blockingExplaination";
-            this.blockingExplaination.Size = new System.Drawing.Size(202, 39);
+            this.blockingExplaination.Size = new System.Drawing.Size(218, 39);
             this.blockingExplaination.TabIndex = 3;
             this.blockingExplaination.Text = "This motion can NOT be interrupted by another motion.";
             // 
@@ -1264,7 +1454,7 @@
             this.move_down.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_down.Enabled = false;
             this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
-            this.move_down.Location = new System.Drawing.Point(244, 316);
+            this.move_down.Location = new System.Drawing.Point(260, 316);
             this.move_down.Name = "move_down";
             this.move_down.Size = new System.Drawing.Size(23, 37);
             this.move_down.TabIndex = 7;
@@ -1277,7 +1467,7 @@
             this.move_up.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_up.Enabled = false;
             this.move_up.Image = global::_86ME_ver1.Properties.Resources.up_arrow;
-            this.move_up.Location = new System.Drawing.Point(244, 273);
+            this.move_up.Location = new System.Drawing.Point(260, 273);
             this.move_up.Name = "move_up";
             this.move_up.Size = new System.Drawing.Size(23, 37);
             this.move_up.TabIndex = 6;
@@ -1312,7 +1502,7 @@
             this.NewMotion.Cursor = System.Windows.Forms.Cursors.Default;
             this.NewMotion.Location = new System.Drawing.Point(196, 36);
             this.NewMotion.Name = "NewMotion";
-            this.NewMotion.Size = new System.Drawing.Size(71, 23);
+            this.NewMotion.Size = new System.Drawing.Size(87, 23);
             this.NewMotion.TabIndex = 2;
             this.NewMotion.Text = "Add Motion";
             this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
@@ -1388,7 +1578,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1024, 698);
+            this.ClientSize = new System.Drawing.Size(1040, 698);
             this.Controls.Add(this.GenerateAllInOne);
             this.Controls.Add(this.Generate);
             this.Controls.Add(this.Main_menuStrip);
@@ -1397,8 +1587,8 @@
             this.Controls.Add(this.Setting_groupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MainMenuStrip = this.Main_menuStrip;
-            this.MaximumSize = new System.Drawing.Size(1040, 736);
-            this.MinimumSize = new System.Drawing.Size(1040, 736);
+            this.MaximumSize = new System.Drawing.Size(1056, 736);
+            this.MinimumSize = new System.Drawing.Size(1056, 736);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "86Duino Motion Editor";
@@ -1420,6 +1610,8 @@
             this.ActionList.ResumeLayout(false);
             this.MotionTrigger.ResumeLayout(false);
             this.MotionTrigger.PerformLayout();
+            this.acc_groupBox.ResumeLayout(false);
+            this.acc_groupBox.PerformLayout();
             this.ps2_groupBox.ResumeLayout(false);
             this.ps2_groupBox.PerformLayout();
             this.bt_groupBox.ResumeLayout(false);
@@ -1459,9 +1651,9 @@
         private System.Windows.Forms.ListBox Motionlist;
         private System.Windows.Forms.ComboBox MotionCombo;
         private System.Windows.Forms.Panel action_panel;
-        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.Label ActionTypeLabel;
         private System.Windows.Forms.MaskedTextBox delaytext;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label DelayLabel;
         private System.Windows.Forms.ComboBox typecombo;
         private System.Windows.Forms.ContextMenuStrip Motionlist_contextMenuStrip;
         private System.Windows.Forms.Button NewMotion;
@@ -1483,7 +1675,7 @@
         private System.Windows.Forms.Button motorRelease;
         private System.Windows.Forms.Button move_down;
         private System.Windows.Forms.Button move_up;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label delayUnitLabel;
         private System.Windows.Forms.Button motion_stop;
         private System.Windows.Forms.Button motion_pause;
         private System.Windows.Forms.TrackBar sync_speed;
@@ -1547,6 +1739,23 @@
         private System.Windows.Forms.ComboBox MotionLayerCombo;
         private System.Windows.Forms.Label separateLine;
         private System.Windows.Forms.RichTextBox motionLayerExplanation;
+        private System.Windows.Forms.RadioButton acc_radioButton;
+        private System.Windows.Forms.GroupBox acc_groupBox;
+        private System.Windows.Forms.MaskedTextBox accLXText;
+        private System.Windows.Forms.Label accXLabel;
+        private System.Windows.Forms.MaskedTextBox accDurationText;
+        private System.Windows.Forms.Label accw3;
+        private System.Windows.Forms.MaskedTextBox accHZText;
+        private System.Windows.Forms.MaskedTextBox accLZText;
+        private System.Windows.Forms.Label accZLabel;
+        private System.Windows.Forms.Label accw2;
+        private System.Windows.Forms.MaskedTextBox accHYText;
+        private System.Windows.Forms.MaskedTextBox accLYText;
+        private System.Windows.Forms.Label accYLabel;
+        private System.Windows.Forms.Label accDurationLabel;
+        private System.Windows.Forms.Label accw1;
+        private System.Windows.Forms.MaskedTextBox accHXText;
+        private System.Windows.Forms.Label accDurationUnit;
     }
 }
 

@@ -23,6 +23,7 @@ using System.Collections;
 using System.Threading;
 using System.Media;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace _86ME_ver1
 {
@@ -62,6 +63,7 @@ namespace _86ME_ver1
         int[] autoframe = new int[45];
         int[] offset = new int[45];
         int board_ver86;
+        int used_imu;
         int[] motor_info = new int[45];
         int mdx, mdy;
         bool freshflag;
@@ -387,6 +389,46 @@ namespace _86ME_ver1
             }
         }
 
+        public void floatcheck(object sender, KeyPressEventArgs e) //Text number check
+        {
+            if ((int)e.KeyChar == 46 && ((MaskedTextBox)sender).Text.IndexOf('.') != -1)
+            {
+                e.Handled = true;
+            }
+            if (e.KeyChar == (char)('-') && ((MaskedTextBox)sender).Text.IndexOf('-') != -1)
+            {
+                e.Handled = true;
+            }
+            if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 46 & (int)e.KeyChar != 8 & e.KeyChar != (char)('-'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        public void accXYZText_Changed(object sender, EventArgs e)
+        {
+            double output;
+            if (double.TryParse(((MaskedTextBox)sender).Text, out output))
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[int.Parse(((MaskedTextBox)sender).Name)] = output;
+            else if (((MaskedTextBox)sender).Text == "-" || ((MaskedTextBox)sender).Text == "" ||
+                     ((MaskedTextBox)sender).Text == "-." || ((MaskedTextBox)sender).Text == ".")
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[int.Parse(((MaskedTextBox)sender).Name)] = 0;
+            else
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg19"]);
+                ((MaskedTextBox)sender).SelectAll();
+            }
+        }
+
+        public void accDurationText_Changed(object sender, EventArgs e)
+        {
+            int output;
+            if (int.TryParse(((MaskedTextBox)sender).Text, out output))
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = output;
+            else
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = 0;
+        }
+
         private bool needToSave()
         {
             bool need_to_save = false;
@@ -528,7 +570,12 @@ namespace _86ME_ver1
                 delaytext.Text = default_delay.ToString();
                 typecombo.Text = "";
                 board_ver86 = Motion.comboBox1.SelectedIndex;
+                used_imu = Motion.comboBox2.SelectedIndex;
                 initPs2();
+                ps2pins[0] = "0";
+                ps2pins[1] = "0";
+                ps2pins[2] = "0";
+                ps2pins[3] = "0";
 
                 for (int i = 0; i < 45; i++)
                 {
@@ -673,7 +720,7 @@ namespace _86ME_ver1
             }
             MotionConfig.SelectedIndex = 0;
             initPs2();
-            if(change_board)
+            if (change_board)
             {
                 ps2pins[0] = "0";
                 ps2pins[1] = "0";
@@ -701,8 +748,7 @@ namespace _86ME_ver1
 
             writer.Write("BoardVer ");
             writer.Write(Motion.comboBox1.SelectedItem.ToString());
-            writer.Write(" " + ps2pins[0] + " " + ps2pins[1] + " " + ps2pins[2] + " " + ps2pins[3] + " " +
-                         bt_baud + " " + bt_port);
+            writer.Write(" " + ps2pins[0] + " " + ps2pins[1] + " " + ps2pins[2] + " " + ps2pins[3] + " " + bt_baud + " " + bt_port);
             writer.Write("\n");
             writer.Write("Servo ");
             for (int i = 0; i < 45; i++)
@@ -755,13 +801,17 @@ namespace _86ME_ver1
             }
             // save sync_speed
             writer.WriteLine("Sync " + sync_speed.Value.ToString());
+            // save IMU
+            writer.WriteLine("IMU " + Motion.comboBox2.SelectedIndex);
             for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
                 writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
                              m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
-                             " " + m.ps2_type + " " + m.bt_mode + "\n");
+                             " " + m.ps2_type + " " + m.bt_mode + " " + m.acc_Settings[0] + " " + m.acc_Settings[1] +
+                             " " + m.acc_Settings[2] + " " + m.acc_Settings[3] + " " + m.acc_Settings[4] +
+                             " " + m.acc_Settings[5] + " " + m.acc_Settings[6] + "\n");
                 writer.Write("Layer " + m.moton_layer + " ");
                 for (int j = 0; j < m.used_servos.Count; j++)
                 {
@@ -1024,8 +1074,11 @@ namespace _86ME_ver1
                     }
                     else if (String.Compare(datas[i], "Sync") == 0)
                     {
-                        i++;
-                        sync_speed.Value = int.Parse(datas[i]);
+                        sync_speed.Value = int.Parse(datas[++i]);
+                    }
+                    else if (String.Compare(datas[i], "IMU") == 0)
+                    {
+                        nMotion.comboBox2.SelectedIndex = int.Parse(datas[++i]);
                     }
                     else if (String.Compare(datas[i], "picmode") == 0)
                     {
@@ -1098,6 +1151,7 @@ namespace _86ME_ver1
                             motiontag = new ME_Motion();
                             motiontag.name = datas[i];
                             int try_out;
+                            double try_out_d;
                             if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
                                 String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
                                 String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
@@ -1119,8 +1173,18 @@ namespace _86ME_ver1
                                 if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
                                     String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
                                     String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
-                                    String.Compare("MotionEnd", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
+                                    String.Compare("MotionEnd", datas[i + 1]) != 0 && String.Compare("Layer", datas[i + 1]) != 0)
                                     motiontag.bt_mode = datas[++i];
+                                if (double.TryParse(datas[i + 1], out try_out_d))
+                                {
+                                    motiontag.acc_Settings[0] = double.Parse(datas[++i]);
+                                    motiontag.acc_Settings[1] = double.Parse(datas[++i]);
+                                    motiontag.acc_Settings[2] = double.Parse(datas[++i]);
+                                    motiontag.acc_Settings[3] = double.Parse(datas[++i]);
+                                    motiontag.acc_Settings[4] = double.Parse(datas[++i]);
+                                    motiontag.acc_Settings[5] = double.Parse(datas[++i]);
+                                    motiontag.acc_Settings[6] = int.Parse(datas[++i]);
+                                }
                             }
                             ME_Motionlist.Add(motiontag);
                         }
@@ -1372,7 +1436,7 @@ namespace _86ME_ver1
                     Motionlist.SelectedIndex++;
                 }
                 delaytext.Enabled = true;
-                label2.Enabled = true;
+                DelayLabel.Enabled = true;
                 Framelist.Enabled = true;
                 capturebutton.Enabled = true;
                 autocheck.Enabled= true;
@@ -1396,7 +1460,7 @@ namespace _86ME_ver1
                     Motionlist.SelectedIndex++;
                 }
                 delaytext.Enabled = true;
-                label2.Enabled = true;
+                DelayLabel.Enabled = true;
                 capturebutton.Enabled = false;
                 autocheck.Enabled = true;
                 typecombo.Enabled = false;
@@ -1414,7 +1478,7 @@ namespace _86ME_ver1
                     Motionlist.SelectedIndex++;
                 }
                 delaytext.Enabled = true;
-                label2.Enabled = true;
+                DelayLabel.Enabled = true;
                 Framelist.Enabled = false;
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
@@ -1440,7 +1504,7 @@ namespace _86ME_ver1
                     }
                 }
                 delaytext.Enabled = true;
-                label2.Enabled = true;
+                DelayLabel.Enabled = true;
                 Framelist.Enabled = true;
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
@@ -1457,7 +1521,7 @@ namespace _86ME_ver1
                 }
                 delaytext.Text = "";
                 delaytext.Enabled = false;
-                label2.Enabled = false;
+                DelayLabel.Enabled = false;
                 Framelist.Enabled = true;
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
@@ -1473,7 +1537,7 @@ namespace _86ME_ver1
                 }
                 delaytext.Text = "";
                 delaytext.Enabled = false;
-                label2.Enabled = false;
+                DelayLabel.Enabled = false;
                 Framelist.Enabled = true;
                 capturebutton.Enabled = false;
                 autocheck.Enabled= false;
@@ -1490,7 +1554,7 @@ namespace _86ME_ver1
                 }
                 delaytext.Text = "";
                 delaytext.Enabled = false;
-                label2.Enabled = false;
+                DelayLabel.Enabled = false;
                 Framelist.Enabled = true;
                 capturebutton.Enabled = false;
                 autocheck.Enabled = false;
@@ -1522,6 +1586,7 @@ namespace _86ME_ver1
             Keyboard_radioButton.Enabled = true;
             bt_radioButton.Enabled = true;
             ps2_radioButton.Enabled = true;
+            acc_radioButton.Enabled = true;
             ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
             if (m.trigger_method == (int)mtest_method.always)
             {
@@ -1530,6 +1595,7 @@ namespace _86ME_ver1
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = false;
                 ps2_groupBox.Enabled = false;
+                acc_groupBox.Enabled = false;
             }
             else if(m.trigger_method == (int)mtest_method.keyboard)
             {
@@ -1538,6 +1604,7 @@ namespace _86ME_ver1
                 Keyboard_groupBox.Enabled = true;
                 bt_groupBox.Enabled = false;
                 ps2_groupBox.Enabled = false;
+                acc_groupBox.Enabled = false;
             }
             else if (m.trigger_method == (int)mtest_method.bluetooth)
             {
@@ -1546,6 +1613,7 @@ namespace _86ME_ver1
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = true;
                 ps2_groupBox.Enabled = false;
+                acc_groupBox.Enabled = false;
             }
             else if (m.trigger_method == (int)mtest_method.ps2)
             {
@@ -1554,6 +1622,16 @@ namespace _86ME_ver1
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = false;
                 ps2_groupBox.Enabled = true;
+                acc_groupBox.Enabled = false;
+            }
+            else if (m.trigger_method == (int)mtest_method.acc)
+            {
+                acc_radioButton.Checked = true;
+                Always_groupBox.Enabled = false;
+                Keyboard_groupBox.Enabled = false;
+                bt_groupBox.Enabled = false;
+                ps2_groupBox.Enabled = false;
+                acc_groupBox.Enabled = true;
             }
             if (m.auto_method == (int)auto_method.on)
                 AlwaysOn.Checked = true;
@@ -1573,6 +1651,13 @@ namespace _86ME_ver1
             ps2CLKCombo.Text = ps2pins[3];
             ps2KeyCombo.Text = m.ps2_key;
             ps2TypeCombo.SelectedIndex = m.ps2_type;
+            accLXText.Text = m.acc_Settings[0].ToString();
+            accHXText.Text = m.acc_Settings[1].ToString();
+            accLYText.Text = m.acc_Settings[2].ToString();
+            accHYText.Text = m.acc_Settings[3].ToString();
+            accLZText.Text = m.acc_Settings[4].ToString();
+            accHZText.Text = m.acc_Settings[5].ToString();
+            accDurationText.Text = m.acc_Settings[6].ToString();
             // Motion Property Part
             Blocking.Enabled = true;
             NonBlocking.Enabled = true;
@@ -1665,7 +1750,7 @@ namespace _86ME_ver1
                 loadFrame.Visible = false;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
-                this.label2.Text = Main_lang_dic["Label2TextDelay"];
+                this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
             }
             if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
             {
@@ -1679,7 +1764,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = true;
                     loadFrame.Visible = true;
-                    this.label2.Text = Main_lang_dic["Label2TextPlayTime"];
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
                     typecombo.SelectedIndex = 0;
                     typecombo.Text = "Frame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1741,7 +1826,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = Main_lang_dic["Label2TextPlayTime"];
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
                     typecombo.SelectedIndex = 4;
                     typecombo.Text = "HomeFrame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1796,7 +1881,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.SelectedIndex = 1;
                     typecombo.Text = "Delay";
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1807,7 +1892,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = Main_lang_dic["Label2TextPlayTime"];
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
                     typecombo.SelectedIndex = 2;
                     typecombo.Text = "Sound";
                     delaytext.Text = ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
@@ -1817,7 +1902,7 @@ namespace _86ME_ver1
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     typecombo.SelectedIndex = 3;
-                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.Text = "Flag";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
@@ -1843,7 +1928,7 @@ namespace _86ME_ver1
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     typecombo.SelectedIndex = 2;
-                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.Text = "Goto";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
@@ -1914,7 +1999,7 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    this.label2.Text = Main_lang_dic["Label2TextDelay"];
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
                     typecombo.SelectedIndex = 5;
                     typecombo.Text = "GotoMotion";
                     Framelist.Controls.Clear();
@@ -2257,10 +2342,12 @@ namespace _86ME_ver1
                 Keyboard_radioButton.Enabled = false;
                 bt_radioButton.Enabled = false;
                 ps2_radioButton.Enabled = false;
+                acc_radioButton.Enabled = false;
                 Always_groupBox.Enabled = false;
                 Keyboard_groupBox.Enabled = false;
                 bt_groupBox.Enabled = false;
                 ps2_groupBox.Enabled = false;
+                acc_groupBox.Enabled = false;
             }
             else if (MotionConfig.SelectedIndex == 2)
             {
@@ -2871,10 +2958,12 @@ namespace _86ME_ver1
                     Keyboard_radioButton.Enabled = false;
                     bt_radioButton.Enabled = false;
                     ps2_radioButton.Enabled = false;
+                    acc_groupBox.Enabled = false;
                     Always_groupBox.Enabled = false;
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
                     ps2_groupBox.Enabled = false;
+                    acc_groupBox.Enabled = false;
                 }
                 else
                 {
@@ -2884,6 +2973,7 @@ namespace _86ME_ver1
                         Keyboard_groupBox.Enabled = false;
                         bt_groupBox.Enabled = false;
                         ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = false;
                     }
                     else if (Keyboard_radioButton.Checked == true)
                     {
@@ -2891,6 +2981,7 @@ namespace _86ME_ver1
                         Keyboard_groupBox.Enabled = true;
                         bt_groupBox.Enabled = false;
                         ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = false;
                     }
                     else if (bt_radioButton.Checked == true)
                     {
@@ -2898,6 +2989,7 @@ namespace _86ME_ver1
                         Keyboard_groupBox.Enabled = false;
                         bt_groupBox.Enabled = true;
                         ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = false;
                     }
                     else if (ps2_radioButton.Checked == true)
                     {
@@ -2905,6 +2997,15 @@ namespace _86ME_ver1
                         Keyboard_groupBox.Enabled = false;
                         bt_groupBox.Enabled = false;
                         ps2_groupBox.Enabled = true;
+                        acc_groupBox.Enabled = false;
+                    }
+                    else if (acc_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = true;
                     }
                     ps2DATCombo.Text = ps2pins[0];
                     ps2CMDCombo.Text = ps2pins[1];
@@ -2957,6 +3058,7 @@ namespace _86ME_ver1
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
                     ps2_groupBox.Enabled = false;
+                    acc_groupBox.Enabled = false;
                 }
         }
 
@@ -2970,6 +3072,7 @@ namespace _86ME_ver1
                     Keyboard_groupBox.Enabled = true;
                     bt_groupBox.Enabled = false;
                     ps2_groupBox.Enabled = false;
+                    acc_groupBox.Enabled = false;
                 }
         }
 
@@ -2983,6 +3086,7 @@ namespace _86ME_ver1
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = true;
                     ps2_groupBox.Enabled = false;
+                    acc_groupBox.Enabled = false;
                 }
         }
 
@@ -2996,6 +3100,21 @@ namespace _86ME_ver1
                     Keyboard_groupBox.Enabled = false;
                     bt_groupBox.Enabled = false;
                     ps2_groupBox.Enabled = true;
+                    acc_groupBox.Enabled = false;
+                }
+        }
+
+        private void acc_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                if (acc_radioButton.Checked == true)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.acc;
+                    Always_groupBox.Enabled = false;
+                    Keyboard_groupBox.Enabled = false;
+                    bt_groupBox.Enabled = false;
+                    ps2_groupBox.Enabled = false;
+                    acc_groupBox.Enabled = true;
                 }
         }
 
@@ -3203,8 +3322,8 @@ namespace _86ME_ver1
             Hint_groupBox.Text = Main_lang_dic["Hint_groupBox_Text"];
             howToUseToolStripMenuItem.Text = Main_lang_dic["howToUseToolStripMenuItem_Text"];
             Keyboard_groupBox.Text = Main_lang_dic["Keyboard_groupBox_Text"];
-            label1.Text = Main_lang_dic["Main_label1_Text"];
-            label2.Text = Main_lang_dic["Main_label2_Text"];
+            ActionTypeLabel.Text = Main_lang_dic["Main_label1_Text"];
+            DelayLabel.Text = Main_lang_dic["Main_label2_Text"];
             languageToolStripMenuItem.Text = Main_lang_dic["languageToolStripMenuItem_Text"];
             Motion_groupBox.Text = Main_lang_dic["Motion_groupBox_Text"];
             motionLayerExplanation.Text = Main_lang_dic["motionLayerExplanation_Text"];

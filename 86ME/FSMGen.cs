@@ -7,6 +7,13 @@ using System.IO;
 
 namespace _86ME_ver1
 {
+    enum mtest_method { always, keyboard, bluetooth, ps2, acc };
+    enum keyboard_method { first, pressed, release };
+    enum auto_method { on, off, title };
+    enum serial_ports { serial1, serial2, serial3 };
+    enum motion_property { blocking, nonblocking };
+    enum internal_trigger { call, jump };
+
     class FSMGen
     {
         private string nfilename = "";
@@ -82,6 +89,8 @@ namespace _86ME_ver1
                         return "ps2x.Button(" + m.ps2_key + ") && !ps2x.ButtonPressed(" + m.ps2_key + ")";
                     else
                         return "ps2x.ButtonReleased(" + m.ps2_key + ")";
+                case (int)mtest_method.acc:
+                    return m.name + "::acc_state == 2";
                 default:
                     return "1";
             }
@@ -182,7 +191,50 @@ namespace _86ME_ver1
                 }
                 writer.WriteLine("};");
             }
+            if (m.trigger_method == (int)mtest_method.acc)
+            {
+                writer.WriteLine("  int acc_state = 0;");
+                writer.WriteLine("  unsigned long acc_time;");
+            }
             writer.WriteLine("}");
+        }
+
+        private void generate_updateAcc(TextWriter writer)
+        {
+            if (method_flag[4])
+            {
+                writer.WriteLine("void updateAcc()\n{\n  _IMU.getValues(_IMU_val);");
+                for (int i = 0; i < ME_Motionlist.Count; i++)
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    string stmts = "";
+                    if (m.acc_Settings[0] < m.acc_Settings[1])
+                        stmts += "(_IMU_val[0] >= " + m.acc_Settings[0] + " && _IMU_val[0] <= " + m.acc_Settings[1] + ") &&\n";
+                    else
+                        stmts += "(_IMU_val[0] >= " + m.acc_Settings[1] + " && _IMU_val[0] <= " + m.acc_Settings[0] + ") &&\n";
+                    if (m.acc_Settings[2] < m.acc_Settings[3])
+                        stmts += "         (_IMU_val[1] >= " + m.acc_Settings[2] + " && _IMU_val[1] <= " + m.acc_Settings[3] + ") &&\n";
+                    else
+                        stmts += "         (_IMU_val[1] >= " + m.acc_Settings[3] + " && _IMU_val[1] <= " + m.acc_Settings[2] + ") &&\n";
+                    if (m.acc_Settings[4] < m.acc_Settings[5])
+                        stmts += "         (_IMU_val[2] >= " + m.acc_Settings[4] + " && _IMU_val[2] <= " + m.acc_Settings[5] + ")";
+                    else
+                        stmts += "         (_IMU_val[2] >= " + m.acc_Settings[5] + " && _IMU_val[2] <= " + m.acc_Settings[4] + ")";
+                    if (m.trigger_method == (int)mtest_method.acc)
+                    {
+                        writer.WriteLine("  switch(" + m.name + "::acc_state)\n  {\n" +
+                                         "    case 0:\n      if(" + stmts + ")\n      {\n" +
+                                         "        " + m.name + "::acc_state = 1;\n" +
+                                         "        " + m.name + "::acc_time = millis();\n      }\n      break;\n" +
+                                         "    case 1:\n      if(" + stmts + ")\n" + "      {\n" +
+                                         "        if(millis() - " + m.name + "::acc_time >= " + m.acc_Settings[6] + ")\n" +
+                                         "          " + m.name + "::acc_state = 2;\n      }\n      else\n" +
+                                         "        " + m.name + "::acc_state = 0;\n      break;\n    default:\n" +
+                                         "      break;\n  }");
+                    }
+                }
+                writer.WriteLine("}");
+            }
         }
 
         private void generate_isBlocked(TextWriter writer)
@@ -279,6 +331,28 @@ namespace _86ME_ver1
                                              m.name + "_title--;" + update_mask + "}");
                     }
                 }
+                for (int i = 0; i < ME_Motionlist.Count; i++) //acc
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    if (m.trigger_method == (int)mtest_method.acc && m.moton_layer == layer)
+                    {
+                        string update_mask = "";
+                        if (layer == 1)
+                            update_mask = "memcpy(servo_mask, " + m.name + "::mask, sizeof(servo_mask));";
+
+                        if (first)
+                        {
+                            writer.WriteLine(space + "if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                m.name + "::acc_state = 0;" + update_mask + "}");
+                            first = false;
+                        }
+                        else
+                            writer.WriteLine(space + "else if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                m.name + "::acc_state = 0;" + update_mask + "}");
+                    }
+                }
                 for (int i = 0; i < ME_Motionlist.Count; i++) //bt
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -311,7 +385,8 @@ namespace _86ME_ver1
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
                     if (!(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.on) &&
                         !(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title) &&
-                        !(m.trigger_method == (int)mtest_method.bluetooth) && m.moton_layer == layer)
+                        !(m.trigger_method == (int)mtest_method.bluetooth) && !(m.trigger_method == (int)mtest_method.acc) &&
+                        m.moton_layer == layer)
                     {
                         string cancel_release = "";
                         string update_mask = "";
@@ -640,6 +715,8 @@ namespace _86ME_ver1
                 writer.WriteLine("#include <KeyboardController.h>");
             if (method_flag[3]) // ps2
                 writer.WriteLine("#include <PS2X_lib.h>");
+            if (method_flag[4]) // acc
+                writer.WriteLine("#include <EEPROM.h>\n#include \"FreeIMU1.h\"\n#include <Wire.h>");
             writer.WriteLine();
 
             writer.WriteLine("int servo_mask[" + channels.Count + "] = {0};");
@@ -697,10 +774,16 @@ namespace _86ME_ver1
             }
             if (method_flag[3]) // ps2
                 writer.WriteLine("PS2X ps2x;");
+            if (method_flag[4]) // acc
+            {
+                writer.WriteLine("float _IMU_val[9];");
+                writer.WriteLine("FreeIMU1 _IMU = FreeIMU1();");
+            }
             writer.WriteLine();
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
                 generate_variable((ME_Motion)ME_Motionlist[i], writer, channels);
+            generate_updateAcc(writer);
             generate_isBlocked(writer);
             generate_closeTriggers(writer);
             generate_updateTrigger(writer);
@@ -724,6 +807,15 @@ namespace _86ME_ver1
             if (method_flag[3]) // ps2
                 writer.WriteLine("  ps2x.config_gamepad(" + ps2_pins[3] + ", " + ps2_pins[1] +
                                  ", " + ps2_pins[2] + ", " + ps2_pins[0] + ", false, false);\n");
+            if (method_flag[4]) // acc
+            {
+                if (Motion.comboBox2.SelectedIndex == 1) //LSM330DLC
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init(0x30 >> 1, 0xD4 >> 1, false);\n  delay(5);\n");
+                else if (Motion.comboBox2.SelectedIndex == 2) //RM-G146
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init(0x30 >> 1, 0xD0 >> 1, false);\n  delay(5);\n");
+                else // NONE
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init();\n  delay(5);\n");
+            }
             for (int i = 0; i < channels.Count; i++)
                 writer.WriteLine("  used_servos[" + i.ToString() + "].attach(" + channels[i].ToString() + ");");
             writer.WriteLine();
@@ -783,6 +875,8 @@ namespace _86ME_ver1
         {
             writer.WriteLine("void loop()");
             writer.WriteLine("{");
+            if (method_flag[4]) //acc
+                writer.WriteLine("  updateAcc();");
             writer.WriteLine("  updateTrigger();");
             for (int j = 0; j < ME_Motionlist.Count; j++)
             {
