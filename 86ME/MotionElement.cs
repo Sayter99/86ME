@@ -80,17 +80,6 @@ namespace _86ME_ver1
         }
     }
 
-    public class ME_Sound
-    {
-        public string filename;
-        public int delay;
-        public ME_Sound()
-        {
-            this.filename = null;
-            this.delay = -1;
-        }
-    }
-
     public class ME_Goto
     {
         public string name;

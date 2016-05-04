@@ -64,8 +64,6 @@
             this.delayUnitLabel = new System.Windows.Forms.Label();
             this.delaytext = new System.Windows.Forms.MaskedTextBox();
             this.DelayLabel = new System.Windows.Forms.Label();
-            this.typecombo = new System.Windows.Forms.ComboBox();
-            this.ActionTypeLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Framelist = new System.Windows.Forms.Panel();
             this.Robot_pictureBox = new System.Windows.Forms.PictureBox();
@@ -420,8 +418,6 @@
             this.action_panel.Controls.Add(this.delayUnitLabel);
             this.action_panel.Controls.Add(this.delaytext);
             this.action_panel.Controls.Add(this.DelayLabel);
-            this.action_panel.Controls.Add(this.typecombo);
-            this.action_panel.Controls.Add(this.ActionTypeLabel);
             this.action_panel.Location = new System.Drawing.Point(12, 21);
             this.action_panel.Name = "action_panel";
             this.action_panel.Size = new System.Drawing.Size(303, 85);
@@ -430,7 +426,7 @@
             // loadFrame
             // 
             this.loadFrame.Image = global::_86ME_ver1.Properties.Resources.load_frame;
-            this.loadFrame.Location = new System.Drawing.Point(218, 7);
+            this.loadFrame.Location = new System.Drawing.Point(52, 47);
             this.loadFrame.Name = "loadFrame";
             this.loadFrame.Size = new System.Drawing.Size(28, 26);
             this.loadFrame.TabIndex = 13;
@@ -441,7 +437,7 @@
             // saveFrame
             // 
             this.saveFrame.Image = global::_86ME_ver1.Properties.Resources.save_frame;
-            this.saveFrame.Location = new System.Drawing.Point(184, 7);
+            this.saveFrame.Location = new System.Drawing.Point(18, 47);
             this.saveFrame.Name = "saveFrame";
             this.saveFrame.Size = new System.Drawing.Size(28, 26);
             this.saveFrame.TabIndex = 12;
@@ -452,7 +448,7 @@
             // delayUnitLabel
             // 
             this.delayUnitLabel.AutoSize = true;
-            this.delayUnitLabel.Location = new System.Drawing.Point(184, 46);
+            this.delayUnitLabel.Location = new System.Drawing.Point(188, 15);
             this.delayUnitLabel.Name = "delayUnitLabel";
             this.delayUnitLabel.Size = new System.Drawing.Size(18, 12);
             this.delayUnitLabel.TabIndex = 11;
@@ -460,7 +456,7 @@
             // 
             // delaytext
             // 
-            this.delaytext.Location = new System.Drawing.Point(84, 42);
+            this.delaytext.Location = new System.Drawing.Point(88, 11);
             this.delaytext.Name = "delaytext";
             this.delaytext.Size = new System.Drawing.Size(91, 22);
             this.delaytext.TabIndex = 6;
@@ -472,36 +468,11 @@
             // DelayLabel
             // 
             this.DelayLabel.AutoSize = true;
-            this.DelayLabel.Location = new System.Drawing.Point(13, 46);
+            this.DelayLabel.Location = new System.Drawing.Point(17, 15);
             this.DelayLabel.Name = "DelayLabel";
             this.DelayLabel.Size = new System.Drawing.Size(35, 12);
             this.DelayLabel.TabIndex = 5;
             this.DelayLabel.Text = "Delay:";
-            // 
-            // typecombo
-            // 
-            this.typecombo.FormattingEnabled = true;
-            this.typecombo.Items.AddRange(new object[] {
-            "Frame",
-            "Delay",
-            "Goto",
-            "Flag",
-            "HomeFrame",
-            "Motion"});
-            this.typecombo.Location = new System.Drawing.Point(84, 10);
-            this.typecombo.Name = "typecombo";
-            this.typecombo.Size = new System.Drawing.Size(91, 20);
-            this.typecombo.TabIndex = 0;
-            this.typecombo.TextChanged += new System.EventHandler(this.typecombo_TextChanged);
-            // 
-            // ActionTypeLabel
-            // 
-            this.ActionTypeLabel.AutoSize = true;
-            this.ActionTypeLabel.Location = new System.Drawing.Point(13, 14);
-            this.ActionTypeLabel.Name = "ActionTypeLabel";
-            this.ActionTypeLabel.Size = new System.Drawing.Size(66, 12);
-            this.ActionTypeLabel.TabIndex = 3;
-            this.ActionTypeLabel.Text = "Action Type:";
             // 
             // panel2
             // 
@@ -718,11 +689,11 @@
             // accDurationText
             // 
             this.accDurationText.Location = new System.Drawing.Point(69, 106);
-            this.accDurationText.Name = "6";
+            this.accDurationText.Name = "accDurationText";
             this.accDurationText.Size = new System.Drawing.Size(93, 22);
             this.accDurationText.TabIndex = 41;
-            this.accDurationText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(numbercheck);
-            this.accDurationText.TextChanged += new System.EventHandler(accDurationText_Changed);
+            this.accDurationText.TextChanged += new System.EventHandler(this.accDurationText_Changed);
+            this.accDurationText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numbercheck);
             // 
             // accw3
             // 
@@ -736,20 +707,20 @@
             // accHZText
             // 
             this.accHZText.Location = new System.Drawing.Point(122, 77);
-            this.accHZText.Name = "5";
+            this.accHZText.Name = "accHZText";
             this.accHZText.Size = new System.Drawing.Size(62, 22);
             this.accHZText.TabIndex = 39;
-            this.accHZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
-            this.accHZText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            this.accHZText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
+            this.accHZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accLZText
             // 
             this.accLZText.Location = new System.Drawing.Point(32, 77);
-            this.accLZText.Name = "4";
+            this.accLZText.Name = "accLZText";
             this.accLZText.Size = new System.Drawing.Size(62, 22);
             this.accLZText.TabIndex = 38;
-            this.accLZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
-            this.accLZText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            this.accLZText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
+            this.accLZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accZLabel
             // 
@@ -772,20 +743,20 @@
             // accHYText
             // 
             this.accHYText.Location = new System.Drawing.Point(122, 49);
-            this.accHYText.Name = "3";
+            this.accHYText.Name = "accHYText";
             this.accHYText.Size = new System.Drawing.Size(62, 22);
             this.accHYText.TabIndex = 35;
-            this.accHYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
-            this.accHYText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            this.accHYText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
+            this.accHYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accLYText
             // 
             this.accLYText.Location = new System.Drawing.Point(32, 49);
-            this.accLYText.Name = "2";
+            this.accLYText.Name = "accLYText";
             this.accLYText.Size = new System.Drawing.Size(62, 22);
             this.accLYText.TabIndex = 34;
-            this.accLYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
-            this.accLYText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            this.accLYText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
+            this.accLYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accYLabel
             // 
@@ -817,20 +788,20 @@
             // accHXText
             // 
             this.accHXText.Location = new System.Drawing.Point(122, 21);
-            this.accHXText.Name = "1";
+            this.accHXText.Name = "accHXText";
             this.accHXText.Size = new System.Drawing.Size(62, 22);
             this.accHXText.TabIndex = 26;
-            this.accHXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
-            this.accHXText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            this.accHXText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
+            this.accHXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accLXText
             // 
             this.accLXText.Location = new System.Drawing.Point(32, 21);
-            this.accLXText.Name = "0";
+            this.accLXText.Name = "accLXText";
             this.accLXText.Size = new System.Drawing.Size(62, 22);
             this.accLXText.TabIndex = 16;
-            this.accLXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(floatcheck);
-            this.accLXText.TextChanged += new System.EventHandler(accXYZText_Changed);
+            this.accLXText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
+            this.accLXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accXLabel
             // 
@@ -1651,10 +1622,8 @@
         private System.Windows.Forms.ListBox Motionlist;
         private System.Windows.Forms.ComboBox MotionCombo;
         private System.Windows.Forms.Panel action_panel;
-        private System.Windows.Forms.Label ActionTypeLabel;
         private System.Windows.Forms.MaskedTextBox delaytext;
         private System.Windows.Forms.Label DelayLabel;
-        private System.Windows.Forms.ComboBox typecombo;
         private System.Windows.Forms.ContextMenuStrip Motionlist_contextMenuStrip;
         private System.Windows.Forms.Button NewMotion;
         private System.Windows.Forms.Button capturebutton;

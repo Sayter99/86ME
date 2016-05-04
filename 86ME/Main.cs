@@ -54,7 +54,6 @@ namespace _86ME_ver1
         public ArrayList ME_Motionlist;
         int framecount = 0;
         int homecount = 0;
-        Boolean new_obj = false;
         string load_filename = "";
         string picture_name;
         uint[] homeframe = new uint[45];
@@ -66,7 +65,7 @@ namespace _86ME_ver1
         int used_imu;
         int[] motor_info = new int[45];
         int mdx, mdy;
-        bool freshflag;
+        bool[] freshflag = new bool[2];
         bool picmode_move = false;
         bool[] captured = new bool[45];
         string[] motionevent = new string[8];
@@ -83,6 +82,13 @@ namespace _86ME_ver1
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
+            accLXText.Name = "0";
+            accHXText.Name = "1";
+            accLYText.Name = "2";
+            accHYText.Name = "3";
+            accLZText.Name = "4";
+            accHZText.Name = "5";
+            accDurationText.Name = "6";
             Main_lang_dic = lang_dic;
             applyLang();
         }
@@ -99,6 +105,13 @@ namespace _86ME_ver1
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
+            accLXText.Name = "0";
+            accHXText.Name = "1";
+            accLYText.Name = "2";
+            accHYText.Name = "3";
+            accLZText.Name = "4";
+            accHZText.Name = "5";
+            accDurationText.Text = "6";
             Main_lang_dic = lang_dic;
             applyLang();
             init_load_file = filename;
@@ -335,7 +348,7 @@ namespace _86ME_ver1
                 this.fbar[int.Parse(((MaskedTextBox)sender).Name)].Value = int.Parse(((MaskedTextBox)sender).Text);
                 if (autocheck.Checked == true)
                 {
-                    if (!freshflag)
+                    if (!freshflag[0])
                     {
                         for (int i = 0; i < 45; i++)
                         {
@@ -568,7 +581,6 @@ namespace _86ME_ver1
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
                 delaytext.Text = default_delay.ToString();
-                typecombo.Text = "";
                 board_ver86 = Motion.comboBox1.SelectedIndex;
                 used_imu = Motion.comboBox2.SelectedIndex;
                 initPs2();
@@ -854,11 +866,6 @@ namespace _86ME_ver1
                         ME_Delay d = (ME_Delay)m.Events[j];
                         writer.Write("delay " + d.delay.ToString() + "\n");
                     }
-                    else if (m.Events[j] is ME_Sound)
-                    {
-                        ME_Sound s = (ME_Sound)m.Events[j];
-                        writer.Write("sound " + s.filename + " " + s.delay.ToString() + "\n");
-                    }
                     else if (m.Events[j] is ME_Goto)
                     {
                         ME_Goto g = (ME_Goto)m.Events[j];
@@ -974,7 +981,6 @@ namespace _86ME_ver1
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
                 delaytext.Text = default_delay.ToString();
-                typecombo.Text = "";
 
                 for (int i = 0; i < datas.Length; i++)
                 {
@@ -1153,9 +1159,9 @@ namespace _86ME_ver1
                             int try_out;
                             double try_out_d;
                             if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
-                                String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
-                                String.Compare("MotionEnd", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
+                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                                String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                                int.TryParse(datas[i + 1], out try_out))
                             { // triggers
                                 motiontag.trigger_method = int.Parse(datas[++i]);
                                 motiontag.auto_method = int.Parse(datas[++i]);
@@ -1171,9 +1177,9 @@ namespace _86ME_ver1
                                 motiontag.ps2_key = datas[++i];
                                 motiontag.ps2_type = int.Parse(datas[++i]);
                                 if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
-                                    String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
-                                    String.Compare("MotionEnd", datas[i + 1]) != 0 && String.Compare("Layer", datas[i + 1]) != 0)
+                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                                    String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                                    String.Compare("Layer", datas[i + 1]) != 0)
                                     motiontag.bt_mode = datas[++i];
                                 if (double.TryParse(datas[i + 1], out try_out_d))
                                 {
@@ -1196,9 +1202,9 @@ namespace _86ME_ver1
                         if (int.TryParse(datas[i], out try_out) == true)
                             motiontag.moton_layer = try_out;
                         while (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("sound", datas[i + 1]) != 0 &&
-                            String.Compare("flag", datas[i + 1]) != 0 && String.Compare("goto", datas[i + 1]) != 0 &&
-                            String.Compare("MotionEnd", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
+                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                            String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                            int.TryParse(datas[i + 1], out try_out))
                         {
                             i++;
                             motiontag.used_servos.Add(try_out);
@@ -1308,15 +1314,6 @@ namespace _86ME_ver1
                         }
                         motiontag.Events.Add(ndelay);
                     }
-                    else if (String.Compare(datas[i], "sound") == 0)
-                    {
-                        ME_Sound nsound = new ME_Sound();
-                        i++;
-                        nsound.filename = datas[i];
-                        i++;
-                        nsound.delay = int.Parse(datas[i]);
-                        motiontag.Events.Add(nsound);
-                    }
                     else if (String.Compare(datas[i], "flag") == 0)
                     {
                         ME_Flag nflag = new ME_Flag();
@@ -1417,161 +1414,6 @@ namespace _86ME_ver1
             MotionTest.Enabled = false;
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
-        }
-
-        private void typecombo_TextChanged(object sender, EventArgs e) // choose a type of action
-        {
-            Framelist.Controls.Clear();
-            if (String.Compare(typecombo.Text, "Frame") == 0)
-            {
-                if (new_obj)
-                {
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex+1,"[Frame] " + MotionCombo.SelectedItem.ToString() + "-" + framecount++.ToString());
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Frame());
-
-                    for (int i = 0; i < 45; i++)
-                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame[i] = (int)homeframe[i];
-                    ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
-                    Motionlist.SelectedIndex++;
-                }
-                delaytext.Enabled = true;
-                DelayLabel.Enabled = true;
-                Framelist.Enabled = true;
-                capturebutton.Enabled = true;
-                autocheck.Enabled= true;
-                typecombo.Enabled = false;
-                Update_framelist();
-                new_obj = false;
-            }
-            else if (String.Compare(typecombo.Text, "HomeFrame") == 0)
-            {
-                if (new_obj)
-                {
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Home] " + homecount++.ToString());
-                    ME_Frame h = new ME_Frame();
-                    h.type = 0;
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, h);
-
-                    for (int i = 0; i < 45; i++)
-                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
-                            ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).frame[i] = (int)homeframe[i];
-                    ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
-                    Motionlist.SelectedIndex++;
-                }
-                delaytext.Enabled = true;
-                DelayLabel.Enabled = true;
-                capturebutton.Enabled = false;
-                autocheck.Enabled = true;
-                typecombo.Enabled = false;
-                Update_framelist();
-                Framelist.Enabled = false;
-                new_obj = false;
-            }
-            else if (String.Compare(typecombo.Text, "Delay") == 0)
-            {
-                if (new_obj)
-                {
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Delay]");
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Delay());
-                    ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
-                    Motionlist.SelectedIndex++;
-                }
-                delaytext.Enabled = true;
-                DelayLabel.Enabled = true;
-                Framelist.Enabled = false;
-                capturebutton.Enabled = false;
-                autocheck.Enabled= false;
-                typecombo.Enabled = false;
-                new_obj = false;
-            }
-            else if (String.Compare(typecombo.Text, "Sound") == 0)
-            {
-                if (new_obj)
-                {
-                    OpenFileDialog dialog = new OpenFileDialog();
-                    dialog.Filter = "wav files (*.wav)|*.wav";
-                    dialog.Title = "Link Sound";
-                    String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
-                    if (filename != null)
-                    {
-                            ME_Sound s = new ME_Sound();
-                            s.filename = Path.GetFileName(filename);
-                            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Sound] " + Path.GetFileName(filename));
-                            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, s);
-                            ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1]).delay = default_delay;
-                            Motionlist.SelectedIndex++;
-                    }
-                }
-                delaytext.Enabled = true;
-                DelayLabel.Enabled = true;
-                Framelist.Enabled = true;
-                capturebutton.Enabled = false;
-                autocheck.Enabled= false;
-                typecombo.Enabled = false;
-                new_obj = false;
-            }
-            else if (String.Compare(typecombo.Text, "Flag") == 0)
-            {
-                if (new_obj)
-                {
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Flag]");
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Flag());
-                    Motionlist.SelectedIndex++;
-                }
-                delaytext.Text = "";
-                delaytext.Enabled = false;
-                DelayLabel.Enabled = false;
-                Framelist.Enabled = true;
-                capturebutton.Enabled = false;
-                autocheck.Enabled= false;
-                typecombo.Enabled = false;
-                new_obj = false;
-            }
-            else if (String.Compare(typecombo.Text, "Goto") == 0)
-            {
-                if(new_obj){
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Goto]");
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Goto());
-                    Motionlist.SelectedIndex++;
-                }
-                delaytext.Text = "";
-                delaytext.Enabled = false;
-                DelayLabel.Enabled = false;
-                Framelist.Enabled = true;
-                capturebutton.Enabled = false;
-                autocheck.Enabled= false;
-                typecombo.Enabled = false;
-                new_obj = false;
-            }
-            else if (String.Compare(typecombo.Text, "GotoMotion") == 0)
-            {
-                if (new_obj)
-                {
-                    Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[GotoMotion]");
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, new ME_Trigger());
-                    Motionlist.SelectedIndex++;
-                }
-                delaytext.Text = "";
-                delaytext.Enabled = false;
-                DelayLabel.Enabled = false;
-                Framelist.Enabled = true;
-                capturebutton.Enabled = false;
-                autocheck.Enabled = false;
-                typecombo.Enabled = false;
-                new_obj = false;
-            }
-            else if (String.Compare(typecombo.Text, "Select type") == 0)
-            {
-                new_obj = true;
-                typecombo.Enabled = true;
-                delaytext.Enabled = false;
-                delaytext.Text = "";
-                capturebutton.Enabled = false;
-                autocheck.Enabled= false;
-                Framelist.Enabled = false;
-            }
-            draw_background();
         }
 
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -1750,6 +1592,7 @@ namespace _86ME_ver1
                 loadFrame.Visible = false;
                 move_up.Enabled = false;
                 move_down.Enabled = false;
+                freshflag[1] = false;
                 this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
             }
             if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
@@ -1764,9 +1607,8 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = true;
                     loadFrame.Visible = true;
+                    autocheck.Enabled = true;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
-                    typecombo.SelectedIndex = 0;
-                    typecombo.Text = "Frame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
                     if (autocheck.Checked == true)
                     {
@@ -1796,12 +1638,12 @@ namespace _86ME_ver1
                         }
                         autocheck.Enabled = true;
                     }
-                    freshflag = false;
+                    freshflag[0] = false;
                     for (int i = 0; i < 45; i++)
                     {
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && fpanel[i] != null)
                         {
-                            freshflag = true;
+                            freshflag[0] = true;
                             uint frame_value = ((uint)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).frame[i]);
                             if(frame_value <= Max[i] && frame_value >= min[i])
                                 ftext[i].Text = frame_value.ToString();
@@ -1812,10 +1654,15 @@ namespace _86ME_ver1
                             }
                         }
                     }
-                    if (!freshflag)
+                    if (!freshflag[1])
+                    {
                         Update_framelist();
-                    freshflag = false;
+                        freshflag[1] = true;
+                    }
+                    freshflag[0] = false;
                     Framelist.Enabled = true;
+                    delaytext.Enabled = true;
+                    capturebutton.Enabled = true;
                     draw_background();
                     if (Motion.picfilename == null)
                         this.hint_richTextBox.Text = Main_lang_dic["hint2"];
@@ -1826,9 +1673,8 @@ namespace _86ME_ver1
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
+                    autocheck.Enabled = true;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
-                    typecombo.SelectedIndex = 4;
-                    typecombo.Text = "HomeFrame";
                     delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
                     if (autocheck.Checked == true)
                     {
@@ -1854,12 +1700,12 @@ namespace _86ME_ver1
                         }
                         autocheck.Enabled = true;
                     }
-                    freshflag = false;
+                    freshflag[0] = false;
                     for (int i = 0; i < 45; i++)
                     {
                         if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0 && fpanel[i] != null)
                         {
-                            freshflag = true;
+                            freshflag[0] = true;
                             uint frame_value = homeframe[i];
                             if (frame_value <= Max[i] && frame_value >= min[i])
                                 ftext[i].Text = frame_value.ToString();
@@ -1870,10 +1716,15 @@ namespace _86ME_ver1
                             }
                         }
                     }
-                    if (!freshflag)
+                    if (!freshflag[1])
+                    {
                         Update_framelist();
-                    freshflag = false;
+                        freshflag[1] = true;
+                    }
+                    freshflag[0] = false;
                     Framelist.Enabled = false;
+                    delaytext.Enabled = true;
+                    capturebutton.Enabled = false;
                     draw_background();
                     this.hint_richTextBox.Text = Main_lang_dic["hint4"];
                 }
@@ -1882,28 +1733,26 @@ namespace _86ME_ver1
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
-                    typecombo.SelectedIndex = 1;
-                    typecombo.Text = "Delay";
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
-                    draw_background();
+                    delaytext.Enabled = true;
+                    Framelist.Enabled = false;
+                    capturebutton.Enabled = false;
+                    autocheck.Enabled = false;
+                    freshflag[1] = false;
                     this.hint_richTextBox.Text = Main_lang_dic["hint5"];
-                }
-                else if (String.Compare(datas[0], "[Sound]") == 0)
-                {
-                    saveFrame.Visible = false;
-                    loadFrame.Visible = false;
-                    this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
-                    typecombo.SelectedIndex = 2;
-                    typecombo.Text = "Sound";
-                    delaytext.Text = ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
                 }
                 else if (String.Compare(datas[0], "[Flag]") == 0)
                 {
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    typecombo.SelectedIndex = 3;
+                    delaytext.Text = "";
+                    delaytext.Enabled = false;
+                    Framelist.Enabled = true;
+                    capturebutton.Enabled = false;
+                    autocheck.Enabled = false;
+                    freshflag[1] = false;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
-                    typecombo.Text = "Flag";
+
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
                     xlabel.Text = Main_lang_dic["flag_xlabel"];
@@ -1918,18 +1767,22 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(xlabel);
                     Framelist.Controls.Add(xtext);
                     Framelist.Enabled = true;
-                    draw_background();
                     this.hint_richTextBox.Text = Main_lang_dic["hint6"];
                     xtext.SelectionStart = xtext.Text.Length;
                     xtext.Focus();
                 }
                 else if (String.Compare(datas[0], "[Goto]") == 0)
                 {
+                    delaytext.Text = "";
+                    delaytext.Enabled = false;
+                    Framelist.Enabled = true;
+                    capturebutton.Enabled = false;
+                    autocheck.Enabled = false;
+                    freshflag[1] = false;
+
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
-                    typecombo.SelectedIndex = 2;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
-                    typecombo.Text = "Goto";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
                     xlabel.Text = Main_lang_dic["goto_xlabel"];
@@ -1990,18 +1843,22 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(xlabel4);
                     Framelist.Controls.Add(xcheckbox2);
                     Framelist.Enabled = true;
-                    draw_background();
                     this.hint_richTextBox.Text = Main_lang_dic["hint7"];
                     xtext.SelectionStart = xtext.Text.Length;
                     xtext.Focus();
                 }
                 else if (String.Compare(datas[0], "[GotoMotion]") == 0)
                 {
+                    delaytext.Text = "";
+                    delaytext.Enabled = false;
+                    Framelist.Enabled = true;
+                    capturebutton.Enabled = false;
+                    autocheck.Enabled = false;
+                    freshflag[1] = false;
+
                     saveFrame.Visible = false;
                     loadFrame.Visible = false;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
-                    typecombo.SelectedIndex = 5;
-                    typecombo.Text = "GotoMotion";
                     Framelist.Controls.Clear();
                     Label xlabel = new Label();
                     xlabel.Text = Main_lang_dic["gotoMotion_xlabel"];
@@ -2065,7 +1922,6 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(call_radio);
                     Framelist.Enabled = true;
 
-                    draw_background();
                     this.hint_richTextBox.Text = Main_lang_dic["hint8"];
                 }
             }
@@ -2082,10 +1938,6 @@ namespace _86ME_ver1
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Delay)
                 {
                     ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay = int.Parse(((MaskedTextBox)sender).Text);
-                }
-                else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Sound)
-                {
-                    ((ME_Sound)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay = int.Parse(((MaskedTextBox)sender).Text);
                 }
             }
         }
@@ -2161,8 +2013,6 @@ namespace _86ME_ver1
                         case 2:
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(Motionlist.SelectedIndex);
                             Motionlist.Items.Remove(Motionlist.SelectedItem);
-                            typecombo.Enabled = false;
-                            typecombo.Text="";
                             delaytext.Enabled = false;
                             delaytext.Text = "";
                             capturebutton.Enabled = false;
@@ -2540,7 +2390,6 @@ namespace _86ME_ver1
             autocheck.Enabled = false;
             capturebutton.Enabled = false;
             Framelist.Enabled = false;
-            SoundPlayer sp = null;
             if (ME_Motionlist == null)
                 return;
 
@@ -2556,8 +2405,6 @@ namespace _86ME_ver1
                     MotionTest.Enabled = true;
                     motion_pause.Enabled = false;
                     motion_stop.Enabled = true;
-                    if (sp != null)
-                        sp.Stop();
                     this.hint_richTextBox.Text =
                             "   ___   __   ____        _\n" +
                             "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
@@ -2595,12 +2442,6 @@ namespace _86ME_ver1
                 {
                     Thread.Sleep((int)((ME_Delay)m.Events[j]).delay);
                 }
-                else if (m.Events[j] is ME_Sound)
-                {
-                    sp = new SoundPlayer(Application.StartupPath + "\\" + ((ME_Sound)m.Events[j]).filename);
-                    sp.Play();
-                    Thread.Sleep((int)((ME_Sound)m.Events[j]).delay);
-                }
                 else if (m.Events[j] is ME_Goto)
                 {
                     if (((ME_Goto)m.Events[j]).is_goto &&
@@ -2628,7 +2469,6 @@ namespace _86ME_ver1
             }
             
             mtest_start_pos = 0;
-            typecombo.Text = "";
 
             optionsToolStripMenuItem.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
@@ -2651,8 +2491,6 @@ namespace _86ME_ver1
                     ((ME_Goto)m.Events[j]).current_loop = loops;
                 }
             }
-            if (sp != null)
-                sp.Stop();
             hint_richTextBox.Text =
                     "   ___   __   ____        _\n" +
                     "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
@@ -2663,10 +2501,10 @@ namespace _86ME_ver1
 
         private void MotionTest_Click(object sender, EventArgs e)
         {
-            // TODO: Using Thread to control UI
             MotionConfig.SelectedIndex = 0;
             Motionlist.Focus();
             Framelist.Controls.Clear();
+            freshflag[1] = false;
             motiontest_state = (int)mtest_states.start;
             Thread t;
             t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
@@ -2685,7 +2523,6 @@ namespace _86ME_ver1
             if (motiontest_state == (int)mtest_states.pause)
             {
                 mtest_start_pos = 0;
-                typecombo.Text = "";
                 optionsToolStripMenuItem.Enabled = true;
                 saveFileToolStripMenuItem.Enabled = true;
                 fileToolStripMenuItem.Enabled = true;
@@ -2855,11 +2692,6 @@ namespace _86ME_ver1
                             ME_Delay d = (ME_Delay)m.Events[j];
                             Motionlist.Items.Add("[Delay]");
                         }
-                        else if (m.Events[j] is ME_Sound)
-                        {
-                            ME_Sound s = (ME_Sound)m.Events[j];
-                            Motionlist.Items.Add("[Sound] " + s.filename);
-                        }
                         else if (m.Events[j] is ME_Goto)
                         {
                             ME_Goto g = (ME_Goto)m.Events[j];
@@ -2929,7 +2761,15 @@ namespace _86ME_ver1
         {
             if(MotionConfig.SelectedIndex == 0)
             {
-                Motionlist.SelectedIndex = -1;
+                if (Motionlist.SelectedItem != null && (MotionTest.Enabled))
+                {
+                    string[] datas = Motionlist.SelectedItem.ToString().Split(' ');
+                    if (String.Compare(datas[0], "[Frame]") == 0)
+                    {
+                        loadFrame.Visible = true;
+                        saveFrame.Visible = true;
+                    }
+                }
                 Framelist.Enabled = true;
                 autocheck.Enabled = true;
                 capturebutton.Enabled = true;
@@ -2945,7 +2785,6 @@ namespace _86ME_ver1
             {
                 saveFrame.Visible = false;
                 loadFrame.Visible = false;
-                typecombo.Text = "";
                 move_down.Enabled = false;
                 move_up.Enabled = false;
                 Framelist.Enabled = false;
@@ -3018,7 +2857,6 @@ namespace _86ME_ver1
             {
                 saveFrame.Visible = false;
                 loadFrame.Visible = false;
-                typecombo.Text = "";
                 move_down.Enabled = false;
                 move_up.Enabled = false;
                 Framelist.Enabled = false;
@@ -3322,7 +3160,6 @@ namespace _86ME_ver1
             Hint_groupBox.Text = Main_lang_dic["Hint_groupBox_Text"];
             howToUseToolStripMenuItem.Text = Main_lang_dic["howToUseToolStripMenuItem_Text"];
             Keyboard_groupBox.Text = Main_lang_dic["Keyboard_groupBox_Text"];
-            ActionTypeLabel.Text = Main_lang_dic["Main_label1_Text"];
             DelayLabel.Text = Main_lang_dic["Main_label2_Text"];
             languageToolStripMenuItem.Text = Main_lang_dic["languageToolStripMenuItem_Text"];
             Motion_groupBox.Text = Main_lang_dic["Motion_groupBox_Text"];
@@ -3373,7 +3210,6 @@ namespace _86ME_ver1
             {
                 Motionlist.SelectedIndex = -1;
                 Framelist.Controls.Clear();
-                typecombo.Text = "";
             }
 
             this.hint_richTextBox.Text =
