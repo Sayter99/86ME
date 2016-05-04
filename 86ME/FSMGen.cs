@@ -145,7 +145,7 @@ namespace _86ME_ver1
                     m.states.Add("GOTO_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
-                    for (int k = 0; k < i; k++)
+                    for (int k = 0; k < m.Events.Count; k++)
                     {
                         if (m.Events[k] is ME_Flag)
                         {
@@ -168,6 +168,13 @@ namespace _86ME_ver1
                     writer.Write("MOTION_" + i.ToString() + ", " + "WAIT_MOTION_" + i.ToString());
                     m.states.Add("MOTION_" + i.ToString());
                     m.states.Add("WAIT_MOTION_" + i.ToString());
+                    if (i != m.Events.Count - 1)
+                        writer.Write(", ");
+                }
+                else if (m.Events[i] is ME_Release)
+                {
+                    writer.Write("RELEASE_" + i.ToString());
+                    m.states.Add("RELEASE_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                 }
@@ -538,7 +545,7 @@ namespace _86ME_ver1
                 {
                     writer.WriteLine(space + "case " + m.name + "::FLAG_" + i + ":");
                     state_counter++;
-                    for (int k = i; k < m.Events.Count; k++)
+                    for (int k = 0; k < m.Events.Count; k++)
                     {
                         if (m.Events[k] is ME_Goto)
                         {
@@ -572,12 +579,14 @@ namespace _86ME_ver1
                     state_counter++;
                     if (g.is_goto)
                     {
-                        for (int k = 0; k < i; k++)
+                        for (int k = 0; k < m.Events.Count; k++)
                         {
                             if (m.Events[k] is ME_Flag)
                             {
                                 if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                 {
+                                    if (k > i)
+                                        ((ME_Flag)m.Events[k]).var = m.name + "_" + g.name + "_" + flag_count.ToString();
                                     string for_var = ((ME_Flag)m.Events[k]).var;
                                     if (((ME_Goto)m.Events[i]).infinite == false)
                                     {
@@ -594,6 +603,7 @@ namespace _86ME_ver1
                         if (i != m.Events.Count - 1)
                         {
                             next_action = m.name + "::" + m.states[state_counter];
+                            writer.WriteLine(space4 + m.name + "::" + g.name + "_" + i + " = 0;");
                             writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
                         }
                         else
@@ -697,6 +707,28 @@ namespace _86ME_ver1
                         writer.WriteLine(space4 + t.name + "::state = " + t.name + "::IDLE;");
                         for (int j = 0; j < m.goto_var.Count; j++)
                             writer.WriteLine(space4 + m.name + "::" + m.goto_var[j] + " = 0;");
+                    }
+                    writer.WriteLine(space4 + "break;");
+                }
+                else if (m.Events[i] is ME_Release)
+                {
+                    writer.WriteLine(space + "case " + m.name + "::RELEASE_" + i + ":");
+                    writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
+                    writer.WriteLine(space4 + "  used_servos[i].release();");
+                    if (i != m.Events.Count - 1)
+                    {
+                        state_counter ++;
+                        next_action = m.name + "::" + m.states[state_counter];
+                        writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                    }
+                    else
+                    {
+                        next_action = m.name + "::IDLE";
+                        writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                        for (int j = 0; j < m.goto_var.Count; j++)
+                            writer.WriteLine(space4 + m.name + "::" + m.goto_var[j] + " = 0;");
+                        writer.WriteLine(space4 + "internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                        writer.WriteLine(space4 + "external_trigger[_" + m.name.ToUpper() + "] = false;");
                     }
                     writer.WriteLine(space4 + "break;");
                 }

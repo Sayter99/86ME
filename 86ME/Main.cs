@@ -881,6 +881,10 @@ namespace _86ME_ver1
                         ME_Trigger t = (ME_Trigger)m.Events[j];
                         writer.Write("trigger " + t.name + " " + t.method + "\n");
                     }
+                    else if (m.Events[j] is ME_Release)
+                    {
+                        writer.Write("release\n");
+                    }
                 }
                 writer.Write("MotionEnd " + m.property + " " + m.name);
                 if (i != ME_Motionlist.Count - 1)
@@ -1358,6 +1362,11 @@ namespace _86ME_ver1
                         ntr.name = datas[++i];
                         ntr.method = int.Parse(datas[++i]);
                         motiontag.Events.Add(ntr);
+                    }
+                    else if (String.Compare(datas[i], "release") == 0)
+                    {
+                        ME_Release nr = new ME_Release();
+                        motiontag.Events.Add(nr);
                     }
                 }
             }
@@ -1924,6 +1933,22 @@ namespace _86ME_ver1
 
                     this.hint_richTextBox.Text = Main_lang_dic["hint8"];
                 }
+                else if (String.Compare(datas[0], "[Release]") == 0)
+                {
+                    delaytext.Text = "";
+                    delaytext.Enabled = false;
+                    Framelist.Enabled = true;
+                    capturebutton.Enabled = false;
+                    autocheck.Enabled = false;
+                    freshflag[1] = false;
+
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
+                    Framelist.Controls.Clear();
+
+                    this.hint_richTextBox.Text = Main_lang_dic["hint14"];
+                }
             }
         }
 
@@ -1943,7 +1968,6 @@ namespace _86ME_ver1
         }
         private void delaytext_KeyPress(object sender, KeyPressEventArgs e)
         {
-
             if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8)
             {
                 e.Handled = true;
@@ -1995,7 +2019,9 @@ namespace _86ME_ver1
         {
             int n;
             for (int i = 0; i < motionevent.Length; i++)
+            {
                 if (String.Compare(e.ClickedItem.Text, motionevent[i]) == 0)
+                {
                     switch (i)
                     {
                         case 0:
@@ -2016,7 +2042,7 @@ namespace _86ME_ver1
                             delaytext.Enabled = false;
                             delaytext.Text = "";
                             capturebutton.Enabled = false;
-                            autocheck.Enabled= false;
+                            autocheck.Enabled = false;
                             Framelist.Controls.Clear();
                             Framelist.Enabled = false;
                             update_motionlist();
@@ -2029,13 +2055,13 @@ namespace _86ME_ver1
                                 break;
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(n - 1, ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[n]);
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(n + 1);
-                            Motionlist.Items.Insert(n - 1,Motionlist.SelectedItem);
+                            Motionlist.Items.Insert(n - 1, Motionlist.SelectedItem);
                             Motionlist.Items.RemoveAt(n + 1);
                             break;
                         case 4:
                             Framelist.Enabled = false;
                             n = Motionlist.SelectedIndex;
-                            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count <= n+1)
+                            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count <= n + 1)
                                 break;
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(n + 2, ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[n]);
                             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(n);
@@ -2076,6 +2102,8 @@ namespace _86ME_ver1
                             Motionlist.SelectedIndex++;
                             break;
                     }
+                }
+            }
         }
 
         private void Motionlistcloseevent(object sender, EventArgs e)
@@ -2083,6 +2111,24 @@ namespace _86ME_ver1
             Motionlist_contextMenuStrip.Items.Clear();
             Motionlist_contextMenuStrip.ItemClicked -= Motionlistevent;
             Motionlist_contextMenuStrip.Closed -= Motionlistcloseevent;
+        }
+
+        private void ifToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ;
+        }
+
+        private void operandToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ;
+        }
+
+        private void releaseToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ME_Release r = new ME_Release();
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Release]");
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, r);
+            Motionlist.SelectedIndex++;
         }
 
         private void frameToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2450,13 +2496,15 @@ namespace _86ME_ver1
                     {
                         if (((ME_Goto)m.Events[j]).infinite == false)
                             ((ME_Goto)m.Events[j]).current_loop--;
-                        for (int k = 0; k < j; k++)
+                        for (int k = 0; k < m.Events.Count; k++)
                         {
                             if (m.Events[k] is ME_Flag)
                             {
-                                if (String.Compare(((ME_Goto)m.Events[j]).name,
-                                                ((ME_Flag)m.Events[k]).name) == 0)
+                                if (String.Compare(((ME_Goto)m.Events[j]).name, ((ME_Flag)m.Events[k]).name) == 0)
+                                {
                                     j = k;
+                                    break;
+                                }
                             }
                         }
                     }
@@ -2465,6 +2513,10 @@ namespace _86ME_ver1
                         int loop_num = int.Parse(((ME_Goto)m.Events[j]).loops);
                         ((ME_Goto)m.Events[j]).current_loop = loop_num;
                     }
+                }
+                else if (m.Events[j] is ME_Release)
+                {
+                    arduino.motor_release();
                 }
             }
             
@@ -2689,7 +2741,6 @@ namespace _86ME_ver1
                         }
                         else if (m.Events[j] is ME_Delay)
                         {
-                            ME_Delay d = (ME_Delay)m.Events[j];
                             Motionlist.Items.Add("[Delay]");
                         }
                         else if (m.Events[j] is ME_Goto)
@@ -2706,6 +2757,20 @@ namespace _86ME_ver1
                         {
                             ME_Trigger t = (ME_Trigger)m.Events[j];
                             Motionlist.Items.Add("[GotoMotion] " + t.name);
+                        }
+                        else if (m.Events[j] is ME_Release)
+                        {
+                            Motionlist.Items.Add("[Release]");
+                        }
+                        else if (m.Events[j] is ME_If)
+                        {
+                            ME_If mif = (ME_If)m.Events[j];
+                            Motionlist.Items.Add("[If]");
+                        }
+                        else if (m.Events[j] is ME_Operand)
+                        {
+                            ME_Operand op = (ME_Operand)m.Events[j];
+                            Motionlist.Items.Add("[Operand]");
                         }
                     }
                     break;

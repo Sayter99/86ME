@@ -107,4 +107,25 @@ namespace _86ME_ver1
             this.var = null;
         }
     }
+
+    public class ME_Release
+    {
+        public ME_Release()
+        {
+        }
+    }
+
+    public class ME_If
+    {
+        public ME_If()
+        {
+        }
+    }
+
+    public class ME_Operand
+    {
+        public ME_Operand()
+        {
+        }
+    }
 }

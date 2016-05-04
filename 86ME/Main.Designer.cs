@@ -55,6 +55,9 @@
             this.gotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.delayToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.triggerToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.releaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.operandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ifToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Action_groupBox = new System.Windows.Forms.GroupBox();
             this.Hint_groupBox = new System.Windows.Forms.GroupBox();
             this.hint_richTextBox = new System.Windows.Forms.RichTextBox();
@@ -327,7 +330,10 @@
             this.flagToolStripMenuItem,
             this.gotoToolStripMenuItem,
             this.delayToolStripMenuItem,
-            this.triggerToolStripMenuItem});
+            this.triggerToolStripMenuItem,
+            this.releaseToolStripMenuItem,
+            this.operandToolStripMenuItem,
+            this.ifToolStripMenuItem});
             this.motionToolStripMenuItem.Name = "motionToolStripMenuItem";
             this.motionToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
             this.motionToolStripMenuItem.Text = "Add new action at the first field";
@@ -373,6 +379,27 @@
             this.triggerToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
             this.triggerToolStripMenuItem.Text = "GotoMotion";
             this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
+            // 
+            // releaseToolStripMenuItem
+            // 
+            this.releaseToolStripMenuItem.Name = "releaseToolStripMenuItem";
+            this.releaseToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.releaseToolStripMenuItem.Text = "Release";
+            this.releaseToolStripMenuItem.Click += new System.EventHandler(this.releaseToolStripMenuItem_Click);
+            // 
+            // operandToolStripMenuItem
+            // 
+            this.operandToolStripMenuItem.Name = "operandToolStripMenuItem";
+            this.operandToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.operandToolStripMenuItem.Text = "Operand";
+            this.operandToolStripMenuItem.Click += new System.EventHandler(this.operandToolStripMenuItem_Click);
+            // 
+            // ifToolStripMenuItem
+            // 
+            this.ifToolStripMenuItem.Name = "ifToolStripMenuItem";
+            this.ifToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
+            this.ifToolStripMenuItem.Text = "If";
+            this.ifToolStripMenuItem.Click += new System.EventHandler(this.ifToolStripMenuItem_Click);
             // 
             // Action_groupBox
             // 
@@ -612,7 +639,7 @@
             this.ActionList.Controls.Add(this.Motionlist);
             this.ActionList.Location = new System.Drawing.Point(4, 22);
             this.ActionList.Name = "ActionList";
-            this.ActionList.Padding = new System.Windows.Forms.Padding(3);
+            this.ActionList.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
             this.ActionList.Size = new System.Drawing.Size(239, 462);
             this.ActionList.TabIndex = 0;
             this.ActionList.Text = "Action List";
@@ -620,10 +647,10 @@
             // 
             // Motionlist
             // 
-            this.Motionlist.Font = new System.Drawing.Font("PMingLiU", 14F);
+            this.Motionlist.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Motionlist.FormattingEnabled = true;
             this.Motionlist.IntegralHeight = false;
-            this.Motionlist.ItemHeight = 19;
+            this.Motionlist.ItemHeight = 22;
             this.Motionlist.Location = new System.Drawing.Point(1, 3);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
@@ -646,10 +673,10 @@
             this.MotionTrigger.Controls.Add(this.Always_radioButton);
             this.MotionTrigger.Controls.Add(this.Keyboard_groupBox);
             this.MotionTrigger.Controls.Add(this.Always_groupBox);
-            this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
+            this.MotionTrigger.Location = new System.Drawing.Point(4, 25);
             this.MotionTrigger.Name = "MotionTrigger";
-            this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionTrigger.Size = new System.Drawing.Size(239, 462);
+            this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.MotionTrigger.Size = new System.Drawing.Size(239, 459);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
             // 
@@ -1292,10 +1319,10 @@
             this.MotionProperty.Controls.Add(this.NonBlocking);
             this.MotionProperty.Controls.Add(this.Blocking);
             this.MotionProperty.Controls.Add(this.MotionPropertyLabel);
-            this.MotionProperty.Location = new System.Drawing.Point(4, 22);
+            this.MotionProperty.Location = new System.Drawing.Point(4, 25);
             this.MotionProperty.Name = "MotionProperty";
-            this.MotionProperty.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionProperty.Size = new System.Drawing.Size(239, 462);
+            this.MotionProperty.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.MotionProperty.Size = new System.Drawing.Size(239, 459);
             this.MotionProperty.TabIndex = 2;
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
@@ -1612,6 +1639,9 @@
         private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem motionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frameToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ifToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem operandToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem releaseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem homeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem flagToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem gotoToolStripMenuItem;
