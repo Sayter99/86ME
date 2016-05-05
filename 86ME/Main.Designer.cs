@@ -639,7 +639,7 @@
             this.ActionList.Controls.Add(this.Motionlist);
             this.ActionList.Location = new System.Drawing.Point(4, 22);
             this.ActionList.Name = "ActionList";
-            this.ActionList.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
+            this.ActionList.Padding = new System.Windows.Forms.Padding(3);
             this.ActionList.Size = new System.Drawing.Size(239, 462);
             this.ActionList.TabIndex = 0;
             this.ActionList.Text = "Action List";
@@ -647,10 +647,10 @@
             // 
             // Motionlist
             // 
-            this.Motionlist.Font = new System.Drawing.Font("Consolas", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Motionlist.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Motionlist.FormattingEnabled = true;
             this.Motionlist.IntegralHeight = false;
-            this.Motionlist.ItemHeight = 22;
+            this.Motionlist.ItemHeight = 23;
             this.Motionlist.Location = new System.Drawing.Point(1, 3);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
@@ -673,10 +673,10 @@
             this.MotionTrigger.Controls.Add(this.Always_radioButton);
             this.MotionTrigger.Controls.Add(this.Keyboard_groupBox);
             this.MotionTrigger.Controls.Add(this.Always_groupBox);
-            this.MotionTrigger.Location = new System.Drawing.Point(4, 25);
+            this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
             this.MotionTrigger.Name = "MotionTrigger";
-            this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.MotionTrigger.Size = new System.Drawing.Size(239, 459);
+            this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
+            this.MotionTrigger.Size = new System.Drawing.Size(239, 462);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
             // 
@@ -1319,10 +1319,10 @@
             this.MotionProperty.Controls.Add(this.NonBlocking);
             this.MotionProperty.Controls.Add(this.Blocking);
             this.MotionProperty.Controls.Add(this.MotionPropertyLabel);
-            this.MotionProperty.Location = new System.Drawing.Point(4, 25);
+            this.MotionProperty.Location = new System.Drawing.Point(4, 22);
             this.MotionProperty.Name = "MotionProperty";
-            this.MotionProperty.Padding = new System.Windows.Forms.Padding(3, 3, 3, 3);
-            this.MotionProperty.Size = new System.Drawing.Size(239, 459);
+            this.MotionProperty.Padding = new System.Windows.Forms.Padding(3);
+            this.MotionProperty.Size = new System.Drawing.Size(239, 462);
             this.MotionProperty.TabIndex = 2;
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;

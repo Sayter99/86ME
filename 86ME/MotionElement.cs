@@ -76,7 +76,7 @@ namespace _86ME_ver1
         public int delay;
         public ME_Delay()
         {
-            this.delay = 0;
+            this.delay = 1000;
         }
     }
 
@@ -117,15 +117,41 @@ namespace _86ME_ver1
 
     public class ME_If
     {
+        public int method;
+        public int left_var;
+        public int right_var;
+        public string name;
         public ME_If()
         {
+            this.name = null;
+            this.method = 0;
+            this.left_var = 0;
+            this.right_var = 0;
         }
     }
 
     public class ME_Operand
     {
+        public int left_var;
+        public int form;
+        public int f1_var1;
+        public int f1_op;
+        public int f1_var2;
+        public int f2_op;
+        public int f2_var;
+        public int f3_var;
+        public double f4_const;
         public ME_Operand()
         {
+            this.left_var = 0;
+            this.form = 0;
+            this.f1_var1 = 0;
+            this.f1_op = 0;
+            this.f1_var2 = 0;
+            this.f2_op = 0;
+            this.f2_var = 0;
+            this.f3_var = 0;
+            this.f4_const = 0.0;
         }
     }
 }

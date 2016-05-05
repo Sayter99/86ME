@@ -30,6 +30,8 @@ namespace _86ME_ver1
     public partial class Main : Form
     {
         Dictionary<string, string> Main_lang_dic;
+        int[] operand_int = new int[14];
+        float[] operand_float = new float[6];
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -306,8 +308,7 @@ namespace _86ME_ver1
 
         public void scroll_event(object sender, ScrollEventArgs e) //Scroll event
         {
-             //if (e.Type == ScrollEventType.EndScroll)
-                this.ftext[int.Parse(((HScrollBar)sender).Name)].Text = ((HScrollBar)sender).Value.ToString();            
+            this.ftext[int.Parse(((HScrollBar)sender).Name)].Text = ((HScrollBar)sender).Value.ToString();            
         }
 
         public void SyncSpeed(object sender, EventArgs e)
@@ -885,6 +886,17 @@ namespace _86ME_ver1
                     {
                         writer.Write("release\n");
                     }
+                    else if (m.Events[j] is ME_Operand)
+                    {
+                        ME_Operand op = (ME_Operand)m.Events[j];
+                        writer.Write("operand " + op.left_var + " " + op.form + " " + op.f1_var1 + " " + op.f1_op + " " + op.f1_var2 +
+                                     " " + op.f2_op + " " + op.f2_var + " " + op.f3_var + " " + op.f4_const + "\n");
+                    }
+                    else if (m.Events[j] is ME_If)
+                    {
+                        ME_If mif = (ME_If)m.Events[j];
+                        writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + "\n");
+                    }
                 }
                 writer.Write("MotionEnd " + m.property + " " + m.name);
                 if (i != ME_Motionlist.Count - 1)
@@ -1368,6 +1380,29 @@ namespace _86ME_ver1
                         ME_Release nr = new ME_Release();
                         motiontag.Events.Add(nr);
                     }
+                    else if (String.Compare(datas[i], "operand") == 0)
+                    {
+                        ME_Operand op = new ME_Operand();
+                        op.left_var = int.Parse(datas[++i]);
+                        op.form = int.Parse(datas[++i]);
+                        op.f1_var1 = int.Parse(datas[++i]);
+                        op.f1_op = int.Parse(datas[++i]);
+                        op.f1_var2 = int.Parse(datas[++i]);
+                        op.f2_op = int.Parse(datas[++i]);
+                        op.f2_var = int.Parse(datas[++i]);
+                        op.f3_var = int.Parse(datas[++i]);
+                        op.f4_const = double.Parse(datas[++i]);
+                        motiontag.Events.Add(op);
+                    }
+                    else if (String.Compare(datas[i], "if") == 0)
+                    {
+                        ME_If mif = new ME_If();
+                        mif.left_var = int.Parse(datas[++i]);
+                        mif.method = int.Parse(datas[++i]);
+                        mif.right_var = int.Parse(datas[++i]);
+                        mif.name = datas[++i];
+                        motiontag.Events.Add(mif);
+                    }
                 }
             }
 
@@ -1543,6 +1578,14 @@ namespace _86ME_ver1
             }
         }
 
+        private void iftext(object sender, EventArgs e)
+        {
+            ME_If mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            mif.name = ((MaskedTextBox)sender).Text;
+            Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                       convertIndex2Str(mif.right_var, 0) + " => " + mif.name;
+        }
+
         private void triggerMotion_SelectedIndexChanged(object sender, EventArgs e)
         {
             ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((ComboBox)sender).Text;
@@ -1593,6 +1636,268 @@ namespace _86ME_ver1
             }
         }
 
+        private void operandRadioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            ME_Operand op = (ME_Operand)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            op.form = int.Parse(((RadioButton)sender).Name);
+            Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+        }
+
+        private void opVar_Handle(object sender, EventArgs e)
+        {
+            ME_Operand op = new ME_Operand();
+            ME_If mif = new ME_If();
+            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Operand)
+                op = (ME_Operand)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            else
+                mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            switch(((ComboBox)sender).Name)
+            {
+                case "0":
+                    op.left_var = ((ComboBox)sender).SelectedIndex;
+                    Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+                    break;
+                case "1":
+                    op.f1_var1 = ((ComboBox)sender).SelectedIndex;
+                    if (op.form == 0)
+                        Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+                    break;
+                case "2":
+                    op.f1_var2 = ((ComboBox)sender).SelectedIndex;
+                    if (op.form == 0)
+                        Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+                    break;
+                case "3":
+                    op.f2_var = ((ComboBox)sender).SelectedIndex;
+                    if (op.form == 1)
+                        Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+                    break;
+                case "4":
+                    op.f3_var = ((ComboBox)sender).SelectedIndex;
+                    if (op.form == 2)
+                        Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+                    break;
+                case "5":
+                    op.f1_op = ((ComboBox)sender).SelectedIndex;
+                    if (op.form == 0)
+                        Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+                    break;
+                case "6":
+                    op.f2_op = ((ComboBox)sender).SelectedIndex;
+                    if (op.form == 1)
+                        Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+                    break;
+                case "i0":
+                    mif.left_var = ((ComboBox)sender).SelectedIndex;
+                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                convertIndex2Str(mif.right_var, 0) + " => " + mif.name;
+                    break;
+                case "i1":
+                    mif.method = ((ComboBox)sender).SelectedIndex;
+                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                convertIndex2Str(mif.right_var, 0) + " => " + mif.name;
+                    break;
+                case "i2":
+                    mif.right_var = ((ComboBox)sender).SelectedIndex;
+                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                convertIndex2Str(mif.right_var, 0) + " => " + mif.name;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void setOpComboBox(ComboBox cb, int top, int left, string name)
+        {
+            ME_Operand op = new ME_Operand();
+            ME_If mif = new ME_If();
+            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Operand)
+                op = (ME_Operand)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            else
+                mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            cb.Name = name;
+            cb.Size = new Size(36, 22);
+            cb.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb.Top += top;
+            cb.Left += left;
+            switch (name)
+            {
+                case "5":
+                    cb.Items.Add("+");
+                    cb.Items.Add("-");
+                    cb.Items.Add("×");
+                    cb.Items.Add("÷");
+                    cb.Items.Add("^");
+                    cb.Items.Add("%");
+                    cb.Items.Add("&");
+                    cb.Items.Add("|");
+                    cb.SelectedIndex = op.f1_op;
+                    break;
+                case "6":
+                    cb.Items.Add("~");
+                    cb.Items.Add("√");
+                    cb.Items.Add("e^");
+                    cb.Items.Add("㏑");
+                    cb.Items.Add("㏒");
+                    cb.SelectedIndex = op.f2_op;
+                    break;
+                case "i1":
+                    cb.Items.Add("=");
+                    cb.Items.Add("≠");
+                    cb.Items.Add("≧");
+                    cb.Items.Add("≦");
+                    cb.Items.Add(">");
+                    cb.Items.Add("<");
+                    cb.SelectedIndex = mif.method;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void setOpVComboBox(ComboBox cb, int top, int left, string name)
+        {
+            ME_Operand op = new ME_Operand();
+            ME_If mif = new ME_If();
+            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Operand)
+                op = (ME_Operand)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            else
+                mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            cb.Name = name;
+            cb.Size = new Size(60, 22);
+            cb.DropDownStyle = ComboBoxStyle.DropDownList;
+            cb.Top += top;
+            cb.Left += left;
+            for (int i = 0; i < 50; i++)
+            {
+                if (i < 20)
+                    cb.Items.Add("v" + i);
+                else
+                    cb.Items.Add("s" + (i - 20));
+            }
+            switch (name)
+            {
+                case "0":
+                    cb.SelectedIndex = op.left_var;
+                    break;
+                case "1":
+                    cb.SelectedIndex = op.f1_var1;
+                    break;
+                case "2":
+                    cb.SelectedIndex = op.f1_var2;
+                    break;
+                case "3":
+                    cb.SelectedIndex = op.f2_var;
+                    break;
+                case "4":
+                    cb.SelectedIndex = op.f3_var;
+                    break;
+                case "i0":
+                    cb.SelectedIndex = mif.left_var;
+                    break;
+                case "i2":
+                    cb.SelectedIndex = mif.right_var;
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        private void OpConst_TextChanged(object sender, EventArgs e)
+        {
+            ME_Operand op = (ME_Operand)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            double output;
+            if (double.TryParse(((MaskedTextBox)sender).Text, out output))
+            {
+                op.f4_const = output;
+                if (op.form == 3)
+                    Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+            }
+            else if (((MaskedTextBox)sender).Text == "-" || ((MaskedTextBox)sender).Text == "" ||
+                     ((MaskedTextBox)sender).Text == "-." || ((MaskedTextBox)sender).Text == ".")
+            {
+                op.f4_const = 0;
+                if (op.form == 3)
+                    Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
+            }
+            else
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg19"]);
+                ((MaskedTextBox)sender).SelectAll();
+            }
+        }
+
+        private string convertIndex2Str(int n, int type)
+        {
+            if (type == 0)
+            {
+                if (n < 20)
+                    return "v" + n;
+                else
+                    return "s" + (n - 20);
+            }
+            else if (type == 1)
+            {
+                switch(n)
+                {
+                    case 0: return "+";
+                    case 1: return "-";
+                    case 2: return "×";
+                    case 3: return "÷";
+                    case 4: return "^";
+                    case 5: return "%";
+                    case 6: return "&";
+                    case 7: return "|";
+                    default: break;
+                }
+            }
+            else if (type == 2)
+            {
+                switch(n)
+                {
+                    case 0: return "~";
+                    case 1: return "√";
+                    case 2: return "e^";
+                    case 3: return "㏑";
+                    case 4: return "㏒";
+                    default: break;
+                }
+            }
+            else if (type == 3)
+            {
+                switch(n)
+                {
+                    case 0: return "=";
+                    case 1: return "≠";
+                    case 2: return "≧";
+                    case 3: return "≦";
+                    case 4: return ">";
+                    case 5: return "<";
+                    default: break;
+                }
+            }
+            return "";
+        }
+
+        private string Operand2Text(ME_Operand op)
+        {
+            switch(op.form)
+            {
+                case 0:
+                    return convertIndex2Str(op.left_var, 0) + "=" + convertIndex2Str(op.f1_var1, 0) +
+                           convertIndex2Str(op.f1_op, 1) + convertIndex2Str(op.f1_var2, 0);
+                case 1:
+                    return convertIndex2Str(op.left_var, 0) + "=" + convertIndex2Str(op.f2_op, 2) + convertIndex2Str(op.f2_var, 0);
+                case 2:
+                    return convertIndex2Str(op.left_var, 0) + "=" + convertIndex2Str(op.f3_var, 0);
+                case 3:
+                    return convertIndex2Str(op.left_var, 0) + "=" + op.f4_const.ToString();
+                default:
+                    break;
+            }
+            return "";
+        }
+
         private void Motionlist_SelectedIndexChanged(object sender, EventArgs e) // select motionlist
         {
             if (Motionlist.SelectedIndex == -1)
@@ -1608,6 +1913,8 @@ namespace _86ME_ver1
             {
                 move_up.Enabled = true;
                 move_down.Enabled = true;
+                if (Motionlist.SelectedIndex == current_motionlist_idx)
+                    return;
                 current_motionlist_idx = Motionlist.SelectedIndex;
                 Action_groupBox.Enabled = true;
                 Setting_groupBox.Enabled = true;
@@ -1939,6 +2246,27 @@ namespace _86ME_ver1
                     delaytext.Enabled = false;
                     Framelist.Enabled = true;
                     capturebutton.Enabled = false;
+                    freshflag[1] = false;
+
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
+                    Framelist.Controls.Clear();
+
+                    if (autocheck.Checked == true)
+                        if (string.Compare(com_port, "OFF") != 0)
+                            arduino.motor_release();
+
+                    this.hint_richTextBox.Text = Main_lang_dic["hint14"];
+                }
+                else if (String.Compare(datas[0], "[Operand]") == 0)
+                {
+                    ME_Operand op = (ME_Operand)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+
+                    delaytext.Text = "";
+                    delaytext.Enabled = false;
+                    Framelist.Enabled = true;
+                    capturebutton.Enabled = false;
                     autocheck.Enabled = false;
                     freshflag[1] = false;
 
@@ -1947,7 +2275,135 @@ namespace _86ME_ver1
                     this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
                     Framelist.Controls.Clear();
 
-                    this.hint_richTextBox.Text = Main_lang_dic["hint14"];
+                    ComboBox left_var = new ComboBox();
+                    setOpVComboBox(left_var, 5, 5, "0");
+
+                    Label equal = new Label();
+                    equal.Text = "=";
+                    equal.Top += 5;
+                    equal.Left += 65;
+                    equal.Font = new Font("Arial", 14);
+                    equal.Size = new Size(22,22);
+
+                    RadioButton[] method = new RadioButton[4];
+                    for (int i = 0; i < 4; i++)
+                    {
+                        method[i] = new RadioButton();
+                        method[i].Name = i.ToString();
+                        method[i].Top += 5 + i * 25;
+                        method[i].Left += 88;
+                        method[i].Size = new Size(22, 22);
+                        Framelist.Controls.Add(method[i]);
+                    }
+                    method[op.form].Checked = true;
+
+                    ComboBox f1_var1 = new ComboBox();
+                    setOpVComboBox(f1_var1, 5, 110, "1");
+                    ComboBox f1_var2 = new ComboBox();
+                    setOpVComboBox(f1_var2, 5, 212, "2");
+                    ComboBox f2_var = new ComboBox();
+                    setOpVComboBox(f2_var, 30, 149, "3");
+                    ComboBox f3_var = new ComboBox();
+                    setOpVComboBox(f3_var, 55, 110, "4");
+                    ComboBox f1_op = new ComboBox();
+                    setOpComboBox(f1_op, 5, 173, "5");
+                    ComboBox f2_op = new ComboBox();
+                    setOpComboBox(f2_op, 30, 110, "6");
+
+                    EventHandler op_var_handle = new EventHandler(opVar_Handle);
+                    left_var.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    f1_var1.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    f1_var2.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    f2_var.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    f3_var.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    f1_op.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    f2_op.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    for (int i = 0; i < 4; i++)
+                        method[i].CheckedChanged += new EventHandler(operandRadioButton_CheckedChanged);
+
+                    MaskedTextBox f4_const = new MaskedTextBox();
+                    f4_const.Size = new Size(60, 22);
+                    f4_const.Top += 80;
+                    f4_const.Left += 110;
+                    f4_const.Text = op.f4_const.ToString();
+                    f4_const.KeyPress += new KeyPressEventHandler(floatcheck);
+                    f4_const.TextChanged += new EventHandler(OpConst_TextChanged);
+
+                    Framelist.Controls.Add(left_var);
+                    Framelist.Controls.Add(equal);
+                    Framelist.Controls.Add(f1_var1);
+                    Framelist.Controls.Add(f1_var2);
+                    Framelist.Controls.Add(f2_var);
+                    Framelist.Controls.Add(f3_var);
+                    Framelist.Controls.Add(f1_op);
+                    Framelist.Controls.Add(f2_op);
+                    Framelist.Controls.Add(f4_const);
+
+                    this.hint_richTextBox.Text = Main_lang_dic["hint15"];
+                }
+                else if (String.Compare(datas[0], "[If]") == 0)
+                {
+                    ME_If mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+
+                    delaytext.Text = "";
+                    delaytext.Enabled = false;
+                    Framelist.Enabled = true;
+                    capturebutton.Enabled = false;
+                    freshflag[1] = false;
+
+                    saveFrame.Visible = false;
+                    loadFrame.Visible = false;
+                    this.DelayLabel.Text = Main_lang_dic["Label2TextDelay"];
+                    Framelist.Controls.Clear();
+
+                    Label lstmt = new Label();
+                    lstmt.Text = "if (";
+                    lstmt.Top += 3;
+                    lstmt.Left += 5;
+                    lstmt.Font = new Font("Arial", 14);
+                    lstmt.Size = new Size(35, 22);
+
+                    Label rstmt = new Label();
+                    rstmt.Text = ")";
+                    rstmt.Top += 3;
+                    rstmt.Left += 225;
+                    rstmt.Font = new Font("Arial", 14);
+                    rstmt.Size = new Size(22, 22);
+
+                    Label gstmt = new Label();
+                    gstmt.Text = "goto ";
+                    gstmt.Top += 30;
+                    gstmt.Left += 5;
+                    gstmt.Font = new Font("Arial", 14);
+                    gstmt.Size = new Size(50, 22);
+
+                    ComboBox left_var = new ComboBox();
+                    setOpVComboBox(left_var, 5, 50, "i0");
+                    ComboBox op = new ComboBox();
+                    setOpComboBox(op, 5, 115, "i1");
+                    ComboBox right_var = new ComboBox();
+                    setOpVComboBox(right_var, 5, 156, "i2");
+
+                    MaskedTextBox xtextbox = new MaskedTextBox();
+                    xtextbox.Size = new Size(80, 22);
+                    xtextbox.Top += 33;
+                    xtextbox.Left += 60;
+                    xtextbox.Text = mif.name;
+                    xtextbox.TextChanged += new EventHandler(iftext);
+
+                    left_var.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    op.SelectedIndexChanged += new EventHandler(opVar_Handle);
+                    right_var.SelectedIndexChanged += new EventHandler(opVar_Handle);
+
+                    Framelist.Controls.Add(lstmt);
+                    Framelist.Controls.Add(rstmt);
+                    Framelist.Controls.Add(gstmt);
+                    Framelist.Controls.Add(left_var);
+                    Framelist.Controls.Add(op);
+                    Framelist.Controls.Add(right_var);
+                    Framelist.Controls.Add(xtextbox);
+
+                    this.hint_richTextBox.Text = Main_lang_dic["hint15"];
                 }
             }
         }
@@ -2115,12 +2571,18 @@ namespace _86ME_ver1
 
         private void ifToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ;
+            ME_If mif = new ME_If();
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[If] v0=v0 =>");
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, mif);
+            Motionlist.SelectedIndex++;
         }
 
         private void operandToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ;
+            ME_Operand op = new ME_Operand();
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Operand] v0=v0+v0");
+            ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, op);
+            Motionlist.SelectedIndex++;
         }
 
         private void releaseToolStripMenuItem_Click(object sender, EventArgs e)
@@ -2516,7 +2978,8 @@ namespace _86ME_ver1
                 }
                 else if (m.Events[j] is ME_Release)
                 {
-                    arduino.motor_release();
+                    if (string.Compare(com_port, "OFF") != 0)
+                        arduino.motor_release();
                 }
             }
             
@@ -2605,7 +3068,7 @@ namespace _86ME_ver1
             if (MotionCombo.SelectedItem != null)
                 if (ME_Motionlist != null)
                     if (m.Events.Capacity - 1 >= Motionlist.SelectedIndex && Motionlist.SelectedIndex >= 0)
-                        if (m.Events[Motionlist.SelectedIndex] is ME_Frame)
+                        if (m.Events[Motionlist.SelectedIndex] is ME_Frame || m.Events[Motionlist.SelectedIndex] is ME_Release)
                             active_autocheck = true;
 
             if (String.Compare(delaytext.Text, "") == 0)
@@ -2619,33 +3082,41 @@ namespace _86ME_ver1
                 }
                 else if (autocheck.Checked == true)
                 {
-                    for (int i = 0; i < 45; i++)
+                    if (m.Events[Motionlist.SelectedIndex] is ME_Release)
                     {
-                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        if (string.Compare(com_port, "OFF") != 0)
+                            arduino.motor_release();
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 45; i++)
                         {
-                            autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
-                            if (m.moton_layer != 0 && !m.used_servos.Contains(i))
+                            if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                            {
+                                autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
+                                if (m.moton_layer != 0 && !m.used_servos.Contains(i))
+                                    autoframe[i] = 0;
+                            }
+                            else
                                 autoframe[i] = 0;
                         }
-                        else
-                            autoframe[i] = 0;
-                    }
 
-                    autocheck.Enabled = false;
+                        autocheck.Enabled = false;
 
-                    if (string.Compare(com_port, "OFF") != 0)
-                    {
-                        try
+                        if (string.Compare(com_port, "OFF") != 0)
                         {
-                            arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
+                            try
+                            {
+                                arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
+                            }
+                            catch
+                            {
+                                com_port = "OFF";
+                                MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                            }
                         }
-                        catch
-                        {
-                            com_port = "OFF";
-                            MessageBox.Show(Main_lang_dic["errorMsg1"]);
-                        }
+                        autocheck.Enabled = true;
                     }
-                    autocheck.Enabled = true;
                 }
             }
         }
@@ -2765,12 +3236,13 @@ namespace _86ME_ver1
                         else if (m.Events[j] is ME_If)
                         {
                             ME_If mif = (ME_If)m.Events[j];
-                            Motionlist.Items.Add("[If]");
+                            Motionlist.Items.Add("[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                 convertIndex2Str(mif.right_var, 0) + " => " + mif.name);
                         }
                         else if (m.Events[j] is ME_Operand)
                         {
                             ME_Operand op = (ME_Operand)m.Events[j];
-                            Motionlist.Items.Add("[Operand]");
+                            Motionlist.Items.Add("[Operand] " + Operand2Text(op));
                         }
                     }
                     break;
@@ -2954,6 +3426,7 @@ namespace _86ME_ver1
         private void Always_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
                 if (Always_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.always;
@@ -2963,11 +3436,13 @@ namespace _86ME_ver1
                     ps2_groupBox.Enabled = false;
                     acc_groupBox.Enabled = false;
                 }
+            }
         }
 
         private void Keyboard_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
                 if (Keyboard_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.keyboard;
@@ -2977,11 +3452,13 @@ namespace _86ME_ver1
                     ps2_groupBox.Enabled = false;
                     acc_groupBox.Enabled = false;
                 }
+            }
         }
 
         private void bt_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
                 if (bt_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.bluetooth;
@@ -2991,11 +3468,13 @@ namespace _86ME_ver1
                     ps2_groupBox.Enabled = false;
                     acc_groupBox.Enabled = false;
                 }
+            }
         }
 
         private void ps2_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
                 if (ps2_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.ps2;
@@ -3005,11 +3484,13 @@ namespace _86ME_ver1
                     ps2_groupBox.Enabled = true;
                     acc_groupBox.Enabled = false;
                 }
+            }
         }
 
         private void acc_radioButton_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
                 if (acc_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.acc;
@@ -3019,6 +3500,7 @@ namespace _86ME_ver1
                     ps2_groupBox.Enabled = false;
                     acc_groupBox.Enabled = true;
                 }
+            }
         }
 
         private void AlwaysOn_CheckedChanged(object sender, EventArgs e)
