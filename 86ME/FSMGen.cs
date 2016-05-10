@@ -24,6 +24,7 @@ namespace _86ME_ver1
         private string[] ps2_pins = new string[4];
         private string bt_baud;
         private string bt_port;
+        private int opVar_num = 50;
 
         public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port)
         {
@@ -37,6 +38,8 @@ namespace _86ME_ver1
             {
                 method_flag[((ME_Motion)ME_Motionlist[i]).trigger_method] = true;
             }
+            if (Motion.comboBox2.SelectedIndex != 0)
+                method_flag[4] = true;
         }
 
         private int convert_keynum(int keynum)
@@ -94,6 +97,69 @@ namespace _86ME_ver1
                 default:
                     return "1";
             }
+        }
+
+        private string op2str(int left, int val1, int val2, int n, int f)
+        {
+            switch (f)
+            {
+                case 0:
+                    if (n == 0) return "    " + var2str(left) + " = " + var2str(val1) + "+" + var2str(val2) + ";";
+                    else if (n == 1) return "    " + var2str(left) + " = " + var2str(val1) + "-" + var2str(val2) + ";";
+                    else if (n == 2) return "    " + var2str(left) + " = " + var2str(val1) + "*" + var2str(val2) + ";";
+                    else if (n == 3) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = " + var2str(val1) +
+                                            "/" + var2str(val2) + ";\n    else " + var2str(left) + " = 0;";
+                    else if (n == 4) return "    " + var2str(left) + " = pow(" + var2str(val1) + ", " + var2str(val2) + ");";
+                    else if (n == 5) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = fmod(" + var2str(val1) +
+                                            ", " + var2str(val2) + ");\n    else " + var2str(left) + " = 0;";
+                    else if (n == 6) return "    " + var2str(left) + " = (int)" + var2str(val1) + " & (int)" + var2str(val2) + ";";
+                    else if (n == 7) return "    " + var2str(left) + " = (int)" + var2str(val1) + " | (int)" + var2str(val2) + ";";
+                    break;
+                case 1:
+                    if (n == 0) return "    " + var2str(left) + " = ~((int)" + var2str(val2) + ");";
+                    else if (n == 1) return "    " + var2str(left) + " = sqrt(" + var2str(val2) + ");";
+                    else if (n == 2) return "    " + var2str(left) + " = exp(" + var2str(val2) + ");";
+                    else if (n == 3) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = log(" + var2str(val2) + ");\n" +
+                                            "    else " + var2str(val2) + " = 0;";
+                    else if (n == 4) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = log10(" + var2str(val2) + ");\n" +
+                                            "    else " + var2str(val2) + " = 0;";
+                    else if (n == 5) return "    " + var2str(left) + " = fabs(" + var2str(val2) + ");";
+                    break;
+            }
+            return "";
+        }
+
+        private string method2str(int n)
+        {
+            switch(n)
+            {
+                case 0:
+                    return "==";
+                case 1:
+                    return "!=";
+                case 2:
+                    return ">=";
+                case 3:
+                    return "<=";
+                case 4:
+                    return ">";
+                case 5:
+                    return "<";
+                default:
+                    return "==";
+            }
+        }
+
+        private string var2str(int n)
+        {
+            if (n < opVar_num + 14 && n >= opVar_num)
+                return "digitalRead(" + (n - opVar_num) + ")";
+            else if (n < opVar_num + 20 && n >= opVar_num + 14)
+                return "analogRead(" + (n - opVar_num - 14) + ")";
+            else if (n < opVar_num + 29 && n >= opVar_num + 20)
+                return "_IMU_val[" + (n - opVar_num - 20) + "]";
+            else
+                return "_86ME_var[" + n + "]";
         }
 
         private string set_space(int n)
@@ -178,6 +244,20 @@ namespace _86ME_ver1
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                 }
+                else if (m.Events[i] is ME_If)
+                {
+                    writer.Write("IF_" + i.ToString());
+                    m.states.Add("IF_" + i.ToString());
+                    if (i != m.Events.Count - 1)
+                        writer.Write(", ");
+                }
+                else if (m.Events[i] is ME_Operand)
+                {
+                    writer.Write("OPERAND_" + i.ToString());
+                    m.states.Add("OPERAND_" + i.ToString());
+                    if (i != m.Events.Count - 1)
+                        writer.Write(", ");
+                }
             }
             writer.WriteLine("};");
             writer.WriteLine(space + "int state = IDLE;");
@@ -214,21 +294,22 @@ namespace _86ME_ver1
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                    string stmts = "";
-                    if (m.acc_Settings[0] < m.acc_Settings[1])
-                        stmts += "(_IMU_val[0] >= " + m.acc_Settings[0] + " && _IMU_val[0] <= " + m.acc_Settings[1] + ") &&\n";
-                    else
-                        stmts += "(_IMU_val[0] >= " + m.acc_Settings[1] + " && _IMU_val[0] <= " + m.acc_Settings[0] + ") &&\n";
-                    if (m.acc_Settings[2] < m.acc_Settings[3])
-                        stmts += "         (_IMU_val[1] >= " + m.acc_Settings[2] + " && _IMU_val[1] <= " + m.acc_Settings[3] + ") &&\n";
-                    else
-                        stmts += "         (_IMU_val[1] >= " + m.acc_Settings[3] + " && _IMU_val[1] <= " + m.acc_Settings[2] + ") &&\n";
-                    if (m.acc_Settings[4] < m.acc_Settings[5])
-                        stmts += "         (_IMU_val[2] >= " + m.acc_Settings[4] + " && _IMU_val[2] <= " + m.acc_Settings[5] + ")";
-                    else
-                        stmts += "         (_IMU_val[2] >= " + m.acc_Settings[5] + " && _IMU_val[2] <= " + m.acc_Settings[4] + ")";
                     if (m.trigger_method == (int)mtest_method.acc)
                     {
+                        string stmts = "";
+                        if (m.acc_Settings[0] < m.acc_Settings[1])
+                            stmts += "(_IMU_val[0] >= " + m.acc_Settings[0] + " && _IMU_val[0] <= " + m.acc_Settings[1] + ") &&\n";
+                        else
+                            stmts += "(_IMU_val[0] >= " + m.acc_Settings[1] + " && _IMU_val[0] <= " + m.acc_Settings[0] + ") &&\n";
+                        if (m.acc_Settings[2] < m.acc_Settings[3])
+                            stmts += "         (_IMU_val[1] >= " + m.acc_Settings[2] + " && _IMU_val[1] <= " + m.acc_Settings[3] + ") &&\n";
+                        else
+                            stmts += "         (_IMU_val[1] >= " + m.acc_Settings[3] + " && _IMU_val[1] <= " + m.acc_Settings[2] + ") &&\n";
+                        if (m.acc_Settings[4] < m.acc_Settings[5])
+                            stmts += "         (_IMU_val[2] >= " + m.acc_Settings[4] + " && _IMU_val[2] <= " + m.acc_Settings[5] + ")";
+                        else
+                            stmts += "         (_IMU_val[2] >= " + m.acc_Settings[5] + " && _IMU_val[2] <= " + m.acc_Settings[4] + ")";
+
                         writer.WriteLine("  switch(" + m.name + "::acc_state)\n  {\n" +
                                          "    case 0:\n      if(" + stmts + ")\n      {\n" +
                                          "        " + m.name + "::acc_state = 1;\n" +
@@ -468,6 +549,44 @@ namespace _86ME_ver1
             writer.WriteLine("}");
         }
 
+        private void generate_forvar(ME_Motion m)
+        {
+            for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
+            {
+                if (m.Events[i] is ME_Flag)
+                {
+                    for (int k = 0; k < m.Events.Count; k++)
+                    {
+                        if (m.Events[k] is ME_Goto)
+                        {
+                            if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_Goto)m.Events[k]).name) == 0)
+                            {
+                                ME_Goto g = (ME_Goto)m.Events[k];
+                                if (g.is_goto)
+                                {
+                                    string for_var = m.name + "_" + g.name + "_" + flag_count.ToString();
+                                    ((ME_Flag)m.Events[i]).var = for_var;
+                                    flag_count++;
+                                    break;
+                                }
+                            }
+                        }
+                        else if (m.Events[k] is ME_If)
+                        {
+                            if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_If)m.Events[k]).name) == 0)
+                            {
+                                ME_If mif = (ME_If)m.Events[k];
+                                string for_var = m.name + "_" + mif.name + "_" + flag_count.ToString();
+                                ((ME_Flag)m.Events[i]).var = for_var;
+                                flag_count++;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         private void generate_motion(ME_Motion m, string frm_name, TextWriter writer, int channels)
         {
             string space = set_space(2);
@@ -475,12 +594,17 @@ namespace _86ME_ver1
             writer.WriteLine("void " + m.name + "Update()\n{");
             writer.WriteLine(space + "switch(" + m.name + "::state)\n  {");
             writer.WriteLine(space + "case " + m.name + "::IDLE:");
-            writer.WriteLine(space4 + "if(external_trigger[_" + m.name.ToUpper() + "] || internal_trigger[_" +
-                             m.name.ToUpper() + "]) " + m.name + "::state = " + m.name + "::" + m.states[1] + ";");
+            if (m.states.Count > 1)
+                writer.WriteLine(space4 + "if(external_trigger[_" + m.name.ToUpper() + "] || internal_trigger[_" +
+                                 m.name.ToUpper() + "]) " + m.name + "::state = " + m.name + "::" + m.states[1] + ";");
+            else
+                writer.WriteLine(space4 + "if(external_trigger[_" + m.name.ToUpper() + "] || internal_trigger[_" +
+                                 m.name.ToUpper() + "]) " + m.name + "::state = " + m.name + "::" + m.states[0] + ";");
             writer.WriteLine(space4 + "else break;");
             string next_action = "";
             int state_counter = 1;
-            for (int i = 0, flag_count = 0; i < m.Events.Count; i++)
+            generate_forvar(m);
+            for (int i = 0; i < m.Events.Count; i++)
             {
                 if (m.Events[i] is ME_Frame)
                 {
@@ -554,11 +678,18 @@ namespace _86ME_ver1
                                 ME_Goto g = (ME_Goto)m.Events[k];
                                 if (g.is_goto)
                                 {
-                                    string for_var = m.name + "_" + g.name + "_" + flag_count.ToString();
-                                    ((ME_Flag)m.Events[i]).var = for_var;
-                                    writer.WriteLine(space4 + "flag_" + for_var + ":");
-                                    flag_count++;
+                                    writer.WriteLine(space4 + "flag_" + ((ME_Flag)m.Events[i]).var + ":");
+                                    break;
                                 }
+                            }
+                        }
+                        else if (m.Events[k] is ME_If)
+                        {
+                            if (String.Compare(((ME_Flag)m.Events[i]).name, ((ME_If)m.Events[k]).name) == 0)
+                            {
+                                ME_If mif = (ME_If)m.Events[k];
+                                writer.WriteLine(space4 + "flag_" + ((ME_Flag)m.Events[i]).var + ":");
+                                break;
                             }
                         }
                     }
@@ -585,17 +716,17 @@ namespace _86ME_ver1
                             {
                                 if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                 {
-                                    if (k > i)
-                                        ((ME_Flag)m.Events[k]).var = m.name + "_" + g.name + "_" + flag_count.ToString();
                                     string for_var = ((ME_Flag)m.Events[k]).var;
                                     if (((ME_Goto)m.Events[i]).infinite == false)
                                     {
                                         writer.WriteLine(space4 + "if(" + m.name + "::" + g.name + "_" + i +
                                                          "++ < " + g.loops + ") goto flag_" + for_var + ";");
+                                        break;
                                     }
                                     else
                                     {
                                         writer.WriteLine(space4 + "if(1) goto flag_" + for_var + ";");
+                                        break;
                                     }
                                 }
                             }
@@ -715,9 +846,9 @@ namespace _86ME_ver1
                     writer.WriteLine(space + "case " + m.name + "::RELEASE_" + i + ":");
                     writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
                     writer.WriteLine(space4 + "  used_servos[i].release();");
+                    state_counter++;
                     if (i != m.Events.Count - 1)
                     {
-                        state_counter ++;
                         next_action = m.name + "::" + m.states[state_counter];
                         writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
                     }
@@ -732,6 +863,93 @@ namespace _86ME_ver1
                     }
                     writer.WriteLine(space4 + "break;");
                 }
+                else if (m.Events[i] is ME_If)
+                {
+                    ME_If mif = (ME_If)m.Events[i];
+                    writer.WriteLine(space + "case " + m.name + "::IF_" + i + ":");
+                    if ((mif.left_var >= opVar_num) && (mif.left_var < opVar_num + 14))
+                        writer.WriteLine(space4 + "pinMode(" + (mif.left_var - opVar_num) + ", INPUT);");
+                    if ((mif.right_var >= opVar_num) && (mif.right_var < opVar_num + 14))
+                        writer.WriteLine(space4 + "pinMode(" + (mif.right_var - opVar_num) + ", INPUT);");
+                    writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + var2str(mif.right_var) + ")");
+                    bool hasTarget = false;
+                    for (int k = 0; k < m.Events.Count; k++)
+                    {
+                        if (m.Events[k] is ME_Flag)
+                        {
+                            if (String.Compare(mif.name, ((ME_Flag)m.Events[k]).name) == 0)
+                            {
+                                writer.WriteLine(space4 + "  goto flag_" + ((ME_Flag)m.Events[k]).var + ";");
+                                hasTarget = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!hasTarget)
+                        writer.WriteLine(space4 + "  ;");
+                    state_counter++;
+                    if (i != m.Events.Count - 1)
+                    {
+                        next_action = m.name + "::" + m.states[state_counter];
+                        writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                    }
+                    else
+                    {
+                        next_action = m.name + "::IDLE";
+                        writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                        for (int j = 0; j < m.goto_var.Count; j++)
+                            writer.WriteLine(space4 + m.name + "::" + m.goto_var[j] + " = 0;");
+                        writer.WriteLine(space4 + "internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                        writer.WriteLine(space4 + "external_trigger[_" + m.name.ToUpper() + "] = false;");
+                    }
+                    writer.WriteLine(space4 + "break;");
+                }
+                else if (m.Events[i] is ME_Operand)
+                {
+                    ME_Operand op = (ME_Operand)m.Events[i];
+                    writer.WriteLine(space + "case " + m.name + "::OPERAND_" + i + ":");
+                    switch(op.form)
+                    {
+                        case 0:
+                            if ((op.f1_var1 >= opVar_num) && (op.f1_var1 < opVar_num + 14))
+                                writer.WriteLine(space4 + "pinMode(" + (op.f1_var1 - opVar_num) + ", INPUT);");
+                            if ((op.f1_var2 >= opVar_num) && (op.f1_var2 < opVar_num + 14))
+                                writer.WriteLine(space4 + "pinMode(" + (op.f1_var2 - opVar_num) + ", INPUT);");
+                            writer.WriteLine(op2str(op.left_var, op.f1_var1, op.f1_var2, op.f1_op, 0));
+                            break;
+                        case 1:
+                            if ((op.f2_var >= opVar_num) && (op.f2_var < opVar_num + 14))
+                                writer.WriteLine(space4 + "pinMode(" + (op.f2_var - opVar_num) + ", INPUT);");
+                            writer.WriteLine(op2str(op.left_var, 0, op.f2_var, op.f2_op, 1));
+                            break;
+                        case 2:
+                            if ((op.f3_var >= opVar_num) && (op.f3_var < opVar_num + 14))
+                                writer.WriteLine(space4 + "pinMode(" + (op.f3_var - opVar_num) + ", INPUT);");
+                            writer.WriteLine(space4 + var2str(op.left_var) + " = " + var2str(op.f3_var) + ";");
+                            break;
+                        case 3:
+                            writer.WriteLine(space4 + var2str(op.left_var) + " = " + op.f4_const + ";");
+                            break;
+                        default:
+                            break;
+                    }
+                    state_counter++;
+                    if (i != m.Events.Count - 1)
+                    {
+                        next_action = m.name + "::" + m.states[state_counter];
+                        writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                    }
+                    else
+                    {
+                        next_action = m.name + "::IDLE";
+                        writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
+                        for (int j = 0; j < m.goto_var.Count; j++)
+                            writer.WriteLine(space4 + m.name + "::" + m.goto_var[j] + " = 0;");
+                        writer.WriteLine(space4 + "internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                        writer.WriteLine(space4 + "external_trigger[_" + m.name.ToUpper() + "] = false;");
+                        writer.WriteLine(space4 + "break;");
+                    }
+                }
             }
             writer.WriteLine(space + "default:");
             writer.WriteLine(space4 + "break;");
@@ -742,6 +960,7 @@ namespace _86ME_ver1
         public void generate_declaration(TextWriter writer, List<int> channels, List<uint> home, bool isAllinOne)
         {
             string frm_name;
+            writer.WriteLine("#include <math.h>");
             writer.WriteLine("#include <Servo86.h>");
             if (method_flag[1]) // keyboard
                 writer.WriteLine("#include <KeyboardController.h>");
@@ -751,8 +970,17 @@ namespace _86ME_ver1
                 writer.WriteLine("#include <EEPROM.h>\n#include \"FreeIMU1.h\"\n#include <Wire.h>");
             writer.WriteLine();
 
-            writer.WriteLine("int servo_mask[" + channels.Count + "] = {0};");
-            writer.WriteLine("Servo used_servos[" + channels.Count + "];");
+            writer.WriteLine("float _86ME_var[50] = {0};");
+            if (channels.Count > 0)
+            {
+                writer.WriteLine("int servo_mask[" + channels.Count + "] = {0};");
+                writer.WriteLine("Servo used_servos[" + channels.Count + "];");
+            }
+            else
+            {
+                writer.WriteLine("int servo_mask[1] = {0};");
+                writer.WriteLine("Servo used_servos[1];");
+            }
             writer.WriteLine();
             writer.Write("enum {");
             for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -808,7 +1036,7 @@ namespace _86ME_ver1
                 writer.WriteLine("PS2X ps2x;");
             if (method_flag[4]) // acc
             {
-                writer.WriteLine("float _IMU_val[9];");
+                writer.WriteLine("float _IMU_val[9] = {0};");
                 writer.WriteLine("FreeIMU1 _IMU = FreeIMU1();");
             }
             writer.WriteLine();

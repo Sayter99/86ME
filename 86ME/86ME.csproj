@@ -76,7 +76,6 @@
     <Compile Include="firmata.cs" />
     <Compile Include="MotionElement.cs" />
     <Compile Include="SetLanguage.cs" />
-    <Compile Include="SketchGen.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

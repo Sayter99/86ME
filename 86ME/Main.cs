@@ -30,8 +30,8 @@ namespace _86ME_ver1
     public partial class Main : Form
     {
         Dictionary<string, string> Main_lang_dic;
-        int[] operand_int = new int[14];
-        float[] operand_float = new float[6];
+        int opVar_num = 50;
+        float[] operand_var = new float[100];
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -627,6 +627,20 @@ namespace _86ME_ver1
                 this.MotionConfig.SelectedIndex = 0;
                 this.hint_richTextBox.Text = Main_lang_dic["hint1"];
                 this.MotionConfig.Enabled = false;
+
+                if (Motion.comboBox2.SelectedIndex != 0 && string.Compare(com_port, "OFF") != 0)
+                {
+                    try
+                    {
+                        arduino.init_IMU(Motion.comboBox2.SelectedIndex - 1);
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show(Main_lang_dic["errorMsg2"], "",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
+                }
             }
         }
 
@@ -716,6 +730,20 @@ namespace _86ME_ver1
                 {
                     board_ver86 = Motion.comboBox1.SelectedIndex;
                     change_board = true;
+                }
+                used_imu = Motion.comboBox2.SelectedIndex;
+                if (Motion.comboBox2.SelectedIndex != 0 && string.Compare(com_port, "OFF") != 0)
+                {
+                    try
+                    {
+                        arduino.init_IMU(Motion.comboBox2.SelectedIndex - 1);
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show(Main_lang_dic["errorMsg2"], "",
+                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
             else if (Motion.DialogResult == DialogResult.Cancel)
@@ -1100,7 +1128,21 @@ namespace _86ME_ver1
                     }
                     else if (String.Compare(datas[i], "IMU") == 0)
                     {
-                        nMotion.comboBox2.SelectedIndex = int.Parse(datas[++i]);
+                        used_imu = int.Parse(datas[++i]);
+                        nMotion.comboBox2.SelectedIndex = used_imu;
+                        if (string.Compare(com_port, "OFF") != 0)
+                        {
+                            try
+                            {
+                                arduino.init_IMU(used_imu - 1);
+                            }
+                            catch
+                            {
+                                com_port = "OFF";
+                                MessageBox.Show(Main_lang_dic["errorMsg2"], "",
+                                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            }
+                        }
                     }
                     else if (String.Compare(datas[i], "picmode") == 0)
                     {
@@ -1643,6 +1685,117 @@ namespace _86ME_ver1
             Motionlist.Items[current_motionlist_idx] = "[Operand] " + Operand2Text(op);
         }
 
+        private float opVal(int index)
+        {
+            if (index < opVar_num)
+            {
+                return operand_var[index];
+            }
+            else if (index < opVar_num + 20 && index >= opVar_num)
+            {
+                if (string.Compare(com_port, "OFF") != 0)
+                {
+                    try
+                    {
+                        arduino.pin_capture(index - opVar_num);
+                        DateTime time_start = DateTime.Now;
+                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 5000) ;
+                        arduino.dataRecieved = false;
+                        return arduino.captured_data;
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                    }
+                }
+            }
+            else if (index < opVar_num + 29 && index >= opVar_num + 20)
+            {
+                if (string.Compare(com_port, "OFF") != 0)
+                {
+                    try
+                    {
+                        arduino.pin_capture(index - opVar_num);
+                        DateTime time_start = DateTime.Now;
+                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 5000) ;
+                        arduino.dataRecieved = false;
+                        return arduino.captured_float;
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                    }
+                }
+            }
+            return 0;
+        }
+
+        private bool ifResult(int ind1, int ind2, int method)
+        {
+            switch (method)
+            {
+                case 0:
+                    return float.Equals(operand_var[ind1], operand_var[ind2]);
+                case 1:
+                    return !float.Equals(operand_var[ind1], operand_var[ind2]);
+                case 2:
+                    return operand_var[ind1] >= operand_var[ind2];
+                case 3:
+                    return operand_var[ind1] <= operand_var[ind2];
+                case 4:
+                    return operand_var[ind1] > operand_var[ind2];
+                case 5:
+                    return operand_var[ind1] < operand_var[ind2];
+                default:
+                    break;
+            }
+            return false;
+        }
+
+        private float opOperate(float val1, float val2, int form, int method)
+        {
+            switch (form)
+            {
+                case 0:
+                    if (method == 0)
+                        return val1 + val2;
+                    else if (method == 1)
+                        return val1 - val2;
+                    else if (method == 2)
+                        return val1 * val2;
+                    else if (method == 3 && val2 != 0)
+                        return val1 / val2;
+                    else if (method == 4)
+                        return (float)Math.Pow(val1, val2);
+                    else if (method == 5 && val2 != 0)
+                        return val1 % val2;
+                    else if (method == 6)
+                        return (int)val1 & (int)val2;
+                    else if (method == 7)
+                        return (int)val1 | (int)val2;
+                    break;
+                case 1:
+                    if (method == 0)
+                        return ~((int)val2);
+                    else if (method == 1)
+                        return (float)Math.Sqrt(val2);
+                    else if (method == 2)
+                        return (float)Math.Exp(val2);
+                    else if (method == 3 && val2 != 0)
+                        return (float)Math.Log(val2, Math.E);
+                    else if (method == 4 && val2 != 0)
+                        return (float)Math.Log10(val2);
+                    else if (method == 5)
+                        return Math.Abs(val2);
+                    break;
+                default:
+                    break;
+            }
+            return 0;
+        }
+
         private void opVar_Handle(object sender, EventArgs e)
         {
             ME_Operand op = new ME_Operand();
@@ -1716,7 +1869,7 @@ namespace _86ME_ver1
             else
                 mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
             cb.Name = name;
-            cb.Size = new Size(36, 22);
+            cb.Size = new Size(45, 22);
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.Top += top;
             cb.Left += left;
@@ -1739,6 +1892,7 @@ namespace _86ME_ver1
                     cb.Items.Add("e^");
                     cb.Items.Add("㏑");
                     cb.Items.Add("㏒");
+                    cb.Items.Add("abs");
                     cb.SelectedIndex = op.f2_op;
                     break;
                 case "i1":
@@ -1755,7 +1909,7 @@ namespace _86ME_ver1
             }
         }
 
-        private void setOpVComboBox(ComboBox cb, int top, int left, string name)
+        private void setOpVComboBox(ComboBox cb, int top, int left, string name, bool isLeft)
         {
             ME_Operand op = new ME_Operand();
             ME_If mif = new ME_If();
@@ -1768,12 +1922,19 @@ namespace _86ME_ver1
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.Top += top;
             cb.Left += left;
-            for (int i = 0; i < 50; i++)
+            for (int i = 0; i < opVar_num + 29; i++)
             {
-                if (i < 20)
-                    cb.Items.Add("v" + i);
-                else
-                    cb.Items.Add("s" + (i - 20));
+                if (i < opVar_num)
+                    cb.Items.Add("V" + i);
+                else if (!isLeft)
+                {
+                    if (i < opVar_num + 14 && i >= opVar_num)
+                        cb.Items.Add("G" + (i - opVar_num));
+                    else if (i < opVar_num + 20 && i >= opVar_num + 14)
+                        cb.Items.Add("A" + (i - opVar_num - 14));
+                    else if (i < opVar_num + 29 && i >= opVar_num + 20)
+                        cb.Items.Add("I" + (i - opVar_num - 20));
+                }
             }
             switch (name)
             {
@@ -1831,10 +1992,14 @@ namespace _86ME_ver1
         {
             if (type == 0)
             {
-                if (n < 20)
-                    return "v" + n;
-                else
-                    return "s" + (n - 20);
+                if (n < opVar_num)
+                    return "V" + n;
+                else if (n < opVar_num + 14 && n >= opVar_num)
+                    return "G" + (n - opVar_num);
+                else if (n < opVar_num + 20 && n >= opVar_num + 14)
+                    return "A" + (n - opVar_num - 14);
+                else if (n < opVar_num + 29 && n >= opVar_num + 20)
+                    return "I" + (n - opVar_num - 20);
             }
             else if (type == 1)
             {
@@ -1860,6 +2025,7 @@ namespace _86ME_ver1
                     case 2: return "e^";
                     case 3: return "㏑";
                     case 4: return "㏒";
+                    case 5: return "abs";
                     default: break;
                 }
             }
@@ -2276,7 +2442,7 @@ namespace _86ME_ver1
                     Framelist.Controls.Clear();
 
                     ComboBox left_var = new ComboBox();
-                    setOpVComboBox(left_var, 5, 5, "0");
+                    setOpVComboBox(left_var, 5, 5, "0", true);
 
                     Label equal = new Label();
                     equal.Text = "=";
@@ -2298,13 +2464,13 @@ namespace _86ME_ver1
                     method[op.form].Checked = true;
 
                     ComboBox f1_var1 = new ComboBox();
-                    setOpVComboBox(f1_var1, 5, 110, "1");
+                    setOpVComboBox(f1_var1, 5, 110, "1", false);
                     ComboBox f1_var2 = new ComboBox();
-                    setOpVComboBox(f1_var2, 5, 212, "2");
+                    setOpVComboBox(f1_var2, 5, 221, "2", false);
                     ComboBox f2_var = new ComboBox();
-                    setOpVComboBox(f2_var, 30, 149, "3");
+                    setOpVComboBox(f2_var, 30, 158, "3", false);
                     ComboBox f3_var = new ComboBox();
-                    setOpVComboBox(f3_var, 55, 110, "4");
+                    setOpVComboBox(f3_var, 55, 110, "4", false);
                     ComboBox f1_op = new ComboBox();
                     setOpComboBox(f1_op, 5, 173, "5");
                     ComboBox f2_op = new ComboBox();
@@ -2378,11 +2544,11 @@ namespace _86ME_ver1
                     gstmt.Size = new Size(50, 22);
 
                     ComboBox left_var = new ComboBox();
-                    setOpVComboBox(left_var, 5, 50, "i0");
+                    setOpVComboBox(left_var, 5, 50, "i0", false);
                     ComboBox op = new ComboBox();
                     setOpComboBox(op, 5, 115, "i1");
                     ComboBox right_var = new ComboBox();
-                    setOpVComboBox(right_var, 5, 156, "i2");
+                    setOpVComboBox(right_var, 5, 156, "i2", false);
 
                     MaskedTextBox xtextbox = new MaskedTextBox();
                     xtextbox.Size = new Size(80, 22);
@@ -2403,7 +2569,7 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(right_var);
                     Framelist.Controls.Add(xtextbox);
 
-                    this.hint_richTextBox.Text = Main_lang_dic["hint15"];
+                    this.hint_richTextBox.Text = Main_lang_dic["hint16"];
                 }
             }
         }
@@ -2980,6 +3146,46 @@ namespace _86ME_ver1
                 {
                     if (string.Compare(com_port, "OFF") != 0)
                         arduino.motor_release();
+                }
+                else if (m.Events[j] is ME_Operand)
+                {
+                    ME_Operand op = (ME_Operand)m.Events[j];
+                    switch(op.form)
+                    {
+                        case 0:
+                            operand_var[op.left_var] = opOperate(opVal(op.f1_var1), opVal(op.f1_var2), 0, op.f1_op);
+                            break;
+                        case 1:
+                            operand_var[op.left_var] = opOperate(0, opVal(op.f2_var), 1, op.f2_op);
+                            break;
+                        case 2:
+                            operand_var[op.left_var] = opVal(op.f3_var);
+                            break;
+                        case 3:
+                            operand_var[op.left_var] = (float)op.f4_const;
+                            break;
+                        default:
+                            break;
+                    }
+                    MessageBox.Show(operand_var[op.left_var].ToString());
+                }
+                else if (m.Events[j] is ME_If)
+                {
+                    ME_If mif = (ME_If)m.Events[j];
+                    if (ifResult(mif.left_var, mif.right_var, mif.method))
+                    {
+                        for (int k = 0; k < m.Events.Count; k++)
+                        {
+                            if (m.Events[k] is ME_Flag)
+                            {
+                                if (String.Compare(((ME_If)m.Events[j]).name, ((ME_Flag)m.Events[k]).name) == 0)
+                                {
+                                    j = k;
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
             }
             

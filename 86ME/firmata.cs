@@ -48,6 +48,8 @@ namespace _86ME_ver1
      */
     public class Arduino
     {
+        public bool dataRecieved = false;
+
         public static int INPUT = 0;
         public static int OUTPUT = 1;
         public static int LOW = 0;
@@ -73,6 +75,7 @@ namespace _86ME_ver1
         private int multiByteChannel = 0;
         private int[] storedInputData = new int[MAX_DATA_BYTES];
         public int captured_data;
+        public float captured_float;
         private bool parsingSysex;
         private int sysexBytesRead;
 
@@ -340,6 +343,26 @@ namespace _86ME_ver1
             _serialPort.Write(message, 0, 4);
         }
 
+        public void pin_capture(int pin)
+        {
+            byte[] message = new byte[4];
+            message[0] = 0xF0;
+            message[1] = 0x6D;
+            message[2] = (byte)(pin & 0x7F);
+            message[3] = 0xF7;
+            _serialPort.Write(message, 0, 4);
+        }
+
+        public void init_IMU(int module)
+        {
+            byte[] message = new byte[4];
+            message[0] = 0xF0;
+            message[1] = 0x78;
+            message[2] = (byte)(module & 0x7F);
+            message[3] = 0xF7;
+            _serialPort.Write(message, 0, 4);
+        }
+
         private void setDigitalInputs(int portNumber, int portData)
         {
             digitalInputData[portNumber] = portData;
@@ -378,7 +401,26 @@ namespace _86ME_ver1
                             {
                                 parsingSysex = false;
                                 if (storedInputData[0] == 0x6A)
+                                {
                                     captured_data = (int)((storedInputData[2] << 7) + storedInputData[1]);
+                                    dataRecieved = true;
+                                }
+                                else if (storedInputData[0] == 0x6E) // PIN_STATE_RESPONSE
+                                {
+                                    if (storedInputData[1] < 20)
+                                    {
+                                        captured_data = (int)((storedInputData[3] << 7) + storedInputData[2]);
+                                        dataRecieved = true;
+                                    }
+                                    else
+                                    {
+                                        byte[] b2f = new byte[4];
+                                        for (int i = 0; i < 4; i++)
+                                            b2f[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 - i)) & 0x80));
+                                        captured_float = System.BitConverter.ToSingle(b2f, 0);
+                                        dataRecieved = true;
+                                    }
+                                }
                             }
                             else
                             {
