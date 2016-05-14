@@ -74,6 +74,7 @@
     </Compile>
     <Compile Include="FSMGen.cs" />
     <Compile Include="firmata.cs" />
+    <Compile Include="Orientation.cs" />
     <Compile Include="MotionElement.cs" />
     <Compile Include="SetLanguage.cs" />
     <Compile Include="Program.cs" />
