@@ -3167,7 +3167,6 @@ namespace _86ME_ver1
                         default:
                             break;
                     }
-                    MessageBox.Show(operand_var[op.left_var].ToString());
                 }
                 else if (m.Events[j] is ME_If)
                 {

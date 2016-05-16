@@ -76,6 +76,7 @@ namespace _86ME_ver1
         private int[] storedInputData = new int[MAX_DATA_BYTES];
         public int captured_data;
         public float captured_float;
+        public float[] quaternion = new float[4];
         private bool parsingSysex;
         private int sysexBytesRead;
 
@@ -363,6 +364,16 @@ namespace _86ME_ver1
             _serialPort.Write(message, 0, 4);
         }
 
+        public void getQ()
+        {
+            byte[] message = new byte[4];
+            message[0] = 0xF0;
+            message[1] = 0x76;
+            message[2] = 0x00; // getQ()
+            message[3] = 0xF7;
+            _serialPort.Write(message, 0, 4);
+        }
+
         private void setDigitalInputs(int portNumber, int portData)
         {
             digitalInputData[portNumber] = portData;
@@ -416,8 +427,21 @@ namespace _86ME_ver1
                                     {
                                         byte[] b2f = new byte[4];
                                         for (int i = 0; i < 4; i++)
-                                            b2f[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 - i)) & 0x80));
+                                            b2f[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
                                         captured_float = System.BitConverter.ToSingle(b2f, 0);
+                                        dataRecieved = true;
+                                    }
+                                }
+                                else if (storedInputData[0] == 0x77) // I2C_REPLY
+                                {
+                                    if (storedInputData[1] == 0x00) // Quaternion
+                                    {
+                                        for (int i = 0; i < 4; i++)
+                                        {
+                                            byte[] b2f = new byte[4];
+                                            for (int j = 0; j < 4; j++)
+                                                b2f[j] = (byte)((storedInputData[2 + j + i*4]) | ((storedInputData[18 + i] << (4 + j)) & 0x80));
+                                        }
                                         dataRecieved = true;
                                     }
                                 }
