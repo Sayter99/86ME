@@ -131,6 +131,8 @@ namespace _86ME_ver1
 
         private void Update_framelist()  //set framelist
         {
+            if (ME_Motionlist.Count == 0)
+                return;
             Framelist.Controls.Clear();
 
             int count = 0;
@@ -571,7 +573,6 @@ namespace _86ME_ver1
             if (nMotion.DialogResult == DialogResult.OK)
             {
                 load_filename = "";
-                Motion = nMotion;
                 Hint_groupBox.Enabled = true;
                 Motion_groupBox.Enabled = true;
                 saveFileToolStripMenuItem.Enabled = true;
@@ -582,14 +583,26 @@ namespace _86ME_ver1
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
                 delaytext.Text = default_delay.ToString();
-                board_ver86 = Motion.comboBox1.SelectedIndex;
-                used_imu = Motion.comboBox2.SelectedIndex;
+                board_ver86 = nMotion.comboBox1.SelectedIndex;
+                used_imu = nMotion.comboBox2.SelectedIndex;
                 initPs2();
                 ps2pins[0] = "0";
                 ps2pins[1] = "0";
                 ps2pins[2] = "0";
                 ps2pins[3] = "0";
 
+                if (nMotion.maskedTextBox1.Text == "" || nMotion.maskedTextBox1.Text == "." ||
+                    nMotion.maskedTextBox1.Text == "-." || nMotion.maskedTextBox1.Text == "-")
+                    nMotion.maskedTextBox1.Text = "0";
+                if (nMotion.maskedTextBox2.Text == "" || nMotion.maskedTextBox2.Text == "." ||
+                    nMotion.maskedTextBox2.Text == "-." || nMotion.maskedTextBox2.Text == "-")
+                    nMotion.maskedTextBox2.Text = "0";
+                if (nMotion.maskedTextBox3.Text == "" || nMotion.maskedTextBox3.Text == "." ||
+                    nMotion.maskedTextBox3.Text == "-." || nMotion.maskedTextBox3.Text == "-")
+                    nMotion.maskedTextBox3.Text = "0";
+                if (nMotion.maskedTextBox4.Text == "" || nMotion.maskedTextBox4.Text == "." ||
+                    nMotion.maskedTextBox4.Text == "-." || nMotion.maskedTextBox4.Text == "-")
+                    nMotion.maskedTextBox4.Text = "0";
                 for (int i = 0; i < 45; i++)
                 {
                     if (nMotion.ftext[i].Text == "")
@@ -600,7 +613,10 @@ namespace _86ME_ver1
                         nMotion.ftext3[i].Text = "600";
                     if (nMotion.ftext4[i].Text == "")
                         nMotion.ftext4[i].Text = "2400";
-                    motor_info[i] = Motion.fbox[i].SelectedIndex;
+                    if (nMotion.ftext5[i].Text == "" || nMotion.ftext5[i].Text == "." ||
+                        nMotion.ftext5[i].Text == "-." || nMotion.ftext5[i].Text == "-")
+                        nMotion.ftext5[i].Text = "0";
+                    motor_info[i] = nMotion.fbox[i].SelectedIndex;
                     homeframe[i] = uint.Parse(nMotion.ftext2[i].Text);
                     min[i] = uint.Parse(nMotion.ftext3[i].Text);
                     Max[i] = uint.Parse(nMotion.ftext4[i].Text);
@@ -616,7 +632,7 @@ namespace _86ME_ver1
                         MessageBox.Show(error_msg);
                     }
                 }
-
+                Motion = nMotion;
                 if(Robot_pictureBox.Image != null)
                     Robot_pictureBox.Image = null;
                 if (nMotion.picfilename != null)
@@ -627,20 +643,6 @@ namespace _86ME_ver1
                 this.MotionConfig.SelectedIndex = 0;
                 this.hint_richTextBox.Text = Main_lang_dic["hint1"];
                 this.MotionConfig.Enabled = false;
-
-                if (Motion.comboBox2.SelectedIndex != 0 && string.Compare(com_port, "OFF") != 0)
-                {
-                    try
-                    {
-                        arduino.init_IMU(Motion.comboBox2.SelectedIndex - 1);
-                    }
-                    catch
-                    {
-                        com_port = "OFF";
-                        MessageBox.Show(Main_lang_dic["errorMsg2"], "",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
             }
         }
 
@@ -671,6 +673,7 @@ namespace _86ME_ver1
             autocheck.Checked = false;
             if (string.Compare(com_port, "OFF") != 0)
                 Motion.arduino = arduino;
+            Motion.thread_event.Set();
             Motion.ShowDialog();
             if (Motion.DialogResult == DialogResult.OK)
             {
@@ -687,6 +690,18 @@ namespace _86ME_ver1
                         MessageBox.Show(Main_lang_dic["errorMsg3"]);
                     }
                 }
+                if (Motion.maskedTextBox1.Text == "" || Motion.maskedTextBox1.Text == "." ||
+                    Motion.maskedTextBox1.Text == "-." || Motion.maskedTextBox1.Text == "-")
+                    Motion.maskedTextBox1.Text = "0";
+                if (Motion.maskedTextBox2.Text == "" || Motion.maskedTextBox2.Text == "." ||
+                    Motion.maskedTextBox2.Text == "-." || Motion.maskedTextBox2.Text == "-")
+                    Motion.maskedTextBox2.Text = "0";
+                if (Motion.maskedTextBox3.Text == "" || Motion.maskedTextBox3.Text == "." ||
+                    Motion.maskedTextBox3.Text == "-." || Motion.maskedTextBox3.Text == "-")
+                    Motion.maskedTextBox3.Text = "0";
+                if (Motion.maskedTextBox4.Text == "" || Motion.maskedTextBox4.Text == "." ||
+                    Motion.maskedTextBox4.Text == "-." || Motion.maskedTextBox4.Text == "-")
+                    Motion.maskedTextBox4.Text = "0";
                 for (int i = 0; i < 45; i++)
                 {
                     if (Motion.ftext[i].Text == "")
@@ -697,6 +712,9 @@ namespace _86ME_ver1
                         Motion.ftext3[i].Text = "600";
                     if (Motion.ftext4[i].Text == "")
                         Motion.ftext4[i].Text = "2400";
+                    if (Motion.ftext5[i].Text == "" || Motion.ftext5[i].Text == "." ||
+                        Motion.ftext5[i].Text == "-." || Motion.ftext5[i].Text == "-")
+                        Motion.ftext5[i].Text = "0";
                     homeframe[i] = uint.Parse(Motion.ftext2[i].Text);
                     min[i] = uint.Parse(Motion.ftext3[i].Text);
                     Max[i] = uint.Parse(Motion.ftext4[i].Text);
@@ -732,19 +750,6 @@ namespace _86ME_ver1
                     change_board = true;
                 }
                 used_imu = Motion.comboBox2.SelectedIndex;
-                if (Motion.comboBox2.SelectedIndex != 0 && string.Compare(com_port, "OFF") != 0)
-                {
-                    try
-                    {
-                        arduino.init_IMU(Motion.comboBox2.SelectedIndex - 1);
-                    }
-                    catch
-                    {
-                        com_port = "OFF";
-                        MessageBox.Show(Main_lang_dic["errorMsg2"], "",
-                                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    }
-                }
             }
             else if (Motion.DialogResult == DialogResult.Cancel)
             {
@@ -843,7 +848,24 @@ namespace _86ME_ver1
             // save sync_speed
             writer.WriteLine("Sync " + sync_speed.Value.ToString());
             // save IMU
-            writer.WriteLine("IMU " + Motion.comboBox2.SelectedIndex);
+            writer.WriteLine("IMU " + Motion.comboBox2.SelectedIndex + " " + Motion.q.w + " " + Motion.q.x +
+                             " " + Motion.q.y + " " + Motion.q.z);
+            writer.Write("PGain ");
+            for (int j = 0; j < 45; j++)
+            {
+                if (string.Compare(Motion.ftext5[j].Text, "") == 0)
+                    Motion.ftext5[j].Text = "0";
+                writer.Write(Motion.ftext5[j].Text + " ");
+            }
+            writer.WriteLine();
+            writer.Write("Source ");
+            for (int j = 0; j < 45; j++)
+                writer.Write(Motion.fbox2[j].Text + " ");
+            writer.WriteLine();
+            writer.Write("EnablePGain ");
+            for (int j = 0; j < 45; j++)
+                writer.Write(Motion.fcheck2[j].Checked + " ");
+            writer.WriteLine();
             for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -1129,19 +1151,32 @@ namespace _86ME_ver1
                     else if (String.Compare(datas[i], "IMU") == 0)
                     {
                         used_imu = int.Parse(datas[++i]);
+                        if (used_imu != 0)
+                            nMotion.init_imu.Enabled = true;
                         nMotion.comboBox2.SelectedIndex = used_imu;
-                        if (string.Compare(com_port, "OFF") != 0)
+                        nMotion.maskedTextBox1.Text = datas[++i];
+                        nMotion.maskedTextBox2.Text = datas[++i];
+                        nMotion.maskedTextBox3.Text = datas[++i];
+                        nMotion.maskedTextBox4.Text = datas[++i];
+                    }
+                    else if (String.Compare(datas[i], "PGain") == 0)
+                    {
+                        for (int k = 0; k < 45; k++)
+                            nMotion.ftext5[k].Text = datas[++i];
+                    }
+                    else if (String.Compare(datas[i], "Source") == 0)
+                    {
+                        for (int k = 0; k < 45; k++)
+                            nMotion.fbox2[k].Text = datas[++i];
+                    }
+                    else if (String.Compare(datas[i], "EnablePGain") == 0)
+                    {
+                        for (int k = 0; k < 45; k++)
                         {
-                            try
-                            {
-                                arduino.init_IMU(used_imu - 1);
-                            }
-                            catch
-                            {
-                                com_port = "OFF";
-                                MessageBox.Show(Main_lang_dic["errorMsg2"], "",
-                                                MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                            }
+                            if (String.Compare(datas[++i], "True") == 0)
+                                nMotion.fcheck2[k].Checked = true;
+                            else
+                                nMotion.fcheck2[k].Checked = false;
                         }
                     }
                     else if (String.Compare(datas[i], "picmode") == 0)
@@ -2079,8 +2114,6 @@ namespace _86ME_ver1
             {
                 move_up.Enabled = true;
                 move_down.Enabled = true;
-                if (Motionlist.SelectedIndex == current_motionlist_idx)
-                    return;
                 current_motionlist_idx = Motionlist.SelectedIndex;
                 Action_groupBox.Enabled = true;
                 Setting_groupBox.Enabled = true;
@@ -2218,6 +2251,7 @@ namespace _86ME_ver1
                     delaytext.Text = ((ME_Delay)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
                     delaytext.Enabled = true;
                     Framelist.Enabled = false;
+                    Framelist.Controls.Clear();
                     capturebutton.Enabled = false;
                     autocheck.Enabled = false;
                     freshflag[1] = false;
@@ -2532,7 +2566,7 @@ namespace _86ME_ver1
                     Label rstmt = new Label();
                     rstmt.Text = ")";
                     rstmt.Top += 3;
-                    rstmt.Left += 225;
+                    rstmt.Left += 235;
                     rstmt.Font = new Font("Arial", 14);
                     rstmt.Size = new Size(22, 22);
 
@@ -2548,7 +2582,7 @@ namespace _86ME_ver1
                     ComboBox op = new ComboBox();
                     setOpComboBox(op, 5, 115, "i1");
                     ComboBox right_var = new ComboBox();
-                    setOpVComboBox(right_var, 5, 156, "i2", false);
+                    setOpVComboBox(right_var, 5, 165, "i2", false);
 
                     MaskedTextBox xtextbox = new MaskedTextBox();
                     xtextbox.Size = new Size(80, 22);
@@ -3226,8 +3260,7 @@ namespace _86ME_ver1
             Framelist.Controls.Clear();
             freshflag[1] = false;
             motiontest_state = (int)mtest_states.start;
-            Thread t;
-            t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
+            Thread t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
             t.IsBackground = true;
             t.Start();
             draw_background();

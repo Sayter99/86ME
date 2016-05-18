@@ -101,6 +101,11 @@ namespace _86ME_ver1
         ///                     when autoStart is true.</param>
         public Arduino(string serialPortName, Int32 baudRate, bool autoStart, int delay)
         {
+            quaternion[0] = 1;
+            quaternion[1] = 0;
+            quaternion[2] = 0;
+            quaternion[3] = 0;
+
             _serialPort = new SerialPort(serialPortName, baudRate);
             _serialPort.DataBits = 8;
             _serialPort.Parity = Parity.None;
@@ -441,6 +446,7 @@ namespace _86ME_ver1
                                             byte[] b2f = new byte[4];
                                             for (int j = 0; j < 4; j++)
                                                 b2f[j] = (byte)((storedInputData[2 + j + i*4]) | ((storedInputData[18 + i] << (4 + j)) & 0x80));
+                                            quaternion[i] = System.BitConverter.ToSingle(b2f, 0);
                                         }
                                         dataRecieved = true;
                                     }

@@ -593,23 +593,21 @@ public class MException : Exception
 
 public class RollPitchYaw
 {
-    public double roll;
-    public double pitch;
-    public double yaw;
+    public double[] rpy = new double[3];
 
     public RollPitchYaw()
     {
-        roll = 0;
-        pitch = 0;
-        yaw = 0;
+        rpy[0] = 0;
+        rpy[1] = 0;
+        rpy[2] = 0;
     }
 
     public override string ToString()
     {
         string s = "";
-        s += String.Format("{0,5:0.00000}", this.roll) + " ";
-        s += String.Format("{0,5:0.00000}", this.pitch) + " ";
-        s += String.Format("{0,5:0.00000}", this.yaw) + " ";
+        s += String.Format("{0,5:0.00000}", this.rpy[0]) + " ";
+        s += String.Format("{0,5:0.00000}", this.rpy[1]) + " ";
+        s += String.Format("{0,5:0.00000}", this.rpy[2]) + " ";
         s += "\r\n";
         return s;
     }
@@ -641,9 +639,9 @@ public class Quaternion
     public RollPitchYaw toRPY()
     {
         RollPitchYaw rpy = new RollPitchYaw();
-        rpy.roll = Math.Atan2(2*(this.w*this.x + this.y*this.z), 1 - 2*(this.x*this.x + this.y*this.y));
-        rpy.pitch = Math.Asin(2*(this.w*this.y - this.z*this.x));
-        rpy.yaw = Math.Atan2(2*(this.w*this.z + this.x*this.y), 1 - 2*(this.y*this.y + this.z*this.z));
+        rpy.rpy[0] = Math.Atan2(2*(this.w*this.x + this.y*this.z), 1 - 2*(this.x*this.x + this.y*this.y));
+        rpy.rpy[1] = Math.Asin(2 * (this.w * this.y - this.z * this.x));
+        rpy.rpy[2] = Math.Atan2(2 * (this.w * this.z + this.x * this.y), 1 - 2 * (this.y * this.y + this.z * this.z));
         return rpy;
     }
 
