@@ -135,7 +135,7 @@ namespace _86ME_ver1
                 {
                     for (int i = 0; i < 45; i++)
                         update_autoframe(i);
-                    try { arduino.frameWrite(0x6F, autoframe, 0); }
+                    try { arduino.frameWrite(0x6F, autoframe, 0); Thread.Sleep(20); }
                     catch { }
                 }
                 thread_event.WaitOne();
@@ -780,12 +780,12 @@ namespace _86ME_ver1
         private void init_imu_Click(object sender, EventArgs e)
         {
             thread_event.Reset();
+            Thread show_progress = new Thread(new ThreadStart(progress_thread));
             if (arduino != null)
             {
                 try
                 {
                     arduino.init_IMU(comboBox2.SelectedIndex);
-                    Thread show_progress = new Thread(new ThreadStart(progress_thread));
                     show_progress.Start();
                 }
                 catch
@@ -793,7 +793,6 @@ namespace _86ME_ver1
                     MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
                 }
             }
-            thread_event.Set();
             getQ.Enabled = true;
         }
 
@@ -827,6 +826,7 @@ namespace _86ME_ver1
             progress_Increase = new IncreaseHandle(init_ProcessBar.Increase);
             init_ProcessBar.ShowDialog();
             init_ProcessBar = null;
+            thread_event.Set();
         }
 
         private void progress_thread()
