@@ -692,7 +692,7 @@ namespace _86ME_ver1
                 }
                 if (Motion.maskedTextBox1.Text == "" || Motion.maskedTextBox1.Text == "." ||
                     Motion.maskedTextBox1.Text == "-." || Motion.maskedTextBox1.Text == "-")
-                    Motion.maskedTextBox1.Text = "0";
+                    Motion.maskedTextBox1.Text = "1";
                 if (Motion.maskedTextBox2.Text == "" || Motion.maskedTextBox2.Text == "." ||
                     Motion.maskedTextBox2.Text == "-." || Motion.maskedTextBox2.Text == "-")
                     Motion.maskedTextBox2.Text = "0";
@@ -1152,7 +1152,14 @@ namespace _86ME_ver1
                     {
                         used_imu = int.Parse(datas[++i]);
                         if (used_imu != 0)
-                            nMotion.init_imu.Enabled = true;
+                        {
+                            if (string.Compare(com_port, "OFF") != 0)
+                                nMotion.init_imu.Enabled = true;
+                            nMotion.maskedTextBox1.Enabled = true;
+                            nMotion.maskedTextBox2.Enabled = true;
+                            nMotion.maskedTextBox3.Enabled = true;
+                            nMotion.maskedTextBox4.Enabled = true;
+                        }
                         nMotion.comboBox2.SelectedIndex = used_imu;
                         nMotion.maskedTextBox1.Text = datas[++i];
                         nMotion.maskedTextBox2.Text = datas[++i];

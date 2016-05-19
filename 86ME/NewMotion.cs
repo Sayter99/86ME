@@ -43,7 +43,11 @@ namespace _86ME_ver1
         public bool newflag = false;
         string last_picfilename = null;
         public Thread sync;
-        public ManualResetEvent thread_event = new ManualResetEvent(true); 
+        public ManualResetEvent thread_event = new ManualResetEvent(true);
+        private Progress init_ProcessBar = null;
+        private delegate bool IncreaseHandle(int nValue);
+        private IncreaseHandle progress_Increase = null;
+
         public NewMotion(Dictionary<string, string> lang_dic)
         {
             InitializeComponent();
@@ -91,7 +95,7 @@ namespace _86ME_ver1
             int gain = 0;
             if (fcheck[i].Checked == true)
             {
-                if (fcheck2[i].Checked == true && arduino != null)
+                if (fcheck2[i].Checked == true)
                 {
                     Quaternion autoq = new Quaternion();
                     try
@@ -185,7 +189,8 @@ namespace _86ME_ver1
             }
             else
             {
-                init_imu.Enabled = true;
+                if (arduino != null)
+                    init_imu.Enabled = true;
                 getQ.Enabled = false;
                 for (int i = 0; i < 45; i++)
                 {
@@ -227,7 +232,7 @@ namespace _86ME_ver1
                 switch (((MaskedTextBox)sender).Name)
                 {
                     case "maskedTextBox1":
-                        q.w = 0;
+                        q.w = 1;
                         break;
                     case "maskedTextBox2":
                         q.x = 0;
@@ -774,29 +779,34 @@ namespace _86ME_ver1
 
         private void init_imu_Click(object sender, EventArgs e)
         {
+            thread_event.Reset();
             if (arduino != null)
             {
                 try
                 {
                     arduino.init_IMU(comboBox2.SelectedIndex);
+                    Thread show_progress = new Thread(new ThreadStart(progress_thread));
+                    show_progress.Start();
                 }
                 catch
                 {
                     MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
                 }
             }
+            thread_event.Set();
             getQ.Enabled = true;
         }
 
         private void getQ_Click(object sender, EventArgs e)
         {
+            thread_event.Reset();
             if (arduino != null)
             {
                 try
                 {
                     arduino.getQ();
                     DateTime time_start = DateTime.Now;
-                    while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
+                    while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 1000) ;
                     arduino.dataRecieved = false;
                     maskedTextBox1.Text = arduino.quaternion[0].ToString();
                     maskedTextBox2.Text = arduino.quaternion[1].ToString();
@@ -808,6 +818,31 @@ namespace _86ME_ver1
                     MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
                 }
             }
+            thread_event.Set();
+        }
+
+        private void ShowProcessBar()
+        {
+            init_ProcessBar = new Progress();
+            progress_Increase = new IncreaseHandle(init_ProcessBar.Increase);
+            init_ProcessBar.ShowDialog();
+            init_ProcessBar = null;
+        }
+
+        private void progress_thread()
+        {
+            MethodInvoker mi = new MethodInvoker(ShowProcessBar);
+            this.BeginInvoke(mi);
+            Thread.Sleep(100);
+            bool blnIncreased = false;
+            object objReturn = null;
+            do
+            {
+                Thread.Sleep(80);
+                objReturn = this.Invoke(this.progress_Increase, new object[] { 1 });
+                blnIncreased = (bool)objReturn;
+            }
+            while (blnIncreased);
         }
     }
 }

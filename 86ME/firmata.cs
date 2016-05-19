@@ -55,7 +55,7 @@ namespace _86ME_ver1
         public static int LOW = 0;
         public static int HIGH = 1;
 
-        private const int MAX_DATA_BYTES = 32;
+        private const int MAX_DATA_BYTES = 128;
 
         private const int DIGITAL_MESSAGE = 0x90; // send data for a digital port
         private const int ANALOG_MESSAGE = 0xE0; // send data for an analog pin (or PWM)
