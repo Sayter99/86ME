@@ -636,6 +636,16 @@ public class Quaternion
         this.z = _z;
     }
 
+    public Quaternion Round(int dec)
+    {
+        Quaternion res = new Quaternion();
+        res.w = Math.Round(this.w, dec);
+        res.x = Math.Round(this.x, dec);
+        res.y = Math.Round(this.y, dec);
+        res.z = Math.Round(this.z, dec);
+        return res;
+    }
+
     public RollPitchYaw toRPY()
     {
         RollPitchYaw rpy = new RollPitchYaw();

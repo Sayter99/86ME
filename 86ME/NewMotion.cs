@@ -47,6 +47,7 @@ namespace _86ME_ver1
         private Progress init_ProcessBar = null;
         private delegate bool IncreaseHandle(int nValue);
         private IncreaseHandle progress_Increase = null;
+        private object serial_lock = new object();
 
         public NewMotion(Dictionary<string, string> lang_dic)
         {
@@ -108,7 +109,7 @@ namespace _86ME_ver1
                         autoq.x = arduino.quaternion[1];
                         autoq.y = arduino.quaternion[2];
                         autoq.z = arduino.quaternion[3];
-                        autoq = autoq.Normalized() * q.Normalized().Inverse();
+                        autoq = autoq.Normalized().Round(4) * q.Normalized().Round(4).Inverse();
                         RollPitchYaw rpy = autoq.toRPY();
                         gain = (int)(rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI) * p_gain[i]);
                     }
@@ -131,14 +132,17 @@ namespace _86ME_ver1
         {
             while (true)
             {
-                if (arduino != null)
+                lock (serial_lock)
                 {
-                    for (int i = 0; i < 45; i++)
-                        update_autoframe(i);
-                    try { arduino.frameWrite(0x6F, autoframe, 0); Thread.Sleep(20); }
-                    catch { }
+                    if (arduino != null)
+                    {
+                        for (int i = 0; i < 45; i++)
+                            update_autoframe(i);
+                        try { arduino.frameWrite(0x6F, autoframe, 0); Thread.Sleep(16); }
+                        catch { }
+                    }
+                    thread_event.WaitOne();
                 }
-                thread_event.WaitOne();
             }
         }
 
@@ -779,45 +783,48 @@ namespace _86ME_ver1
 
         private void init_imu_Click(object sender, EventArgs e)
         {
-            thread_event.Reset();
-            Thread show_progress = new Thread(new ThreadStart(progress_thread));
-            if (arduino != null)
+            lock (serial_lock)
             {
-                try
+                Thread show_progress = new Thread(new ThreadStart(progress_thread));
+                if (arduino != null)
                 {
-                    arduino.init_IMU(comboBox2.SelectedIndex);
-                    show_progress.Start();
+                    try
+                    {
+                        arduino.init_IMU(comboBox2.SelectedIndex);
+                        show_progress.Start();
+                    }
+                    catch
+                    {
+                        MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
+                    }
                 }
-                catch
-                {
-                    MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
-                }
+                getQ.Enabled = true;
             }
-            getQ.Enabled = true;
         }
 
         private void getQ_Click(object sender, EventArgs e)
         {
-            thread_event.Reset();
-            if (arduino != null)
+            lock (serial_lock)
             {
-                try
+                if (arduino != null)
                 {
-                    arduino.getQ();
-                    DateTime time_start = DateTime.Now;
-                    while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 1000) ;
-                    arduino.dataRecieved = false;
-                    maskedTextBox1.Text = arduino.quaternion[0].ToString();
-                    maskedTextBox2.Text = arduino.quaternion[1].ToString();
-                    maskedTextBox3.Text = arduino.quaternion[2].ToString();
-                    maskedTextBox4.Text = arduino.quaternion[3].ToString();
-                }
-                catch
-                {
-                    MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
+                    try
+                    {
+                        arduino.getQ();
+                        DateTime time_start = DateTime.Now;
+                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 1000) ;
+                        arduino.dataRecieved = false;
+                        maskedTextBox1.Text = arduino.quaternion[0].ToString("0.####");
+                        maskedTextBox2.Text = arduino.quaternion[1].ToString("0.####");
+                        maskedTextBox3.Text = arduino.quaternion[2].ToString("0.####");
+                        maskedTextBox4.Text = arduino.quaternion[3].ToString("0.####");
+                    }
+                    catch
+                    {
+                        MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
+                    }
                 }
             }
-            thread_event.Set();
         }
 
         private void ShowProcessBar()
@@ -826,7 +833,6 @@ namespace _86ME_ver1
             progress_Increase = new IncreaseHandle(init_ProcessBar.Increase);
             init_ProcessBar.ShowDialog();
             init_ProcessBar = null;
-            thread_event.Set();
         }
 
         private void progress_thread()
@@ -838,7 +844,7 @@ namespace _86ME_ver1
             object objReturn = null;
             do
             {
-                Thread.Sleep(80);
+                Thread.Sleep(65);
                 objReturn = this.Invoke(this.progress_Increase, new object[] { 1 });
                 blnIncreased = (bool)objReturn;
             }

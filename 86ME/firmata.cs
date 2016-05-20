@@ -88,7 +88,6 @@ namespace _86ME_ver1
         private int minorVersion = 0;
         private Thread readThread = null;
         private object locker = new object();
-
         /// <summary>
         /// 
         /// </summary>
@@ -318,10 +317,10 @@ namespace _86ME_ver1
             for (int i = 0; i < 45; i++, msg_index += 2)
             {
                 message[msg_index] = (byte)(frame[i] & 0x7F);
-                message[msg_index + 1] = (byte)(frame[i] >> 7);
+                message[msg_index + 1] = (byte)((frame[i] >> 7) & 0x7F);
             }
             message[msg_index] = (byte)(delay & 0x7F);
-            message[msg_index + 1] = (byte)(delay >> 7);
+            message[msg_index + 1] = (byte)((delay >> 7) & 0x7F);
             message[msg_index + 2] = 0xF7;
             _serialPort.Write(message, 0, 95);
         }

@@ -47,7 +47,7 @@
             this.Controls.Add(this.progressBar1);
             this.Name = "Progress";
             this.ShowInTaskbar = false;
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "Initializing";
             this.ResumeLayout(false);
 

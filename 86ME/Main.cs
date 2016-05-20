@@ -1159,6 +1159,8 @@ namespace _86ME_ver1
                             nMotion.maskedTextBox2.Enabled = true;
                             nMotion.maskedTextBox3.Enabled = true;
                             nMotion.maskedTextBox4.Enabled = true;
+                            for (int k = 0; k < 45; k++)
+                                nMotion.fcheck2[k].Enabled = true;
                         }
                         nMotion.comboBox2.SelectedIndex = used_imu;
                         nMotion.maskedTextBox1.Text = datas[++i];
@@ -1754,7 +1756,7 @@ namespace _86ME_ver1
             }
             else if (index < opVar_num + 29 && index >= opVar_num + 20)
             {
-                if (string.Compare(com_port, "OFF") != 0)
+                if (string.Compare(com_port, "OFF") != 0 && Motion.getQ.Enabled == true)
                 {
                     try
                     {
@@ -3934,6 +3936,7 @@ namespace _86ME_ver1
             motionevent[7] = Main_lang_dic["InsertIntermediateFrame"];
 
             aboutToolStripMenuItem.Text = Main_lang_dic["aboutToolStripMenuItem_Text"];
+            acc_groupBox.Text = Main_lang_dic["acc_groupBox_Text"];
             Action_groupBox.Text = Main_lang_dic["Action_groupBox_Text"];
             ActionList.Text = Main_lang_dic["ActionList_Text"];
             actionToolStripMenuItem.Text = Main_lang_dic["actionToolStripMenuItem_Text"];
@@ -3948,6 +3951,7 @@ namespace _86ME_ver1
             fileToolStripMenuItem.Text = Main_lang_dic["fileToolStripMenuItem_Text"];
             Generate.Text = Main_lang_dic["Generate_Text"];
             GenerateAllInOne.Text = Main_lang_dic["GenerateAllInOne_Text"];
+            getAccData.Text = Main_lang_dic["getAccData_Text"];
             helpToolStripMenuItem.Text = Main_lang_dic["helpToolStripMenuItem_Text"];
             Hint_groupBox.Text = Main_lang_dic["Hint_groupBox_Text"];
             howToUseToolStripMenuItem.Text = Main_lang_dic["howToUseToolStripMenuItem_Text"];
@@ -4069,6 +4073,35 @@ namespace _86ME_ver1
                 SetLanguage sl = new SetLanguage(_86ME_path + "\\locales\\ja.ini");
                 Main_lang_dic = sl.lang_dic;
                 applyLang();
+            }
+        }
+
+        private void getAccData_Click(object sender, EventArgs e)
+        {
+            if (string.Compare(com_port, "OFF") != 0 && Motion.getQ.Enabled == true)
+            {
+                float x, y, z;
+                arduino.pin_capture(20);
+                DateTime time_start = DateTime.Now;
+                while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
+                arduino.dataRecieved = false;
+                x = arduino.captured_float;
+                arduino.pin_capture(21);
+                time_start = DateTime.Now;
+                while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
+                arduino.dataRecieved = false;
+                y = arduino.captured_float;
+                arduino.pin_capture(22);
+                time_start = DateTime.Now;
+                while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
+                arduino.dataRecieved = false;
+                z = arduino.captured_float;
+                MessageBox.Show("X: " + x.ToString("00.###") + "   Y: " + y.ToString("00.###") +
+                                "   Z: " + z.ToString("00.###"));
+            }
+            else
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg20"]);
             }
         }
     }

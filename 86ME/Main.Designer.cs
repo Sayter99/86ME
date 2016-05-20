@@ -156,6 +156,7 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.getAccData = new System.Windows.Forms.Button();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -682,6 +683,7 @@
             // 
             // acc_groupBox
             // 
+            this.acc_groupBox.Controls.Add(this.getAccData);
             this.acc_groupBox.Controls.Add(this.accDurationUnit);
             this.acc_groupBox.Controls.Add(this.accDurationText);
             this.acc_groupBox.Controls.Add(this.accw3);
@@ -699,7 +701,7 @@
             this.acc_groupBox.Controls.Add(this.accXLabel);
             this.acc_groupBox.Location = new System.Drawing.Point(27, 348);
             this.acc_groupBox.Name = "acc_groupBox";
-            this.acc_groupBox.Size = new System.Drawing.Size(192, 138);
+            this.acc_groupBox.Size = new System.Drawing.Size(192, 164);
             this.acc_groupBox.TabIndex = 14;
             this.acc_groupBox.TabStop = false;
             this.acc_groupBox.Text = "Accelerometer";
@@ -707,7 +709,7 @@
             // accDurationUnit
             // 
             this.accDurationUnit.AutoSize = true;
-            this.accDurationUnit.Location = new System.Drawing.Point(168, 112);
+            this.accDurationUnit.Location = new System.Drawing.Point(168, 141);
             this.accDurationUnit.Name = "accDurationUnit";
             this.accDurationUnit.Size = new System.Drawing.Size(18, 12);
             this.accDurationUnit.TabIndex = 14;
@@ -715,7 +717,7 @@
             // 
             // accDurationText
             // 
-            this.accDurationText.Location = new System.Drawing.Point(69, 106);
+            this.accDurationText.Location = new System.Drawing.Point(69, 135);
             this.accDurationText.Name = "accDurationText";
             this.accDurationText.Size = new System.Drawing.Size(93, 22);
             this.accDurationText.TabIndex = 41;
@@ -797,7 +799,7 @@
             // accDurationLabel
             // 
             this.accDurationLabel.AutoSize = true;
-            this.accDurationLabel.Location = new System.Drawing.Point(14, 109);
+            this.accDurationLabel.Location = new System.Drawing.Point(14, 138);
             this.accDurationLabel.Name = "accDurationLabel";
             this.accDurationLabel.Size = new System.Drawing.Size(49, 12);
             this.accDurationLabel.TabIndex = 32;
@@ -1571,6 +1573,16 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
+            // getAccData
+            // 
+            this.getAccData.Location = new System.Drawing.Point(30, 106);
+            this.getAccData.Name = "getAccData";
+            this.getAccData.Size = new System.Drawing.Size(154, 23);
+            this.getAccData.TabIndex = 42;
+            this.getAccData.Text = "Show Current Data";
+            this.getAccData.UseVisualStyleBackColor = true;
+            this.getAccData.Click += new System.EventHandler(this.getAccData_Click);
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1755,6 +1767,7 @@
         private System.Windows.Forms.Label accw1;
         private System.Windows.Forms.MaskedTextBox accHXText;
         private System.Windows.Forms.Label accDurationUnit;
+        private System.Windows.Forms.Button getAccData;
     }
 }
 

@@ -405,7 +405,7 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label12;
-        private System.Windows.Forms.Button getQ;
+        public System.Windows.Forms.Button getQ;
         public System.Windows.Forms.Button init_imu;
     }
 }
