@@ -66,6 +66,10 @@ namespace _86ME_ver1
         int board_ver86;
         int used_imu;
         int[] motor_info = new int[45];
+        bool[] enable_gain = new bool[45];
+        double[] p_gain = new double[45];
+        int[] gain_source = new int[45];
+        double[] init_quaternion = new double[4];
         int mdx, mdy;
         bool[] freshflag = new bool[2];
         bool picmode_move = false;
@@ -547,6 +551,70 @@ namespace _86ME_ver1
             }
         }
 
+        private void update_newMotionParams(NewMotion nMotion)
+        {
+            board_ver86 = nMotion.comboBox1.SelectedIndex;
+            used_imu = nMotion.comboBox2.SelectedIndex;
+            if (nMotion.maskedTextBox1.Text == "" || nMotion.maskedTextBox1.Text == "." ||
+                nMotion.maskedTextBox1.Text == "-." || nMotion.maskedTextBox1.Text == "-")
+                nMotion.maskedTextBox1.Text = "0";
+            if (nMotion.maskedTextBox2.Text == "" || nMotion.maskedTextBox2.Text == "." ||
+                nMotion.maskedTextBox2.Text == "-." || nMotion.maskedTextBox2.Text == "-")
+                nMotion.maskedTextBox2.Text = "0";
+            if (nMotion.maskedTextBox3.Text == "" || nMotion.maskedTextBox3.Text == "." ||
+                nMotion.maskedTextBox3.Text == "-." || nMotion.maskedTextBox3.Text == "-")
+                nMotion.maskedTextBox3.Text = "0";
+            if (nMotion.maskedTextBox4.Text == "" || nMotion.maskedTextBox4.Text == "." ||
+                nMotion.maskedTextBox4.Text == "-." || nMotion.maskedTextBox4.Text == "-")
+                nMotion.maskedTextBox4.Text = "0";
+            init_quaternion[0] = double.Parse(nMotion.maskedTextBox1.Text);
+            init_quaternion[1] = double.Parse(nMotion.maskedTextBox2.Text);
+            init_quaternion[2] = double.Parse(nMotion.maskedTextBox3.Text);
+            init_quaternion[3] = double.Parse(nMotion.maskedTextBox4.Text);
+            for (int i = 0; i < 45; i++)
+            {
+                if (nMotion.ftext[i].Text == "")
+                    nMotion.ftext[i].Text = "0";
+                if (nMotion.ftext2[i].Text == "")
+                    nMotion.ftext2[i].Text = "1500";
+                if (nMotion.ftext3[i].Text == "")
+                    nMotion.ftext3[i].Text = "600";
+                if (nMotion.ftext4[i].Text == "")
+                    nMotion.ftext4[i].Text = "2400";
+                if (nMotion.ftext5[i].Text == "" || nMotion.ftext5[i].Text == "." ||
+                    nMotion.ftext5[i].Text == "-." || nMotion.ftext5[i].Text == "-")
+                    nMotion.ftext5[i].Text = "0";
+                motor_info[i] = nMotion.fbox[i].SelectedIndex;
+                homeframe[i] = uint.Parse(nMotion.ftext2[i].Text);
+                min[i] = uint.Parse(nMotion.ftext3[i].Text);
+                Max[i] = uint.Parse(nMotion.ftext4[i].Text);
+                p_gain[i] = double.Parse(nMotion.ftext5[i].Text);
+                enable_gain[i] = nMotion.fcheck2[i].Checked;
+                gain_source[i] = nMotion.fbox2[i].SelectedIndex;
+                if (homeframe[i] > Max[i] || homeframe[i] < min[i])
+                {
+                    homeframe[i] = 1500;
+                    nMotion.ftext2[i].Text = "1500";
+                }
+                try
+                {
+                    offset[i] = int.Parse(nMotion.ftext[i].Text);
+                    if (offset[i] > offset_Max || offset[i] < offset_min)
+                    {
+                        offset[i] = 0;
+                        nMotion.ftext[i].Text = "0";
+                    }
+                }
+                catch
+                {
+                    offset[i] = 0;
+                    nMotion.ftext[i].Text = "0";
+                    string error_msg = "The offset " + i.ToString() + " is illegal, set to 0";
+                    MessageBox.Show(error_msg);
+                }
+            }
+        }
+
         private void fileToolStripMenuItem_Click(object sender, EventArgs e) //new project
         {
             if (needToSave() && File.Exists(load_filename))
@@ -583,55 +651,15 @@ namespace _86ME_ver1
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
                 delaytext.Text = default_delay.ToString();
-                board_ver86 = nMotion.comboBox1.SelectedIndex;
-                used_imu = nMotion.comboBox2.SelectedIndex;
+
                 initPs2();
                 ps2pins[0] = "0";
                 ps2pins[1] = "0";
                 ps2pins[2] = "0";
                 ps2pins[3] = "0";
 
-                if (nMotion.maskedTextBox1.Text == "" || nMotion.maskedTextBox1.Text == "." ||
-                    nMotion.maskedTextBox1.Text == "-." || nMotion.maskedTextBox1.Text == "-")
-                    nMotion.maskedTextBox1.Text = "0";
-                if (nMotion.maskedTextBox2.Text == "" || nMotion.maskedTextBox2.Text == "." ||
-                    nMotion.maskedTextBox2.Text == "-." || nMotion.maskedTextBox2.Text == "-")
-                    nMotion.maskedTextBox2.Text = "0";
-                if (nMotion.maskedTextBox3.Text == "" || nMotion.maskedTextBox3.Text == "." ||
-                    nMotion.maskedTextBox3.Text == "-." || nMotion.maskedTextBox3.Text == "-")
-                    nMotion.maskedTextBox3.Text = "0";
-                if (nMotion.maskedTextBox4.Text == "" || nMotion.maskedTextBox4.Text == "." ||
-                    nMotion.maskedTextBox4.Text == "-." || nMotion.maskedTextBox4.Text == "-")
-                    nMotion.maskedTextBox4.Text = "0";
-                for (int i = 0; i < 45; i++)
-                {
-                    if (nMotion.ftext[i].Text == "")
-                        nMotion.ftext[i].Text = "0";
-                    if (nMotion.ftext2[i].Text == "")
-                        nMotion.ftext2[i].Text = "1500";
-                    if (nMotion.ftext3[i].Text == "")
-                        nMotion.ftext3[i].Text = "600";
-                    if (nMotion.ftext4[i].Text == "")
-                        nMotion.ftext4[i].Text = "2400";
-                    if (nMotion.ftext5[i].Text == "" || nMotion.ftext5[i].Text == "." ||
-                        nMotion.ftext5[i].Text == "-." || nMotion.ftext5[i].Text == "-")
-                        nMotion.ftext5[i].Text = "0";
-                    motor_info[i] = nMotion.fbox[i].SelectedIndex;
-                    homeframe[i] = uint.Parse(nMotion.ftext2[i].Text);
-                    min[i] = uint.Parse(nMotion.ftext3[i].Text);
-                    Max[i] = uint.Parse(nMotion.ftext4[i].Text);
-                    try
-                    {
-                        offset[i] = int.Parse(nMotion.ftext[i].Text);
-                    }
-                    catch
-                    {
-                        offset[i] = 0;
-                        nMotion.ftext[i].Text = "0";
-                        string error_msg = "The offset " + i.ToString() + " is illegal, set to 0";
-                        MessageBox.Show(error_msg);
-                    }
-                }
+                update_newMotionParams(nMotion);
+
                 Motion = nMotion;
                 if(Robot_pictureBox.Image != null)
                     Robot_pictureBox.Image = null;
@@ -690,80 +718,55 @@ namespace _86ME_ver1
                         MessageBox.Show(Main_lang_dic["errorMsg3"]);
                     }
                 }
-                if (Motion.maskedTextBox1.Text == "" || Motion.maskedTextBox1.Text == "." ||
-                    Motion.maskedTextBox1.Text == "-." || Motion.maskedTextBox1.Text == "-")
-                    Motion.maskedTextBox1.Text = "1";
-                if (Motion.maskedTextBox2.Text == "" || Motion.maskedTextBox2.Text == "." ||
-                    Motion.maskedTextBox2.Text == "-." || Motion.maskedTextBox2.Text == "-")
-                    Motion.maskedTextBox2.Text = "0";
-                if (Motion.maskedTextBox3.Text == "" || Motion.maskedTextBox3.Text == "." ||
-                    Motion.maskedTextBox3.Text == "-." || Motion.maskedTextBox3.Text == "-")
-                    Motion.maskedTextBox3.Text = "0";
-                if (Motion.maskedTextBox4.Text == "" || Motion.maskedTextBox4.Text == "." ||
-                    Motion.maskedTextBox4.Text == "-." || Motion.maskedTextBox4.Text == "-")
-                    Motion.maskedTextBox4.Text = "0";
-                for (int i = 0; i < 45; i++)
-                {
-                    if (Motion.ftext[i].Text == "")
-                        Motion.ftext[i].Text = "0";
-                    if (Motion.ftext2[i].Text == "")
-                        Motion.ftext2[i].Text = "1500";
-                    if (Motion.ftext3[i].Text == "")
-                        Motion.ftext3[i].Text = "600";
-                    if (Motion.ftext4[i].Text == "")
-                        Motion.ftext4[i].Text = "2400";
-                    if (Motion.ftext5[i].Text == "" || Motion.ftext5[i].Text == "." ||
-                        Motion.ftext5[i].Text == "-." || Motion.ftext5[i].Text == "-")
-                        Motion.ftext5[i].Text = "0";
-                    homeframe[i] = uint.Parse(Motion.ftext2[i].Text);
-                    min[i] = uint.Parse(Motion.ftext3[i].Text);
-                    Max[i] = uint.Parse(Motion.ftext4[i].Text);
-                    motor_info[i] = Motion.fbox[i].SelectedIndex;
-                    if (homeframe[i] > Max[i] || homeframe[i] < min[i])
-                    {
-                        homeframe[i] = 1500;
-                        Motion.ftext2[i].Text = "1500";
-                    }
-                    try
-                    {
-                        offset[i] = int.Parse(Motion.ftext[i].Text);
-                        if (offset[i] > offset_Max || offset[i] < offset_min)
-                        {
-                            offset[i] = 0;
-                            Motion.ftext[i].Text = "0";
-                        }
-                    }
-                    catch
-                    {
-                        offset[i] = 0;
-                        Motion.ftext[i].Text = "0";
-                        string error_msg = "The offset " + i.ToString() + " is illegal, set to 0";
-                        MessageBox.Show(error_msg);
-                    }
-                }
+
+                if (board_ver86 != Motion.comboBox1.SelectedIndex)
+                    change_board = true;
+
+                update_newMotionParams(Motion);
+
                 Update_framelist();
                 update_motionlist();
                 draw_background();
-                if (board_ver86 != Motion.comboBox1.SelectedIndex)
-                {
-                    board_ver86 = Motion.comboBox1.SelectedIndex;
-                    change_board = true;
-                }
-                used_imu = Motion.comboBox2.SelectedIndex;
             }
             else if (Motion.DialogResult == DialogResult.Cancel)
             {
+                if (board_ver86 != Motion.comboBox1.SelectedIndex)
+                {
+                    Motion.clear_Channels();
+                    if (board_ver86 == 0)
+                        Motion.create_panel(0, 45, 0);
+                    else if (board_ver86 == 1)
+                    {
+                        Motion.create_panel(0, 14, 0);
+                        Motion.create_panel(42, 45, 14);
+                    }
+                    else if (board_ver86 == 2)
+                    {
+                        Motion.create_panel(0, 21, 0);
+                        Motion.create_panel(31, 33, 21);
+                        Motion.create_panel(42, 45, 23);
+                    }
+                }
                 Motion.picfilename = picture_name;
                 Motion.comboBox1.SelectedIndex = board_ver86;
+                Motion.comboBox2.SelectedIndex = used_imu;
+                Motion.maskedTextBox1.Text = init_quaternion[0].ToString();
+                Motion.maskedTextBox2.Text = init_quaternion[1].ToString();
+                Motion.maskedTextBox3.Text = init_quaternion[2].ToString();
+                Motion.maskedTextBox4.Text = init_quaternion[3].ToString();
                 for (int i = 0; i < 45; i++)
                 {
                     Motion.fbox[i].SelectedIndex = motor_info[i];
+                    Motion.fbox2[i].SelectedIndex = gain_source[i];
+                    Motion.fcheck2[i].Checked = enable_gain[i];
                     Motion.ftext[i].Text = offset[i].ToString();
                     Motion.ftext2[i].Text = homeframe[i].ToString();
                     Motion.ftext3[i].Text = min[i].ToString();
                     Motion.ftext4[i].Text = Max[i].ToString();
+                    Motion.ftext5[i].Text = p_gain[i].ToString();
                 }
             }
+
             MotionConfig.SelectedIndex = 0;
             initPs2();
             if (change_board)
@@ -775,6 +778,7 @@ namespace _86ME_ver1
                 change_board = false;
             }
         }
+
         private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)    //save project
         {
             SaveFileDialog dialog = new SaveFileDialog();

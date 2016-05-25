@@ -25,6 +25,8 @@ namespace _86ME_ver1
         private string bt_baud;
         private string bt_port;
         private int opVar_num = 50;
+        private bool IMU_compensatory = false;
+        private Quaternion invQ = new Quaternion();
 
         public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port)
         {
@@ -34,12 +36,25 @@ namespace _86ME_ver1
             this.ps2_pins = ps2pins;
             this.bt_baud = bt_baud;
             this.bt_port = bt_port;
+            this.invQ.w = double.Parse(Motion.maskedTextBox1.Text);
+            this.invQ.x = double.Parse(Motion.maskedTextBox2.Text);
+            this.invQ.y = double.Parse(Motion.maskedTextBox3.Text);
+            this.invQ.z = double.Parse(Motion.maskedTextBox4.Text);
+            this.invQ = this.invQ.Normalized().Inverse();
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
-                method_flag[((ME_Motion)ME_Motionlist[i]).trigger_method] = true;
+                int method = ((ME_Motion)ME_Motionlist[i]).trigger_method;
+                method_flag[method] = true;
             }
             if (Motion.comboBox2.SelectedIndex != 0)
+            {
                 method_flag[4] = true;
+                for (int i = 0; i < 45; i++ )
+                {
+                    if (Motion.fcheck2[i].Checked == true && Motion.p_gain[i] != 0)
+                        IMU_compensatory = true;
+                }
+            }
         }
 
         private int convert_keynum(int keynum)
@@ -286,11 +301,44 @@ namespace _86ME_ver1
             writer.WriteLine("}");
         }
 
-        private void generate_updateAcc(TextWriter writer)
+        private void generate_updateIMU(TextWriter writer, List<int> channels)
         {
             if (method_flag[4])
             {
-                writer.WriteLine("void updateAcc()\n{\n  _IMU.getValues(_IMU_val);");
+                writer.WriteLine("void updateIMU()\n{");
+                writer.WriteLine("  if(millis() - _IMU_update_time < 33) return;\n"); // ~33fps
+                if (IMU_compensatory)
+                {
+                    writer.WriteLine("  _IMU.getQ(_IMU_Q, _IMU_val);");
+                    writer.WriteLine("  double _w, _x, _y, _z;");
+                    writer.WriteLine("  _w = _IMU_Q[0]*" + invQ.w + " - _IMU_Q[1]*" + invQ.x +
+                                     " - _IMU_Q[2]*" + invQ.y + " - _IMU_Q[3]*" + invQ.z + ";");
+                    writer.WriteLine("  _x = _IMU_Q[1]*" + invQ.w + " + _IMU_Q[0]*" + invQ.x +
+                                     " - _IMU_Q[3]*" + invQ.y + " + _IMU_Q[2]*" + invQ.z + ";");
+                    writer.WriteLine("  _y = _IMU_Q[2]*" + invQ.w + " + _IMU_Q[3]*" + invQ.x +
+                                     " + _IMU_Q[0]*" + invQ.y + " - _IMU_Q[1]*" + invQ.z + ";");
+                    writer.WriteLine("  _z = _IMU_Q[3]*" + invQ.w + " - _IMU_Q[2]*" + invQ.x +
+                                     " + _IMU_Q[1]*" + invQ.y + " + _IMU_Q[0]*" + invQ.z + ";");
+                    writer.WriteLine("  double _roll = atan2(2*(_w*_x + _y*_z), 1 - 2*(_x*_x + _y*_y));");
+                    writer.WriteLine("  double _pitch = asin(2*(_w*_y - _z*_x));");
+                    for (int i = 0; i < channels.Count; i++)
+                    {
+                        if (Motion.p_gain[channels[i]] != 0)
+                        {
+                            if (Motion.fbox2[channels[i]].SelectedIndex == 0) // roll
+                                writer.WriteLine("  mixOffsets.mixoffsets[" + i + "] = " +
+                                                 "(long)((180*_roll*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                            else if (Motion.fbox2[channels[i]].SelectedIndex == 1) // pitch
+                                writer.WriteLine("  mixOffsets.mixoffsets[" + i + "] = " +
+                                                 "(long)((180*_pitch*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                        }
+                    }
+                    writer.WriteLine("  mixOffsets.setMixOffsets();\n");
+                }
+                else
+                {
+                    writer.WriteLine("  _IMU.getValues(_IMU_val);");
+                }
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -321,6 +369,7 @@ namespace _86ME_ver1
                                          "      break;\n  }");
                     }
                 }
+                writer.WriteLine("  _IMU_update_time = millis();");
                 writer.WriteLine("}");
             }
         }
@@ -1036,14 +1085,20 @@ namespace _86ME_ver1
                 writer.WriteLine("PS2X ps2x;");
             if (method_flag[4]) // acc
             {
-                writer.WriteLine("float _IMU_val[9] = {0};");
+                writer.WriteLine("unsigned long _IMU_update_time = millis();");
+                writer.WriteLine("double _IMU_val[9] = {0};");
                 writer.WriteLine("FreeIMU1 _IMU = FreeIMU1();");
+            }
+            if (IMU_compensatory)
+            {
+                writer.WriteLine("double _IMU_Q[4] = {0};");
+                writer.WriteLine("ServoMixOffset mixOffsets;");
             }
             writer.WriteLine();
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
                 generate_variable((ME_Motion)ME_Motionlist[i], writer, channels);
-            generate_updateAcc(writer);
+            generate_updateIMU(writer, channels);
             generate_isBlocked(writer);
             generate_closeTriggers(writer);
             generate_updateTrigger(writer);
@@ -1136,7 +1191,7 @@ namespace _86ME_ver1
             writer.WriteLine("void loop()");
             writer.WriteLine("{");
             if (method_flag[4]) //acc
-                writer.WriteLine("  updateAcc();");
+                writer.WriteLine("  updateIMU();");
             writer.WriteLine("  updateTrigger();");
             for (int j = 0; j < ME_Motionlist.Count; j++)
             {

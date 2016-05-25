@@ -48,6 +48,7 @@ namespace _86ME_ver1
         private delegate bool IncreaseHandle(int nValue);
         private IncreaseHandle progress_Increase = null;
         private object serial_lock = new object();
+        private bool send_msg = false;
 
         public NewMotion(Dictionary<string, string> lang_dic)
         {
@@ -103,7 +104,7 @@ namespace _86ME_ver1
                     {
                         arduino.getQ();
                         DateTime time_start = DateTime.Now;
-                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 5000) ;
+                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
                         arduino.dataRecieved = false;
                         autoq.w = arduino.quaternion[0];
                         autoq.x = arduino.quaternion[1];
@@ -121,7 +122,11 @@ namespace _86ME_ver1
                 int pos = (int)homeframe[i] + offset[i] + gain;
                 if ((uint)pos >= min[i] && (uint)pos <= Max[i])
                 {
-                    autoframe[i] = pos;
+                    if (Math.Abs(pos - autoframe[i]) > 10)
+                    {
+                        autoframe[i] = pos;
+                        send_msg = true;
+                    }
                     return;
                 }
             }
@@ -138,8 +143,16 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                             update_autoframe(i);
-                        try { arduino.frameWrite(0x6F, autoframe, 0); Thread.Sleep(16); }
-                        catch { }
+                        if (send_msg)
+                        {
+                            try
+                            {
+                                arduino.frameWrite(0x6F, autoframe, 0);
+                                Thread.Sleep(33);
+                                send_msg = false;
+                            }
+                            catch { }
+                        }
                     }
                     thread_event.WaitOne();
                 }
@@ -315,41 +328,35 @@ namespace _86ME_ver1
             last_index = comboBox1.SelectedIndex;
         }
 
+        public void clear_Channels()
+        {
+            for (int i = 0; i < 45; i++)
+            {
+                if (fpanel[i] != null)
+                    fpanel[i].Controls.Clear();
+            }
+            channelver.Controls.Clear();
+        }
+
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (last_index == comboBox1.SelectedIndex)
             {
             }
-            //add 86duino series into the combobox
             else if (string.Compare(comboBox1.Text, "86Duino_One") == 0)
             {
-                for (int i = 0; i < 45; i++ )
-                {
-                    if (fpanel[i] != null)
-                        fpanel[i].Controls.Clear();
-                }
-                channelver.Controls.Clear();
+                clear_Channels();
                 create_panel(0, 45, 0);
             }
             else if (string.Compare(comboBox1.Text, "86Duino_Zero") == 0)
             {
-                for (int i = 0; i < 45; i++)
-                {
-                    if (fpanel[i] != null)
-                        fpanel[i].Controls.Clear();
-                }
-                channelver.Controls.Clear();
+                clear_Channels();
                 create_panel(0, 14, 0);
                 create_panel(42, 45, 14);
             }
             else if (string.Compare(comboBox1.Text, "86Duino_EduCake") == 0)
             {
-                for (int i = 0; i < 45; i++)
-                {
-                    if (fpanel[i] != null)
-                        fpanel[i].Controls.Clear();
-                }
-                channelver.Controls.Clear();
+                clear_Channels();
                 create_panel(0, 21, 0);
                 create_panel(31, 33, 21);
                 create_panel(42, 45, 23);
@@ -392,7 +399,7 @@ namespace _86ME_ver1
             }
         }
 
-        private void create_panel(int low, int high, int start_pos)
+        public void create_panel(int low, int high, int start_pos)
         {
             for (int i = low; i < high; i++, start_pos++)
             {
@@ -440,7 +447,10 @@ namespace _86ME_ver1
                 fcheck2[i].Name = i.ToString();
                 fcheck2[i].Checked = false;
                 fcheck2[i].CheckedChanged += new EventHandler(gain_checked);
-                fcheck2[i].Enabled = false;
+                if (comboBox2.SelectedIndex != 0)
+                    fcheck2[i].Enabled = true;
+                else
+                    fcheck2[i].Enabled = false;
 
                 ftext[i].Name = i.ToString();
                 ftext[i].Text = offset[i].ToString();

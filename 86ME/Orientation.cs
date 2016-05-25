@@ -649,7 +649,7 @@ public class Quaternion
     public RollPitchYaw toRPY()
     {
         RollPitchYaw rpy = new RollPitchYaw();
-        rpy.rpy[0] = Math.Atan2(2*(this.w*this.x + this.y*this.z), 1 - 2*(this.x*this.x + this.y*this.y));
+        rpy.rpy[0] = Math.Atan2(2 * (this.w*this.x + this.y*this.z), 1 - 2 * (this.x*this.x + this.y*this.y));
         rpy.rpy[1] = Math.Asin(2 * (this.w * this.y - this.z * this.x));
         rpy.rpy[2] = Math.Atan2(2 * (this.w * this.z + this.x * this.y), 1 - 2 * (this.y * this.y + this.z * this.z));
         return rpy;
