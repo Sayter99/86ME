@@ -323,7 +323,7 @@ namespace _86ME_ver1
                     writer.WriteLine("  double _pitch = asin(2*(_w*_y - _z*_x));");
                     for (int i = 0; i < channels.Count; i++)
                     {
-                        if (Motion.p_gain[channels[i]] != 0)
+                        if (Motion.p_gain[channels[i]] != 0 && Motion.fcheck2[channels[i]].Checked == true)
                         {
                             if (Motion.fbox2[channels[i]].SelectedIndex == 0) // roll
                                 writer.WriteLine("  mixOffsets.mixoffsets[" + i + "] = " +
@@ -1180,6 +1180,11 @@ namespace _86ME_ver1
             writer.WriteLine();
             writer.WriteLine("  offsets.setOffsets();");
             writer.WriteLine();
+            if (IMU_compensatory)
+            {
+                writer.WriteLine("  for(int i = 0; i < 400; i++)\n  {\n    _IMU.getQ(_IMU_Q, _IMU_val);\n" +
+                                 "    delay(50);\n  }\n");
+            }
             writer.WriteLine("  _86ME_HOME.playPositions(0);");
 
             writer.WriteLine("}");

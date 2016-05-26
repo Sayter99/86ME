@@ -1171,25 +1171,42 @@ namespace _86ME_ver1
                         nMotion.maskedTextBox2.Text = datas[++i];
                         nMotion.maskedTextBox3.Text = datas[++i];
                         nMotion.maskedTextBox4.Text = datas[++i];
+                        init_quaternion[0] = double.Parse(nMotion.maskedTextBox1.Text);
+                        init_quaternion[1] = double.Parse(nMotion.maskedTextBox2.Text);
+                        init_quaternion[2] = double.Parse(nMotion.maskedTextBox3.Text);
+                        init_quaternion[3] = double.Parse(nMotion.maskedTextBox4.Text);
                     }
                     else if (String.Compare(datas[i], "PGain") == 0)
                     {
                         for (int k = 0; k < 45; k++)
-                            nMotion.ftext5[k].Text = datas[++i];
+                        {
+                            i++;
+                            nMotion.ftext5[k].Text = datas[i];
+                            p_gain[k] = double.Parse(datas[i]);
+                        }
                     }
                     else if (String.Compare(datas[i], "Source") == 0)
                     {
                         for (int k = 0; k < 45; k++)
+                        {
                             nMotion.fbox2[k].Text = datas[++i];
+                            gain_source[k] = nMotion.fbox2[k].SelectedIndex;
+                        }
                     }
                     else if (String.Compare(datas[i], "EnablePGain") == 0)
                     {
                         for (int k = 0; k < 45; k++)
                         {
                             if (String.Compare(datas[++i], "True") == 0)
+                            {
                                 nMotion.fcheck2[k].Checked = true;
+                                enable_gain[k] = true;
+                            }
                             else
+                            {
                                 nMotion.fcheck2[k].Checked = false;
+                                enable_gain[k] = false;
+                            }
                         }
                     }
                     else if (String.Compare(datas[i], "picmode") == 0)

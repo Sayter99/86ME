@@ -2,6 +2,12 @@
 ---------
 #### CHANGELOG ####
 
+_VERSION_: v1.8
+
+* Add three new actions "Release", "Operand" and "If".
+* Add a new trigger "Accelerometer".
+* Support two IMUs including RM-G146 and LSM330DLC for the gyro-gain function.
+
 _VERSION_: v1.7
 
 * Add a new property named "Motion Layer". This feature makes motions can be triggered parallelly in different layers. And Layer 1's priority is higher than 0's.

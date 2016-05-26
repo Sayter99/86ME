@@ -854,7 +854,7 @@ namespace _86ME_ver1
             object objReturn = null;
             do
             {
-                Thread.Sleep(65);
+                Thread.Sleep(180);
                 objReturn = this.Invoke(this.progress_Increase, new object[] { 1 });
                 blnIncreased = (bool)objReturn;
             }
