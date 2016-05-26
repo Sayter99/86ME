@@ -35,7 +35,9 @@ namespace _86ME_ver1
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
         public double[] p_gain = new double[45];
+        public double[] angle = new double[45];
         public Quaternion q = new Quaternion();
+        private Quaternion autoq = new Quaternion();
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
         public string picfilename = null;
         public int[] channelx = new int[45];
@@ -49,6 +51,7 @@ namespace _86ME_ver1
         private IncreaseHandle progress_Increase = null;
         private object serial_lock = new object();
         private bool send_msg = false;
+        private bool renew_quaternion = true;
 
         public NewMotion(Dictionary<string, string> lang_dic)
         {
@@ -99,20 +102,28 @@ namespace _86ME_ver1
             {
                 if (fcheck2[i].Checked == true)
                 {
-                    Quaternion autoq = new Quaternion();
                     try
                     {
-                        arduino.getQ();
-                        DateTime time_start = DateTime.Now;
-                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
-                        arduino.dataRecieved = false;
-                        autoq.w = arduino.quaternion[0];
-                        autoq.x = arduino.quaternion[1];
-                        autoq.y = arduino.quaternion[2];
-                        autoq.z = arduino.quaternion[3];
+                        if (renew_quaternion)
+                        {
+                            arduino.getQ();
+                            DateTime time_start = DateTime.Now;
+                            while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
+                            arduino.dataRecieved = false;
+                            autoq.w = arduino.quaternion[0];
+                            autoq.x = arduino.quaternion[1];
+                            autoq.y = arduino.quaternion[2];
+                            autoq.z = arduino.quaternion[3];
+                            renew_quaternion = false;
+                        }
                         autoq = autoq.Normalized().Round(4) * q.Normalized().Round(4).Inverse();
                         RollPitchYaw rpy = autoq.toRPY();
-                        gain = (int)(rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI) * p_gain[i]);
+                        if (Math.Abs(angle[i] - rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI)) > 4)
+                        {
+                            angle[i] = rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI);
+                            send_msg = true;
+                        }
+                        gain = (int)Math.Round(angle[i] * p_gain[i]);
                     }
                     catch
                     {
@@ -122,11 +133,7 @@ namespace _86ME_ver1
                 int pos = (int)homeframe[i] + offset[i] + gain;
                 if ((uint)pos >= min[i] && (uint)pos <= Max[i])
                 {
-                    if (Math.Abs(pos - autoframe[i]) > 10)
-                    {
-                        autoframe[i] = pos;
-                        send_msg = true;
-                    }
+                    autoframe[i] = pos;
                     return;
                 }
             }
@@ -143,6 +150,7 @@ namespace _86ME_ver1
                     {
                         for (int i = 0; i < 45; i++)
                             update_autoframe(i);
+                        renew_quaternion = true;
                         if (send_msg)
                         {
                             try
