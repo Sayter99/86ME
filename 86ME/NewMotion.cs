@@ -31,11 +31,11 @@ namespace _86ME_ver1
         int last_index;
         int last_IMU;
         int[] autoframe = new int[45];
+        int[] autogain = new int[45];
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
         public double[] p_gain = new double[45];
-        public double[] angle = new double[45];
         public Quaternion q = new Quaternion();
         private Quaternion autoq = new Quaternion();
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
@@ -97,7 +97,6 @@ namespace _86ME_ver1
 
         private void update_autoframe(int i)
         {
-            int gain = 0;
             if (fcheck[i].Checked == true)
             {
                 if (fcheck2[i].Checked == true)
@@ -116,24 +115,24 @@ namespace _86ME_ver1
                             autoq.z = arduino.quaternion[3];
                             renew_quaternion = false;
                         }
-                        autoq = autoq.Normalized().Round(4) * q.Normalized().Round(4).Inverse();
-                        RollPitchYaw rpy = autoq.toRPY();
-                        if (Math.Abs(angle[i] - rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI)) > 4)
-                        {
-                            angle[i] = rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI);
-                            send_msg = true;
-                        }
-                        gain = (int)Math.Round(angle[i] * p_gain[i]);
+                        RollPitchYaw rpy = (autoq.Normalized().Round(4) * q.Normalized().Round(4).Inverse()).toRPY();
+                        int gain = (int)Math.Round(rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI) * p_gain[i]);
+                        if (Math.Abs(autogain[i] - gain) > 4 * p_gain[i])
+                            autogain[i] = gain;
                     }
                     catch
                     {
-                        gain = 0;
+                        autogain[i] = 0;
                     }
                 }
-                int pos = (int)homeframe[i] + offset[i] + gain;
+                int pos = (int)homeframe[i] + offset[i] + autogain[i];
                 if ((uint)pos >= min[i] && (uint)pos <= Max[i])
                 {
-                    autoframe[i] = pos;
+                    if (autoframe[i] != pos)
+                    {
+                        autoframe[i] = pos;
+                        send_msg = true;
+                    }
                     return;
                 }
             }
@@ -801,23 +800,20 @@ namespace _86ME_ver1
 
         private void init_imu_Click(object sender, EventArgs e)
         {
-            lock (serial_lock)
+            Thread show_progress = new Thread(new ThreadStart(progress_thread));
+            if (arduino != null)
             {
-                Thread show_progress = new Thread(new ThreadStart(progress_thread));
-                if (arduino != null)
+                try
                 {
-                    try
-                    {
-                        arduino.init_IMU(comboBox2.SelectedIndex);
-                        show_progress.Start();
-                    }
-                    catch
-                    {
-                        MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
-                    }
+                    arduino.init_IMU(comboBox2.SelectedIndex);
+                    show_progress.Start();
                 }
-                getQ.Enabled = true;
+                catch
+                {
+                    MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
+                }
             }
+            getQ.Enabled = true;
         }
 
         private void getQ_Click(object sender, EventArgs e)
@@ -855,18 +851,21 @@ namespace _86ME_ver1
 
         private void progress_thread()
         {
-            MethodInvoker mi = new MethodInvoker(ShowProcessBar);
-            this.BeginInvoke(mi);
-            Thread.Sleep(100);
-            bool blnIncreased = false;
-            object objReturn = null;
-            do
+            lock (serial_lock)
             {
-                Thread.Sleep(180);
-                objReturn = this.Invoke(this.progress_Increase, new object[] { 1 });
-                blnIncreased = (bool)objReturn;
+                MethodInvoker mi = new MethodInvoker(ShowProcessBar);
+                this.BeginInvoke(mi);
+                Thread.Sleep(100);
+                bool blnIncreased = false;
+                object objReturn = null;
+                do
+                {
+                    Thread.Sleep(180);
+                    objReturn = this.Invoke(this.progress_Increase, new object[] { 1 });
+                    blnIncreased = (bool)objReturn;
+                }
+                while (blnIncreased);
             }
-            while (blnIncreased);
         }
     }
 }
