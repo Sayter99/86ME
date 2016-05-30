@@ -99,7 +99,7 @@ namespace _86ME_ver1
         {
             if (fcheck[i].Checked == true)
             {
-                if (fcheck2[i].Checked == true)
+                if (fcheck2[i].Checked == true && getQ.Enabled == true)
                 {
                     try
                     {

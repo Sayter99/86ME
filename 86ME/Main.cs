@@ -443,10 +443,13 @@ namespace _86ME_ver1
         public void accDurationText_Changed(object sender, EventArgs e)
         {
             int output;
-            if (int.TryParse(((MaskedTextBox)sender).Text, out output))
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = output;
-            else
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = 0;
+            if (ME_Motionlist != null)
+            {
+                if (int.TryParse(((MaskedTextBox)sender).Text, out output))
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = output;
+                else
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = 0;
+            }
         }
 
         private bool needToSave()
