@@ -74,7 +74,7 @@ namespace _86ME_ver1
         private int executeMultiByteCommand = 0;
         private int multiByteChannel = 0;
         private int[] storedInputData = new int[MAX_DATA_BYTES];
-        public int captured_data;
+        public long captured_data;
         public float captured_float;
         public float[] quaternion = new float[4];
         private bool parsingSysex;
@@ -422,7 +422,23 @@ namespace _86ME_ver1
                                 }
                                 else if (storedInputData[0] == 0x6E) // PIN_STATE_RESPONSE
                                 {
-                                    if (storedInputData[1] < 20)
+                                    if (storedInputData[1] == 0)
+                                    {
+                                        byte[] b2u = new byte[4];
+                                        for (int i = 0; i < 4; i++)
+                                            b2u[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
+                                        captured_data = System.BitConverter.ToUInt32(b2u, 0);
+                                        dataRecieved = true;
+                                    }
+                                    else if (storedInputData[1] == 1)
+                                    {
+                                        byte[] b2i = new byte[4];
+                                        for (int i = 0; i < 4; i++)
+                                            b2i[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
+                                        captured_data = System.BitConverter.ToInt32(b2i, 0);
+                                        dataRecieved = true;
+                                    }
+                                    else if (storedInputData[1] < 8 && storedInputData[1] >= 2)
                                     {
                                         captured_data = (int)((storedInputData[3] << 7) + storedInputData[2]);
                                         dataRecieved = true;

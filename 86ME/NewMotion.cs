@@ -16,6 +16,7 @@ namespace _86ME_ver1
         public Arduino arduino = null;
         public Panel[] fpanel = new Panel[45];
         public Label[] flabel = new Label[45];
+        public Label[] flabel2 = new Label[45];
         public ComboBox[] fbox = new ComboBox[45];
         public ComboBox[] fbox2 = new ComboBox[45];
         public MaskedTextBox[] ftext = new MaskedTextBox[45];
@@ -24,7 +25,6 @@ namespace _86ME_ver1
         public MaskedTextBox[] ftext4 = new MaskedTextBox[45];
         public MaskedTextBox[] ftext5 = new MaskedTextBox[45];
         public CheckBox[] fcheck = new CheckBox[45];
-        public CheckBox[] fcheck2 = new CheckBox[45];
         public HScrollBar[] fbar_off = new HScrollBar[45];
         public HScrollBar[] fbar_home = new HScrollBar[45];
         int[] offset = new int[45];
@@ -64,7 +64,7 @@ namespace _86ME_ver1
             comboBox1.SelectedIndex = 0;
 
             comboBox2.Items.AddRange(new object[] { "NONE",
-                                                    "LSM330DLC",
+                                                    "86Duino One On-Board IMU",
                                                     "RM-G146",
                                                     });
             comboBox2.SelectedIndex = 0;
@@ -89,6 +89,8 @@ namespace _86ME_ver1
                 p_gain[i] = 0;
             }
             create_panel(0, 45, 0);
+            label10.Enabled = false;
+            label11.Enabled = false;
             applyLang();
             sync = new Thread(() => synchronizer());
             sync.IsBackground = true;
@@ -99,7 +101,7 @@ namespace _86ME_ver1
         {
             if (fcheck[i].Checked == true)
             {
-                if (fcheck2[i].Checked == true && getQ.Enabled == true)
+                if (fbox[i].SelectedIndex != 2 && getQ.Enabled == true)
                 {
                     try
                     {
@@ -184,7 +186,6 @@ namespace _86ME_ver1
             {
                 fcheck[i].Text = NewMotion_lang_dic["NewMotion_fcheckText"];
                 ttp.SetToolTip(fcheck[i], NewMotion_lang_dic["NewMotion_fcheck_ToolTip"]);
-                ttp.SetToolTip(fcheck2[i], NewMotion_lang_dic["NewMotion_fcheck2_ToolTip"]);
             }
         }
 
@@ -193,22 +194,22 @@ namespace _86ME_ver1
             last_IMU = comboBox2.SelectedIndex;
         }
 
-        private void IMU_SelectedIndexChanged(object sender, EventArgs e)
+        public void SetIMUUI(int imu)
         {
-            if (comboBox2.SelectedIndex == last_IMU)
-                return;
-            if (comboBox2.SelectedIndex == 0)
+            if (imu == 0)
             {
                 init_imu.Enabled = false;
                 getQ.Enabled = false;
+                maskedTextBox1.Enabled = false;
+                maskedTextBox2.Enabled = false;
+                maskedTextBox3.Enabled = false;
+                maskedTextBox4.Enabled = false;
+                label10.Enabled = false;
+                label11.Enabled = false;
                 for (int i = 0; i < 45; i++)
                 {
-                    fcheck2[i].Checked = false;
-                    fcheck2[i].Enabled = false;
-                    maskedTextBox1.Enabled = false;
-                    maskedTextBox2.Enabled = false;
-                    maskedTextBox3.Enabled = false;
-                    maskedTextBox4.Enabled = false;
+                    ftext5[i].Enabled = false;
+                    fbox2[i].Enabled = false;
                 }
             }
             else
@@ -216,15 +217,26 @@ namespace _86ME_ver1
                 if (arduino != null)
                     init_imu.Enabled = true;
                 getQ.Enabled = false;
+                maskedTextBox1.Enabled = true;
+                maskedTextBox2.Enabled = true;
+                maskedTextBox3.Enabled = true;
+                maskedTextBox4.Enabled = true;
+                label10.Enabled = true;
+                label11.Enabled = true;
                 for (int i = 0; i < 45; i++)
                 {
-                    fcheck2[i].Enabled = true;
-                    maskedTextBox1.Enabled = true;
-                    maskedTextBox2.Enabled = true;
-                    maskedTextBox3.Enabled = true;
-                    maskedTextBox4.Enabled = true;
+                    ftext5[i].Enabled = true;
+                    fbox2[i].Enabled = true;
                 }
             }
+        }
+
+        private void IMU_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (comboBox2.SelectedIndex == last_IMU)
+                return;
+            else
+                SetIMUUI(comboBox2.SelectedIndex);
         }
 
         private void Quaternion_TextChanged(object sender, EventArgs e)
@@ -412,6 +424,7 @@ namespace _86ME_ver1
             {
                 fpanel[i] = new Panel();
                 flabel[i] = new Label();
+                flabel2[i] = new Label();
                 fbox[i] = new ComboBox();
                 fbox2[i] = new ComboBox();
                 ftext[i] = new MaskedTextBox();
@@ -420,16 +433,19 @@ namespace _86ME_ver1
                 ftext4[i] = new MaskedTextBox();
                 ftext5[i] = new MaskedTextBox();
                 fcheck[i] = new CheckBox();
-                fcheck2[i] = new CheckBox();
                 fbar_off[i] = new HScrollBar();
                 fbar_home[i] = new HScrollBar();
 
                 fpanel[i].Size = new Size(660, 50);
-                fpanel[i].Top += 5 + start_pos * 50;
+                fpanel[i].Top += 3 + start_pos * 50;
 
                 flabel[i].Size = new Size(65, 18);
                 flabel[i].Top += 5;
                 flabel[i].Left += 5;
+
+                flabel2[i].Size = new Size(2, 47);
+                flabel2[i].Left += 534;
+                flabel2[i].BorderStyle = BorderStyle.FixedSingle;
 
                 fbox[i].DropDownStyle = ComboBoxStyle.DropDownList;
                 fbox[i].Size = new Size(135, 22);
@@ -437,7 +453,7 @@ namespace _86ME_ver1
 
                 fbox2[i].DropDownStyle = ComboBoxStyle.DropDownList;
                 fbox2[i].Size = new Size(50, 22);
-                fbox2[i].Left += 605;
+                fbox2[i].Left += 555;
 
                 fcheck[i].Top += 24;
                 fcheck[i].Left += 125;
@@ -447,17 +463,6 @@ namespace _86ME_ver1
                 fcheck[i].Checked = false;
                 fcheck[i].Enabled = false;
                 ttp.SetToolTip(fcheck[i], NewMotion_lang_dic["NewMotion_fcheck_ToolTip"]);
-
-                fcheck2[i].Left += 530;
-                fcheck2[i].Size = new Size(30, 22);
-                fcheck2[i].Text = "";
-                fcheck2[i].Name = i.ToString();
-                fcheck2[i].Checked = false;
-                fcheck2[i].CheckedChanged += new EventHandler(gain_checked);
-                if (comboBox2.SelectedIndex != 0)
-                    fcheck2[i].Enabled = true;
-                else
-                    fcheck2[i].Enabled = false;
 
                 ftext[i].Name = i.ToString();
                 ftext[i].Text = offset[i].ToString();
@@ -499,7 +504,7 @@ namespace _86ME_ver1
                 ftext5[i].KeyPress += new KeyPressEventHandler(floatcheck);
                 ftext5[i].TextChanged += new EventHandler(check_pgain);
                 ftext5[i].Size = new Size(40, 22);
-                ftext5[i].Left += 560;
+                ftext5[i].Left += 610;
                 ftext5[i].Enabled = false;
 
                 fbar_off[i].Name = i.ToString();
@@ -542,8 +547,8 @@ namespace _86ME_ver1
                 fbox[i].Name = i.ToString();
                 fbox[i].SelectedIndexChanged += new EventHandler(motors_SelectedIndexChanged);
 
-                fbox2[i].Items.AddRange(new object[] { "roll", "pitch" });
-                fbox2[i].SelectedIndex = 0;
+                fbox2[i].Items.AddRange(new object[] { "roll", "pitch", "none" });
+                fbox2[i].SelectedIndex = 2;
                 fbox2[i].Name = i.ToString();
                 fbox2[i].Enabled = false;
 
@@ -553,6 +558,7 @@ namespace _86ME_ver1
                     flabel[i].Text = "SetServo" + i.ToString() + ":";
 
                 fpanel[i].Controls.Add(flabel[i]);
+                fpanel[i].Controls.Add(flabel2[i]);
                 fpanel[i].Controls.Add(fbox[i]);
                 fpanel[i].Controls.Add(fbox2[i]);
                 fpanel[i].Controls.Add(ftext[i]);
@@ -561,7 +567,6 @@ namespace _86ME_ver1
                 fpanel[i].Controls.Add(ftext4[i]);
                 fpanel[i].Controls.Add(ftext5[i]);
                 fpanel[i].Controls.Add(fcheck[i]);
-                fpanel[i].Controls.Add(fcheck2[i]);
                 fpanel[i].Controls.Add(fbar_off[i]);
                 fpanel[i].Controls.Add(fbar_home[i]);
                 channelver.Controls.Add(fpanel[i]);
@@ -783,21 +788,6 @@ namespace _86ME_ver1
             }
         }
 
-        private void gain_checked(object sender, EventArgs e)
-        {
-            int i = int.Parse(((CheckBox)sender).Name);
-            if (fcheck2[i].Checked == true)
-            {
-                ftext5[i].Enabled = true;
-                fbox2[i].Enabled = true;
-            }
-            else if (fcheck2[i].Checked == false)
-            {
-                ftext5[i].Enabled = false;
-                fbox2[i].Enabled = false;
-            }
-        }
-
         private void init_imu_Click(object sender, EventArgs e)
         {
             Thread show_progress = new Thread(new ThreadStart(progress_thread));
@@ -824,14 +814,30 @@ namespace _86ME_ver1
                 {
                     try
                     {
-                        arduino.getQ();
-                        DateTime time_start = DateTime.Now;
-                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 1000) ;
-                        arduino.dataRecieved = false;
-                        maskedTextBox1.Text = arduino.quaternion[0].ToString("0.####");
-                        maskedTextBox2.Text = arduino.quaternion[1].ToString("0.####");
-                        maskedTextBox3.Text = arduino.quaternion[2].ToString("0.####");
-                        maskedTextBox4.Text = arduino.quaternion[3].ToString("0.####");
+                        Quaternion detectQ = new Quaternion();
+                        detectQ.w = 0;
+                        int avg_times = 8;
+                        for (int i = 0; i < avg_times; i++)
+                        {
+                            arduino.getQ();
+                            DateTime time_start = DateTime.Now;
+                            while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 1000) ;
+                            arduino.dataRecieved = false;
+                            detectQ.w += arduino.quaternion[0];
+                            detectQ.x += arduino.quaternion[1];
+                            detectQ.y += arduino.quaternion[2];
+                            detectQ.z += arduino.quaternion[3];
+                            Thread.Sleep(33);
+                        }
+                        detectQ.w /= avg_times;
+                        detectQ.x /= avg_times;
+                        detectQ.y /= avg_times;
+                        detectQ.z /= avg_times;
+                        detectQ = detectQ.Normalized();
+                        maskedTextBox1.Text = detectQ.w.ToString("0.####");
+                        maskedTextBox2.Text = detectQ.x.ToString("0.####");
+                        maskedTextBox3.Text = detectQ.y.ToString("0.####");
+                        maskedTextBox4.Text = detectQ.z.ToString("0.####");
                     }
                     catch
                     {

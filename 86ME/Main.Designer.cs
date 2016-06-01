@@ -82,6 +82,7 @@
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
             this.acc_groupBox = new System.Windows.Forms.GroupBox();
+            this.getAccData = new System.Windows.Forms.Button();
             this.accDurationUnit = new System.Windows.Forms.Label();
             this.accDurationText = new System.Windows.Forms.MaskedTextBox();
             this.accw3 = new System.Windows.Forms.Label();
@@ -156,7 +157,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.getAccData = new System.Windows.Forms.Button();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -392,7 +392,7 @@
             // 
             this.operandToolStripMenuItem.Name = "operandToolStripMenuItem";
             this.operandToolStripMenuItem.Size = new System.Drawing.Size(147, 22);
-            this.operandToolStripMenuItem.Text = "Operand";
+            this.operandToolStripMenuItem.Text = "Compute";
             this.operandToolStripMenuItem.Click += new System.EventHandler(this.operandToolStripMenuItem_Click);
             // 
             // ifToolStripMenuItem
@@ -706,6 +706,16 @@
             this.acc_groupBox.TabStop = false;
             this.acc_groupBox.Text = "Accelerometer";
             // 
+            // getAccData
+            // 
+            this.getAccData.Location = new System.Drawing.Point(30, 106);
+            this.getAccData.Name = "getAccData";
+            this.getAccData.Size = new System.Drawing.Size(154, 23);
+            this.getAccData.TabIndex = 42;
+            this.getAccData.Text = "Auto Detect";
+            this.getAccData.UseVisualStyleBackColor = true;
+            this.getAccData.Click += new System.EventHandler(this.getAccData_Click);
+            // 
             // accDurationUnit
             // 
             this.accDurationUnit.AutoSize = true;
@@ -717,9 +727,9 @@
             // 
             // accDurationText
             // 
-            this.accDurationText.Location = new System.Drawing.Point(69, 135);
+            this.accDurationText.Location = new System.Drawing.Point(77, 135);
             this.accDurationText.Name = "accDurationText";
-            this.accDurationText.Size = new System.Drawing.Size(93, 22);
+            this.accDurationText.Size = new System.Drawing.Size(85, 22);
             this.accDurationText.TabIndex = 41;
             this.accDurationText.TextChanged += new System.EventHandler(this.accDurationText_Changed);
             this.accDurationText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numbercheck);
@@ -801,9 +811,9 @@
             this.accDurationLabel.AutoSize = true;
             this.accDurationLabel.Location = new System.Drawing.Point(14, 138);
             this.accDurationLabel.Name = "accDurationLabel";
-            this.accDurationLabel.Size = new System.Drawing.Size(49, 12);
+            this.accDurationLabel.Size = new System.Drawing.Size(57, 12);
             this.accDurationLabel.TabIndex = 32;
-            this.accDurationLabel.Text = "Duration:";
+            this.accDurationLabel.Text = "Wait Time:";
             // 
             // accw1
             // 
@@ -1572,16 +1582,6 @@
             this.Setting_groupBox.TabIndex = 15;
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
-            // 
-            // getAccData
-            // 
-            this.getAccData.Location = new System.Drawing.Point(30, 106);
-            this.getAccData.Name = "getAccData";
-            this.getAccData.Size = new System.Drawing.Size(154, 23);
-            this.getAccData.TabIndex = 42;
-            this.getAccData.Text = "Show Current Data";
-            this.getAccData.UseVisualStyleBackColor = true;
-            this.getAccData.Click += new System.EventHandler(this.getAccData_Click);
             // 
             // Main
             // 

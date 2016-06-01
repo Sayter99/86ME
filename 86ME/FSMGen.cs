@@ -51,7 +51,7 @@ namespace _86ME_ver1
                 method_flag[4] = true;
                 for (int i = 0; i < 45; i++ )
                 {
-                    if (Motion.fcheck2[i].Checked == true && Motion.p_gain[i] != 0)
+                    if (Motion.fbox2[i].SelectedIndex != 2 && Motion.p_gain[i] != 0)
                         IMU_compensatory = true;
                 }
             }
@@ -114,9 +114,9 @@ namespace _86ME_ver1
             }
         }
 
-        private string op2str(int left, int val1, int val2, int n, int f)
+        private string op2str(int left, int val1, int val2, int n, int form)
         {
-            switch (f)
+            switch (form)
             {
                 case 0:
                     if (n == 0) return "    " + var2str(left) + " = " + var2str(val1) + "+" + var2str(val2) + ";";
@@ -139,6 +139,9 @@ namespace _86ME_ver1
                     else if (n == 4) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = log10(" + var2str(val2) + ");\n" +
                                             "    else " + var2str(val2) + " = 0;";
                     else if (n == 5) return "    " + var2str(left) + " = fabs(" + var2str(val2) + ");";
+                    else if (n == 6) return "    " + var2str(left) + " = -" + var2str(val2) + ";";
+                    else if (n == 7) return "    " + var2str(left) + " = cos(" + var2str(val2) + ");";
+                    else if (n == 8) return "    " + var2str(left) + " = sin(" + var2str(val2) + ");";
                     break;
             }
             return "";
@@ -167,12 +170,18 @@ namespace _86ME_ver1
 
         private string var2str(int n)
         {
-            if (n < opVar_num + 14 && n >= opVar_num)
-                return "digitalRead(" + (n - opVar_num) + ")";
-            else if (n < opVar_num + 20 && n >= opVar_num + 14)
-                return "analogRead(" + (n - opVar_num - 14) + ")";
-            else if (n < opVar_num + 29 && n >= opVar_num + 20)
-                return "_IMU_val[" + (n - opVar_num - 20) + "]";
+            if (n == opVar_num)
+                return "millis()";
+            else if (n == opVar_num + 1)
+                return "rand()";
+            else if (n < opVar_num + 8 && n >= opVar_num + 2)
+                return "analogRead(" + (n - opVar_num - 2) + ")";
+            else if (n < opVar_num + 11 && n >= opVar_num + 8)
+                return "_IMU_val[" + (n - opVar_num - 8) + "]";
+            else if (n == opVar_num + 11)
+                return "_roll";
+            else if (n == opVar_num + 12)
+                return "_pitch";
             else
                 return "_86ME_var[" + n + "]";
         }
@@ -266,10 +275,10 @@ namespace _86ME_ver1
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                 }
-                else if (m.Events[i] is ME_Operand)
+                else if (m.Events[i] is ME_Compute)
                 {
-                    writer.Write("OPERAND_" + i.ToString());
-                    m.states.Add("OPERAND_" + i.ToString());
+                    writer.Write("COMPUTE_" + i.ToString());
+                    m.states.Add("COMPUTE_" + i.ToString());
                     if (i != m.Events.Count - 1)
                         writer.Write(", ");
                 }
@@ -307,23 +316,23 @@ namespace _86ME_ver1
             {
                 writer.WriteLine("void updateIMU()\n{");
                 writer.WriteLine("  if(millis() - _IMU_update_time < 33) return;\n"); // ~33fps
+                writer.WriteLine("  _IMU.getQ(_IMU_Q, _IMU_val);");
+                writer.WriteLine("  double _w, _x, _y, _z;");
+                writer.WriteLine("  _w = _IMU_Q[0]*" + invQ.w + " - _IMU_Q[1]*" + invQ.x +
+                                    " - _IMU_Q[2]*" + invQ.y + " - _IMU_Q[3]*" + invQ.z + ";");
+                writer.WriteLine("  _x = _IMU_Q[1]*" + invQ.w + " + _IMU_Q[0]*" + invQ.x +
+                                    " - _IMU_Q[3]*" + invQ.y + " + _IMU_Q[2]*" + invQ.z + ";");
+                writer.WriteLine("  _y = _IMU_Q[2]*" + invQ.w + " + _IMU_Q[3]*" + invQ.x +
+                                    " + _IMU_Q[0]*" + invQ.y + " - _IMU_Q[1]*" + invQ.z + ";");
+                writer.WriteLine("  _z = _IMU_Q[3]*" + invQ.w + " - _IMU_Q[2]*" + invQ.x +
+                                    " + _IMU_Q[1]*" + invQ.y + " + _IMU_Q[0]*" + invQ.z + ";");
+                writer.WriteLine("  _roll = atan2(2*(_w*_x + _y*_z), 1 - 2*(_x*_x + _y*_y));");
+                writer.WriteLine("  _pitch = asin(2*(_w*_y - _z*_x));");
                 if (IMU_compensatory)
                 {
-                    writer.WriteLine("  _IMU.getQ(_IMU_Q, _IMU_val);");
-                    writer.WriteLine("  double _w, _x, _y, _z;");
-                    writer.WriteLine("  _w = _IMU_Q[0]*" + invQ.w + " - _IMU_Q[1]*" + invQ.x +
-                                     " - _IMU_Q[2]*" + invQ.y + " - _IMU_Q[3]*" + invQ.z + ";");
-                    writer.WriteLine("  _x = _IMU_Q[1]*" + invQ.w + " + _IMU_Q[0]*" + invQ.x +
-                                     " - _IMU_Q[3]*" + invQ.y + " + _IMU_Q[2]*" + invQ.z + ";");
-                    writer.WriteLine("  _y = _IMU_Q[2]*" + invQ.w + " + _IMU_Q[3]*" + invQ.x +
-                                     " + _IMU_Q[0]*" + invQ.y + " - _IMU_Q[1]*" + invQ.z + ";");
-                    writer.WriteLine("  _z = _IMU_Q[3]*" + invQ.w + " - _IMU_Q[2]*" + invQ.x +
-                                     " + _IMU_Q[1]*" + invQ.y + " + _IMU_Q[0]*" + invQ.z + ";");
-                    writer.WriteLine("  double _roll = atan2(2*(_w*_x + _y*_z), 1 - 2*(_x*_x + _y*_y));");
-                    writer.WriteLine("  double _pitch = asin(2*(_w*_y - _z*_x));");
                     for (int i = 0; i < channels.Count; i++)
                     {
-                        if (Motion.p_gain[channels[i]] != 0 && Motion.fcheck2[channels[i]].Checked == true)
+                        if (Motion.p_gain[channels[i]] != 0 && Motion.fbox2[channels[i]].SelectedIndex != 2)
                         {
                             if (Motion.fbox2[channels[i]].SelectedIndex == 0) // roll
                                 writer.WriteLine("  mixOffsets.mixoffsets[" + i + "] = " +
@@ -335,10 +344,7 @@ namespace _86ME_ver1
                     }
                     writer.WriteLine("  mixOffsets.setMixOffsets();\n");
                 }
-                else
-                {
-                    writer.WriteLine("  _IMU.getValues(_IMU_val);");
-                }
+
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -665,7 +671,7 @@ namespace _86ME_ver1
                     writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
                     writer.WriteLine(space4 + "  _86ME_RUN.positions[i] = " + frm_name +
                                      "[" + f.num + "].positions[i] & " + mask_str + ";");
-                    writer.WriteLine(space4 + "_86ME_RUN.playPositions(" + f.delay + ");");
+                    writer.WriteLine(space4 + "_86ME_RUN.playPositions((unsigned long)" + f.delay + ");");
                     writer.WriteLine(space4 + m.name + "::time = millis();");
                     writer.WriteLine(space4 + m.name + "::state = "+ m.name + "::WAIT_FRAME_" + i + ";");
                     writer.WriteLine(space + "case " + m.name + "::WAIT_FRAME_" + i + ":");
@@ -916,10 +922,6 @@ namespace _86ME_ver1
                 {
                     ME_If mif = (ME_If)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::IF_" + i + ":");
-                    if ((mif.left_var >= opVar_num) && (mif.left_var < opVar_num + 14))
-                        writer.WriteLine(space4 + "pinMode(" + (mif.left_var - opVar_num) + ", INPUT);");
-                    if ((mif.right_var >= opVar_num) && (mif.right_var < opVar_num + 14))
-                        writer.WriteLine(space4 + "pinMode(" + (mif.right_var - opVar_num) + ", INPUT);");
                     writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + var2str(mif.right_var) + ")");
                     bool hasTarget = false;
                     for (int k = 0; k < m.Events.Count; k++)
@@ -953,27 +955,19 @@ namespace _86ME_ver1
                     }
                     writer.WriteLine(space4 + "break;");
                 }
-                else if (m.Events[i] is ME_Operand)
+                else if (m.Events[i] is ME_Compute)
                 {
-                    ME_Operand op = (ME_Operand)m.Events[i];
-                    writer.WriteLine(space + "case " + m.name + "::OPERAND_" + i + ":");
+                    ME_Compute op = (ME_Compute)m.Events[i];
+                    writer.WriteLine(space + "case " + m.name + "::COMPUTE_" + i + ":");
                     switch(op.form)
                     {
                         case 0:
-                            if ((op.f1_var1 >= opVar_num) && (op.f1_var1 < opVar_num + 14))
-                                writer.WriteLine(space4 + "pinMode(" + (op.f1_var1 - opVar_num) + ", INPUT);");
-                            if ((op.f1_var2 >= opVar_num) && (op.f1_var2 < opVar_num + 14))
-                                writer.WriteLine(space4 + "pinMode(" + (op.f1_var2 - opVar_num) + ", INPUT);");
                             writer.WriteLine(op2str(op.left_var, op.f1_var1, op.f1_var2, op.f1_op, 0));
                             break;
                         case 1:
-                            if ((op.f2_var >= opVar_num) && (op.f2_var < opVar_num + 14))
-                                writer.WriteLine(space4 + "pinMode(" + (op.f2_var - opVar_num) + ", INPUT);");
                             writer.WriteLine(op2str(op.left_var, 0, op.f2_var, op.f2_op, 1));
                             break;
                         case 2:
-                            if ((op.f3_var >= opVar_num) && (op.f3_var < opVar_num + 14))
-                                writer.WriteLine(space4 + "pinMode(" + (op.f3_var - opVar_num) + ", INPUT);");
                             writer.WriteLine(space4 + var2str(op.left_var) + " = " + var2str(op.f3_var) + ";");
                             break;
                         case 3:
@@ -1009,6 +1003,7 @@ namespace _86ME_ver1
         public void generate_declaration(TextWriter writer, List<int> channels, List<uint> home, bool isAllinOne)
         {
             string frm_name;
+            writer.WriteLine("#include <time.h>");
             writer.WriteLine("#include <math.h>");
             writer.WriteLine("#include <Servo86.h>");
             if (method_flag[1]) // keyboard
@@ -1020,6 +1015,10 @@ namespace _86ME_ver1
             writer.WriteLine();
 
             writer.WriteLine("float _86ME_var[50] = {0};");
+            writer.WriteLine("double _roll = 0;");
+            writer.WriteLine("double _pitch = 0;");
+            writer.WriteLine("double _IMU_val[9] = {0};");
+            writer.WriteLine("double _IMU_Q[4] = {0};");
             if (channels.Count > 0)
             {
                 writer.WriteLine("int servo_mask[" + channels.Count + "] = {0};");
@@ -1086,12 +1085,10 @@ namespace _86ME_ver1
             if (method_flag[4]) // acc
             {
                 writer.WriteLine("unsigned long _IMU_update_time = millis();");
-                writer.WriteLine("double _IMU_val[9] = {0};");
                 writer.WriteLine("FreeIMU1 _IMU = FreeIMU1();");
             }
             if (IMU_compensatory)
             {
-                writer.WriteLine("double _IMU_Q[4] = {0};");
                 writer.WriteLine("ServoMixOffset mixOffsets;");
             }
             writer.WriteLine();
@@ -1116,6 +1113,7 @@ namespace _86ME_ver1
             int processed = 0;
             writer.WriteLine("void setup()");
             writer.WriteLine("{");
+            writer.WriteLine("  srand(time(NULL));");
             if (method_flag[2]) // bt
                 writer.WriteLine("  " + bt_port + ".begin(" + bt_baud + ");");
             writer.WriteLine();
@@ -1180,12 +1178,12 @@ namespace _86ME_ver1
             writer.WriteLine();
             writer.WriteLine("  offsets.setOffsets();");
             writer.WriteLine();
-            if (IMU_compensatory)
+            if (method_flag[4])
             {
                 writer.WriteLine("  for(int i = 0; i < 400; i++)\n  {\n    _IMU.getQ(_IMU_Q, _IMU_val);\n" +
                                  "    delay(50);\n  }\n");
             }
-            writer.WriteLine("  _86ME_HOME.playPositions(0);");
+            writer.WriteLine("  _86ME_HOME.playPositions((unsigned long)0);");
 
             writer.WriteLine("}");
             writer.WriteLine();

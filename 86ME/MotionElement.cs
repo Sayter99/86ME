@@ -130,7 +130,7 @@ namespace _86ME_ver1
         }
     }
 
-    public class ME_Operand
+    public class ME_Compute
     {
         public int left_var;
         public int form;
@@ -141,7 +141,7 @@ namespace _86ME_ver1
         public int f2_var;
         public int f3_var;
         public double f4_const;
-        public ME_Operand()
+        public ME_Compute()
         {
             this.left_var = 0;
             this.form = 0;

@@ -4,8 +4,9 @@
 
 _VERSION_: v1.8
 
-* Add three new actions "Release", "Operand" and "If".
+* Add three new actions "Release", "Compute" and "If".
 * Add a new trigger "Accelerometer".
+* Add a new button on framelist that it can release a single servo.
 * Support two IMUs including RM-G146 and LSM330DLC for the gyro-gain function.
 
 _VERSION_: v1.7
@@ -78,14 +79,15 @@ _VERSION_: v1.0
 #### INSTALLATION ####
 
 1. System reqirement: Windows XP/Vista/7/8/8.1/10 with .NET framework 4.
-2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.6.zip).
+2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.8.zip).
 3. Unzip 86ME and execute 86ME.exe to start.
 
 #### DOCUMENTS ####
 
 The 86ME tutorial pages for installation instructions and usage.
 
-* [Version 1.7](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Version 1.8](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Version 1.7](http://www.86duino.com/index.php?p=15750&lang=TW)
 * [Version 1.6](http://www.86duino.com/index.php?p=14738&lang=TW)
 * [Version 1.5](http://www.86duino.com/index.php?p=13111&lang=TW)
 * [Version 1.4](http://www.86duino.com/index.php?p=12778&lang=TW)

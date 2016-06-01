@@ -41,6 +41,8 @@
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.pic_loaded = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.getQ = new System.Windows.Forms.Button();
+            this.init_imu = new System.Windows.Forms.Button();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
@@ -54,16 +56,13 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
-            this.label12 = new System.Windows.Forms.Label();
-            this.init_imu = new System.Windows.Forms.Button();
-            this.getQ = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button1.Location = new System.Drawing.Point(395, 559);
+            this.button1.Location = new System.Drawing.Point(392, 559);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -74,7 +73,7 @@
             // button2
             // 
             this.button2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button2.Location = new System.Drawing.Point(510, 559);
+            this.button2.Location = new System.Drawing.Point(507, 559);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -105,20 +104,21 @@
             // channelver
             // 
             this.channelver.AutoScroll = true;
+            this.channelver.BackColor = System.Drawing.SystemColors.Control;
             this.channelver.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.channelver.Location = new System.Drawing.Point(12, 146);
+            this.channelver.Location = new System.Drawing.Point(14, 148);
             this.channelver.Name = "channelver";
-            this.channelver.Size = new System.Drawing.Size(680, 407);
+            this.channelver.Size = new System.Drawing.Size(680, 405);
             this.channelver.TabIndex = 5;
             // 
             // checkBox2
             // 
             this.checkBox2.AutoSize = true;
-            this.checkBox2.Location = new System.Drawing.Point(443, 130);
+            this.checkBox2.Location = new System.Drawing.Point(445, 132);
             this.checkBox2.Name = "checkBox2";
-            this.checkBox2.Size = new System.Drawing.Size(81, 16);
+            this.checkBox2.Size = new System.Drawing.Size(82, 16);
             this.checkBox2.TabIndex = 9;
-            this.checkBox2.Text = "min      Max";
+            this.checkBox2.Text = "Min      Max";
             this.ttp.SetToolTip(this.checkBox2, "Enable or disable to modify ranges of motors.");
             this.checkBox2.UseVisualStyleBackColor = true;
             this.checkBox2.CheckedChanged += new System.EventHandler(this.checkBox2_CheckedChanged);
@@ -126,7 +126,7 @@
             // button3
             // 
             this.button3.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button3.Location = new System.Drawing.Point(105, 559);
+            this.button3.Location = new System.Drawing.Point(102, 559);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(125, 23);
             this.button3.TabIndex = 10;
@@ -138,20 +138,20 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(225, 131);
+            this.label2.Location = new System.Drawing.Point(227, 133);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(88, 12);
+            this.label2.Size = new System.Drawing.Size(90, 12);
             this.label2.TabIndex = 11;
-            this.label2.Text = "offset (-256~255)";
+            this.label2.Text = "Offset (-256~255)";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(352, 131);
+            this.label3.Location = new System.Drawing.Point(354, 133);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 12);
+            this.label3.Size = new System.Drawing.Size(60, 12);
             this.label3.TabIndex = 12;
-            this.label3.Text = "homeframe";
+            this.label3.Text = "Homeframe";
             // 
             // ttp
             // 
@@ -184,12 +184,32 @@
             this.groupBox1.Controls.Add(this.label5);
             this.groupBox1.Controls.Add(this.comboBox2);
             this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Location = new System.Drawing.Point(14, 34);
+            this.groupBox1.Location = new System.Drawing.Point(14, 36);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(678, 90);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "IMU";
+            this.groupBox1.Text = "Inertial Measurement Unit (IMU) Settings";
+            // 
+            // getQ
+            // 
+            this.getQ.Location = new System.Drawing.Point(455, 49);
+            this.getQ.Name = "getQ";
+            this.getQ.Size = new System.Drawing.Size(217, 23);
+            this.getQ.TabIndex = 26;
+            this.getQ.Text = "Auto Detect Orientation";
+            this.getQ.UseVisualStyleBackColor = true;
+            this.getQ.Click += new System.EventHandler(this.getQ_Click);
+            // 
+            // init_imu
+            // 
+            this.init_imu.Location = new System.Drawing.Point(560, 13);
+            this.init_imu.Name = "init_imu";
+            this.init_imu.Size = new System.Drawing.Size(112, 23);
+            this.init_imu.TabIndex = 25;
+            this.init_imu.Text = "Initialize IMU";
+            this.init_imu.UseVisualStyleBackColor = true;
+            this.init_imu.Click += new System.EventHandler(this.init_imu_Click);
             // 
             // label9
             // 
@@ -272,9 +292,9 @@
             this.label5.AutoSize = true;
             this.label5.Location = new System.Drawing.Point(6, 54);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(90, 12);
+            this.label5.Size = new System.Drawing.Size(85, 12);
             this.label5.TabIndex = 16;
-            this.label5.Text = "Initial Quaternion:";
+            this.label5.Text = "Base Orientation:";
             // 
             // comboBox2
             // 
@@ -292,66 +312,36 @@
             this.label4.AutoSize = true;
             this.label4.Location = new System.Drawing.Point(6, 18);
             this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(56, 12);
+            this.label4.Size = new System.Drawing.Size(60, 12);
             this.label4.TabIndex = 15;
-            this.label4.Text = "Used IMU:";
+            this.label4.Text = "Select IMU:";
             // 
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(578, 131);
+            this.label10.Location = new System.Drawing.Point(633, 133);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(33, 12);
+            this.label10.Size = new System.Drawing.Size(27, 12);
             this.label10.TabIndex = 15;
-            this.label10.Text = "PGain";
+            this.label10.Text = "Gain";
             // 
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(623, 131);
+            this.label11.Location = new System.Drawing.Point(574, 133);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(37, 12);
+            this.label11.Size = new System.Drawing.Size(45, 12);
             this.label11.TabIndex = 16;
-            this.label11.Text = "Source";
-            // 
-            // label12
-            // 
-            this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(531, 131);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(37, 12);
-            this.label12.TabIndex = 17;
-            this.label12.Text = "Enable";
-            // 
-            // init_imu
-            // 
-            this.init_imu.Location = new System.Drawing.Point(560, 13);
-            this.init_imu.Name = "init_imu";
-            this.init_imu.Size = new System.Drawing.Size(112, 23);
-            this.init_imu.TabIndex = 25;
-            this.init_imu.Text = "Initialize IMU";
-            this.init_imu.UseVisualStyleBackColor = true;
-            this.init_imu.Click += new System.EventHandler(this.init_imu_Click);
-            // 
-            // getQ
-            // 
-            this.getQ.Location = new System.Drawing.Point(455, 49);
-            this.getQ.Name = "getQ";
-            this.getQ.Size = new System.Drawing.Size(217, 23);
-            this.getQ.TabIndex = 26;
-            this.getQ.Text = "Get Current Quaternion";
-            this.getQ.UseVisualStyleBackColor = true;
-            this.getQ.Click += new System.EventHandler(this.getQ_Click);
+            this.label11.Text = "IMU Src";
             // 
             // NewMotion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(704, 594);
-            this.Controls.Add(this.label12);
+            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
-            this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.pic_loaded);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.label2);
@@ -402,9 +392,8 @@
         public System.Windows.Forms.MaskedTextBox maskedTextBox3;
         public System.Windows.Forms.MaskedTextBox maskedTextBox2;
         public System.Windows.Forms.MaskedTextBox maskedTextBox1;
-        private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.Label label11;
-        private System.Windows.Forms.Label label12;
+        public System.Windows.Forms.Label label10;
+        public System.Windows.Forms.Label label11;
         public System.Windows.Forms.Button getQ;
         public System.Windows.Forms.Button init_imu;
     }
