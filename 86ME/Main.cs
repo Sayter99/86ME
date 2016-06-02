@@ -30,6 +30,7 @@ namespace _86ME_ver1
     public partial class Main : Form
     {
         Dictionary<string, string> Main_lang_dic;
+        ulong servo_onOff = ~0UL;
         int opVar_num = 50;
         float[] operand_var = new float[100];
         string bt_port = "Serial1";
@@ -52,6 +53,7 @@ namespace _86ME_ver1
         Label[] flabel = new Label[45];
         MaskedTextBox[] ftext = new MaskedTextBox[45];
         CheckBox[] fcheck = new CheckBox[45];
+        CheckBox[] fonoff = new CheckBox[45];
         HScrollBar[] fbar = new HScrollBar[45];
         NewMotion Motion;
         public ArrayList ME_Motionlist;
@@ -149,11 +151,12 @@ namespace _86ME_ver1
                 if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                 {
                     fcheck[i] = new CheckBox();
+                    fonoff[i] = new CheckBox();
                     fpanel[i] = new Panel();
                     flabel[i] = new Label();
                     ftext[i] = new MaskedTextBox();
                     fbar[i] = new HScrollBar();
-                    fpanel[i].Size = new Size(275, 30);
+                    fpanel[i].Size = new Size(267, 30);
                     fpanel[i].BackColor = Color.Transparent;
                     fpanel[i].BorderStyle = BorderStyle.FixedSingle;
                     if (Motion.picfilename == null || Motion.newflag == true)
@@ -186,7 +189,7 @@ namespace _86ME_ver1
                     flabel[i].BackColor = Color.White;
                     flabel[i].Top += 3;
                     flabel[i].Left += 20;
-                    ftext[i].Size = new Size(45, 22);
+                    ftext[i].Size = new Size(40, 22);
                     ftext[i].Left += 60;
                     ftext[i].TextAlign = HorizontalAlignment.Right;
 
@@ -204,14 +207,28 @@ namespace _86ME_ver1
                         }
                     }
                     ftext[i].KeyPress += new KeyPressEventHandler(numbercheck);
-                    fbar[i].Size = new Size(160, 22);
-                    fbar[i].Left += 110;
 
+                    fbar[i].Size = new Size(135, 22);
+                    fbar[i].Left += 105;
                     fbar[i].Maximum = (int)(Max[i] + 9);
                     fbar[i].Minimum = (int)min[i];
-
                     fbar[i].Name = i.ToString();
                     fbar[i].Scroll += new ScrollEventHandler(scroll_event);
+
+                    fonoff[i].Appearance = Appearance.Button;
+                    fonoff[i].FlatStyle = FlatStyle.Flat;
+                    fonoff[i].FlatAppearance.BorderSize = 0;
+                    fonoff[i].Image = Properties.Resources.on;
+                    fonoff[i].BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+                    fonoff[i].Size = new Size(23, 23);
+                    fonoff[i].Left += 241;
+                    fonoff[i].Name = i.ToString();
+                    fonoff[i].CheckedChanged += new EventHandler(onOff_CheckedChanged);
+                    if ((servo_onOff & (1UL << i)) != 0)
+                        fonoff[i].Checked = false;
+                    else
+                        fonoff[i].Checked = true;
+
                     if (Motionlist.SelectedItem != null)
                     {
                         string[] datas = Motionlist.SelectedItem.ToString().Split(' ');
@@ -251,14 +268,70 @@ namespace _86ME_ver1
                         fbar[i].Enabled = false;
                     }
 
+                    ttp.SetToolTip(fonoff[i], Main_lang_dic["fonoff_ToolTip"]);
                     ttp.SetToolTip(fcheck[i], Main_lang_dic["fcheck_ToolTip"]);
                     fpanel[i].Controls.Add(fcheck[i]);
+                    fpanel[i].Controls.Add(fonoff[i]);
                     fpanel[i].Controls.Add(flabel[i]);
                     fpanel[i].Controls.Add(ftext[i]);
                     fpanel[i].Controls.Add(fbar[i]);
                     Framelist.Controls.Add(fpanel[i]);
                     
                     count++;
+                }
+            }
+        }
+
+        public void onOff_CheckedChanged(object sender, EventArgs e) //sender -> fonoff[i]
+        {
+            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
+            int index = int.Parse(((CheckBox)sender).Name);
+            if (((CheckBox)sender).Checked == true)
+            {
+                ((CheckBox)sender).Image = Properties.Resources.off;
+                servo_onOff &= ~(1UL << index);
+                if (string.Compare(com_port, "OFF") != 0)
+                {
+                    try
+                    {
+                        arduino.motor_release(index);
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                    }
+                }
+            }
+            else if (((CheckBox)sender).Checked == false)
+            {
+                ((CheckBox)sender).Image = Properties.Resources.on;
+                servo_onOff |= 1UL << index;
+                if (autocheck.Checked == true)
+                {
+                    for (int i = 0; i < 45; i++)
+                    {
+                        if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        {
+                            autoframe[i] = (int.Parse(ftext[i].Text) + offset[i]);
+                            if (m.moton_layer != 0 && !m.used_servos.Contains(i))
+                                autoframe[i] = 0;
+                        }
+                        else
+                            autoframe[i] = 0;
+                    }
+                    if (string.Compare(com_port, "OFF") != 0)
+                    {
+                        try
+                        {
+                            arduino.frameWrite(0x6F, autoframe, 0, servo_onOff);
+                        }
+                        catch
+                        {
+                            com_port = "OFF";
+                            MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                        }
+                    }
                 }
             }
         }
@@ -322,10 +395,18 @@ namespace _86ME_ver1
         {
             if (string.Compare(com_port, "OFF") != 0)
             {
-                if(sync_speed.Value == 5)
-                    arduino.setSyncSpeed(0);
-                else
-                    arduino.setSyncSpeed(400 + sync_speed.Value * 400);
+                try
+                {
+                    if (sync_speed.Value == 5)
+                        arduino.setSyncSpeed(0);
+                    else
+                        arduino.setSyncSpeed(400 + sync_speed.Value * 400);
+                }
+                catch
+                {
+                    com_port = "OFF";
+                    MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                }
             }
         }
 
@@ -373,7 +454,7 @@ namespace _86ME_ver1
                         {
                             try
                             {
-                                arduino.frameWrite(0x6F, autoframe, 0);
+                                arduino.frameWrite(0x6F, autoframe, 0, servo_onOff);
                             }
                             catch
                             {
@@ -656,6 +737,8 @@ namespace _86ME_ver1
                 delaytext.Text = default_delay.ToString();
                 current_motionlist_idx = -1;
                 last_motionlist_idx = -1;
+                servo_onOff = ~0UL;
+                autocheck.Checked = false;
 
                 initPs2();
                 ps2pins[0] = "0";
@@ -965,7 +1048,7 @@ namespace _86ME_ver1
             writer.Close();
         }
 
-        private void actionToolStripMenuItem_Click(object sender, EventArgs e)      //load project
+        private void actionToolStripMenuItem_Click(object sender, EventArgs e)//load project
         {
             if (needToSave() && File.Exists(load_filename))
             {
@@ -995,6 +1078,10 @@ namespace _86ME_ver1
                 MessageBox.Show(Main_lang_dic["errorMsg4"]);
                 return;
             }
+            current_motionlist_idx = -1;
+            last_motionlist_idx = -1;
+            servo_onOff = ~0UL;
+            autocheck.Checked = false;
             load_project(filename);
             MotionConfig.SelectedIndex = 0;
         }
@@ -2201,7 +2288,8 @@ namespace _86ME_ver1
                     loadFrame.Visible = true;
                     autocheck.Enabled = true;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
-                    delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
+                    ME_Frame f = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
+                    delaytext.Text = f.delay.ToString();
                     if (autocheck.Checked == true)
                     {
                         for (int i = 0; i < 45; i++)
@@ -2220,7 +2308,7 @@ namespace _86ME_ver1
                         {
                             try
                             {
-                                arduino.frameWrite(0x6F, autoframe, (int)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay);
+                                arduino.frameWrite(0x6F, autoframe, (int)(f.delay), servo_onOff);
                             }
                             catch
                             {
@@ -2270,7 +2358,8 @@ namespace _86ME_ver1
                     loadFrame.Visible = false;
                     autocheck.Enabled = true;
                     this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
-                    delaytext.Text = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay.ToString();
+                    ME_Frame h = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
+                    delaytext.Text = h.delay.ToString();
                     if (autocheck.Checked == true)
                     {
                         for (int i = 0; i < 45; i++)
@@ -2285,7 +2374,7 @@ namespace _86ME_ver1
                         {
                             try
                             {
-                                arduino.frameWrite(0x6F, autoframe, (int)((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).delay);
+                                arduino.frameWrite(0x6F, autoframe, (int)(h.delay), servo_onOff);
                             }
                             catch
                             {
@@ -3414,6 +3503,8 @@ namespace _86ME_ver1
 
         private void autocheck_CheckedChanged(object sender, EventArgs e)
         {
+            if (ME_Motionlist.Count == 0)
+                return;
             ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
             bool active_autocheck = false;
             if (MotionCombo.SelectedItem != null)
@@ -3458,7 +3549,7 @@ namespace _86ME_ver1
                         {
                             try
                             {
-                                arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text));
+                                arduino.frameWrite(0x6F, autoframe, int.Parse(delaytext.Text), servo_onOff);
                             }
                             catch
                             {

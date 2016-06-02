@@ -299,19 +299,31 @@ namespace _86ME_ver1
             _serialPort.Write(message, 0, 8);
         }
 
-        public void motor_release()
+        public void motor_release(int s = 45)
         {
-            byte[] message = new byte[3];
-            message[0] = 0xF0;
-            message[1] = 0x70;
-            message[2] = 0xF7;
-            _serialPort.Write(message, 0, 3);
+            if (s == 45)
+            {
+                byte[] message = new byte[3];
+                message[0] = 0xF0;
+                message[1] = 0x70;
+                message[2] = 0xF7;
+                _serialPort.Write(message, 0, 3);
+            }
+            else
+            {
+                byte[] message = new byte[4];
+                message[0] = 0xF0;
+                message[1] = 0x70;
+                message[2] = (byte)(s & 0x7F);
+                message[3] = 0xF7;
+                _serialPort.Write(message, 0, 4);
+            }
         }
 
-        public void frameWrite(int command, int[] frame, int delay)
+        public void frameWrite(int command, int[] frame, int delay, ulong servos = ~0UL)
         {
             int msg_index = 2;
-            byte[] message = new byte[95];
+            byte[] message = new byte[102];
             message[0] = 0xF0;
             message[1] = (byte)(command);
             for (int i = 0; i < 45; i++, msg_index += 2)
@@ -321,8 +333,18 @@ namespace _86ME_ver1
             }
             message[msg_index] = (byte)(delay & 0x7F);
             message[msg_index + 1] = (byte)((delay >> 7) & 0x7F);
-            message[msg_index + 2] = 0xF7;
-            _serialPort.Write(message, 0, 95);
+            if (servos == ~0UL)
+            {
+                message[msg_index + 2] = 0xF7;
+                _serialPort.Write(message, 0, 95);
+            }
+            else
+            {
+                for (int i = 0; i < 7; i++, msg_index++)
+                    message[msg_index + 2] = (byte)((servos >> (7 * (6 - i))) & 0x7F);
+                message[msg_index + 2] = 0xF7;
+                _serialPort.Write(message, 0, 102);
+            }
         }
 
         public void setSyncSpeed(int speed)
