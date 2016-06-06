@@ -803,7 +803,6 @@ namespace _86ME_ver1
                     MessageBox.Show(NewMotion_lang_dic["errorMsg1"]);
                 }
             }
-            getQ.Enabled = true;
         }
 
         private void getQ_Click(object sender, EventArgs e)
@@ -821,7 +820,7 @@ namespace _86ME_ver1
                         {
                             arduino.getQ();
                             DateTime time_start = DateTime.Now;
-                            while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 1000) ;
+                            while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
                             arduino.dataRecieved = false;
                             detectQ.w += arduino.quaternion[0];
                             detectQ.x += arduino.quaternion[1];
@@ -866,11 +865,32 @@ namespace _86ME_ver1
                 object objReturn = null;
                 do
                 {
-                    Thread.Sleep(180);
+                    if (comboBox2.SelectedIndex == 1)
+                        Thread.Sleep(50);
+                    else
+                        Thread.Sleep(130);
                     objReturn = this.Invoke(this.progress_Increase, new object[] { 1 });
                     blnIncreased = (bool)objReturn;
                 }
                 while (blnIncreased);
+                DateTime time_start = DateTime.Now;
+                while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 500) ;
+                if (arduino.dataRecieved)
+                {
+                    if (arduino.captured_data != 0)
+                    {
+                        getQ.Enabled = false;
+                        MessageBox.Show(this, NewMotion_lang_dic["errorMsg21"]);
+                    }
+                    else
+                        getQ.Enabled = true;
+                }
+                else
+                {
+                    getQ.Enabled = false;
+                    MessageBox.Show(this, NewMotion_lang_dic["errorMsg1"]);
+                }
+                arduino.dataRecieved = false;
             }
         }
     }

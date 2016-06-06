@@ -315,7 +315,7 @@ namespace _86ME_ver1
             if (method_flag[4])
             {
                 writer.WriteLine("void updateIMU()\n{");
-                writer.WriteLine("  if(millis() - _IMU_update_time < 33) return;\n"); // ~33fps
+                writer.WriteLine("  if(millis() - _IMU_update_time < 33 && _IMU_init_status != 0) return;\n"); // ~33fps
                 writer.WriteLine("  _IMU.getQ(_IMU_Q, _IMU_val);");
                 writer.WriteLine("  double _w, _x, _y, _z;");
                 writer.WriteLine("  _w = _IMU_Q[0]*" + invQ.w + " - _IMU_Q[1]*" + invQ.x +
@@ -1018,7 +1018,8 @@ namespace _86ME_ver1
             writer.WriteLine("double _roll = 0;");
             writer.WriteLine("double _pitch = 0;");
             writer.WriteLine("double _IMU_val[9] = {0};");
-            writer.WriteLine("double _IMU_Q[4] = {0};");
+            writer.WriteLine("double _IMU_Q[4] = {1, 0, 0, 0};");
+            writer.WriteLine("int _IMU_init_status;");
             if (channels.Count > 0)
             {
                 writer.WriteLine("int servo_mask[" + channels.Count + "] = {0};");
@@ -1123,11 +1124,11 @@ namespace _86ME_ver1
             if (method_flag[4]) // acc
             {
                 if (Motion.comboBox2.SelectedIndex == 1) //LSM330DLC
-                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init(0x30 >> 1, 0xD4 >> 1, false);\n  delay(5);\n");
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(0);\n  delay(5);\n");
                 else if (Motion.comboBox2.SelectedIndex == 2) //RM-G146
-                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init(0x30 >> 1, 0xD0 >> 1, false);\n  delay(5);\n");
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(2);\n  delay(5);\n");
                 else // NONE
-                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init();\n  delay(5);\n");
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.init();\n  delay(5);\n");
             }
             for (int i = 0; i < channels.Count; i++)
                 writer.WriteLine("  used_servos[" + i.ToString() + "].attach(" + channels[i].ToString() + ");");
@@ -1180,8 +1181,9 @@ namespace _86ME_ver1
             writer.WriteLine();
             if (method_flag[4])
             {
-                writer.WriteLine("  for(int i = 0; i < 400; i++)\n  {\n    _IMU.getQ(_IMU_Q, _IMU_val);\n" +
-                                 "    delay(50);\n  }\n");
+                writer.WriteLine("  if(_IMU_init_status == 0)\n  {\n    for(int i = 0; i < 10; i++)\n" +
+                                 "    {\n      _IMU.getQ(_IMU_Q, _IMU_val);\n" +
+                                 "      delay(50);\n    }\n  }\n");
             }
             writer.WriteLine("  _86ME_HOME.playPositions((unsigned long)0);");
 

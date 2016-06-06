@@ -487,6 +487,11 @@ namespace _86ME_ver1
                                         }
                                         dataRecieved = true;
                                     }
+                                    else if (storedInputData[1] == 0x01) // IMU_init
+                                    {
+                                        captured_data = storedInputData[2] & 0x7F;
+                                        dataRecieved = true;
+                                    }
                                 }
                             }
                             else
