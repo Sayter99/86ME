@@ -101,7 +101,7 @@ namespace _86ME_ver1
         {
             if (fcheck[i].Checked == true)
             {
-                if (fbox[i].SelectedIndex != 2 && getQ.Enabled == true)
+                if (fbox2[i].SelectedIndex != 2 && getQ.Enabled == true)
                 {
                     try
                     {
@@ -126,6 +126,10 @@ namespace _86ME_ver1
                     {
                         autogain[i] = 0;
                     }
+                }
+                else
+                {
+                    autogain[i] = 0;
                 }
                 int pos = (int)homeframe[i] + offset[i] + autogain[i];
                 if ((uint)pos >= min[i] && (uint)pos <= Max[i])
