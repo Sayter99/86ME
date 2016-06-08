@@ -1015,7 +1015,7 @@ namespace _86ME_ver1
                 writer.WriteLine("#include <EEPROM.h>\n#include \"FreeIMU1.h\"\n#include <Wire.h>");
             writer.WriteLine();
 
-            writer.WriteLine("float _86ME_var[50] = {0};");
+            writer.WriteLine("double _86ME_var[50] = {0};");
             writer.WriteLine("double _roll = 0;");
             writer.WriteLine("double _pitch = 0;");
             writer.WriteLine("double _IMU_val[9] = {0};");

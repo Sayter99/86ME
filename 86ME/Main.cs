@@ -32,7 +32,7 @@ namespace _86ME_ver1
         Dictionary<string, string> Main_lang_dic;
         ulong servo_onOff = ~0UL;
         int opVar_num = 50;
-        float[] operand_var = new float[100];
+        double[] operand_var = new double[100];
         string bt_port = "Serial1";
         string bt_baud = "9600";
         string[] ps2pins = new string[4]{"0", "0", "0", "0"};
@@ -1830,7 +1830,7 @@ namespace _86ME_ver1
             Motionlist.Items[current_motionlist_idx] = "[Compute] " + Operand2Text(op);
         }
 
-        private float opVal(int index)
+        private double opVal(int index)
         {
             if (index < opVar_num)
             {
@@ -1924,7 +1924,7 @@ namespace _86ME_ver1
             return false;
         }
 
-        private float opOperate(float val1, float val2, int form, int method)
+        private double opOperate(double val1, double val2, int form, int method)
         {
             switch (form)
             {
