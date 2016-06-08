@@ -315,7 +315,7 @@ namespace _86ME_ver1
             if (method_flag[4])
             {
                 writer.WriteLine("void updateIMU()\n{");
-                writer.WriteLine("  if(millis() - _IMU_update_time < 33 && _IMU_init_status != 0) return;\n"); // ~33fps
+                writer.WriteLine("  if(millis() - _IMU_update_time < 20 && _IMU_init_status != 0) return;\n"); // ~50fps
                 writer.WriteLine("  _IMU.getQ(_IMU_Q, _IMU_val);");
                 writer.WriteLine("  double _w, _x, _y, _z;");
                 writer.WriteLine("  _w = _IMU_Q[0]*" + invQ.w + " - _IMU_Q[1]*" + invQ.x +
