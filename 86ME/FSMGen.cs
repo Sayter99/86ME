@@ -789,7 +789,8 @@ namespace _86ME_ver1
                         if (i != m.Events.Count - 1)
                         {
                             next_action = m.name + "::" + m.states[state_counter];
-                            writer.WriteLine(space4 + m.name + "::" + g.name + "_" + i + " = 0;");
+                            if (g.infinite == false)
+                                writer.WriteLine(space4 + m.name + "::" + g.name + "_" + i + " = 0;");
                             writer.WriteLine(space4 + m.name + "::state = " + next_action + ";");
                         }
                         else
