@@ -335,14 +335,14 @@ namespace _86ME_ver1
                         if (Motion.p_gain[channels[i]] != 0 && Motion.fbox2[channels[i]].SelectedIndex != 2)
                         {
                             if (Motion.fbox2[channels[i]].SelectedIndex == 0) // roll
-                                writer.WriteLine("  mixOffsets.mixoffsets[" + i + "] = " +
+                                writer.WriteLine("  _mixOffsets[" + i + "] = " +
                                                  "(long)((180*_roll*" + Motion.p_gain[channels[i]] + ")/M_PI);");
                             else if (Motion.fbox2[channels[i]].SelectedIndex == 1) // pitch
-                                writer.WriteLine("  mixOffsets.mixoffsets[" + i + "] = " +
+                                writer.WriteLine("  _mixOffsets[" + i + "] = " +
                                                  "(long)((180*_pitch*" + Motion.p_gain[channels[i]] + ")/M_PI);");
                         }
                     }
-                    writer.WriteLine("  mixOffsets.setMixOffsets();\n");
+                    writer.WriteLine("  servoMultiRealTimeMixing(_mixOffsets);\n");
                 }
 
                 for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -1091,7 +1091,7 @@ namespace _86ME_ver1
             }
             if (IMU_compensatory)
             {
-                writer.WriteLine("ServoMixOffset mixOffsets;");
+                writer.WriteLine("long _mixOffsets[45] = {0};");
             }
             writer.WriteLine();
 

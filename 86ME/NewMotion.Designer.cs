@@ -379,7 +379,7 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ToolTip ttp;
-        private System.Windows.Forms.Label pic_loaded;
+        public System.Windows.Forms.Label pic_loaded;
         private System.Windows.Forms.GroupBox groupBox1;
         public System.Windows.Forms.ComboBox comboBox2;
         private System.Windows.Forms.Label label4;

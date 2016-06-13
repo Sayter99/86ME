@@ -1307,6 +1307,11 @@ namespace _86ME_ver1
                                 break;
                             }
                         }
+                        string short_picfilename = Path.GetFileName(nMotion.picfilename);
+                        if (short_picfilename.Length < 25)
+                            nMotion.pic_loaded.Text = short_picfilename;
+                        else
+                            nMotion.pic_loaded.Text = short_picfilename.Substring(0, 22) + "...";
                         for (int k = 0; k < 45; k++)
                         {
                             i++;
