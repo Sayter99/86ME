@@ -734,6 +734,7 @@ namespace _86ME_ver1
                 MotionCombo.Items.Clear();
                 MotionCombo.Text = "";
                 Motionlist.Items.Clear();
+                Framelist.Controls.Clear();
                 delaytext.Text = default_delay.ToString();
                 current_motionlist_idx = -1;
                 last_motionlist_idx = -1;
@@ -812,7 +813,8 @@ namespace _86ME_ver1
 
                 update_newMotionParams(Motion);
                 last_motionlist_idx = -1;
-                Update_framelist();
+                current_motionlist_idx = -1;
+                freshflag[1] = false;
                 update_motionlist();
                 draw_background();
             }
@@ -859,6 +861,9 @@ namespace _86ME_ver1
             }
 
             MotionConfig.SelectedIndex = 0;
+            if (ME_Motionlist.Count > 0)
+                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
+                    Motionlist.SelectedIndex = 0;
             initPs2();
             if (change_board)
             {
@@ -1084,6 +1089,9 @@ namespace _86ME_ver1
             autocheck.Checked = false;
             load_project(filename);
             MotionConfig.SelectedIndex = 0;
+            if (ME_Motionlist.Count > 0)
+                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
+                    Motionlist.SelectedIndex = 0;
         }
 
         public void load_project(string filename)
@@ -1744,7 +1752,15 @@ namespace _86ME_ver1
             else if (m.property == (int)motion_property.nonblocking)
                 NonBlocking.Checked = true;
             MotionLayerCombo.SelectedIndex = m.moton_layer;
-            Update_framelist();
+            Framelist.Controls.Clear();
+            current_motionlist_idx = -1;
+            last_motionlist_idx = -1;
+            freshflag[1] = false;
+            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0 && MotionConfig.SelectedIndex == 0)
+            {
+                Update_framelist();
+                Motionlist.SelectedIndex = 0;
+            }
             if (MotionConfig.SelectedIndex == 0)
                 this.hint_richTextBox.Text =
                             "   ___   __   ____        _\n" +
