@@ -1758,7 +1758,6 @@ namespace _86ME_ver1
             freshflag[1] = false;
             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0 && MotionConfig.SelectedIndex == 0)
             {
-                Update_framelist();
                 Motionlist.SelectedIndex = 0;
             }
             if (MotionConfig.SelectedIndex == 0)
@@ -4300,6 +4299,7 @@ namespace _86ME_ver1
         {
             if (string.Compare(com_port, "OFF") != 0 && Motion.getQ.Enabled == true)
             {
+                double tolerance = 2.25;
                 float x, y, z;
                 arduino.pin_capture(8);
                 DateTime time_start = DateTime.Now;
@@ -4316,12 +4316,12 @@ namespace _86ME_ver1
                 while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
                 arduino.dataRecieved = false;
                 z = arduino.captured_float;
-                accLXText.Text = (x - 2).ToString();
-                accHXText.Text = (x + 2).ToString();
-                accLYText.Text = (y - 2).ToString();
-                accHYText.Text = (y + 2).ToString();
-                accLZText.Text = (z - 2).ToString();
-                accHZText.Text = (z + 2).ToString();
+                accLXText.Text = (x - tolerance).ToString();
+                accHXText.Text = (x + tolerance).ToString();
+                accLYText.Text = (y - tolerance).ToString();
+                accHYText.Text = (y + tolerance).ToString();
+                accLZText.Text = (z - tolerance).ToString();
+                accHZText.Text = (z + tolerance).ToString();
             }
             else
             {

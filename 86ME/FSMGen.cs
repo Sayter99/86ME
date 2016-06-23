@@ -371,8 +371,10 @@ namespace _86ME_ver1
                                          "    case 1:\n      if(" + stmts + ")\n" + "      {\n" +
                                          "        if(millis() - " + m.name + "::acc_time >= " + m.acc_Settings[6] + ")\n" +
                                          "          " + m.name + "::acc_state = 2;\n      }\n      else\n" +
-                                         "        " + m.name + "::acc_state = 0;\n      break;\n    default:\n" +
-                                         "      break;\n  }");
+                                         "        " + m.name + "::acc_state = 0;\n      break;\n" + 
+                                         "    case 3:\n      if(_curr_motion[" + m.moton_layer + "] != _" + m.name.ToUpper() + ")\n" +
+                                         "        " + m.name + "::acc_state = 0;\n      break;\n" +
+                                         "    default:\n" + "      break;\n  }");
                     }
                 }
                 writer.WriteLine("  _IMU_update_time = millis();");
@@ -486,14 +488,14 @@ namespace _86ME_ver1
                         if (first)
                         {
                             writer.WriteLine(space + "if(" + trigger_condition(m) + ") " +
-                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
-                                                m.name + "::acc_state = 0;" + update_mask + "}");
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + "; " +
+                                                m.name + "::acc_state = 3; " + update_mask + "}");
                             first = false;
                         }
                         else
                             writer.WriteLine(space + "else if(" + trigger_condition(m) + ") " +
-                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
-                                                m.name + "::acc_state = 0;" + update_mask + "}");
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + "; " +
+                                                m.name + "::acc_state = 3; " + update_mask + "}");
                     }
                 }
                 for (int i = 0; i < ME_Motionlist.Count; i++) //bt
