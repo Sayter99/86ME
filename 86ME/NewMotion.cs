@@ -45,7 +45,6 @@ namespace _86ME_ver1
         public bool newflag = false;
         string last_picfilename = null;
         public Thread sync;
-        public ManualResetEvent thread_event = new ManualResetEvent(true);
         private Progress init_ProcessBar = null;
         private delegate bool IncreaseHandle(int nValue);
         private IncreaseHandle progress_Increase = null;
@@ -92,6 +91,10 @@ namespace _86ME_ver1
             label10.Enabled = false;
             label11.Enabled = false;
             applyLang();
+        }
+
+        public void start_synchronizer()
+        {
             sync = new Thread(() => synchronizer());
             sync.IsBackground = true;
             sync.Start();
@@ -161,13 +164,12 @@ namespace _86ME_ver1
                             try
                             {
                                 arduino.frameWrite(0x6F, autoframe, 0);
-                                Thread.Sleep(33);
                                 send_msg = false;
                             }
                             catch { }
                         }
                     }
-                    thread_event.WaitOne();
+                    Thread.Sleep(33);
                 }
             }
         }
@@ -332,14 +334,22 @@ namespace _86ME_ver1
 
         private void button2_Click(object sender, EventArgs e)
         {
-            thread_event.Reset();
+            if (sync != null)
+            {
+                sync.Abort();
+                sync = null;
+            }
             pic_loaded.Text = last_picfilename;
             this.DialogResult = DialogResult.Cancel;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            thread_event.Reset();
+            if (sync != null)
+            {
+                sync.Abort();
+                sync = null;
+            }
             if (String.Compare(comboBox1.SelectedItem.ToString(), "---unset---") == 0)
                 MessageBox.Show(NewMotion_lang_dic["NewMotion_err1"]);
             else

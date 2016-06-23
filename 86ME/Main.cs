@@ -720,7 +720,10 @@ namespace _86ME_ver1
 
             NewMotion nMotion = new NewMotion(Main_lang_dic);
             if (string.Compare(com_port, "OFF") != 0)
+            {
                 nMotion.arduino = arduino;
+                nMotion.start_synchronizer();
+            }
             nMotion.ShowDialog();
             if (nMotion.DialogResult == DialogResult.OK)
             {
@@ -789,8 +792,10 @@ namespace _86ME_ver1
                 Motion.fcheck[i].Checked = false;
             autocheck.Checked = false;
             if (string.Compare(com_port, "OFF") != 0)
+            {
                 Motion.arduino = arduino;
-            Motion.thread_event.Set();
+                Motion.start_synchronizer();
+            }
             Motion.ShowDialog();
             if (Motion.DialogResult == DialogResult.OK)
             {
@@ -1055,7 +1060,8 @@ namespace _86ME_ver1
 
         private void actionToolStripMenuItem_Click(object sender, EventArgs e)//load project
         {
-            if (needToSave() && File.Exists(load_filename))
+            bool _needToSave = needToSave();
+            if (_needToSave && File.Exists(load_filename))
             {
                 DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
@@ -1063,7 +1069,7 @@ namespace _86ME_ver1
                 else if (dialogResult == DialogResult.Cancel)
                     return ;
             }
-            else if (needToSave())
+            else if (_needToSave)
             {
                 DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg2"], "", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
@@ -1094,7 +1100,7 @@ namespace _86ME_ver1
                     Motionlist.SelectedIndex = 0;
         }
 
-        public void load_project(string filename)
+        private void load_project(string filename)
         {
             bool picmode = false;
             NewMotion nMotion = new NewMotion(Main_lang_dic);
