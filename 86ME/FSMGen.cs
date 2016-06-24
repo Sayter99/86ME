@@ -288,6 +288,7 @@ namespace _86ME_ver1
             writer.WriteLine(space + "unsigned long time;");
             for (int i = 0; i < m.goto_var.Count; i++)
                 writer.WriteLine(space + "int " + m.goto_var[i] + " = 0;");
+            writer.WriteLine("  double comp_range = " + m.compRange + ";");
             if (m.moton_layer == 1)
             {
                 writer.Write("  int mask[" + channels.Count + "] = { ");
@@ -317,6 +318,7 @@ namespace _86ME_ver1
                 writer.WriteLine("void updateIMU()\n{");
                 writer.WriteLine("  if(millis() - _IMU_update_time < 20 && _IMU_init_status != 0) return;\n"); // ~50fps
                 writer.WriteLine("  _IMU.getQ(_IMU_Q, _IMU_val);");
+                writer.WriteLine("  if(_comp_range == 0) {DisableMixing(); goto EXIT_COMP;} else {EnableMixing();}");
                 writer.WriteLine("  double _w, _x, _y, _z;");
                 writer.WriteLine("  _w = _IMU_Q[0]*" + invQ.w + " - _IMU_Q[1]*" + invQ.x +
                                     " - _IMU_Q[2]*" + invQ.y + " - _IMU_Q[3]*" + invQ.z + ";");
@@ -330,19 +332,31 @@ namespace _86ME_ver1
                 writer.WriteLine("  _pitch = asin(2*(_w*_y - _z*_x));");
                 if (IMU_compensatory)
                 {
-                    for (int i = 0; i < channels.Count; i++)
+                    for (int source = 0; source < 2; source++)
                     {
-                        if (Motion.p_gain[channels[i]] != 0 && Motion.fbox2[channels[i]].SelectedIndex != 2)
+                        if (source == 0) // roll
+                            writer.WriteLine("  if(fabs(_roll*180/M_PI) <= _comp_range)\n  {");
+                        else if (source == 1) // pitch
+                            writer.WriteLine("  if(fabs(_pitch*180/M_PI) <= _comp_range)\n  {");
+                        for (int i = 0; i < channels.Count; i++)
                         {
-                            if (Motion.fbox2[channels[i]].SelectedIndex == 0) // roll
-                                writer.WriteLine("  _mixOffsets[" + i + "] = " +
-                                                 "(long)((180*_roll*" + Motion.p_gain[channels[i]] + ")/M_PI);");
-                            else if (Motion.fbox2[channels[i]].SelectedIndex == 1) // pitch
-                                writer.WriteLine("  _mixOffsets[" + i + "] = " +
-                                                 "(long)((180*_pitch*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                            if (Motion.p_gain[channels[i]] != 0 && Motion.fbox2[channels[i]].SelectedIndex != 2)
+                            {
+                                if (Motion.fbox2[channels[i]].SelectedIndex == source)
+                                {
+                                    if (source == 0) // roll
+                                        writer.WriteLine("    _mixOffsets[" + i + "] = " +
+                                                         "(long)((180*_roll*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                                    else if (source == 1) // pitch
+                                        writer.WriteLine("    _mixOffsets[" + i + "] = " +
+                                                         "(long)((180*_pitch*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                                }
+                            }
                         }
+                        writer.WriteLine("  }");
                     }
-                    writer.WriteLine("  servoMultiRealTimeMixing(_mixOffsets);\n");
+                    writer.WriteLine("  servoMultiRealTimeMixing(_mixOffsets);");
+                    writer.WriteLine("EXIT_COMP:");
                 }
 
                 for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -425,6 +439,31 @@ namespace _86ME_ver1
             else if (l1 != "" && l0 == "")
                 writer.WriteLine("  if(layer == 1)\n  {\n" + l1 + "  }");
             writer.WriteLine("}");
+        }
+
+        private void generate_updateCompRange(TextWriter writer)
+        {
+            writer.WriteLine("void updateCompRange()\n{");
+            writer.WriteLine("  _comp_range = -1;");
+            bool first = true;
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (first)
+                {
+                    writer.WriteLine("  if((external_trigger[_" + m.name.ToUpper() + "] || internal_trigger[_" +
+                                     m.name.ToUpper() + "]) && " + m.name + "::comp_range >= _comp_range)\n" +
+                                     "    _comp_range = " + m.name + "::comp_range;");
+                    first = false;
+                }
+                else
+                {
+                    writer.WriteLine("  else if((external_trigger[_" + m.name.ToUpper() + "] || internal_trigger[_" +
+                                     m.name.ToUpper() + "]) && " + m.name + "::comp_range >= _comp_range)\n" +
+                                     "    _comp_range = " + m.name + "::comp_range;");
+                }
+            }
+            writer.WriteLine("  else\n    _comp_range = 180;\n}");
         }
 
         private void generate_updateTrigger(TextWriter writer)
@@ -1020,6 +1059,7 @@ namespace _86ME_ver1
             writer.WriteLine("double _86ME_var[50] = {0};");
             writer.WriteLine("double _roll = 0;");
             writer.WriteLine("double _pitch = 0;");
+            writer.WriteLine("double _comp_range = 180;");
             writer.WriteLine("double _IMU_val[9] = {0};");
             writer.WriteLine("double _IMU_Q[4] = {1, 0, 0, 0};");
             writer.WriteLine("int _IMU_init_status;");
@@ -1102,6 +1142,7 @@ namespace _86ME_ver1
             generate_updateIMU(writer, channels);
             generate_isBlocked(writer);
             generate_closeTriggers(writer);
+            generate_updateCompRange(writer);
             generate_updateTrigger(writer);
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
@@ -1198,9 +1239,12 @@ namespace _86ME_ver1
         {
             writer.WriteLine("void loop()");
             writer.WriteLine("{");
-            if (method_flag[4]) //acc
-                writer.WriteLine("  updateIMU();");
             writer.WriteLine("  updateTrigger();");
+            if (method_flag[4]) //IMU
+            {
+                writer.WriteLine("  updateCompRange();");
+                writer.WriteLine("  updateIMU();");
+            }
             for (int j = 0; j < ME_Motionlist.Count; j++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[j];

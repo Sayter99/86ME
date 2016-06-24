@@ -1049,7 +1049,7 @@ namespace _86ME_ver1
                         writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + "\n");
                     }
                 }
-                writer.Write("MotionEnd " + m.property + " " + m.name);
+                writer.Write("MotionEnd " + m.property + " " + m.compRange + " " + m.name);
                 if (i != ME_Motionlist.Count - 1)
                     writer.Write("\n");
             }
@@ -1434,15 +1434,17 @@ namespace _86ME_ver1
                     }
                     else if (String.Compare(datas[i], "MotionEnd") == 0)
                     {
-                        i++;
                         int try_out;
-                        if (int.TryParse(datas[i], out try_out) == true)
+                        if (int.TryParse(datas[++i], out try_out) == true)
                             motiontag.property = try_out;
                         else
                             i--;
-                        i++;
+                        if (int.TryParse(datas[++i], out try_out) == true)
+                            motiontag.compRange = try_out;
+                        else
+                            i--;
                         if (motiontag != null)
-                            if (String.Compare(datas[i], motiontag.name) == 0)
+                            if (String.Compare(datas[++i], motiontag.name) == 0)
                                 motiontag = null;
                     }
                     else if (String.Compare(datas[i], "frame") == 0)
@@ -1758,6 +1760,7 @@ namespace _86ME_ver1
             else if (m.property == (int)motion_property.nonblocking)
                 NonBlocking.Checked = true;
             MotionLayerCombo.SelectedIndex = m.moton_layer;
+            CompRangeText.Text = m.compRange.ToString();
             Framelist.Controls.Clear();
             current_motionlist_idx = -1;
             last_motionlist_idx = -1;
@@ -4071,6 +4074,24 @@ namespace _86ME_ver1
             }
         }
 
+        private void CompRangeText_TextChanged(object sender, EventArgs e)
+        {
+            int try_out;
+            if (int.TryParse(CompRangeText.Text, out try_out))
+            {
+                if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                {
+                    if (try_out <= 180)
+                        ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).compRange = try_out;
+                    else
+                    {
+                        ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).compRange = 180;
+                        CompRangeText.Text = "180";
+                    }
+                }
+            }
+        }
+
         private void saveFrame_Click(object sender, EventArgs e)
         {
             SaveFileDialog dialog = new SaveFileDialog();
@@ -4150,6 +4171,8 @@ namespace _86ME_ver1
             hint_richTextBox.LanguageOption = RichTextBoxLanguageOptions.DualFont;
             nonblockingExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
             blockingExplaination.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+            CompRangeExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+            motionLayerExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
 
             motionevent[0] = Main_lang_dic["AddNewAction_N"];
             motionevent[1] = Main_lang_dic["AddHomeframe"];
@@ -4170,6 +4193,7 @@ namespace _86ME_ver1
             blockingExplaination.Text = Main_lang_dic["blockingExplaination_Text"];
             bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];
             capturebutton.Text = Main_lang_dic["capturebutton_Text"];
+            CompRangeExplanation.Text = Main_lang_dic["CompRangeExplanation_Text"];
             editToolStripMenuItem.Text = Main_lang_dic["editToolStripMenuItem_Text"];
             exitToolStripMenuItem.Text = Main_lang_dic["exitToolStripMenuItem_Text"];
             fast.Text = Main_lang_dic["fast_Text"];
