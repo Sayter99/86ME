@@ -288,7 +288,7 @@ namespace _86ME_ver1
             writer.WriteLine(space + "unsigned long time;");
             for (int i = 0; i < m.goto_var.Count; i++)
                 writer.WriteLine(space + "int " + m.goto_var[i] + " = 0;");
-            writer.WriteLine("  double comp_range = " + m.compRange + ";");
+            writer.WriteLine("  double comp_range = " + m.comp_range + ";");
             if (m.moton_layer == 1)
             {
                 writer.Write("  int mask[" + channels.Count + "] = { ");
@@ -710,8 +710,13 @@ namespace _86ME_ver1
                         mask_str = "servo_mask[i]";
                     writer.WriteLine(space + "case " + m.name + "::FRAME_" + i + ":");
                     writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
-                    writer.WriteLine(space4 + "  _86ME_RUN.positions[i] = " + frm_name +
-                                     "[" + f.num + "].positions[i] & " + mask_str + ";");
+                    if (m.is_cubic)
+                        writer.WriteLine(space4 + "{\n      _86ME_RUN.positions[i] = " + frm_name +
+                                         "[" + f.num + "].positions[i] & " + mask_str + ";\n      _86ME_RUN.acc[i] = " +
+                                         frm_name + "[" + f.num + "].acc[i];\n    }");
+                    else
+                        writer.WriteLine(space4 + "  _86ME_RUN.positions[i] = " + frm_name +
+                                         "[" + f.num + "].positions[i] & " + mask_str + ";");
                     writer.WriteLine(space4 + "_86ME_RUN.playPositions((unsigned long)" + f.delay + ");");
                     writer.WriteLine(space4 + m.name + "::time = millis();");
                     writer.WriteLine(space4 + m.name + "::state = "+ m.name + "::WAIT_FRAME_" + i + ";");
@@ -742,7 +747,8 @@ namespace _86ME_ver1
                     writer.WriteLine(space4 + m.name + "::time = millis();");
                     writer.WriteLine(space4 + m.name + "::state = " + m.name + "::WAIT_DELAY_" + i + ";");
                     writer.WriteLine(space + "case " + m.name + "::WAIT_DELAY_" + i + ":");
-                    writer.WriteLine(space4 + "if(millis() - " + m.name + "::time >= " + d.delay + ")");
+                    if (!m.is_cubic)
+                        writer.WriteLine(space4 + "if(millis() - " + m.name + "::time >= " + d.delay + ")");
                     if (i != m.Events.Count - 1)
                     {
                         state_counter += 2;
@@ -808,7 +814,7 @@ namespace _86ME_ver1
                     {
                         for (int k = 0; k < m.Events.Count; k++)
                         {
-                            if (m.Events[k] is ME_Flag)
+                            if (m.Events[k] is ME_Flag && !m.is_cubic)
                             {
                                 if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                 {
@@ -836,14 +842,16 @@ namespace _86ME_ver1
                         }
                         else
                         {
-                            writer.WriteLine(space4 + "else\n    {");
+                            if (!m.is_cubic)
+                                writer.WriteLine(space4 + "else\n    {");
                             next_action = m.name + "::IDLE";
                             for (int j = 0; j < m.goto_var.Count; j++)
                                 writer.WriteLine(space4 + "  " + m.name + "::" + m.goto_var[j] + " = 0;");
                             writer.WriteLine(space4 + "  internal_trigger[_" + m.name.ToUpper() + "] = false;");
                             writer.WriteLine(space4 + "  external_trigger[_" + m.name.ToUpper() + "] = false;");
                             writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
-                            writer.WriteLine(space4 + "}");
+                            if (!m.is_cubic)
+                                writer.WriteLine(space4 + "}");
                         }
                         writer.WriteLine(space4 + "break;");
                     }
@@ -852,7 +860,7 @@ namespace _86ME_ver1
                 {
                     ME_Trigger t = (ME_Trigger)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::MOTION_" + i + ":");
-                    if (m.moton_layer == 1)
+                    if (m.moton_layer == 1 || m.is_cubic)
                     {
                         if (i != m.Events.Count - 1)
                         {
@@ -941,8 +949,11 @@ namespace _86ME_ver1
                 else if (m.Events[i] is ME_Release)
                 {
                     writer.WriteLine(space + "case " + m.name + "::RELEASE_" + i + ":");
-                    writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
-                    writer.WriteLine(space4 + "  used_servos[i].release();");
+                    if (!m.is_cubic)
+                    {
+                        writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
+                        writer.WriteLine(space4 + "  used_servos[i].release();");
+                    }
                     state_counter++;
                     if (i != m.Events.Count - 1)
                     {
@@ -968,7 +979,7 @@ namespace _86ME_ver1
                     bool hasTarget = false;
                     for (int k = 0; k < m.Events.Count; k++)
                     {
-                        if (m.Events[k] is ME_Flag)
+                        if (m.Events[k] is ME_Flag && !m.is_cubic)
                         {
                             if (String.Compare(mif.name, ((ME_Flag)m.Events[k]).name) == 0)
                             {
@@ -1073,6 +1084,27 @@ namespace _86ME_ver1
                 writer.WriteLine("int servo_mask[1] = {0};");
                 writer.WriteLine("Servo used_servos[1];");
             }
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (m.is_cubic)
+                {
+                    writer.Write("unsigned long _" + m.name + "_frm_time[" + m.frames + "] = {");
+                    int k = 0;
+                    for (int j = 0; j < m.Events.Count; j++)
+                    {
+                        if (m.Events[j] is ME_Frame)
+                        {
+                            writer.Write(((ME_Frame)(m.Events[j])).delay);
+                            if (k != m.frames - 1)
+                                writer.Write(", ");
+                            else
+                                writer.Write("};\n");
+                            k++;
+                        }
+                    }
+                }
+            }
             writer.WriteLine();
             writer.Write("enum {");
             for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -1175,7 +1207,11 @@ namespace _86ME_ver1
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.init();\n  delay(5);\n");
             }
             for (int i = 0; i < channels.Count; i++)
-                writer.WriteLine("  used_servos[" + i.ToString() + "].attach(" + channels[i].ToString() + ");");
+            {
+                int min = int.Parse(Motion.ftext3[channels[i]].Text);
+                int max = int.Parse(Motion.ftext4[channels[i]].Text);
+                writer.WriteLine("  used_servos[" + i.ToString() + "].attach(" + channels[i].ToString() + ", " + min + ", " + max + ");");
+            }
             writer.WriteLine();
 
             if (isAllinOne)
@@ -1220,6 +1256,13 @@ namespace _86ME_ver1
 
             for (int j = 0; j < channels.Count; j++)
                 writer.WriteLine("  _86ME_HOME.positions[" + j.ToString() + "] = " + home[j] + ";");
+            writer.WriteLine();
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (m.is_cubic)
+                    writer.WriteLine("  beginCubicSpline(" + m.name + "_frm, _" + m.name + "_frm_time, " + m.frames + ");");
+            }
             writer.WriteLine();
             writer.WriteLine("  offsets.setOffsets();");
             writer.WriteLine();

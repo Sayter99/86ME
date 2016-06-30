@@ -1049,7 +1049,7 @@ namespace _86ME_ver1
                         writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + "\n");
                     }
                 }
-                writer.Write("MotionEnd " + m.property + " " + m.compRange + " " + m.name);
+                writer.Write("MotionEnd " + m.property + " " + m.comp_range + " " + m.is_cubic + " " + m.name);
                 if (i != ME_Motionlist.Count - 1)
                     writer.Write("\n");
             }
@@ -1440,7 +1440,14 @@ namespace _86ME_ver1
                         else
                             i--;
                         if (int.TryParse(datas[++i], out try_out) == true)
-                            motiontag.compRange = try_out;
+                            motiontag.comp_range = try_out;
+                        else
+                            i--;
+                        i++;
+                        if (datas[i] == "True")
+                            motiontag.is_cubic = true;
+                        else if (datas[i] == "False")
+                            motiontag.is_cubic = false;
                         else
                             i--;
                         if (motiontag != null)
@@ -1760,7 +1767,8 @@ namespace _86ME_ver1
             else if (m.property == (int)motion_property.nonblocking)
                 NonBlocking.Checked = true;
             MotionLayerCombo.SelectedIndex = m.moton_layer;
-            CompRangeText.Text = m.compRange.ToString();
+            CompRangeText.Text = m.comp_range.ToString();
+            CubicCheckBox.Checked = m.is_cubic;
             Framelist.Controls.Clear();
             current_motionlist_idx = -1;
             last_motionlist_idx = -1;
@@ -4082,14 +4090,20 @@ namespace _86ME_ver1
                 if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 {
                     if (try_out <= 180)
-                        ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).compRange = try_out;
+                        ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).comp_range = try_out;
                     else
                     {
-                        ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).compRange = 180;
+                        ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).comp_range = 180;
                         CompRangeText.Text = "180";
                     }
                 }
             }
+        }
+
+        private void CubicCheckBox_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).is_cubic = CubicCheckBox.Checked;
         }
 
         private void saveFrame_Click(object sender, EventArgs e)
@@ -4173,6 +4187,7 @@ namespace _86ME_ver1
             blockingExplaination.LanguageOption = RichTextBoxLanguageOptions.DualFont;
             CompRangeExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
             motionLayerExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+            CubicExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
 
             motionevent[0] = Main_lang_dic["AddNewAction_N"];
             motionevent[1] = Main_lang_dic["AddHomeframe"];
@@ -4194,6 +4209,7 @@ namespace _86ME_ver1
             bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];
             capturebutton.Text = Main_lang_dic["capturebutton_Text"];
             CompRangeExplanation.Text = Main_lang_dic["CompRangeExplanation_Text"];
+            CubicExplanation.Text = Main_lang_dic["CubicExplanation_Text"];
             editToolStripMenuItem.Text = Main_lang_dic["editToolStripMenuItem_Text"];
             exitToolStripMenuItem.Text = Main_lang_dic["exitToolStripMenuItem_Text"];
             fast.Text = Main_lang_dic["fast_Text"];
