@@ -24,7 +24,7 @@ namespace _86ME_ver1
         public int property;
         public int moton_layer;
         public int comp_range;
-        public bool is_cubic;
+        public int control_method;
         public double[] acc_Settings; //LX, HX, LY, HY, LZ, HZ, D
         public ME_Motion()
         {
@@ -42,7 +42,7 @@ namespace _86ME_ver1
             this.property = 0;
             this.moton_layer = 0;
             this.comp_range = 180;
-            this.is_cubic = false;
+            this.control_method = 0;
             this.acc_Settings = new double[7];
             this.goto_var = new List<string>();
             this.states = new List<string>();

@@ -2,6 +2,11 @@
 ---------
 #### CHANGELOG ####
 
+_VERSION_: v1.9
+
+* Add a new property for setting compensating range of motions.
+* Add a new property for setting a method to control servos.
+
 _VERSION_: v1.8
 
 * Add three new actions "Release", "Compute" and "If".

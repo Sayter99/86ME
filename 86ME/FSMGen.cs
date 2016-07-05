@@ -57,6 +57,14 @@ namespace _86ME_ver1
             }
         }
 
+        private bool isPureFrame(ME_Motion m)
+        {
+            for (int i = 0; i < m.Events.Count; i++)
+                if (!(m.Events[i] is ME_Frame))
+                    return false;
+            return true;
+        }
+
         private int convert_keynum(int keynum)
         {
             if (keynum <= 25)
@@ -685,6 +693,7 @@ namespace _86ME_ver1
 
         private void generate_motion(ME_Motion m, string frm_name, TextWriter writer, int channels)
         {
+            bool is_pure = isPureFrame(m);
             string space = set_space(2);
             string space4 = set_space(4);
             writer.WriteLine("void " + m.name + "Update()\n{");
@@ -710,10 +719,11 @@ namespace _86ME_ver1
                         mask_str = "servo_mask[i]";
                     writer.WriteLine(space + "case " + m.name + "::FRAME_" + i + ":");
                     writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
-                    if (m.is_cubic)
+                    if (m.control_method != 0 && is_pure)
                         writer.WriteLine(space4 + "{\n      _86ME_RUN.positions[i] = " + frm_name +
-                                         "[" + f.num + "].positions[i] & " + mask_str + ";\n      _86ME_RUN.acc[i] = " +
-                                         frm_name + "[" + f.num + "].acc[i];\n    }");
+                                         "[" + f.num + "].positions[i] & " + mask_str + ";\n      _86ME_RUN.accelerations[i][0] = " +
+                                         frm_name + "[" + f.num + "].accelerations[i][0];\n      _86ME_RUN.accelerations[i][1] = " +
+                                         frm_name + "[" + f.num + "].accelerations[i][1];\n    }");
                     else
                         writer.WriteLine(space4 + "  _86ME_RUN.positions[i] = " + frm_name +
                                          "[" + f.num + "].positions[i] & " + mask_str + ";");
@@ -747,8 +757,7 @@ namespace _86ME_ver1
                     writer.WriteLine(space4 + m.name + "::time = millis();");
                     writer.WriteLine(space4 + m.name + "::state = " + m.name + "::WAIT_DELAY_" + i + ";");
                     writer.WriteLine(space + "case " + m.name + "::WAIT_DELAY_" + i + ":");
-                    if (!m.is_cubic)
-                        writer.WriteLine(space4 + "if(millis() - " + m.name + "::time >= " + d.delay + ")");
+                    writer.WriteLine(space4 + "if(millis() - " + m.name + "::time >= " + d.delay + ")");
                     if (i != m.Events.Count - 1)
                     {
                         state_counter += 2;
@@ -814,7 +823,7 @@ namespace _86ME_ver1
                     {
                         for (int k = 0; k < m.Events.Count; k++)
                         {
-                            if (m.Events[k] is ME_Flag && !m.is_cubic)
+                            if (m.Events[k] is ME_Flag)
                             {
                                 if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                 {
@@ -842,16 +851,14 @@ namespace _86ME_ver1
                         }
                         else
                         {
-                            if (!m.is_cubic)
-                                writer.WriteLine(space4 + "else\n    {");
+                            writer.WriteLine(space4 + "else\n    {");
                             next_action = m.name + "::IDLE";
                             for (int j = 0; j < m.goto_var.Count; j++)
                                 writer.WriteLine(space4 + "  " + m.name + "::" + m.goto_var[j] + " = 0;");
                             writer.WriteLine(space4 + "  internal_trigger[_" + m.name.ToUpper() + "] = false;");
                             writer.WriteLine(space4 + "  external_trigger[_" + m.name.ToUpper() + "] = false;");
                             writer.WriteLine(space4 + "  " + m.name + "::state = " + next_action + ";");
-                            if (!m.is_cubic)
-                                writer.WriteLine(space4 + "}");
+                            writer.WriteLine(space4 + "}");
                         }
                         writer.WriteLine(space4 + "break;");
                     }
@@ -860,7 +867,7 @@ namespace _86ME_ver1
                 {
                     ME_Trigger t = (ME_Trigger)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::MOTION_" + i + ":");
-                    if (m.moton_layer == 1 || m.is_cubic)
+                    if (m.moton_layer == 1)
                     {
                         if (i != m.Events.Count - 1)
                         {
@@ -949,11 +956,8 @@ namespace _86ME_ver1
                 else if (m.Events[i] is ME_Release)
                 {
                     writer.WriteLine(space + "case " + m.name + "::RELEASE_" + i + ":");
-                    if (!m.is_cubic)
-                    {
-                        writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
-                        writer.WriteLine(space4 + "  used_servos[i].release();");
-                    }
+                    writer.WriteLine(space4 + "for(int i = " + channels + "; i-- > 0; )");
+                    writer.WriteLine(space4 + "  used_servos[i].release();");
                     state_counter++;
                     if (i != m.Events.Count - 1)
                     {
@@ -979,7 +983,7 @@ namespace _86ME_ver1
                     bool hasTarget = false;
                     for (int k = 0; k < m.Events.Count; k++)
                     {
-                        if (m.Events[k] is ME_Flag && !m.is_cubic)
+                        if (m.Events[k] is ME_Flag)
                         {
                             if (String.Compare(mif.name, ((ME_Flag)m.Events[k]).name) == 0)
                             {
@@ -1087,22 +1091,27 @@ namespace _86ME_ver1
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                if (m.is_cubic)
+                if (m.control_method != 0)
                 {
-                    writer.Write("unsigned long _" + m.name + "_frm_time[" + m.frames + "] = {");
-                    int k = 0;
-                    for (int j = 0; j < m.Events.Count; j++)
+                    if (m.frames > 0)
                     {
-                        if (m.Events[j] is ME_Frame)
+                        writer.Write("unsigned long _" + m.name + "_frm_time[" + m.frames + "] = {");
+                        int k = 0;
+                        for (int j = 0; j < m.Events.Count; j++)
                         {
-                            writer.Write(((ME_Frame)(m.Events[j])).delay);
-                            if (k != m.frames - 1)
-                                writer.Write(", ");
-                            else
-                                writer.Write("};\n");
-                            k++;
+                            if (m.Events[j] is ME_Frame)
+                            {
+                                writer.Write(((ME_Frame)(m.Events[j])).delay);
+                                if (k != m.frames - 1)
+                                    writer.Write(", ");
+                                else
+                                    writer.Write("};\n");
+                                k++;
+                            }
                         }
                     }
+                    else
+                        writer.Write("unsigned long _" + m.name + "_frm_time[1] = {0};\n");
                 }
             }
             writer.WriteLine();
@@ -1260,8 +1269,15 @@ namespace _86ME_ver1
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                if (m.is_cubic)
-                    writer.WriteLine("  beginCubicSpline(" + m.name + "_frm, _" + m.name + "_frm_time, " + m.frames + ");");
+                if (m.control_method != 0 && isPureFrame(m))
+                {
+                    if (m.control_method == 1)
+                        writer.WriteLine("  servoBeginSplineMotion(CONSTRAINED_CUBIC, " +
+                                         m.name + "_frm, _" + m.name + "_frm_time, " + m.frames + ");");
+                    else if (m.control_method == 2)
+                        writer.WriteLine("  servoBeginSplineMotion(NATURAL_CUBIC, " +
+                                         m.name + "_frm, _" + m.name + "_frm_time, " + m.frames + ");");
+                }
             }
             writer.WriteLine();
             writer.WriteLine("  offsets.setOffsets();");

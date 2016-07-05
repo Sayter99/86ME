@@ -1049,7 +1049,7 @@ namespace _86ME_ver1
                         writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + "\n");
                     }
                 }
-                writer.Write("MotionEnd " + m.property + " " + m.comp_range + " " + m.is_cubic + " " + m.name);
+                writer.Write("MotionEnd " + m.property + " " + m.comp_range + " " + m.control_method + " " + m.name);
                 if (i != ME_Motionlist.Count - 1)
                     writer.Write("\n");
             }
@@ -1443,11 +1443,8 @@ namespace _86ME_ver1
                             motiontag.comp_range = try_out;
                         else
                             i--;
-                        i++;
-                        if (datas[i] == "True")
-                            motiontag.is_cubic = true;
-                        else if (datas[i] == "False")
-                            motiontag.is_cubic = false;
+                        if (int.TryParse(datas[++i], out try_out) == true)
+                            motiontag.control_method = try_out;
                         else
                             i--;
                         if (motiontag != null)
@@ -1768,7 +1765,7 @@ namespace _86ME_ver1
                 NonBlocking.Checked = true;
             MotionLayerCombo.SelectedIndex = m.moton_layer;
             CompRangeText.Text = m.comp_range.ToString();
-            CubicCheckBox.Checked = m.is_cubic;
+            MotionControlCombo.SelectedIndex = m.control_method;
             Framelist.Controls.Clear();
             current_motionlist_idx = -1;
             last_motionlist_idx = -1;
@@ -2327,6 +2324,11 @@ namespace _86ME_ver1
                     this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
                     ME_Frame f = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
                     delaytext.Text = f.delay.ToString();
+                    if (!freshflag[1])
+                    {
+                        Update_framelist();
+                        freshflag[1] = true;
+                    }
                     if (autocheck.Checked == true)
                     {
                         for (int i = 0; i < 45; i++)
@@ -2371,11 +2373,6 @@ namespace _86ME_ver1
                             }
                         }
                     }
-                    if (!freshflag[1])
-                    {
-                        Update_framelist();
-                        freshflag[1] = true;
-                    }
                     freshflag[0] = false;
                     Framelist.Enabled = true;
                     delaytext.Enabled = true;
@@ -2397,6 +2394,11 @@ namespace _86ME_ver1
                     this.DelayLabel.Text = Main_lang_dic["Label2TextPlayTime"];
                     ME_Frame h = ((ME_Frame)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]);
                     delaytext.Text = h.delay.ToString();
+                    if (!freshflag[1])
+                    {
+                        Update_framelist();
+                        freshflag[1] = true;
+                    }
                     if (autocheck.Checked == true)
                     {
                         for (int i = 0; i < 45; i++)
@@ -2436,11 +2438,6 @@ namespace _86ME_ver1
                                 ftext[i].Text = homeframe[i].ToString();
                             }
                         }
-                    }
-                    if (!freshflag[1])
-                    {
-                        Update_framelist();
-                        freshflag[1] = true;
                     }
                     freshflag[0] = false;
                     Framelist.Enabled = false;
@@ -3757,6 +3754,7 @@ namespace _86ME_ver1
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(n + 1);
             Motionlist.Items.Insert(n - 1, Motionlist.SelectedItem);
             Motionlist.Items.RemoveAt(n + 1);
+            freshflag[1] = true;
             Motionlist.SelectedIndex = n - 1;
         }
 
@@ -3770,6 +3768,7 @@ namespace _86ME_ver1
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(n);
             Motionlist.Items.Insert(n + 2, Motionlist.SelectedItem);
             Motionlist.Items.RemoveAt(n);
+            freshflag[1] = true;
             Motionlist.SelectedIndex = n + 1;
         }
 
@@ -4100,10 +4099,10 @@ namespace _86ME_ver1
             }
         }
 
-        private void CubicCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void MotionControlCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).is_cubic = CubicCheckBox.Checked;
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).control_method = MotionControlCombo.SelectedIndex;
         }
 
         private void saveFrame_Click(object sender, EventArgs e)
@@ -4187,7 +4186,7 @@ namespace _86ME_ver1
             blockingExplaination.LanguageOption = RichTextBoxLanguageOptions.DualFont;
             CompRangeExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
             motionLayerExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
-            CubicExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
+            MotionControlExplanation.LanguageOption = RichTextBoxLanguageOptions.DualFont;
 
             motionevent[0] = Main_lang_dic["AddNewAction_N"];
             motionevent[1] = Main_lang_dic["AddHomeframe"];
@@ -4209,7 +4208,7 @@ namespace _86ME_ver1
             bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];
             capturebutton.Text = Main_lang_dic["capturebutton_Text"];
             CompRangeExplanation.Text = Main_lang_dic["CompRangeExplanation_Text"];
-            CubicExplanation.Text = Main_lang_dic["CubicExplanation_Text"];
+            MotionControlExplanation.Text = Main_lang_dic["MotionControlExplanation_Text"];
             editToolStripMenuItem.Text = Main_lang_dic["editToolStripMenuItem_Text"];
             exitToolStripMenuItem.Text = Main_lang_dic["exitToolStripMenuItem_Text"];
             fast.Text = Main_lang_dic["fast_Text"];

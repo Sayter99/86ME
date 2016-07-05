@@ -135,6 +135,10 @@
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.MotionProperty = new System.Windows.Forms.TabPage();
+            this.MotionControlLabel = new System.Windows.Forms.Label();
+            this.MotionControlCombo = new System.Windows.Forms.ComboBox();
+            this.MotionControlExplanation = new System.Windows.Forms.RichTextBox();
+            this.separateLine3 = new System.Windows.Forms.Label();
             this.CompRangeExplanation = new System.Windows.Forms.RichTextBox();
             this.CompRangeText = new System.Windows.Forms.MaskedTextBox();
             this.CompRange = new System.Windows.Forms.Label();
@@ -161,9 +165,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.separateLine3 = new System.Windows.Forms.Label();
-            this.CubicCheckBox = new System.Windows.Forms.CheckBox();
-            this.CubicExplanation = new System.Windows.Forms.RichTextBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -1329,8 +1330,9 @@
             // 
             // MotionProperty
             // 
-            this.MotionProperty.Controls.Add(this.CubicExplanation);
-            this.MotionProperty.Controls.Add(this.CubicCheckBox);
+            this.MotionProperty.Controls.Add(this.MotionControlLabel);
+            this.MotionProperty.Controls.Add(this.MotionControlCombo);
+            this.MotionProperty.Controls.Add(this.MotionControlExplanation);
             this.MotionProperty.Controls.Add(this.separateLine3);
             this.MotionProperty.Controls.Add(this.CompRangeExplanation);
             this.MotionProperty.Controls.Add(this.CompRangeText);
@@ -1353,6 +1355,47 @@
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
             // 
+            // MotionControlLabel
+            // 
+            this.MotionControlLabel.AutoSize = true;
+            this.MotionControlLabel.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.MotionControlLabel.Location = new System.Drawing.Point(13, 386);
+            this.MotionControlLabel.Name = "MotionControlLabel";
+            this.MotionControlLabel.Size = new System.Drawing.Size(98, 12);
+            this.MotionControlLabel.TabIndex = 17;
+            this.MotionControlLabel.Text = "Control Method:";
+            // 
+            // MotionControlCombo
+            // 
+            this.MotionControlCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MotionControlCombo.FormattingEnabled = true;
+            this.MotionControlCombo.Items.AddRange(new object[] {
+            "Linear",
+            "Constrained Cubic",
+            "Natural Cubic"});
+            this.MotionControlCombo.Location = new System.Drawing.Point(117, 383);
+            this.MotionControlCombo.Name = "MotionControlCombo";
+            this.MotionControlCombo.Size = new System.Drawing.Size(116, 20);
+            this.MotionControlCombo.TabIndex = 16;
+            this.MotionControlCombo.SelectedIndexChanged += new System.EventHandler(this.MotionControlCombo_SelectedIndexChanged);
+            // 
+            // MotionControlExplanation
+            // 
+            this.MotionControlExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.MotionControlExplanation.Location = new System.Drawing.Point(15, 409);
+            this.MotionControlExplanation.Name = "MotionControlExplanation";
+            this.MotionControlExplanation.Size = new System.Drawing.Size(218, 41);
+            this.MotionControlExplanation.TabIndex = 15;
+            this.MotionControlExplanation.Text = "This motion will be controlled by the chosen method.";
+            // 
+            // separateLine3
+            // 
+            this.separateLine3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.separateLine3.Location = new System.Drawing.Point(-2, 373);
+            this.separateLine3.Name = "separateLine3";
+            this.separateLine3.Size = new System.Drawing.Size(243, 1);
+            this.separateLine3.TabIndex = 13;
+            // 
             // CompRangeExplanation
             // 
             this.CompRangeExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -1368,7 +1411,7 @@
             // 
             this.CompRangeText.Location = new System.Drawing.Point(146, 267);
             this.CompRangeText.Name = "CompRangeText";
-            this.CompRangeText.Size = new System.Drawing.Size(68, 22);
+            this.CompRangeText.Size = new System.Drawing.Size(87, 22);
             this.CompRangeText.TabIndex = 11;
             this.CompRangeText.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.CompRangeText.TextChanged += new System.EventHandler(this.CompRangeText_TextChanged);
@@ -1419,7 +1462,7 @@
             "1"});
             this.MotionLayerCombo.Location = new System.Drawing.Point(104, 163);
             this.MotionLayerCombo.Name = "MotionLayerCombo";
-            this.MotionLayerCombo.Size = new System.Drawing.Size(109, 20);
+            this.MotionLayerCombo.Size = new System.Drawing.Size(129, 20);
             this.MotionLayerCombo.TabIndex = 6;
             this.MotionLayerCombo.SelectedIndexChanged += new System.EventHandler(this.MotionLayerCombo_SelectedIndexChanged);
             // 
@@ -1482,9 +1525,9 @@
             this.MotionPropertyLabel.AutoSize = true;
             this.MotionPropertyLabel.Location = new System.Drawing.Point(7, 4);
             this.MotionPropertyLabel.Name = "MotionPropertyLabel";
-            this.MotionPropertyLabel.Size = new System.Drawing.Size(192, 12);
+            this.MotionPropertyLabel.Size = new System.Drawing.Size(198, 12);
             this.MotionPropertyLabel.TabIndex = 0;
-            this.MotionPropertyLabel.Text = "Set the property of the choosed motion :";
+            this.MotionPropertyLabel.Text = "Set the properties of the choosed motion :";
             // 
             // motion_stop
             // 
@@ -1635,36 +1678,6 @@
             this.Setting_groupBox.TabIndex = 15;
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
-            // 
-            // separateLine3
-            // 
-            this.separateLine3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine3.Location = new System.Drawing.Point(-2, 373);
-            this.separateLine3.Name = "separateLine3";
-            this.separateLine3.Size = new System.Drawing.Size(243, 1);
-            this.separateLine3.TabIndex = 13;
-            // 
-            // CubicCheckBox
-            // 
-            this.CubicCheckBox.AutoSize = true;
-            this.CubicCheckBox.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.CubicCheckBox.Location = new System.Drawing.Point(15, 383);
-            this.CubicCheckBox.Name = "CubicCheckBox";
-            this.CubicCheckBox.Size = new System.Drawing.Size(144, 16);
-            this.CubicCheckBox.TabIndex = 14;
-            this.CubicCheckBox.Text = "Cubic-Spline Control";
-            this.CubicCheckBox.UseVisualStyleBackColor = true;
-            this.CubicCheckBox.CheckedChanged += new System.EventHandler(CubicCheckBox_CheckedChanged);
-            // 
-            // CubicExplanation
-            // 
-            this.CubicExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.CubicExplanation.Location = new System.Drawing.Point(15, 405);
-            this.CubicExplanation.Name = "CubicExplanation";
-            this.CubicExplanation.Size = new System.Drawing.Size(218, 51);
-            this.CubicExplanation.TabIndex = 15;
-            this.CubicExplanation.Text = "This motion will be controlled by cubic-spline method.(Only frames can be in this" +
-    " motion, or the other actions will be ignored.)";
             // 
             // Main
             // 
@@ -1856,8 +1869,9 @@
         private System.Windows.Forms.Label separateLine2;
         private System.Windows.Forms.Label separateLine;
         private System.Windows.Forms.Label separateLine3;
-        private System.Windows.Forms.RichTextBox CubicExplanation;
-        private System.Windows.Forms.CheckBox CubicCheckBox;
+        private System.Windows.Forms.RichTextBox MotionControlExplanation;
+        private System.Windows.Forms.Label MotionControlLabel;
+        private System.Windows.Forms.ComboBox MotionControlCombo;
     }
 }
 
