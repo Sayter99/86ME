@@ -19,12 +19,15 @@ namespace _86ME_ver1
         public Label[] flabel2 = new Label[45];
         public ComboBox[] fbox = new ComboBox[45];
         public ComboBox[] fbox2 = new ComboBox[45];
+        public ComboBox[] fbox3 = new ComboBox[45];
         public MaskedTextBox[] ftext = new MaskedTextBox[45];
         public MaskedTextBox[] ftext2 = new MaskedTextBox[45];
         public MaskedTextBox[] ftext3 = new MaskedTextBox[45];
         public MaskedTextBox[] ftext4 = new MaskedTextBox[45];
         public MaskedTextBox[] ftext5 = new MaskedTextBox[45];
+        public MaskedTextBox[] ftext6 = new MaskedTextBox[45];
         public CheckBox[] fcheck = new CheckBox[45];
+        public CheckBox[] fcheck_ps = new CheckBox[45];
         public HScrollBar[] fbar_off = new HScrollBar[45];
         public HScrollBar[] fbar_home = new HScrollBar[45];
         int[] offset = new int[45];
@@ -36,8 +39,10 @@ namespace _86ME_ver1
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
         public double[] p_gain = new double[45];
+        public double[] s_gain = new double[45];
         public Quaternion q = new Quaternion();
         private Quaternion autoq = new Quaternion();
+        private double[] omega = new double[2];
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
         public string picfilename = null;
         public int[] channelx = new int[45];
@@ -86,6 +91,7 @@ namespace _86ME_ver1
                 channelx[i] = 0;
                 channely[i] = 0;
                 p_gain[i] = 0;
+                s_gain[i] = 0;
             }
             create_panel(0, 45, 0);
             label10.Enabled = false;
@@ -104,7 +110,7 @@ namespace _86ME_ver1
         {
             if (fcheck[i].Checked == true)
             {
-                if (fbox2[i].SelectedIndex != 2 && getQ.Enabled == true)
+                if ((fbox2[i].SelectedIndex != 0 || fbox3[i].SelectedIndex != 0) && getQ.Enabled == true)
                 {
                     try
                     {
@@ -118,12 +124,36 @@ namespace _86ME_ver1
                             autoq.x = arduino.quaternion[1];
                             autoq.y = arduino.quaternion[2];
                             autoq.z = arduino.quaternion[3];
+                            arduino.pin_capture(11);
+                            while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
+                            arduino.dataRecieved = false;
+                            omega[0] = 0.1*omega[0] + 0.9*arduino.captured_float;
+                            arduino.pin_capture(12);
+                            while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
+                            arduino.dataRecieved = false;
+                            omega[1] = 0.1*omega[1] + 0.9*arduino.captured_float;
                             renew_quaternion = false;
                         }
                         RollPitchYaw rpy = (autoq.Normalized().Round(4) * q.Normalized().Round(4).Inverse()).toRPY();
-                        int gain = (int)Math.Round(rpy.rpy[fbox2[i].SelectedIndex] * (180 / Math.PI) * p_gain[i]);
-                        if (Math.Abs(autogain[i] - gain) > 4 * p_gain[i])
-                            autogain[i] = gain;
+                        int gain = 0;
+                        for (int src = 0; src < 2; src++)
+                        {
+                            if (src == 0 && p_gain[i] != 0)
+                            {
+                                if (fbox2[i].SelectedIndex == 1 || fbox2[i].SelectedIndex == 2)
+                                    gain += (int)Math.Round(rpy.rpy[fbox2[i].SelectedIndex - 1] * (180 / Math.PI) * p_gain[i]);
+                                else if (fbox2[i].SelectedIndex == 3 || fbox2[i].SelectedIndex == 4)
+                                    gain += (int)Math.Round(omega[fbox2[i].SelectedIndex - 3] * p_gain[i]);
+                            }
+                            else if (src == 1 && s_gain[i] != 0)
+                            {
+                                if (fbox3[i].SelectedIndex == 1 || fbox3[i].SelectedIndex == 2)
+                                    gain += (int)Math.Round(rpy.rpy[fbox3[i].SelectedIndex - 1] * (180 / Math.PI) * s_gain[i]);
+                                else if (fbox3[i].SelectedIndex == 3 || fbox3[i].SelectedIndex == 4)
+                                    gain += (int)Math.Round(omega[fbox3[i].SelectedIndex - 3] * s_gain[i]);
+                            }
+                        }
+                        autogain[i] = gain;
                     }
                     catch
                     {
@@ -157,7 +187,8 @@ namespace _86ME_ver1
                     if (arduino != null)
                     {
                         for (int i = 0; i < 45; i++)
-                            update_autoframe(i);
+                            if (string.Compare("---noServo---", fbox[i].Text) != 0)
+                                update_autoframe(i);
                         renew_quaternion = true;
                         if (send_msg)
                         {
@@ -169,7 +200,7 @@ namespace _86ME_ver1
                             catch { }
                         }
                     }
-                    Thread.Sleep(33);
+                    Thread.Sleep(28);
                 }
             }
         }
@@ -216,6 +247,9 @@ namespace _86ME_ver1
                 {
                     ftext5[i].Enabled = false;
                     fbox2[i].Enabled = false;
+                    ftext6[i].Enabled = false;
+                    fbox3[i].Enabled = false;
+                    fcheck_ps[i].Enabled = false;
                 }
             }
             else
@@ -233,6 +267,9 @@ namespace _86ME_ver1
                 {
                     ftext5[i].Enabled = true;
                     fbox2[i].Enabled = true;
+                    ftext6[i].Enabled = true;
+                    fbox3[i].Enabled = true;
+                    fcheck_ps[i].Enabled = true;
                 }
             }
         }
@@ -416,6 +453,27 @@ namespace _86ME_ver1
             }
         }
 
+        private void fcheck_ps_CheckedChanged(object sender, EventArgs e)
+        {
+            int index = int.Parse(((CheckBox)sender).Name);
+            if (((CheckBox)sender).Checked == true)
+            {
+                ((CheckBox)sender).Image = Properties.Resources.s;
+                ftext5[index].Visible = false;
+                fbox2[index].Visible = false;
+                ftext6[index].Visible = true;
+                fbox3[index].Visible = true;
+            }
+            else
+            {
+                ((CheckBox)sender).Image = Properties.Resources.p;
+                ftext6[index].Visible = false;
+                fbox3[index].Visible = false;
+                ftext5[index].Visible = true;
+                fbox2[index].Visible = true;
+            }
+        }
+
         public void write_back()
         {
             q.w = double.Parse(maskedTextBox1.Text);
@@ -429,6 +487,7 @@ namespace _86ME_ver1
                 min[i] = uint.Parse(ftext3[i].Text);
                 Max[i] = uint.Parse(ftext4[i].Text);
                 p_gain[i] = double.Parse(ftext5[i].Text);
+                s_gain[i] = double.Parse(ftext6[i].Text);
             }
         }
 
@@ -441,16 +500,19 @@ namespace _86ME_ver1
                 flabel2[i] = new Label();
                 fbox[i] = new ComboBox();
                 fbox2[i] = new ComboBox();
+                fbox3[i] = new ComboBox();
                 ftext[i] = new MaskedTextBox();
                 ftext2[i] = new MaskedTextBox();
                 ftext3[i] = new MaskedTextBox();
                 ftext4[i] = new MaskedTextBox();
                 ftext5[i] = new MaskedTextBox();
+                ftext6[i] = new MaskedTextBox();
                 fcheck[i] = new CheckBox();
+                fcheck_ps[i] = new CheckBox();
                 fbar_off[i] = new HScrollBar();
                 fbar_home[i] = new HScrollBar();
 
-                fpanel[i].Size = new Size(660, 50);
+                fpanel[i].Size = new Size(685, 50);
                 fpanel[i].Top += 3 + start_pos * 50;
 
                 flabel[i].Size = new Size(65, 18);
@@ -467,7 +529,12 @@ namespace _86ME_ver1
 
                 fbox2[i].DropDownStyle = ComboBoxStyle.DropDownList;
                 fbox2[i].Size = new Size(50, 22);
-                fbox2[i].Left += 555;
+                fbox2[i].Left += 580;
+
+                fbox3[i].DropDownStyle = ComboBoxStyle.DropDownList;
+                fbox3[i].Size = new Size(50, 22);
+                fbox3[i].Left += 580;
+                fbox3[i].Top += 6;
 
                 fcheck[i].Top += 24;
                 fcheck[i].Left += 125;
@@ -477,6 +544,17 @@ namespace _86ME_ver1
                 fcheck[i].Checked = false;
                 fcheck[i].Enabled = false;
                 ttp.SetToolTip(fcheck[i], NewMotion_lang_dic["NewMotion_fcheck_ToolTip"]);
+
+                fcheck_ps[i].Appearance = Appearance.Button;
+                fcheck_ps[i].FlatStyle = FlatStyle.Flat;
+                fcheck_ps[i].FlatAppearance.BorderSize = 0;
+                fcheck_ps[i].Image = Properties.Resources.p;
+                fcheck_ps[i].BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+                fcheck_ps[i].Size = new Size(23, 22);
+                fcheck_ps[i].Left += 552;
+                fcheck_ps[i].Name = i.ToString();
+                fcheck_ps[i].Enabled = false;
+                fcheck_ps[i].CheckedChanged += new EventHandler(fcheck_ps_CheckedChanged);
 
                 ftext[i].Name = i.ToString();
                 ftext[i].Text = offset[i].ToString();
@@ -518,8 +596,19 @@ namespace _86ME_ver1
                 ftext5[i].KeyPress += new KeyPressEventHandler(floatcheck);
                 ftext5[i].TextChanged += new EventHandler(check_pgain);
                 ftext5[i].Size = new Size(40, 22);
-                ftext5[i].Left += 610;
+                ftext5[i].Left += 635;
                 ftext5[i].Enabled = false;
+
+                ftext6[i].Name = i.ToString();
+                ftext6[i].Text = s_gain[i].ToString();
+                ftext6[i].TextAlign = HorizontalAlignment.Right;
+                ftext6[i].KeyPress += new KeyPressEventHandler(floatcheck);
+                ftext6[i].TextChanged += new EventHandler(check_sgain);
+                ftext6[i].Size = new Size(40, 22);
+                ftext6[i].Left += 635;
+                ftext6[i].Top += 6;
+                ftext6[i].Enabled = false;
+                ftext6[i].Visible = false;
 
                 fbar_off[i].Name = i.ToString();
                 fbar_off[i].Top += 24;
@@ -561,10 +650,16 @@ namespace _86ME_ver1
                 fbox[i].Name = i.ToString();
                 fbox[i].SelectedIndexChanged += new EventHandler(motors_SelectedIndexChanged);
 
-                fbox2[i].Items.AddRange(new object[] { "roll", "pitch", "none" });
-                fbox2[i].SelectedIndex = 2;
+                fbox2[i].Items.AddRange(new object[] { "none", "roll", "pitch", "v_roll", "v_pitch" });
+                fbox2[i].SelectedIndex = 0;
                 fbox2[i].Name = i.ToString();
                 fbox2[i].Enabled = false;
+
+                fbox3[i].Items.AddRange(new object[] { "none", "roll", "pitch", "v_roll", "v_pitch" });
+                fbox3[i].SelectedIndex = 0;
+                fbox3[i].Name = i.ToString();
+                fbox3[i].Enabled = false;
+                fbox3[i].Visible = false;
 
                 if (i < 10)
                     flabel[i].Text = "SetServo " + i.ToString() + ":";
@@ -575,14 +670,17 @@ namespace _86ME_ver1
                 fpanel[i].Controls.Add(flabel2[i]);
                 fpanel[i].Controls.Add(fbox[i]);
                 fpanel[i].Controls.Add(fbox2[i]);
+                fpanel[i].Controls.Add(fbox3[i]);
                 fpanel[i].Controls.Add(ftext[i]);
                 fpanel[i].Controls.Add(ftext2[i]);
                 fpanel[i].Controls.Add(ftext3[i]);
                 fpanel[i].Controls.Add(ftext4[i]);
                 fpanel[i].Controls.Add(ftext5[i]);
+                fpanel[i].Controls.Add(ftext6[i]);
                 fpanel[i].Controls.Add(fcheck[i]);
                 fpanel[i].Controls.Add(fbar_off[i]);
                 fpanel[i].Controls.Add(fbar_home[i]);
+                fpanel[i].Controls.Add(fcheck_ps[i]);
                 channelver.Controls.Add(fpanel[i]);
             }
         }
@@ -798,6 +896,27 @@ namespace _86ME_ver1
             else
             {
                 p_gain[i] = 0;
+                ((MaskedTextBox)sender).Text = "0";
+            }
+        }
+
+        private void check_sgain(object sender, EventArgs e)
+        {
+            double n;
+            int i = int.Parse(((MaskedTextBox)sender).Name);
+
+            if (double.TryParse(((MaskedTextBox)sender).Text, out n))
+            {
+                s_gain[i] = n;
+            }
+            else if (((MaskedTextBox)sender).Text == "-" || ((MaskedTextBox)sender).Text == "" ||
+                     ((MaskedTextBox)sender).Text == "-." || ((MaskedTextBox)sender).Text == ".")
+            {
+                s_gain[i] = 0;
+            }
+            else
+            {
+                s_gain[i] = 0;
                 ((MaskedTextBox)sender).Text = "0";
             }
         }

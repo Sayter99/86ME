@@ -51,7 +51,9 @@ namespace _86ME_ver1
                 method_flag[4] = true;
                 for (int i = 0; i < 45; i++ )
                 {
-                    if (Motion.fbox2[i].SelectedIndex != 2 && Motion.p_gain[i] != 0)
+                    if (((Motion.fbox2[i].SelectedIndex != 0 && Motion.p_gain[i] != 0) ||
+                        (Motion.fbox3[i].SelectedIndex != 0 && Motion.s_gain[i] != 0)) &&
+                        String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
                         IMU_compensatory = true;
                 }
             }
@@ -338,30 +340,67 @@ namespace _86ME_ver1
                                     " + _IMU_Q[1]*" + invQ.y + " + _IMU_Q[0]*" + invQ.z + ";");
                 writer.WriteLine("  _roll = atan2(2*(_w*_x + _y*_z), 1 - 2*(_x*_x + _y*_y));");
                 writer.WriteLine("  _pitch = asin(2*(_w*_y - _z*_x));");
+                writer.WriteLine("  _omega[0] = 0.1*_omega[0] + 0.9*_IMU_val[3];");
+                writer.WriteLine("  _omega[1] = 0.1*_omega[1] + 0.9*_IMU_val[4];");
+                writer.WriteLine("  memset(_mixOffsets, 0, sizeof(long)*45);");
                 if (IMU_compensatory)
                 {
-                    for (int source = 0; source < 2; source++)
+                    for (int ps = 0; ps < 2; ps++)
                     {
-                        if (source == 0) // roll
-                            writer.WriteLine("  if(fabs(_roll*180/M_PI) <= _comp_range)\n  {");
-                        else if (source == 1) // pitch
-                            writer.WriteLine("  if(fabs(_pitch*180/M_PI) <= _comp_range)\n  {");
-                        for (int i = 0; i < channels.Count; i++)
+                        for (int source = 1; source < 5; source++)
                         {
-                            if (Motion.p_gain[channels[i]] != 0 && Motion.fbox2[channels[i]].SelectedIndex != 2)
+                            if (source == 1) // roll
+                                writer.WriteLine("  if(fabs(_roll*180/M_PI) <= _comp_range)\n  {");
+                            else if (source == 2) // pitch
+                                writer.WriteLine("  if(fabs(_pitch*180/M_PI) <= _comp_range)\n  {");
+                            for (int i = 0; i < channels.Count; i++)
                             {
-                                if (Motion.fbox2[channels[i]].SelectedIndex == source)
+                                if (ps == 0)
                                 {
-                                    if (source == 0) // roll
-                                        writer.WriteLine("    _mixOffsets[" + i + "] = " +
-                                                         "(long)((180*_roll*" + Motion.p_gain[channels[i]] + ")/M_PI);");
-                                    else if (source == 1) // pitch
-                                        writer.WriteLine("    _mixOffsets[" + i + "] = " +
-                                                         "(long)((180*_pitch*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                                    if (Motion.p_gain[channels[i]] != 0 && Motion.fbox2[channels[i]].SelectedIndex != 0)
+                                    {
+                                        if (Motion.fbox2[channels[i]].SelectedIndex == source)
+                                        {
+                                            if (source == 1) // roll
+                                                writer.WriteLine("    _mixOffsets[" + i + "] += " +
+                                                                    "(long)((180*_roll*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                                            else if (source == 2) // pitch
+                                                writer.WriteLine("    _mixOffsets[" + i + "] += " +
+                                                                    "(long)((180*_pitch*" + Motion.p_gain[channels[i]] + ")/M_PI);");
+                                            else if (source == 3)
+                                                writer.WriteLine("  _mixOffsets[" + i + "] += " +
+                                                                    "(long)(_omega[0]*" + Motion.p_gain[channels[i]] + ");");
+                                            else if (source == 4)
+                                                writer.WriteLine("  _mixOffsets[" + i + "] += " +
+                                                                    "(long)(_omega[1]*" + Motion.p_gain[channels[i]] + ");");
+                                        }
+                                    }
+                                }
+                                else if (ps == 1)
+                                {
+                                    if (Motion.s_gain[channels[i]] != 0 && Motion.fbox3[channels[i]].SelectedIndex != 0)
+                                    {
+                                        if (Motion.fbox3[channels[i]].SelectedIndex == source)
+                                        {
+                                            if (source == 1) // roll
+                                                writer.WriteLine("    _mixOffsets[" + i + "] += " +
+                                                                    "(long)((180*_roll*" + Motion.s_gain[channels[i]] + ")/M_PI);");
+                                            else if (source == 2) // pitch
+                                                writer.WriteLine("    _mixOffsets[" + i + "] += " +
+                                                                    "(long)((180*_pitch*" + Motion.s_gain[channels[i]] + ")/M_PI);");
+                                            else if (source == 3)
+                                                writer.WriteLine("  _mixOffsets[" + i + "] += " +
+                                                                    "(long)(_omega[0]*" + Motion.s_gain[channels[i]] + ");");
+                                            else if (source == 4)
+                                                writer.WriteLine("  _mixOffsets[" + i + "] += " +
+                                                                    "(long)(_omega[1]*" + Motion.s_gain[channels[i]] + ");");
+                                        }
+                                    }
                                 }
                             }
+                            if (source == 1 || source == 2)
+                                writer.WriteLine("  }");
                         }
-                        writer.WriteLine("  }");
                     }
                     writer.WriteLine("  servoMultiRealTimeMixing(_mixOffsets);");
                     writer.WriteLine("EXIT_COMP:");
@@ -1077,6 +1116,7 @@ namespace _86ME_ver1
             writer.WriteLine("double _comp_range = 180;");
             writer.WriteLine("double _IMU_val[9] = {0};");
             writer.WriteLine("double _IMU_Q[4] = {1, 0, 0, 0};");
+            writer.WriteLine("double _omega[2] = {0};");
             writer.WriteLine("int _IMU_init_status;");
             if (channels.Count > 0)
             {

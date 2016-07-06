@@ -179,6 +179,8 @@
     <Content Include="icons\86Duino.ico" />
     <Content Include="icons\off.png" />
     <Content Include="icons\on.png" />
+    <Content Include="icons\p.png" />
+    <Content Include="icons\s.png" />
     <None Include="icons\load_frame.png" />
     <None Include="icons\save_frame.png" />
     <None Include="Resources\hand_open.cur" />

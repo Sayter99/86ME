@@ -62,7 +62,7 @@
             // button1
             // 
             this.button1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button1.Location = new System.Drawing.Point(392, 559);
+            this.button1.Location = new System.Drawing.Point(423, 559);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -73,7 +73,7 @@
             // button2
             // 
             this.button2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button2.Location = new System.Drawing.Point(507, 559);
+            this.button2.Location = new System.Drawing.Point(538, 559);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -87,7 +87,7 @@
             this.comboBox1.FormattingEnabled = true;
             this.comboBox1.Location = new System.Drawing.Point(102, 8);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(584, 20);
+            this.comboBox1.Size = new System.Drawing.Size(615, 20);
             this.comboBox1.TabIndex = 3;
             this.comboBox1.DropDown += new System.EventHandler(this.comboBox1_DropDown);
             this.comboBox1.DropDownClosed += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
@@ -108,7 +108,7 @@
             this.channelver.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.channelver.Location = new System.Drawing.Point(14, 148);
             this.channelver.Name = "channelver";
-            this.channelver.Size = new System.Drawing.Size(680, 405);
+            this.channelver.Size = new System.Drawing.Size(703, 405);
             this.channelver.TabIndex = 5;
             // 
             // checkBox2
@@ -126,7 +126,7 @@
             // button3
             // 
             this.button3.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button3.Location = new System.Drawing.Point(102, 559);
+            this.button3.Location = new System.Drawing.Point(133, 559);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(125, 23);
             this.button3.TabIndex = 10;
@@ -164,7 +164,7 @@
             // pic_loaded
             // 
             this.pic_loaded.AutoSize = true;
-            this.pic_loaded.Location = new System.Drawing.Point(236, 564);
+            this.pic_loaded.Location = new System.Drawing.Point(264, 564);
             this.pic_loaded.Name = "pic_loaded";
             this.pic_loaded.Size = new System.Drawing.Size(0, 12);
             this.pic_loaded.TabIndex = 13;
@@ -186,7 +186,7 @@
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Location = new System.Drawing.Point(14, 36);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(678, 90);
+            this.groupBox1.Size = new System.Drawing.Size(703, 90);
             this.groupBox1.TabIndex = 14;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Inertial Measurement Unit (IMU) Settings";
@@ -195,7 +195,7 @@
             // 
             this.getQ.Location = new System.Drawing.Point(455, 49);
             this.getQ.Name = "getQ";
-            this.getQ.Size = new System.Drawing.Size(217, 23);
+            this.getQ.Size = new System.Drawing.Size(242, 23);
             this.getQ.TabIndex = 26;
             this.getQ.Text = "Auto Detect Orientation";
             this.getQ.UseVisualStyleBackColor = true;
@@ -205,7 +205,7 @@
             // 
             this.init_imu.Location = new System.Drawing.Point(560, 13);
             this.init_imu.Name = "init_imu";
-            this.init_imu.Size = new System.Drawing.Size(112, 23);
+            this.init_imu.Size = new System.Drawing.Size(137, 23);
             this.init_imu.TabIndex = 25;
             this.init_imu.Text = "Initialize IMU";
             this.init_imu.UseVisualStyleBackColor = true;
@@ -319,7 +319,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(633, 133);
+            this.label10.Location = new System.Drawing.Point(658, 133);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(27, 12);
             this.label10.TabIndex = 15;
@@ -328,7 +328,7 @@
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(574, 133);
+            this.label11.Location = new System.Drawing.Point(599, 133);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(45, 12);
             this.label11.TabIndex = 16;
@@ -338,7 +338,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(704, 594);
+            this.ClientSize = new System.Drawing.Size(729, 593);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -353,8 +353,8 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(720, 632);
-            this.MinimumSize = new System.Drawing.Size(720, 632);
+            this.MaximumSize = new System.Drawing.Size(745, 632);
+            this.MinimumSize = new System.Drawing.Size(745, 632);
             this.Name = "NewMotion";
             this.ShowIcon = false;
             this.ShowInTaskbar = false;

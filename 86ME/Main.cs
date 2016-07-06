@@ -71,7 +71,9 @@ namespace _86ME_ver1
         int[] motor_info = new int[45];
         bool[] enable_gain = new bool[45];
         double[] p_gain = new double[45];
+        double[] s_gain = new double[45];
         int[] gain_source = new int[45];
+        int[] gain_source2 = new int[45];
         double[] init_quaternion = new double[4];
         int mdx, mdy;
         bool[] freshflag = new bool[2];
@@ -675,6 +677,8 @@ namespace _86ME_ver1
                 Max[i] = uint.Parse(nMotion.ftext4[i].Text);
                 p_gain[i] = double.Parse(nMotion.ftext5[i].Text);
                 gain_source[i] = nMotion.fbox2[i].SelectedIndex;
+                s_gain[i] = double.Parse(nMotion.ftext6[i].Text);
+                gain_source2[i] = nMotion.fbox3[i].SelectedIndex;
                 if (homeframe[i] > Max[i] || homeframe[i] < min[i])
                 {
                     homeframe[i] = 1500;
@@ -857,11 +861,13 @@ namespace _86ME_ver1
                 {
                     Motion.fbox[i].SelectedIndex = motor_info[i];
                     Motion.fbox2[i].SelectedIndex = gain_source[i];
+                    Motion.fbox3[i].SelectedIndex = gain_source2[i];
                     Motion.ftext[i].Text = offset[i].ToString();
                     Motion.ftext2[i].Text = homeframe[i].ToString();
                     Motion.ftext3[i].Text = min[i].ToString();
                     Motion.ftext4[i].Text = Max[i].ToString();
                     Motion.ftext5[i].Text = p_gain[i].ToString();
+                    Motion.ftext6[i].Text = s_gain[i].ToString();
                 }
             }
 
@@ -963,9 +969,21 @@ namespace _86ME_ver1
                 writer.Write(Motion.ftext5[j].Text + " ");
             }
             writer.WriteLine();
+            writer.Write("SGain ");
+            for (int j = 0; j < 45; j++)
+            {
+                if (string.Compare(Motion.ftext6[j].Text, "") == 0)
+                    Motion.ftext6[j].Text = "0";
+                writer.Write(Motion.ftext6[j].Text + " ");
+            }
+            writer.WriteLine();
             writer.Write("Source ");
             for (int j = 0; j < 45; j++)
                 writer.Write(Motion.fbox2[j].Text + " ");
+            writer.WriteLine();
+            writer.Write("Source2 ");
+            for (int j = 0; j < 45; j++)
+                writer.Write(Motion.fbox3[j].Text + " ");
             writer.WriteLine();
             for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
             {
@@ -1274,6 +1292,9 @@ namespace _86ME_ver1
                             {
                                 nMotion.fbox2[k].Enabled = true;
                                 nMotion.ftext5[k].Enabled = true;
+                                nMotion.fbox3[k].Enabled = true;
+                                nMotion.ftext6[k].Enabled = true;
+                                nMotion.fcheck_ps[k].Enabled = true;
                             }
                         }
                         nMotion.comboBox2.SelectedIndex = used_imu;
@@ -1295,12 +1316,29 @@ namespace _86ME_ver1
                             p_gain[k] = double.Parse(datas[i]);
                         }
                     }
+                    else if (String.Compare(datas[i], "SGain") == 0)
+                    {
+                        for (int k = 0; k < 45; k++)
+                        {
+                            i++;
+                            nMotion.ftext6[k].Text = datas[i];
+                            s_gain[k] = double.Parse(datas[i]);
+                        }
+                    }
                     else if (String.Compare(datas[i], "Source") == 0)
                     {
                         for (int k = 0; k < 45; k++)
                         {
                             nMotion.fbox2[k].Text = datas[++i];
                             gain_source[k] = nMotion.fbox2[k].SelectedIndex;
+                        }
+                    }
+                    else if (String.Compare(datas[i], "Source2") == 0)
+                    {
+                        for (int k = 0; k < 45; k++)
+                        {
+                            nMotion.fbox3[k].Text = datas[++i];
+                            gain_source2[k] = nMotion.fbox3[k].SelectedIndex;
                         }
                     }
                     else if (String.Compare(datas[i], "picmode") == 0)
