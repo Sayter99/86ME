@@ -736,7 +736,6 @@ namespace _86ME_ver1
                 Motion_groupBox.Enabled = true;
                 saveFileToolStripMenuItem.Enabled = true;
                 editToolStripMenuItem.Enabled = true;
-                NewMotion.Enabled = false;
                 ME_Motionlist = new ArrayList();
                 MotionCombo.Items.Clear();
                 MotionCombo.Text = "";
@@ -988,92 +987,97 @@ namespace _86ME_ver1
             for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
-                writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
-                             m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
-                             " " + m.ps2_type + " " + m.bt_mode + " " + m.acc_Settings[0] + " " + m.acc_Settings[1] +
-                             " " + m.acc_Settings[2] + " " + m.acc_Settings[3] + " " + m.acc_Settings[4] +
-                             " " + m.acc_Settings[5] + " " + m.acc_Settings[6] + "\n");
-                writer.Write("Layer " + m.moton_layer + " ");
-                for (int j = 0; j < m.used_servos.Count; j++)
-                {
-                    writer.Write(m.used_servos[j]);
-                    if (j != m.used_servos.Count - 1)
-                        writer.Write(" ");       
-                }
-                writer.WriteLine();
-                for (int j = 0; j < m.Events.Count; j++)
-                {
-                    if (m.Events[j] is ME_Frame)
-                    {
-                        ME_Frame f = (ME_Frame)m.Events[j];
-                        if (f.type == 1)
-                            writer.Write("frame " + f.delay.ToString() + " ");
-                        else if (f.type == 0)
-                            writer.Write("home " + f.delay.ToString() + " ");
-                        int count = 0;
-                        for (int k = 0; k < 45; k++)
-                        {
-                            if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                            {
-                                count++;
-                            }
-                        }
-                        for (int k = 0; k < 45; k++)
-                        {
-                            if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                            {
-                                count--;
-                                writer.Write(f.frame[k].ToString());
-                                if (count != 0)
-                                    writer.Write(" ");
-                            }
-                        }
-                        writer.Write("\n");
-                    }
-                    else if (m.Events[j] is ME_Delay)
-                    {
-                        ME_Delay d = (ME_Delay)m.Events[j];
-                        writer.Write("delay " + d.delay.ToString() + "\n");
-                    }
-                    else if (m.Events[j] is ME_Goto)
-                    {
-                        ME_Goto g = (ME_Goto)m.Events[j];
-                        writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + " " + g.infinite + "\n");
-                    }
-                    else if (m.Events[j] is ME_Flag)
-                    {
-                        ME_Flag fl = (ME_Flag)m.Events[j];
-                        writer.Write("flag " + fl.name + "\n");
-                    }
-                    else if (m.Events[j] is ME_Trigger)
-                    {
-                        ME_Trigger t = (ME_Trigger)m.Events[j];
-                        writer.Write("trigger " + t.name + " " + t.method + "\n");
-                    }
-                    else if (m.Events[j] is ME_Release)
-                    {
-                        writer.Write("release\n");
-                    }
-                    else if (m.Events[j] is ME_Compute)
-                    {
-                        ME_Compute op = (ME_Compute)m.Events[j];
-                        writer.Write("compute " + op.left_var + " " + op.form + " " + op.f1_var1 + " " + op.f1_op + " " + op.f1_var2 +
-                                     " " + op.f2_op + " " + op.f2_var + " " + op.f3_var + " " + op.f4_const + "\n");
-                    }
-                    else if (m.Events[j] is ME_If)
-                    {
-                        ME_If mif = (ME_If)m.Events[j];
-                        writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + "\n");
-                    }
-                }
-                writer.Write("MotionEnd " + m.property + " " + m.comp_range + " " + m.control_method + " " + m.name);
+                saveMotion(m, writer);
                 if (i != ME_Motionlist.Count - 1)
                     writer.Write("\n");
             }
 
             writer.Dispose();
             writer.Close();
+        }
+
+        private void saveMotion(ME_Motion m, TextWriter writer)
+        {
+            string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
+            writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
+                         m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
+                         " " + m.ps2_type + " " + m.bt_mode + " " + m.acc_Settings[0] + " " + m.acc_Settings[1] +
+                         " " + m.acc_Settings[2] + " " + m.acc_Settings[3] + " " + m.acc_Settings[4] +
+                         " " + m.acc_Settings[5] + " " + m.acc_Settings[6] + "\n");
+            writer.Write("Layer " + m.moton_layer + " ");
+            for (int j = 0; j < m.used_servos.Count; j++)
+            {
+                writer.Write(m.used_servos[j]);
+                if (j != m.used_servos.Count - 1)
+                    writer.Write(" ");
+            }
+            writer.WriteLine();
+            for (int j = 0; j < m.Events.Count; j++)
+            {
+                if (m.Events[j] is ME_Frame)
+                {
+                    ME_Frame f = (ME_Frame)m.Events[j];
+                    if (f.type == 1)
+                        writer.Write("frame " + f.delay.ToString() + " ");
+                    else if (f.type == 0)
+                        writer.Write("home " + f.delay.ToString() + " ");
+                    int count = 0;
+                    for (int k = 0; k < 45; k++)
+                    {
+                        if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                        {
+                            count++;
+                        }
+                    }
+                    for (int k = 0; k < 45; k++)
+                    {
+                        if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                        {
+                            count--;
+                            writer.Write(f.frame[k].ToString());
+                            if (count != 0)
+                                writer.Write(" ");
+                        }
+                    }
+                    writer.Write("\n");
+                }
+                else if (m.Events[j] is ME_Delay)
+                {
+                    ME_Delay d = (ME_Delay)m.Events[j];
+                    writer.Write("delay " + d.delay.ToString() + "\n");
+                }
+                else if (m.Events[j] is ME_Goto)
+                {
+                    ME_Goto g = (ME_Goto)m.Events[j];
+                    writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + " " + g.infinite + "\n");
+                }
+                else if (m.Events[j] is ME_Flag)
+                {
+                    ME_Flag fl = (ME_Flag)m.Events[j];
+                    writer.Write("flag " + fl.name + "\n");
+                }
+                else if (m.Events[j] is ME_Trigger)
+                {
+                    ME_Trigger t = (ME_Trigger)m.Events[j];
+                    writer.Write("trigger " + t.name + " " + t.method + "\n");
+                }
+                else if (m.Events[j] is ME_Release)
+                {
+                    writer.Write("release\n");
+                }
+                else if (m.Events[j] is ME_Compute)
+                {
+                    ME_Compute op = (ME_Compute)m.Events[j];
+                    writer.Write("compute " + op.left_var + " " + op.form + " " + op.f1_var1 + " " + op.f1_op + " " + op.f1_var2 +
+                                 " " + op.f2_op + " " + op.f2_var + " " + op.f3_var + " " + op.f4_const + "\n");
+                }
+                else if (m.Events[j] is ME_If)
+                {
+                    ME_If mif = (ME_If)m.Events[j];
+                    writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + "\n");
+                }
+            }
+            writer.Write("MotionEnd " + m.property + " " + m.comp_range + " " + m.control_method + " " + m.name);
         }
 
         private void actionToolStripMenuItem_Click(object sender, EventArgs e)//load project
@@ -1683,7 +1687,6 @@ namespace _86ME_ver1
             Motion_groupBox.Enabled = true;
             editToolStripMenuItem.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
-            NewMotion.Enabled = false;
             Motion = nMotion;
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -2887,6 +2890,7 @@ namespace _86ME_ver1
                 }
             }
         }
+
         private void delaytext_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8)
@@ -2894,6 +2898,7 @@ namespace _86ME_ver1
                 e.Handled = true;
             }
         }
+
         private void Motionlist_MouseDown(object sender, MouseEventArgs e) // right-click for editing motionlist
         {
             if (e.Button == MouseButtons.Right && MotionCombo.SelectedItem != null)
@@ -2932,6 +2937,27 @@ namespace _86ME_ver1
                     Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
                     Motionlist_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                }
+            }
+        }
+
+        private void Motionlist_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Delete)
+            {
+                if (current_motionlist_idx != -1)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.RemoveAt(Motionlist.SelectedIndex);
+                    Motionlist.Items.Remove(Motionlist.SelectedItem);
+                    delaytext.Enabled = false;
+                    delaytext.Text = "";
+                    capturebutton.Enabled = false;
+                    autocheck.Enabled = false;
+                    Framelist.Controls.Clear();
+                    Framelist.Enabled = false;
+                    update_motionlist();
+                    draw_background();
+                    last_motionlist_idx = -1;
                 }
             }
         }
@@ -3118,105 +3144,26 @@ namespace _86ME_ver1
             Motionlist.SelectedIndex++;
         }
 
-        private void MotionCombo_TextChanged(object sender, EventArgs e)
-        {
-            if (MotionConfig.SelectedIndex == 0)
-            {
-                current_motionlist_idx = -1;
-                move_up.Enabled = false;
-                move_down.Enabled = false;
-                Boolean new_mot = true;
-                NewMotion.Enabled = false;
-                if (String.Compare(MotionCombo.Text, "") == 0)
-                    new_mot = false;
-                for (int i = 0; i < MotionCombo.Items.Count; i++)
-                    if (String.Compare(MotionCombo.Text, MotionCombo.Items[i].ToString()) == 0)
-                        new_mot = false;
-                if (new_mot)
-                {
-                    NewMotion.Enabled = true;
-                }
-                Motionlist.Items.Clear();
-                MotionTest.Enabled = false;
-                motion_pause.Enabled = false;
-                motion_stop.Enabled = false;
-                Action_groupBox.Enabled = false;
-                Setting_groupBox.Enabled = false;
-            }
-            else if (MotionConfig.SelectedIndex == 1)
-            {
-                saveFrame.Visible = false;
-                loadFrame.Visible = false;
-                Boolean new_mot = true;
-                NewMotion.Enabled = false;
-                if (String.Compare(MotionCombo.Text, "") == 0)
-                    new_mot = false;
-                for (int i = 0; i < MotionCombo.Items.Count; i++)
-                    if (String.Compare(MotionCombo.Text, MotionCombo.Items[i].ToString()) == 0)
-                        new_mot = false;
-                if (new_mot)
-                {
-                    NewMotion.Enabled = true;
-                }
-                MotionTest.Enabled = false;
-                motion_pause.Enabled = false;
-                motion_stop.Enabled = false;
-                Action_groupBox.Enabled = false;
-                Setting_groupBox.Enabled = false;
-                //Motion Config
-                Always_radioButton.Enabled = false;
-                Keyboard_radioButton.Enabled = false;
-                bt_radioButton.Enabled = false;
-                ps2_radioButton.Enabled = false;
-                acc_radioButton.Enabled = false;
-                Always_groupBox.Enabled = false;
-                Keyboard_groupBox.Enabled = false;
-                bt_groupBox.Enabled = false;
-                ps2_groupBox.Enabled = false;
-                acc_groupBox.Enabled = false;
-            }
-            else if (MotionConfig.SelectedIndex == 2)
-            {
-                saveFrame.Visible = false;
-                loadFrame.Visible = false;
-                Boolean new_mot = true;
-                NewMotion.Enabled = false;
-                if (String.Compare(MotionCombo.Text, "") == 0)
-                    new_mot = false;
-                for (int i = 0; i < MotionCombo.Items.Count; i++)
-                    if (String.Compare(MotionCombo.Text, MotionCombo.Items[i].ToString()) == 0)
-                        new_mot = false;
-                if (new_mot)
-                {
-                    NewMotion.Enabled = true;
-                }
-                MotionTest.Enabled = false;
-                motion_pause.Enabled = false;
-                motion_stop.Enabled = false;
-                Action_groupBox.Enabled = false;
-                Setting_groupBox.Enabled = false;
-                Blocking.Enabled = false;
-                NonBlocking.Enabled = false;
-            }
-            this.hint_richTextBox.Text = Main_lang_dic["hint1"];
-            MotionConfig.Enabled = false;
-        }
-
         private void NewMotion_Click(object sender, EventArgs e)
         {
-            if (!(new System.Text.RegularExpressions.Regex("^[a-zA-Z][a-zA-Z0-9_]{0,20}$")).IsMatch(MotionCombo.Text))
+            MotionName motionName = new MotionName(Main_lang_dic);
+            motionName.ShowDialog();
+            if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
             {
-                if (MotionCombo.Text.Length < 20)
-                    MessageBox.Show(Main_lang_dic["errorMsg12"]);
-                else
-                    MessageBox.Show(Main_lang_dic["errorMsg13"]);
-                MotionCombo.Focus();
-            }
-            else if (MotionCombo.Text.IndexOf(" ") == -1) // add new motion successfully
-            {
-                MotionCombo.Items.Add(MotionCombo.Text);
+                if (MotionCombo.Items.Count > 0)
+                {
+                    for (int i = 0; i < MotionCombo.Items.Count; i++)
+                    {
+                        if (MotionCombo.Items[i].ToString() == motionName.name)
+                        {
+                            MessageBox.Show(Main_lang_dic["errorMsg22"]);
+                            return;
+                        }
+                    }
+                }
+                MotionCombo.Items.Add(motionName.name);
                 ME_Motion m = new ME_Motion();
-                m.name = MotionCombo.Text;
+                m.name = motionName.name;
                 ME_Motionlist.Add(m);
                 MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
                 Motionlist.Controls.Clear();
@@ -3229,10 +3176,377 @@ namespace _86ME_ver1
                 Motionlist.Focus();
                 this.hint_richTextBox.Text = Main_lang_dic["hint11"];
             }
-            else
+        }
+
+        private void EditMotion_Click(object sender, EventArgs e)
+        {
+            EditMotion_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+        }
+
+        private void ImportMotionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "rbm files (*.mot)|*.mot";
+            dialog.Title = "Open File";
+            String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
+            if (filename == null)
+                return;
+            using (StreamReader reader = new StreamReader(filename))
             {
-                MessageBox.Show(Main_lang_dic["errorMsg14"]);
-                MotionCombo.Focus();
+                string[] datas = reader.ReadToEnd().Split(delimiterChars);
+                ME_Motion motiontag = new ME_Motion();
+                for (int i = 0; i < datas.Length; i++)
+                {
+                    if (String.Compare(datas[i], "Motion") == 0)
+                    {
+                        i++;
+                        for (int j = 0; j < ME_Motionlist.Count; j++)
+                        {
+                            if (String.Compare(datas[i], ((ME_Motion)ME_Motionlist[j]).name) == 0)
+                                motiontag = null;
+                            else
+                                break;
+                        }
+                        if (motiontag == null)
+                        {
+                            MessageBox.Show(Main_lang_dic["errorMsg22"]);
+                            break;
+                        }
+                        motiontag.name = datas[i];
+                        int try_out;
+                        double try_out_d;
+                        if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                            String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                            int.TryParse(datas[i + 1], out try_out))
+                        { // triggers
+                            motiontag.trigger_method = int.Parse(datas[++i]);
+                            motiontag.auto_method = int.Parse(datas[++i]);
+                            motiontag.trigger_key = int.Parse(datas[++i]);
+                            motiontag.trigger_keyType = int.Parse(datas[++i]);
+                            i++;
+                            if (String.Compare("---noBtKey---", datas[i]) == 0)
+                                motiontag.bt_key = "";
+                            else
+                                motiontag.bt_key = datas[i];
+                            if (int.TryParse(datas[++i], out try_out) == false)
+                                i--;
+                            motiontag.ps2_key = datas[++i];
+                            motiontag.ps2_type = int.Parse(datas[++i]);
+                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                                String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                                String.Compare("Layer", datas[i + 1]) != 0)
+                                motiontag.bt_mode = datas[++i];
+                            if (double.TryParse(datas[i + 1], out try_out_d))
+                            {
+                                motiontag.acc_Settings[0] = double.Parse(datas[++i]);
+                                motiontag.acc_Settings[1] = double.Parse(datas[++i]);
+                                motiontag.acc_Settings[2] = double.Parse(datas[++i]);
+                                motiontag.acc_Settings[3] = double.Parse(datas[++i]);
+                                motiontag.acc_Settings[4] = double.Parse(datas[++i]);
+                                motiontag.acc_Settings[5] = double.Parse(datas[++i]);
+                                motiontag.acc_Settings[6] = int.Parse(datas[++i]);
+                            }
+                        }
+                        ME_Motionlist.Add(motiontag);
+                    }
+                    else if (String.Compare(datas[i], "Layer") == 0)
+                    {
+                        i++;
+                        int try_out;
+                        if (int.TryParse(datas[i], out try_out) == true)
+                            motiontag.moton_layer = try_out;
+                        while (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                            String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                            int.TryParse(datas[i + 1], out try_out))
+                        {
+                            i++;
+                            motiontag.used_servos.Add(try_out);
+                        }
+                    }
+                    else if (String.Compare(datas[i], "MotionEnd") == 0)
+                    {
+                        int try_out;
+                        if (int.TryParse(datas[++i], out try_out) == true)
+                            motiontag.property = try_out;
+                        else
+                            i--;
+                        if (int.TryParse(datas[++i], out try_out) == true)
+                            motiontag.comp_range = try_out;
+                        else
+                            i--;
+                        if (int.TryParse(datas[++i], out try_out) == true)
+                            motiontag.control_method = try_out;
+                        else
+                            i--;
+                        if (motiontag != null)
+                        {
+                            if (String.Compare(datas[++i], motiontag.name) == 0)
+                            {
+                                MotionCombo.Items.Add(motiontag.name);
+                                MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
+                            }
+                        }
+                    }
+                    else if (String.Compare(datas[i], "frame") == 0)
+                    {
+                        ME_Frame nframe = new ME_Frame();
+                        nframe.type = 1;
+                        i++;
+                        try
+                        {
+                            nframe.delay = int.Parse(datas[i]);
+                        }
+                        catch
+                        {
+                            nframe.delay = default_delay;
+                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
+                        }
+                        int j = 0;
+                        while (j < 45)
+                        {
+                            if (String.Compare(Motion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
+                            {
+                                i++;
+                                try
+                                {
+                                    nframe.frame[j] = int.Parse(datas[i]);
+                                }
+                                catch
+                                {
+                                    nframe.frame[j] = 0;
+                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
+                                }
+                            }
+                            else
+                            {
+                                nframe.frame[j] = 0;
+                            }
+                            j++;
+                        }
+                        motiontag.Events.Add(nframe);
+                    }
+                    else if (String.Compare(datas[i], "home") == 0)
+                    {
+                        ME_Frame nframe = new ME_Frame();
+                        nframe.type = 0;
+                        i++;
+                        try
+                        {
+                            nframe.delay = int.Parse(datas[i]);
+                        }
+                        catch
+                        {
+                            nframe.delay = default_delay;
+                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
+                        }
+                        int j = 0;
+                        while (j < 45)
+                        {
+                            if (String.Compare(Motion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
+                            {
+                                i++;
+                                try
+                                {
+                                    nframe.frame[j] = int.Parse(datas[i]);
+                                }
+                                catch
+                                {
+                                    nframe.frame[j] = 0;
+                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
+                                }
+                            }
+                            else
+                            {
+                                nframe.frame[j] = 0;
+                            }
+                            j++;
+                        }
+                        motiontag.Events.Add(nframe);
+                    }
+                    else if (String.Compare(datas[i], "delay") == 0)
+                    {
+                        ME_Delay ndelay = new ME_Delay();
+                        i++;
+                        try
+                        {
+                            ndelay.delay = int.Parse(datas[i]);
+                        }
+                        catch
+                        {
+                            ndelay.delay = default_delay;
+                            MessageBox.Show(Main_lang_dic["errorMsg11"]);
+                        }
+                        motiontag.Events.Add(ndelay);
+                    }
+                    else if (String.Compare(datas[i], "flag") == 0)
+                    {
+                        ME_Flag nflag = new ME_Flag();
+                        i++;
+                        nflag.name = datas[i];
+                        motiontag.Events.Add(nflag);
+                    }
+                    else if (String.Compare(datas[i], "goto") == 0)
+                    {
+                        ME_Goto ngoto = new ME_Goto();
+                        i++;
+                        ngoto.name = datas[i];
+                        i++;
+                        if (String.Compare(datas[i], "True") == 0)
+                            ngoto.is_goto = true;
+                        else
+                            ngoto.is_goto = false;
+                        i++;
+                        int value;
+                        bool success = int.TryParse(datas[i], out value);
+                        if (!success)
+                        {
+                            i--;
+                            motiontag.Events.Add(ngoto);
+                            continue;
+                        }
+                        ngoto.loops = datas[i];
+                        ngoto.current_loop = value;
+                        i++;
+                        if (String.Compare(datas[i], "True") == 0)
+                            ngoto.infinite = true;
+                        else if (String.Compare(datas[i], "False") == 0)
+                            ngoto.infinite = false;
+                        else
+                            i--;
+
+                        motiontag.Events.Add(ngoto);
+                    }
+                    else if (String.Compare(datas[i], "trigger") == 0)
+                    {
+                        ME_Trigger ntr = new ME_Trigger();
+                        ntr.name = datas[++i];
+                        ntr.method = int.Parse(datas[++i]);
+                        motiontag.Events.Add(ntr);
+                    }
+                    else if (String.Compare(datas[i], "release") == 0)
+                    {
+                        ME_Release nr = new ME_Release();
+                        motiontag.Events.Add(nr);
+                    }
+                    else if (String.Compare(datas[i], "compute") == 0)
+                    {
+                        ME_Compute op = new ME_Compute();
+                        op.left_var = int.Parse(datas[++i]);
+                        op.form = int.Parse(datas[++i]);
+                        op.f1_var1 = int.Parse(datas[++i]);
+                        op.f1_op = int.Parse(datas[++i]);
+                        op.f1_var2 = int.Parse(datas[++i]);
+                        op.f2_op = int.Parse(datas[++i]);
+                        op.f2_var = int.Parse(datas[++i]);
+                        op.f3_var = int.Parse(datas[++i]);
+                        op.f4_const = double.Parse(datas[++i]);
+                        motiontag.Events.Add(op);
+                    }
+                    else if (String.Compare(datas[i], "if") == 0)
+                    {
+                        ME_If mif = new ME_If();
+                        mif.left_var = int.Parse(datas[++i]);
+                        mif.method = int.Parse(datas[++i]);
+                        mif.right_var = int.Parse(datas[++i]);
+                        mif.name = datas[++i];
+                        motiontag.Events.Add(mif);
+                    }
+                }
+            }
+        }
+
+        private void ExportMotionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MotionCombo.Items.Count > 0)
+            {
+                if (MotionCombo.SelectedItem != null)
+                {
+                    SaveFileDialog dialog = new SaveFileDialog();
+                    dialog.Filter = "mot files (*.mot)|*.mot";
+                    dialog.Title = "Save File";
+                    dialog.FileName = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name;
+                    if (dialog.ShowDialog() == DialogResult.OK && dialog.FileName != null)
+                    {
+                        TextWriter writer = new StreamWriter(dialog.FileName);
+                        saveMotion(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]), writer);
+                        writer.Dispose();
+                        writer.Close();
+                    }
+                }
+            }
+        }
+
+        private void RenameMotionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MotionCombo.Items.Count > 0)
+            {
+                if (MotionCombo.SelectedItem != null)
+                {
+                    MotionName motionName = new MotionName(Main_lang_dic);
+                    motionName.ShowDialog();
+                    if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
+                    {
+                        for (int i = 0; i < MotionCombo.Items.Count; i++)
+                        {
+                            if (MotionCombo.Items[i].ToString() == motionName.name)
+                            {
+                                MessageBox.Show(Main_lang_dic["errorMsg22"]);
+                                return;
+                            }
+                        }
+                        ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name = motionName.name;
+                        MotionCombo.Items[MotionCombo.SelectedIndex] = motionName.name;
+                        RenewGotoMotion();
+                        update_motionlist();
+                        if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
+                            Motionlist.SelectedIndex = 0;
+                    }
+                }
+            }
+        }
+
+        private void DeleteMotionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MotionCombo.Items.Count > 0)
+            {
+                if (MotionCombo.SelectedItem != null)
+                {
+                    DialogResult res = MessageBox.Show(Main_lang_dic["warning1"], "Confirm", MessageBoxButtons.YesNo);
+                    if (res == System.Windows.Forms.DialogResult.Yes)
+                    {
+                        Motionlist.Items.Clear();
+                        Motionlist.Controls.Clear();
+                        ME_Motionlist.Remove(ME_Motionlist[MotionCombo.SelectedIndex]);
+                        MotionCombo.Items.Remove(MotionCombo.SelectedItem);
+                        RenewGotoMotion();
+                        if (MotionCombo.Items.Count > 0)
+                            MotionCombo.SelectedIndex = 0;
+                    }
+                }
+            }
+        }
+
+        private void RenewGotoMotion()
+        {
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                for (int j = 0; j < m.Events.Count; j++)
+                {
+                    if (m.Events[j] is ME_Trigger)
+                    {
+                        ME_Trigger t = (ME_Trigger)m.Events[j];
+                        bool has_target = false;
+                        for (int k = 0; k < ME_Motionlist.Count; k++)
+                            if (((ME_Motion)ME_Motionlist[k]).name == t.name)
+                                has_target = true;
+                        if (has_target == false)
+                            t.name = "";
+                    }
+                }
             }
         }
 
@@ -3366,6 +3680,8 @@ namespace _86ME_ver1
             autocheck.Enabled = false;
             capturebutton.Enabled = false;
             Framelist.Enabled = false;
+            NewMotion.Enabled = false;
+            EditMotion.Enabled = false;
             if (ME_Motionlist == null)
                 return;
 
@@ -3504,6 +3820,8 @@ namespace _86ME_ver1
             MotionConfig.Enabled = true;
             MotionTest.Enabled = true;
             MotionCombo.Enabled = true;
+            NewMotion.Enabled = true;
+            EditMotion.Enabled = true;
 
             for (int j = 0; j < m.Events.Count; j++)
             {
@@ -3562,6 +3880,8 @@ namespace _86ME_ver1
                 Framelist.Enabled = false;
                 MotionCombo.Enabled = true;
                 MotionConfig.Enabled = true;
+                NewMotion.Enabled = true;
+                EditMotion.Enabled = true;
                 this.hint_richTextBox.Text =
                         "   ___   __   ____        _\n" +
                         "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
@@ -4267,7 +4587,6 @@ namespace _86ME_ver1
             MotionPropertyLabel.Text = Main_lang_dic["MotionPropertyLabel_Text"];
             MotionTrigger.Text = Main_lang_dic["MotionTrigger_Text"];
             motorRelease.Text = Main_lang_dic["motorRelease_Text"];
-            NewMotion.Text = Main_lang_dic["NewMotion_Text"];
             newToolStripMenuItem.Text = Main_lang_dic["newToolStripMenuItem_Text"];
             nonblockingExplanation.Text = Main_lang_dic["nonblockinExplanation_Text"];
             optionsToolStripMenuItem.Text = Main_lang_dic["optionsToolStripMenuItem_Text"];

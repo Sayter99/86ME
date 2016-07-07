@@ -6,6 +6,8 @@ _VERSION_: v1.9
 
 * Add a new property for setting compensating range of motions.
 * Add a new property for setting a method to control servos.
+* Add a new button to import/export/rename/delete motions.
+* Add a new function that actions can be deleted by keyboard's "Delete" key. 
 
 _VERSION_: v1.8
 

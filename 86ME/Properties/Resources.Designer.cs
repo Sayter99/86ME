@@ -63,9 +63,29 @@ namespace _86ME_ver1.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap add {
+            get {
+                object obj = ResourceManager.GetObject("add", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap down_arrow {
             get {
                 object obj = ResourceManager.GetObject("down_arrow", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap gear {
+            get {
+                object obj = ResourceManager.GetObject("gear", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

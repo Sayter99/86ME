@@ -10,4 +10,4 @@ C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.csproj.GenerateResourc
 C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.exe
 C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.pdb
 C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\_86ME_ver1.Progress.resources
-C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\86ME.csprojResolveAssemblyReference.cache
+C:\Users\T440\Documents\GitHub\86ME\86ME\obj\Release\_86ME_ver1.MotionName.resources

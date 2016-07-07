@@ -58,18 +58,19 @@
             this.releaseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.operandToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ifToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ImportMotionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ExportMotionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.RenameMotionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.DeleteMotionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Action_groupBox = new System.Windows.Forms.GroupBox();
             this.Hint_groupBox = new System.Windows.Forms.GroupBox();
             this.hint_richTextBox = new System.Windows.Forms.RichTextBox();
             this.action_panel = new System.Windows.Forms.Panel();
-            this.loadFrame = new System.Windows.Forms.Button();
-            this.saveFrame = new System.Windows.Forms.Button();
             this.delayUnitLabel = new System.Windows.Forms.Label();
             this.delaytext = new System.Windows.Forms.MaskedTextBox();
             this.DelayLabel = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.Framelist = new System.Windows.Forms.Panel();
-            this.Robot_pictureBox = new System.Windows.Forms.PictureBox();
             this.fast = new System.Windows.Forms.Label();
             this.slow = new System.Windows.Forms.Label();
             this.sync_speed = new System.Windows.Forms.TrackBar();
@@ -152,26 +153,30 @@
             this.NonBlocking = new System.Windows.Forms.RadioButton();
             this.Blocking = new System.Windows.Forms.RadioButton();
             this.MotionPropertyLabel = new System.Windows.Forms.Label();
+            this.MotionNameLabel = new System.Windows.Forms.TextBox();
+            this.MotionCombo = new System.Windows.Forms.ComboBox();
+            this.Generate = new System.Windows.Forms.Button();
+            this.Motionlist_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.EditMotion_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.GenerateAllInOne = new System.Windows.Forms.Button();
+            this.ttp = new System.Windows.Forms.ToolTip(this.components);
+            this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.EditMotion = new System.Windows.Forms.Button();
             this.motion_stop = new System.Windows.Forms.Button();
             this.motion_pause = new System.Windows.Forms.Button();
             this.move_down = new System.Windows.Forms.Button();
             this.move_up = new System.Windows.Forms.Button();
-            this.MotionNameLabel = new System.Windows.Forms.TextBox();
             this.MotionTest = new System.Windows.Forms.Button();
             this.NewMotion = new System.Windows.Forms.Button();
-            this.MotionCombo = new System.Windows.Forms.ComboBox();
-            this.Generate = new System.Windows.Forms.Button();
-            this.Motionlist_contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.GenerateAllInOne = new System.Windows.Forms.Button();
-            this.ttp = new System.Windows.Forms.ToolTip(this.components);
-            this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.loadFrame = new System.Windows.Forms.Button();
+            this.saveFrame = new System.Windows.Forms.Button();
+            this.Robot_pictureBox = new System.Windows.Forms.PictureBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
             this.action_panel.SuspendLayout();
             this.panel2.SuspendLayout();
             this.Framelist.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.Robot_pictureBox)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).BeginInit();
             this.Motion_groupBox.SuspendLayout();
             this.MotionConfig.SuspendLayout();
@@ -183,7 +188,9 @@
             this.Keyboard_groupBox.SuspendLayout();
             this.Always_groupBox.SuspendLayout();
             this.MotionProperty.SuspendLayout();
+            this.EditMotion_contextMenuStrip.SuspendLayout();
             this.Setting_groupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Robot_pictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // Main_menuStrip
@@ -410,6 +417,34 @@
             this.ifToolStripMenuItem.Text = "If";
             this.ifToolStripMenuItem.Click += new System.EventHandler(this.ifToolStripMenuItem_Click);
             // 
+            // ImportMotionToolStripMenuItem
+            // 
+            this.ImportMotionToolStripMenuItem.Name = "ImportMotionToolStripMenuItem";
+            this.ImportMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.ImportMotionToolStripMenuItem.Text = "Import Motion";
+            this.ImportMotionToolStripMenuItem.Click += new System.EventHandler(this.ImportMotionToolStripMenuItem_Click);
+            // 
+            // ExportMotionToolStripMenuItem
+            // 
+            this.ExportMotionToolStripMenuItem.Name = "ExportMotionToolStripMenuItem";
+            this.ExportMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.ExportMotionToolStripMenuItem.Text = "Export Motion";
+            this.ExportMotionToolStripMenuItem.Click += new System.EventHandler(this.ExportMotionToolStripMenuItem_Click);
+            // 
+            // RenameMotionToolStripMenuItem
+            // 
+            this.RenameMotionToolStripMenuItem.Name = "RenameMotionToolStripMenuItem";
+            this.RenameMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.RenameMotionToolStripMenuItem.Text = "Rename Motion";
+            this.RenameMotionToolStripMenuItem.Click += new System.EventHandler(this.RenameMotionToolStripMenuItem_Click);
+            // 
+            // DeleteMotionToolStripMenuItem
+            // 
+            this.DeleteMotionToolStripMenuItem.Name = "DeleteMotionToolStripMenuItem";
+            this.DeleteMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
+            this.DeleteMotionToolStripMenuItem.Text = "Delete Motion";
+            this.DeleteMotionToolStripMenuItem.Click += new System.EventHandler(this.DeleteMotionToolStripMenuItem_Click);
+            // 
             // Action_groupBox
             // 
             this.Action_groupBox.BackColor = System.Drawing.SystemColors.Control;
@@ -458,28 +493,6 @@
             this.action_panel.Name = "action_panel";
             this.action_panel.Size = new System.Drawing.Size(303, 85);
             this.action_panel.TabIndex = 4;
-            // 
-            // loadFrame
-            // 
-            this.loadFrame.Image = global::_86ME_ver1.Properties.Resources.load_frame;
-            this.loadFrame.Location = new System.Drawing.Point(52, 47);
-            this.loadFrame.Name = "loadFrame";
-            this.loadFrame.Size = new System.Drawing.Size(28, 26);
-            this.loadFrame.TabIndex = 13;
-            this.ttp.SetToolTip(this.loadFrame, "Load a frame from file to set servos.");
-            this.loadFrame.UseVisualStyleBackColor = true;
-            this.loadFrame.Click += new System.EventHandler(this.loadFrame_Click);
-            // 
-            // saveFrame
-            // 
-            this.saveFrame.Image = global::_86ME_ver1.Properties.Resources.save_frame;
-            this.saveFrame.Location = new System.Drawing.Point(18, 47);
-            this.saveFrame.Name = "saveFrame";
-            this.saveFrame.Size = new System.Drawing.Size(28, 26);
-            this.saveFrame.TabIndex = 12;
-            this.ttp.SetToolTip(this.saveFrame, "Save current frame as a txt file.");
-            this.saveFrame.UseVisualStyleBackColor = true;
-            this.saveFrame.Click += new System.EventHandler(this.saveFrame_Click);
             // 
             // delayUnitLabel
             // 
@@ -531,17 +544,6 @@
             this.Framelist.Name = "Framelist";
             this.Framelist.Size = new System.Drawing.Size(694, 470);
             this.Framelist.TabIndex = 5;
-            // 
-            // Robot_pictureBox
-            // 
-            this.Robot_pictureBox.BackColor = System.Drawing.Color.Transparent;
-            this.Robot_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.Robot_pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.Robot_pictureBox.Name = "Robot_pictureBox";
-            this.Robot_pictureBox.Size = new System.Drawing.Size(694, 470);
-            this.Robot_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.Robot_pictureBox.TabIndex = 0;
-            this.Robot_pictureBox.TabStop = false;
             // 
             // fast
             // 
@@ -615,6 +617,7 @@
             // 
             // Motion_groupBox
             // 
+            this.Motion_groupBox.Controls.Add(this.EditMotion);
             this.Motion_groupBox.Controls.Add(this.MotionConfig);
             this.Motion_groupBox.Controls.Add(this.motion_stop);
             this.Motion_groupBox.Controls.Add(this.motion_pause);
@@ -667,6 +670,7 @@
             this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.MouseDown += new System.Windows.Forms.MouseEventHandler(this.Motionlist_MouseDown);
+            this.Motionlist.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Motionlist_KeyDown);
             // 
             // MotionTrigger
             // 
@@ -1529,6 +1533,101 @@
             this.MotionPropertyLabel.TabIndex = 0;
             this.MotionPropertyLabel.Text = "Set the properties of the choosed motion :";
             // 
+            // MotionNameLabel
+            // 
+            this.MotionNameLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.MotionNameLabel.Location = new System.Drawing.Point(7, 18);
+            this.MotionNameLabel.Name = "MotionNameLabel";
+            this.MotionNameLabel.ReadOnly = true;
+            this.MotionNameLabel.Size = new System.Drawing.Size(100, 15);
+            this.MotionNameLabel.TabIndex = 4;
+            this.MotionNameLabel.Text = "Motion Name:";
+            // 
+            // MotionCombo
+            // 
+            this.MotionCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.MotionCombo.FormattingEnabled = true;
+            this.MotionCombo.Location = new System.Drawing.Point(7, 39);
+            this.MotionCombo.Name = "MotionCombo";
+            this.MotionCombo.Size = new System.Drawing.Size(183, 20);
+            this.MotionCombo.TabIndex = 0;
+            this.MotionCombo.SelectedIndexChanged += new System.EventHandler(this.MotionCombo_SelectedIndexChanged);
+            // 
+            // Generate
+            // 
+            this.Generate.Cursor = System.Windows.Forms.Cursors.Default;
+            this.Generate.Location = new System.Drawing.Point(746, 635);
+            this.Generate.Name = "Generate";
+            this.Generate.Size = new System.Drawing.Size(267, 23);
+            this.Generate.TabIndex = 4;
+            this.Generate.Text = "Generate 86Duino Sketch (with Frame Files)";
+            this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will b" +
+        "e stored in files out of the sketch.");
+            this.Generate.UseVisualStyleBackColor = true;
+            this.Generate.Click += new System.EventHandler(this.Generate_Click);
+            // 
+            // Motionlist_contextMenuStrip
+            // 
+            this.Motionlist_contextMenuStrip.Name = "contextMenuStrip1";
+            this.Motionlist_contextMenuStrip.Size = new System.Drawing.Size(61, 4);
+            // 
+            // EditMotion_contextMenuStrip
+            // 
+            this.EditMotion_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.ImportMotionToolStripMenuItem,
+            this.ExportMotionToolStripMenuItem,
+            this.RenameMotionToolStripMenuItem,
+            this.DeleteMotionToolStripMenuItem});
+            this.EditMotion_contextMenuStrip.Name = "contextMenuStrip2";
+            this.EditMotion_contextMenuStrip.Size = new System.Drawing.Size(167, 92);
+            // 
+            // GenerateAllInOne
+            // 
+            this.GenerateAllInOne.Cursor = System.Windows.Forms.Cursors.Default;
+            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 665);
+            this.GenerateAllInOne.Name = "GenerateAllInOne";
+            this.GenerateAllInOne.Size = new System.Drawing.Size(267, 23);
+            this.GenerateAllInOne.TabIndex = 5;
+            this.GenerateAllInOne.Text = "Generate 86Duino Sketch (All in One)";
+            this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in " +
+        "the generated sketch.");
+            this.GenerateAllInOne.UseVisualStyleBackColor = true;
+            this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
+            // 
+            // ttp
+            // 
+            this.ttp.AutoPopDelay = 10000;
+            this.ttp.InitialDelay = 300;
+            this.ttp.ReshowDelay = 300;
+            this.ttp.ShowAlways = true;
+            this.ttp.UseFading = false;
+            // 
+            // Setting_groupBox
+            // 
+            this.Setting_groupBox.Controls.Add(this.fast);
+            this.Setting_groupBox.Controls.Add(this.motorRelease);
+            this.Setting_groupBox.Controls.Add(this.slow);
+            this.Setting_groupBox.Controls.Add(this.capturebutton);
+            this.Setting_groupBox.Controls.Add(this.sync_speed);
+            this.Setting_groupBox.Controls.Add(this.autocheck);
+            this.Setting_groupBox.Location = new System.Drawing.Point(13, 28);
+            this.Setting_groupBox.Name = "Setting_groupBox";
+            this.Setting_groupBox.Size = new System.Drawing.Size(720, 60);
+            this.Setting_groupBox.TabIndex = 15;
+            this.Setting_groupBox.TabStop = false;
+            this.Setting_groupBox.Text = "Edit Settings";
+            // 
+            // EditMotion
+            // 
+            this.EditMotion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.EditMotion.Image = global::_86ME_ver1.Properties.Resources.gear;
+            this.EditMotion.Location = new System.Drawing.Point(231, 37);
+            this.EditMotion.Name = "EditMotion";
+            this.EditMotion.Size = new System.Drawing.Size(23, 23);
+            this.EditMotion.TabIndex = 11;
+            this.EditMotion.UseVisualStyleBackColor = true;
+            this.EditMotion.Click += new System.EventHandler(this.EditMotion_Click);
+            // 
             // motion_stop
             // 
             this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
@@ -1581,16 +1680,6 @@
             this.move_up.UseVisualStyleBackColor = true;
             this.move_up.Click += new System.EventHandler(this.motionlist_up);
             // 
-            // MotionNameLabel
-            // 
-            this.MotionNameLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.MotionNameLabel.Location = new System.Drawing.Point(7, 18);
-            this.MotionNameLabel.Name = "MotionNameLabel";
-            this.MotionNameLabel.ReadOnly = true;
-            this.MotionNameLabel.Size = new System.Drawing.Size(100, 15);
-            this.MotionNameLabel.TabIndex = 4;
-            this.MotionNameLabel.Text = "Motion Name:";
-            // 
             // MotionTest
             // 
             this.MotionTest.Cursor = System.Windows.Forms.Cursors.Default;
@@ -1606,78 +1695,48 @@
             // NewMotion
             // 
             this.NewMotion.Cursor = System.Windows.Forms.Cursors.Default;
-            this.NewMotion.Location = new System.Drawing.Point(196, 36);
+            this.NewMotion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.NewMotion.Image = global::_86ME_ver1.Properties.Resources.add;
+            this.NewMotion.Location = new System.Drawing.Point(196, 33);
             this.NewMotion.Name = "NewMotion";
-            this.NewMotion.Size = new System.Drawing.Size(87, 23);
+            this.NewMotion.Size = new System.Drawing.Size(32, 31);
             this.NewMotion.TabIndex = 2;
-            this.NewMotion.Text = "Add Motion";
             this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
             this.NewMotion.UseVisualStyleBackColor = true;
             this.NewMotion.Click += new System.EventHandler(this.NewMotion_Click);
             // 
-            // MotionCombo
+            // loadFrame
             // 
-            this.MotionCombo.FormattingEnabled = true;
-            this.MotionCombo.Location = new System.Drawing.Point(7, 39);
-            this.MotionCombo.Name = "MotionCombo";
-            this.MotionCombo.Size = new System.Drawing.Size(183, 20);
-            this.MotionCombo.TabIndex = 0;
-            this.MotionCombo.SelectedIndexChanged += new System.EventHandler(this.MotionCombo_SelectedIndexChanged);
-            this.MotionCombo.TextChanged += new System.EventHandler(this.MotionCombo_TextChanged);
+            this.loadFrame.Image = global::_86ME_ver1.Properties.Resources.load_frame;
+            this.loadFrame.Location = new System.Drawing.Point(52, 47);
+            this.loadFrame.Name = "loadFrame";
+            this.loadFrame.Size = new System.Drawing.Size(28, 26);
+            this.loadFrame.TabIndex = 13;
+            this.ttp.SetToolTip(this.loadFrame, "Load a frame from file to set servos.");
+            this.loadFrame.UseVisualStyleBackColor = true;
+            this.loadFrame.Click += new System.EventHandler(this.loadFrame_Click);
             // 
-            // Generate
+            // saveFrame
             // 
-            this.Generate.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Generate.Location = new System.Drawing.Point(746, 635);
-            this.Generate.Name = "Generate";
-            this.Generate.Size = new System.Drawing.Size(267, 23);
-            this.Generate.TabIndex = 4;
-            this.Generate.Text = "Generate 86Duino Sketch (with Frame Files)";
-            this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will b" +
-        "e stored in files out of the sketch.");
-            this.Generate.UseVisualStyleBackColor = true;
-            this.Generate.Click += new System.EventHandler(this.Generate_Click);
+            this.saveFrame.Image = global::_86ME_ver1.Properties.Resources.save_frame;
+            this.saveFrame.Location = new System.Drawing.Point(18, 47);
+            this.saveFrame.Name = "saveFrame";
+            this.saveFrame.Size = new System.Drawing.Size(28, 26);
+            this.saveFrame.TabIndex = 12;
+            this.ttp.SetToolTip(this.saveFrame, "Save current frame as a txt file.");
+            this.saveFrame.UseVisualStyleBackColor = true;
+            this.saveFrame.Click += new System.EventHandler(this.saveFrame_Click);
             // 
-            // Motionlist_contextMenuStrip
+            // Robot_pictureBox
             // 
-            this.Motionlist_contextMenuStrip.Name = "contextMenuStrip1";
-            this.Motionlist_contextMenuStrip.Size = new System.Drawing.Size(61, 4);
-            // 
-            // GenerateAllInOne
-            // 
-            this.GenerateAllInOne.Cursor = System.Windows.Forms.Cursors.Default;
-            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 665);
-            this.GenerateAllInOne.Name = "GenerateAllInOne";
-            this.GenerateAllInOne.Size = new System.Drawing.Size(267, 23);
-            this.GenerateAllInOne.TabIndex = 5;
-            this.GenerateAllInOne.Text = "Generate 86Duino Sketch (All in One)";
-            this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in " +
-        "the generated sketch.");
-            this.GenerateAllInOne.UseVisualStyleBackColor = true;
-            this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
-            // 
-            // ttp
-            // 
-            this.ttp.AutoPopDelay = 10000;
-            this.ttp.InitialDelay = 300;
-            this.ttp.ReshowDelay = 300;
-            this.ttp.ShowAlways = true;
-            this.ttp.UseFading = false;
-            // 
-            // Setting_groupBox
-            // 
-            this.Setting_groupBox.Controls.Add(this.fast);
-            this.Setting_groupBox.Controls.Add(this.motorRelease);
-            this.Setting_groupBox.Controls.Add(this.slow);
-            this.Setting_groupBox.Controls.Add(this.capturebutton);
-            this.Setting_groupBox.Controls.Add(this.sync_speed);
-            this.Setting_groupBox.Controls.Add(this.autocheck);
-            this.Setting_groupBox.Location = new System.Drawing.Point(13, 28);
-            this.Setting_groupBox.Name = "Setting_groupBox";
-            this.Setting_groupBox.Size = new System.Drawing.Size(720, 60);
-            this.Setting_groupBox.TabIndex = 15;
-            this.Setting_groupBox.TabStop = false;
-            this.Setting_groupBox.Text = "Edit Settings";
+            this.Robot_pictureBox.BackColor = System.Drawing.Color.Transparent;
+            this.Robot_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.Robot_pictureBox.Location = new System.Drawing.Point(0, 0);
+            this.Robot_pictureBox.Name = "Robot_pictureBox";
+            this.Robot_pictureBox.Size = new System.Drawing.Size(694, 470);
+            this.Robot_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.Robot_pictureBox.TabIndex = 0;
+            this.Robot_pictureBox.TabStop = false;
             // 
             // Main
             // 
@@ -1708,7 +1767,6 @@
             this.action_panel.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.Framelist.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.Robot_pictureBox)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.sync_speed)).EndInit();
             this.Motion_groupBox.ResumeLayout(false);
             this.Motion_groupBox.PerformLayout();
@@ -1728,8 +1786,10 @@
             this.Always_groupBox.PerformLayout();
             this.MotionProperty.ResumeLayout(false);
             this.MotionProperty.PerformLayout();
+            this.EditMotion_contextMenuStrip.ResumeLayout(false);
             this.Setting_groupBox.ResumeLayout(false);
             this.Setting_groupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.Robot_pictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1746,6 +1806,10 @@
         private System.Windows.Forms.ToolStripMenuItem howToUseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem motionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ImportMotionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ExportMotionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem RenameMotionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem DeleteMotionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem frameToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ifToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem operandToolStripMenuItem;
@@ -1763,6 +1827,7 @@
         private System.Windows.Forms.MaskedTextBox delaytext;
         private System.Windows.Forms.Label DelayLabel;
         private System.Windows.Forms.ContextMenuStrip Motionlist_contextMenuStrip;
+        private System.Windows.Forms.ContextMenuStrip EditMotion_contextMenuStrip;
         private System.Windows.Forms.Button NewMotion;
         private System.Windows.Forms.Button capturebutton;
         private System.Windows.Forms.Button MotionTest;
@@ -1872,6 +1937,7 @@
         private System.Windows.Forms.RichTextBox MotionControlExplanation;
         private System.Windows.Forms.Label MotionControlLabel;
         private System.Windows.Forms.ComboBox MotionControlCombo;
+        private System.Windows.Forms.Button EditMotion;
     }
 }
 

@@ -74,6 +74,12 @@
     </Compile>
     <Compile Include="FSMGen.cs" />
     <Compile Include="firmata.cs" />
+    <Compile Include="MotionName.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MotionName.Designer.cs">
+      <DependentUpon>MotionName.cs</DependentUpon>
+    </Compile>
     <Compile Include="Orientation.cs" />
     <Compile Include="MotionElement.cs" />
     <Compile Include="Progress.cs">
@@ -102,6 +108,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MotionName.resx">
+      <DependentUpon>MotionName.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="NewMotion.resx">
       <DependentUpon>NewMotion.cs</DependentUpon>
@@ -177,6 +186,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="icons\86Duino.ico" />
+    <Content Include="icons\add.png" />
+    <Content Include="icons\gear.png" />
     <Content Include="icons\off.png" />
     <Content Include="icons\on.png" />
     <Content Include="icons\p.png" />
