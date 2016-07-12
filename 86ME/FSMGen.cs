@@ -18,6 +18,7 @@ namespace _86ME_ver1
     {
         private string nfilename = "";
         private ArrayList ME_Motionlist;
+        private List<int> keyboard_keys = new List<int>();
         private NewMotion Motion;
         private bool[] method_flag = new bool[16];
         private int[] offset = new int[45];
@@ -43,8 +44,11 @@ namespace _86ME_ver1
             this.invQ = this.invQ.Normalized().Inverse();
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
-                int method = ((ME_Motion)ME_Motionlist[i]).trigger_method;
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                int method = m.trigger_method;
                 method_flag[method] = true;
+                if (method == (int)mtest_method.keyboard && !keyboard_keys.Contains(m.trigger_key))
+                    keyboard_keys.Add(m.trigger_key);
             }
             if (Motion.comboBox2.SelectedIndex != 0)
             {
@@ -100,11 +104,11 @@ namespace _86ME_ver1
                         return m.name + "_title == 1";
                 case (int)mtest_method.keyboard:
                     if (m.trigger_keyType == (int)keyboard_method.first)
-                        return "key_state(" + convert_keynum(m.trigger_key) + ") == 2";
+                        return "keys_state[" + convert_keynum(m.trigger_key) + "] == 2";
                     else if (m.trigger_keyType == (int)keyboard_method.pressed)
-                        return "key_state(" + convert_keynum(m.trigger_key) + ") == 3";
+                        return "keys_state[" + convert_keynum(m.trigger_key) + "] == 3";
                     else // release
-                        return "key_state(" + convert_keynum(m.trigger_key) + ") == 1";
+                        return "keys_state[" + convert_keynum(m.trigger_key) + "] == 1";
                 case (int)mtest_method.bluetooth:
                     if (String.Compare("", m.bt_key) == 0)
                         return "0";
@@ -522,6 +526,8 @@ namespace _86ME_ver1
             if (method_flag[1])
             {
                 writer.WriteLine("  usb.Task();");
+                for (int i = 0; i < keyboard_keys.Count; i++)
+                    writer.WriteLine("  update_keys_state(" + convert_keynum(keyboard_keys[i]) + ");");
             }
             if (method_flag[2])
             {
@@ -629,13 +635,13 @@ namespace _86ME_ver1
                         if (first)
                         {
                             writer.WriteLine(space + "if(" + trigger_condition(m) + ") " +
-                                             "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                             "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + "; " +
                                              cancel_release + update_mask + "}");
                             first = false;
                         }
                         else
                             writer.WriteLine(space + "else if(" + trigger_condition(m) + ") " +
-                                             "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                             "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + "; " +
                                              cancel_release + update_mask + "}");
                     }
                 }
@@ -1192,13 +1198,13 @@ namespace _86ME_ver1
                 writer.WriteLine("static int keys_pressed[128] = {0};");
                 writer.WriteLine("void keyPressed(){keys_pressed[keyboard.getOemKey()] = 1;}");
                 writer.WriteLine("void keyReleased(){keys_pressed[keyboard.getOemKey()] = 0;}");
-                writer.WriteLine("int key_state(int k)\n{\n  if(keys_pressed[k] == 1 && (keys_state[k]&2) != 2)\n" +
-		                         "  {\n    keys_state[k] = 2;\n    return 2;\n  }\n" +
-                                 "  else if(keys_pressed[k] == 1 && (keys_state[k]&2) == 2)\n  {\n" +
-                                 "    keys_state[k] = 3;\n    return 3;\n  }\n" +
-                                 "  else if(keys_pressed[k] == 0 && (keys_state[k]&2) == 2)\n  {\n" +
-                                 "    keys_state[k] = 1;\n    return 1;\n  }\n" +
-                                 "  else\n  {\n    keys_state[k] = 0;\n    return 0;\n  }\n}");
+                writer.WriteLine("void update_keys_state(int k)\n{\n  if(keys_pressed[k] == 1 && (keys_state[k]&2) != 2)\n" +
+		                         "      keys_state[k] = 2;\n" +
+                                 "  else if(keys_pressed[k] == 1 && (keys_state[k]&2) == 2)\n" +
+                                 "    keys_state[k] = 3;\n" +
+                                 "  else if(keys_pressed[k] == 0 && (keys_state[k]&2) == 2)\n" +
+                                 "    keys_state[k] = 1;\n" +
+                                 "  else\n    keys_state[k] = 0;\n}");
             }
             if (method_flag[2]) // bt
             {

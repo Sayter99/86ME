@@ -1191,6 +1191,19 @@ namespace _86ME_ver1
                                 //***fix bug after remove rb
                                 nMotion.comboBox1.SelectedIndex = j - 7;
                                 board_ver86 = j - 7;
+                                if (string.Compare(rbver[j], "86Duino_Zero") == 0)
+                                {
+                                    nMotion.clear_Channels();
+                                    nMotion.create_panel(0, 14, 0);
+                                    nMotion.create_panel(42, 45, 14);
+                                }
+                                else if (string.Compare(rbver[j], "86Duino_EduCake") == 0)
+                                {
+                                    nMotion.clear_Channels();
+                                    nMotion.create_panel(0, 21, 0);
+                                    nMotion.create_panel(31, 33, 21);
+                                    nMotion.create_panel(42, 45, 23);
+                                }
                             }
                         }
                         if (String.Compare(datas[i + 1], "Servo") != 0)
@@ -2180,8 +2193,8 @@ namespace _86ME_ver1
                 cb.Items.Add("V" + i);
             if (!isLeft)
             {
-                cb.Items.Add("T0");
-                cb.Items.Add("R0");
+                cb.Items.Add("NowTime");
+                cb.Items.Add("Random");
                 for (int i = 0; i < 6; i++)
                     cb.Items.Add("Analog" + i);
                 cb.Items.Add("AccX");
@@ -2249,9 +2262,9 @@ namespace _86ME_ver1
                 if (n < opVar_num)
                     return "V" + n;
                 else if (n == opVar_num)
-                    return "T0";
+                    return "NowTime";
                 else if (n == opVar_num + 1)
-                    return "R0";
+                    return "Random";
                 else if (n < opVar_num + 8 && n >= opVar_num + 2)
                     return "A" + (n - opVar_num - 2);
                 else if (n == opVar_num + 8)
@@ -2906,6 +2919,7 @@ namespace _86ME_ver1
                 Motionlist.SelectedIndex = Motionlist.IndexFromPoint(e.X, e.Y);
                 if (Motionlist.SelectedItem == null)
                 {
+                    last_motionlist_idx = -1;
                     motionToolStripMenuItem.Text = Main_lang_dic["AddNewAction_F"];
                     Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
                     Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
@@ -3146,21 +3160,10 @@ namespace _86ME_ver1
 
         private void NewMotion_Click(object sender, EventArgs e)
         {
-            MotionName motionName = new MotionName(Main_lang_dic);
+            MotionName motionName = new MotionName(Main_lang_dic, "", "Create a New Motion", MotionCombo);
             motionName.ShowDialog();
             if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
             {
-                if (MotionCombo.Items.Count > 0)
-                {
-                    for (int i = 0; i < MotionCombo.Items.Count; i++)
-                    {
-                        if (MotionCombo.Items[i].ToString() == motionName.name)
-                        {
-                            MessageBox.Show(Main_lang_dic["errorMsg22"]);
-                            return;
-                        }
-                    }
-                }
                 MotionCombo.Items.Add(motionName.name);
                 ME_Motion m = new ME_Motion();
                 m.name = motionName.name;
@@ -3176,11 +3179,14 @@ namespace _86ME_ver1
                 Motionlist.Focus();
                 this.hint_richTextBox.Text = Main_lang_dic["hint11"];
             }
+            else
+                MotionCombo.Focus();
         }
 
         private void EditMotion_Click(object sender, EventArgs e)
         {
             EditMotion_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+            MotionCombo.Focus();
         }
 
         private void ImportMotionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -3200,19 +3206,12 @@ namespace _86ME_ver1
                     if (String.Compare(datas[i], "Motion") == 0)
                     {
                         i++;
-                        for (int j = 0; j < ME_Motionlist.Count; j++)
-                        {
-                            if (String.Compare(datas[i], ((ME_Motion)ME_Motionlist[j]).name) == 0)
-                                motiontag = null;
-                            else
-                                break;
-                        }
-                        if (motiontag == null)
-                        {
-                            MessageBox.Show(Main_lang_dic["errorMsg22"]);
-                            break;
-                        }
-                        motiontag.name = datas[i];
+                        MotionName motionName = new MotionName(Main_lang_dic, datas[i], "Enter the Imported Motion Name", MotionCombo);
+                        motionName.ShowDialog();
+                        if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
+                            motiontag.name = motionName.name;
+                        else
+                            return;
                         int try_out;
                         double try_out_d;
                         if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
@@ -3283,11 +3282,8 @@ namespace _86ME_ver1
                             i--;
                         if (motiontag != null)
                         {
-                            if (String.Compare(datas[++i], motiontag.name) == 0)
-                            {
-                                MotionCombo.Items.Add(motiontag.name);
-                                MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
-                            }
+                            MotionCombo.Items.Add(motiontag.name);
+                            MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
                         }
                     }
                     else if (String.Compare(datas[i], "frame") == 0)
@@ -3485,18 +3481,10 @@ namespace _86ME_ver1
             {
                 if (MotionCombo.SelectedItem != null)
                 {
-                    MotionName motionName = new MotionName(Main_lang_dic);
+                    MotionName motionName = new MotionName(Main_lang_dic, MotionCombo.Text, "Rename a Motion", MotionCombo);
                     motionName.ShowDialog();
                     if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
                     {
-                        for (int i = 0; i < MotionCombo.Items.Count; i++)
-                        {
-                            if (MotionCombo.Items[i].ToString() == motionName.name)
-                            {
-                                MessageBox.Show(Main_lang_dic["errorMsg22"]);
-                                return;
-                            }
-                        }
                         ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name = motionName.name;
                         MotionCombo.Items[MotionCombo.SelectedIndex] = motionName.name;
                         RenewGotoMotion();
@@ -3524,6 +3512,28 @@ namespace _86ME_ver1
                         RenewGotoMotion();
                         if (MotionCombo.Items.Count > 0)
                             MotionCombo.SelectedIndex = 0;
+                        else
+                            Framelist.Controls.Clear();
+                    }
+                }
+            }
+        }
+
+        private void DuplicateMotionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (MotionCombo.Items.Count > 0)
+            {
+                if (MotionCombo.SelectedItem != null)
+                {
+                    MotionName motionName = new MotionName(Main_lang_dic, MotionCombo.Text + "_new", "Duplicate the Motion", MotionCombo);
+                    motionName.ShowDialog();
+                    if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
+                    {
+                        ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Copy();
+                        m.name = motionName.name;
+                        MotionCombo.Items.Add(motionName.name);
+                        ME_Motionlist.Add(m);
+                        MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
                     }
                 }
             }
@@ -4560,8 +4570,7 @@ namespace _86ME_ver1
             Action_groupBox.Text = Main_lang_dic["Action_groupBox_Text"];
             ActionList.Text = Main_lang_dic["ActionList_Text"];
             actionToolStripMenuItem.Text = Main_lang_dic["actionToolStripMenuItem_Text"];
-            autocheck.Text = Main_lang_dic["autocheck_Text"];
-            ttp.SetToolTip(autocheck, Main_lang_dic["autocheck_ToolTip"]);
+            autocheck.Text = Main_lang_dic["autocheck_Text"];         
             blockingExplaination.Text = Main_lang_dic["blockingExplaination_Text"];
             bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];
             capturebutton.Text = Main_lang_dic["capturebutton_Text"];
@@ -4595,14 +4604,21 @@ namespace _86ME_ver1
             saveFileToolStripMenuItem.Text = Main_lang_dic["saveFileToolStripMenuItem_Text"];
             Setting_groupBox.Text = Main_lang_dic["Setting_groupBox_Text"];
             slow.Text = Main_lang_dic["slow_Text"];
+            DuplicateMotionToolStripMenuItem.Text = Main_lang_dic["DuplicateMotion"];
+            DeleteMotionToolStripMenuItem.Text = Main_lang_dic["DeleteMotion"];
+            RenameMotionToolStripMenuItem.Text = Main_lang_dic["RenameMotion"];
+            ImportMotionToolStripMenuItem.Text = Main_lang_dic["ImportMotion"];
+            ExportMotionToolStripMenuItem.Text = Main_lang_dic["ExportMotion"];
 
             ttp.SetToolTip(AlwaysOff, Main_lang_dic["AlwaysOff_ToolTip"]);
             ttp.SetToolTip(AlwaysOn, Main_lang_dic["AlwaysOn_ToolTip"]);
+            ttp.SetToolTip(autocheck, Main_lang_dic["autocheck_ToolTip"]);
             ttp.SetToolTip(btBaudCombo, Main_lang_dic["btBaudCombo_ToolTip"]);
             ttp.SetToolTip(btKeyText, Main_lang_dic["btKeyText_ToolTip"]);
             ttp.SetToolTip(btModeCombo, Main_lang_dic["btModeCombo_ToolTip"]);
             ttp.SetToolTip(btPortCombo, Main_lang_dic["btPortCombo_ToolTip"]);
             ttp.SetToolTip(capturebutton, Main_lang_dic["capturebutton_ToolTip"]);
+            ttp.SetToolTip(EditMotion, Main_lang_dic["EditMotion_ToolTip"]);
             ttp.SetToolTip(Generate, Main_lang_dic["Generate_ToolTip"]);
             ttp.SetToolTip(GenerateAllInOne, Main_lang_dic["GenerateAllInOne_ToolTip"]);
             ttp.SetToolTip(KeyboardTypeCombo, Main_lang_dic["KeyboardTypeCombo_ToolTip"]);

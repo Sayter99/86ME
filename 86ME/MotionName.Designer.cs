@@ -42,6 +42,7 @@
             this.motionNameText.Name = "motionNameText";
             this.motionNameText.Size = new System.Drawing.Size(265, 22);
             this.motionNameText.TabIndex = 0;
+            this.motionNameText.KeyDown += new System.Windows.Forms.KeyEventHandler(motionNameText_KeyDown);
             // 
             // OKButton
             // 
