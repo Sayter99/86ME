@@ -4154,14 +4154,21 @@ namespace _86ME_ver1
                         saveFrame.Visible = true;
                     }
                 }
-                Framelist.Enabled = true;
                 autocheck.Enabled = true;
                 capturebutton.Enabled = true;
                 delaytext.Enabled = true;
                 last_motionlist_idx = -1;
-                int tmp_motionlist_idx = current_motionlist_idx;
-                Motionlist.SelectedIndex = -1;
-                Motionlist.SelectedIndex = tmp_motionlist_idx;
+                if (current_motionlist_idx != -1)
+                {
+                    Framelist.Enabled = true;
+                    int tmp_motionlist_idx = current_motionlist_idx;
+                    Motionlist.SelectedIndex = -1;
+                    Motionlist.SelectedIndex = tmp_motionlist_idx;
+                }
+                else
+                {
+                    Framelist.Enabled = false;
+                }
                 this.hint_richTextBox.Text =
                     "   ___   __   ____        _\n" +
                     "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
