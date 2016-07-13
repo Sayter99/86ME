@@ -3482,7 +3482,7 @@ namespace _86ME_ver1
             {
                 if (MotionCombo.SelectedItem != null)
                 {
-                    MotionName motionName = new MotionName(Main_lang_dic, MotionCombo.Text, "Rename a Motion", MotionCombo);
+                    MotionName motionName = new MotionName(Main_lang_dic, MotionCombo.Text, "Rename the Motion", MotionCombo);
                     motionName.ShowDialog();
                     if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
                     {
