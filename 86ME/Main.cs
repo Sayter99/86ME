@@ -4159,6 +4159,9 @@ namespace _86ME_ver1
                 capturebutton.Enabled = true;
                 delaytext.Enabled = true;
                 last_motionlist_idx = -1;
+                int tmp_motionlist_idx = current_motionlist_idx;
+                Motionlist.SelectedIndex = -1;
+                Motionlist.SelectedIndex = tmp_motionlist_idx;
                 this.hint_richTextBox.Text =
                     "   ___   __   ____        _\n" +
                     "  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n" +
