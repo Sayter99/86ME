@@ -742,6 +742,7 @@ namespace _86ME_ver1
                 Motionlist.Items.Clear();
                 Framelist.Controls.Clear();
                 delaytext.Text = default_delay.ToString();
+                delaytext.Enabled = false;
                 current_motionlist_idx = -1;
                 last_motionlist_idx = -1;
                 servo_onOff = ~0UL;
