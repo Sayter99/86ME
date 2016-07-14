@@ -35,17 +35,18 @@
             this.github_button = new System.Windows.Forms.Button();
             this.author_label = new System.Windows.Forms.Label();
             this.license_label = new System.Windows.Forms.Label();
+            this.version_label = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // richTextBox1
             // 
             this.richTextBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 9.75F);
-            this.richTextBox1.Location = new System.Drawing.Point(0, 51);
+            this.richTextBox1.Font = new System.Drawing.Font("Consolas", 11F);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 67);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(284, 170);
+            this.richTextBox1.Size = new System.Drawing.Size(260, 154);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "86ME is an open source project and it is derived from RoboME of RBgod. (https://g" +
     "ithub.com/RoBoardGod/RoBoME)";
@@ -86,29 +87,40 @@
             // author_label
             // 
             this.author_label.AutoSize = true;
-            this.author_label.Font = new System.Drawing.Font("Consolas", 9F);
-            this.author_label.Location = new System.Drawing.Point(10, 9);
+            this.author_label.Font = new System.Drawing.Font("Consolas", 10F);
+            this.author_label.Location = new System.Drawing.Point(12, 5);
             this.author_label.Name = "author_label";
-            this.author_label.Size = new System.Drawing.Size(105, 14);
+            this.author_label.Size = new System.Drawing.Size(120, 17);
             this.author_label.TabIndex = 4;
             this.author_label.Text = "Author: Sayter";
             // 
             // license_label
             // 
             this.license_label.AutoSize = true;
-            this.license_label.Font = new System.Drawing.Font("Consolas", 9F);
-            this.license_label.Location = new System.Drawing.Point(10, 30);
+            this.license_label.Font = new System.Drawing.Font("Consolas", 10F);
+            this.license_label.Location = new System.Drawing.Point(12, 26);
             this.license_label.Name = "license_label";
-            this.license_label.Size = new System.Drawing.Size(140, 14);
+            this.license_label.Size = new System.Drawing.Size(160, 17);
             this.license_label.TabIndex = 5;
             this.license_label.Text = "License: GNU GPL V2";
+            // 
+            // version_label
+            // 
+            this.version_label.AutoSize = true;
+            this.version_label.Font = new System.Drawing.Font("Consolas", 10F);
+            this.version_label.Location = new System.Drawing.Point(12, 47);
+            this.version_label.Name = "version_label";
+            this.version_label.Size = new System.Drawing.Size(216, 17);
+            this.version_label.TabIndex = 7;
+            this.version_label.Text = "Version: 1.9.0, 2016/07/14";
             // 
             // about
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.ClientSize = new System.Drawing.Size(284, 262);
+            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.Controls.Add(this.version_label);
             this.Controls.Add(this.license_label);
             this.Controls.Add(this.author_label);
             this.Controls.Add(this.github_button);
@@ -135,5 +147,6 @@
         private System.Windows.Forms.Button github_button;
         private System.Windows.Forms.Label author_label;
         private System.Windows.Forms.Label license_label;
+        private System.Windows.Forms.Label version_label;
     }
 }

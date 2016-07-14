@@ -18,18 +18,19 @@ namespace _86ME_ver1
             InitializeComponent();
             if (lang_dic.Count > 0)
             {
+                richTextBox1.LanguageOption = RichTextBoxLanguageOptions.DualFont;
                 this.Text = lang_dic["about_title"];
                 richTextBox1.Text = lang_dic["content"];
                 author_label.Text = lang_dic["author_label_Text"];
                 license_label.Text = lang_dic["license_label_Text"];
+                version_label.Text = lang_dic["version_label_Text"];
+                richTextBox1.SelectionStart = richTextBox1.TextLength;
             }
         }
 
         private void richTextBox1_LinkClicked(object sender,
         System.Windows.Forms.LinkClickedEventArgs e)
         {
-            // Call Process.Start method to open a browser
-            // with link text as URL.
             p = System.Diagnostics.Process.Start(e.LinkText);
         }
 
