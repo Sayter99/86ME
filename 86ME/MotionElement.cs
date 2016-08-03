@@ -18,6 +18,7 @@ namespace _86ME_ver1
         public int trigger_keyType;
         public string bt_key;
         public string bt_mode;
+        public int wifi602_key;
         public int frames;
         public string ps2_key;
         public int ps2_type;
@@ -36,6 +37,7 @@ namespace _86ME_ver1
             this.trigger_keyType = 1;
             this.bt_key = "";
             this.bt_mode = "OneShot";
+            this.wifi602_key = 0;
             this.frames = 0;
             this.ps2_key = "PSB_SELECT";
             this.ps2_type = 1;

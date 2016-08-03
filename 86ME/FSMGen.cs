@@ -7,12 +7,28 @@ using System.IO;
 
 namespace _86ME_ver1
 {
-    enum mtest_method { always, keyboard, bluetooth, ps2, acc };
+    enum mtest_method { always, keyboard, bluetooth, ps2, acc, wifi602 };
     enum keyboard_method { first, pressed, release };
     enum auto_method { on, off, title };
     enum serial_ports { serial1, serial2, serial3 };
     enum motion_property { blocking, nonblocking };
     enum internal_trigger { call, jump };
+
+    class GlobalSettings
+    {
+        public string[] ps2pins;
+        public string bt_baud;
+        public string bt_port;
+        public string wifi602_port;
+
+        public GlobalSettings()
+        {
+            this.wifi602_port = "Serial1";
+            this.bt_port = "Serial1";
+            this.bt_baud = "9600";
+            this.ps2pins = new string[4] { "0", "0", "0", "0" };
+        }
+    }
 
     class FSMGen
     {
@@ -25,18 +41,20 @@ namespace _86ME_ver1
         private string[] ps2_pins = new string[4];
         private string bt_baud;
         private string bt_port;
+        private string wifi602_port;
         private int opVar_num = 50;
         private bool IMU_compensatory = false;
         private Quaternion invQ = new Quaternion();
 
-        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, string[] ps2pins, string bt_baud, string bt_port)
+        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, GlobalSettings gs)
         {
             this.Motion = nMotion;
             this.offset = off;
             this.ME_Motionlist = motionlist;
-            this.ps2_pins = ps2pins;
-            this.bt_baud = bt_baud;
-            this.bt_port = bt_port;
+            gs.ps2pins.CopyTo(this.ps2_pins, 0);
+            this.bt_baud = gs.bt_baud;
+            this.bt_port = gs.bt_port;
+            this.wifi602_port = gs.wifi602_port;
             this.invQ.w = double.Parse(Motion.maskedTextBox1.Text);
             this.invQ.x = double.Parse(Motion.maskedTextBox2.Text);
             this.invQ.y = double.Parse(Motion.maskedTextBox3.Text);
@@ -123,6 +141,19 @@ namespace _86ME_ver1
                         return "ps2x.ButtonReleased(" + m.ps2_key + ")";
                 case (int)mtest_method.acc:
                     return m.name + "::acc_state == 2";
+                case (int)mtest_method.wifi602:
+                    if (m.wifi602_key == 0)
+                        return "abs(wifi602_data[2]) <= abs(wifi602_data[3]) && wifi602_data[3] > 0";
+                    else if (m.wifi602_key == 1)
+                        return "abs(wifi602_data[2]) <= abs(wifi602_data[3]) && wifi602_data[3] < 0";
+                    else if (m.wifi602_key == 2)
+                        return "abs(wifi602_data[2]) > abs(wifi602_data[3]) && wifi602_data[2] < 0";
+                    else if (m.wifi602_key == 3)
+                        return "abs(wifi602_data[2]) > abs(wifi602_data[3]) && wifi602_data[2] > 0";
+                    else if (m.wifi602_key == 4) //A
+                        return "wifi602_data[4] < 0";
+                    else //B
+                        return "wifi602_data[4] > 0";
                 default:
                     return "1";
             }
@@ -538,6 +569,10 @@ namespace _86ME_ver1
             {
                 writer.WriteLine("  ps2x.read_gamepad();");
             }
+            if (method_flag[5])
+            {
+                writer.WriteLine("  read_wifi602pad(" + wifi602_port + ");");
+            }
             writer.WriteLine(space + "if(isBlocked(0)) goto L1;");
             for (int layer = 0; layer < 2; layer++)
             {
@@ -617,13 +652,35 @@ namespace _86ME_ver1
                                                 renew_bt + update_mask + "}");
                     }
                 }
+                for (int i = 0; i < ME_Motionlist.Count; i++) //wifi602
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    if (m.trigger_method == (int)mtest_method.wifi602 && m.moton_layer == layer)
+                    {
+                        string update_mask = "";
+                        if (layer == 1)
+                            update_mask = "memcpy(servo_mask, " + m.name + "::mask, sizeof(servo_mask));";
+
+                        if (first)
+                        {
+                            writer.WriteLine(space + "if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                update_mask + "}");
+                            first = false;
+                        }
+                        else
+                            writer.WriteLine(space + "else if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                update_mask + "}");
+                    }
+                }
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
                     if (!(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.on) &&
                         !(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title) &&
                         !(m.trigger_method == (int)mtest_method.bluetooth) && !(m.trigger_method == (int)mtest_method.acc) &&
-                        m.moton_layer == layer)
+                        !(m.trigger_method == (int)mtest_method.wifi602) && m.moton_layer == layer)
                     {
                         string cancel_release = "";
                         string update_mask = "";
@@ -1222,6 +1279,26 @@ namespace _86ME_ver1
             {
                 writer.WriteLine("long _mixOffsets[45] = {0};");
             }
+            if (method_flag[5]) // wifi602
+            {
+                writer.WriteLine("bool wifi602_frame_start = false;");
+                writer.WriteLine("int wifi602_data[11] = {0};");
+                writer.WriteLine("bool check_wifi602_data(int* data)\n{\n  if(data == NULL)\n  {\n" +
+                                 "    wifi602_frame_start = false;\n    return false;\n  }\n" +
+                                 "  int checksum = data[1];\n  for(int i = 2; i < 10; i++)\n" +
+                                 "    checksum ^= data[i];\n  if(checksum != data[0] || data[10] != 0x82)\n" +
+                                 "  {\n    wifi602_frame_start = false;\n    return false;\n  }\n  return true;\n}");
+                writer.WriteLine("void read_wifi602pad(HardwareSerial &uart)\n{\n  int tmp[11];\n" +
+                                 "  if(wifi602_frame_start == false)\n  {\n    if(uart.available())\n" +
+                                 "      if(uart.read() == 0x81)\n        wifi602_frame_start = true;\n  }\n" +
+                                 "  else if(wifi602_frame_start == true)\n  {\n    if(uart.available() >= 11)\n" +
+                                 "    {\n      for(int i = 0; i < 11; i++)\n        tmp[i] = uart.read();\n" +
+                                 "      if(check_wifi602_data(tmp))\n      {\n" +
+                                 "        tmp[2] > 100? wifi602_data[2] = tmp[2] - 256 : wifi602_data[2] = tmp[2];\n" +
+                                 "        tmp[3] > 100? wifi602_data[3] = tmp[3] - 256 : wifi602_data[3] = tmp[3];\n" +
+                                 "        tmp[4] > 100? wifi602_data[4] = tmp[4] - 256 : wifi602_data[4] = tmp[4];\n" +
+                                 "      }\n      wifi602_frame_start = false;\n    }\n  }\n}");
+            }
             writer.WriteLine();
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -1261,6 +1338,8 @@ namespace _86ME_ver1
                 else // NONE
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.init();\n  delay(5);\n");
             }
+            if (method_flag[5]) // wifi602
+                writer.WriteLine("  " + wifi602_port + ".begin(115200);");
             for (int i = 0; i < channels.Count; i++)
             {
                 int min = int.Parse(Motion.ftext3[channels[i]].Text);

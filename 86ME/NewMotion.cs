@@ -403,7 +403,10 @@ namespace _86ME_ver1
             for (int i = 0; i < 45; i++)
             {
                 if (fpanel[i] != null)
+                {
+                    fbox[i].SelectedIndex = 0;
                     fpanel[i].Controls.Clear();
+                }
             }
             channelver.Controls.Clear();
         }
