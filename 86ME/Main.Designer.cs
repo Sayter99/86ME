@@ -87,6 +87,7 @@
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
+            this.wifi602_radioButton = new System.Windows.Forms.RadioButton();
             this.acc_groupBox = new System.Windows.Forms.GroupBox();
             this.getAccData = new System.Windows.Forms.Button();
             this.accDurationUnit = new System.Windows.Forms.Label();
@@ -104,6 +105,11 @@
             this.accHXText = new System.Windows.Forms.MaskedTextBox();
             this.accLXText = new System.Windows.Forms.MaskedTextBox();
             this.accXLabel = new System.Windows.Forms.Label();
+            this.wifi602_groupBox = new System.Windows.Forms.GroupBox();
+            this.wifi602PortCombo = new System.Windows.Forms.ComboBox();
+            this.wifi602PortLabel = new System.Windows.Forms.Label();
+            this.wifi602KeyLabel = new System.Windows.Forms.Label();
+            this.wifi602KeyCombo = new System.Windows.Forms.ComboBox();
             this.acc_radioButton = new System.Windows.Forms.RadioButton();
             this.ps2_groupBox = new System.Windows.Forms.GroupBox();
             this.ps2CLKCombo = new System.Windows.Forms.ComboBox();
@@ -172,12 +178,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.wifi602_radioButton = new System.Windows.Forms.RadioButton();
-            this.wifi602_groupBox = new System.Windows.Forms.GroupBox();
-            this.wifi602KeyLabel = new System.Windows.Forms.Label();
-            this.wifi602KeyCombo = new System.Windows.Forms.ComboBox();
-            this.wifi602PortCombo = new System.Windows.Forms.ComboBox();
-            this.wifi602PortLabel = new System.Windows.Forms.Label();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -191,6 +191,7 @@
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
             this.acc_groupBox.SuspendLayout();
+            this.wifi602_groupBox.SuspendLayout();
             this.ps2_groupBox.SuspendLayout();
             this.bt_groupBox.SuspendLayout();
             this.Keyboard_groupBox.SuspendLayout();
@@ -198,7 +199,6 @@
             this.MotionProperty.SuspendLayout();
             this.EditMotion_contextMenuStrip.SuspendLayout();
             this.Setting_groupBox.SuspendLayout();
-            this.wifi602_groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // Main_menuStrip
@@ -754,6 +754,17 @@
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
             // 
+            // wifi602_radioButton
+            // 
+            this.wifi602_radioButton.AutoSize = true;
+            this.wifi602_radioButton.Location = new System.Drawing.Point(7, 240);
+            this.wifi602_radioButton.Name = "wifi602_radioButton";
+            this.wifi602_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.wifi602_radioButton.TabIndex = 5;
+            this.wifi602_radioButton.TabStop = true;
+            this.wifi602_radioButton.UseVisualStyleBackColor = true;
+            this.wifi602_radioButton.CheckedChanged += new System.EventHandler(this.wifi602_radioButton_CheckedChanged);
+            // 
             // acc_groupBox
             // 
             this.acc_groupBox.Controls.Add(this.getAccData);
@@ -923,6 +934,69 @@
             this.accXLabel.Size = new System.Drawing.Size(19, 12);
             this.accXLabel.TabIndex = 15;
             this.accXLabel.Text = "X: ";
+            // 
+            // wifi602_groupBox
+            // 
+            this.wifi602_groupBox.Controls.Add(this.wifi602PortCombo);
+            this.wifi602_groupBox.Controls.Add(this.wifi602PortLabel);
+            this.wifi602_groupBox.Controls.Add(this.wifi602KeyLabel);
+            this.wifi602_groupBox.Controls.Add(this.wifi602KeyCombo);
+            this.wifi602_groupBox.Location = new System.Drawing.Point(27, 240);
+            this.wifi602_groupBox.Name = "wifi602_groupBox";
+            this.wifi602_groupBox.Size = new System.Drawing.Size(192, 58);
+            this.wifi602_groupBox.TabIndex = 4;
+            this.wifi602_groupBox.TabStop = false;
+            this.wifi602_groupBox.Text = "WiFi Camera (WIFI602)";
+            // 
+            // wifi602PortCombo
+            // 
+            this.wifi602PortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.wifi602PortCombo.FormattingEnabled = true;
+            this.wifi602PortCombo.Items.AddRange(new object[] {
+            "Serial1",
+            "Serial2",
+            "Serial3"});
+            this.wifi602PortCombo.Location = new System.Drawing.Point(105, 32);
+            this.wifi602PortCombo.Name = "wifi602PortCombo";
+            this.wifi602PortCombo.Size = new System.Drawing.Size(81, 20);
+            this.wifi602PortCombo.TabIndex = 10;
+            this.ttp.SetToolTip(this.wifi602PortCombo, "Set used port for connecting the wifi module.");
+            this.wifi602PortCombo.SelectedIndexChanged += new System.EventHandler(this.wifi602PortCombo_SelectedIndexChanged);
+            // 
+            // wifi602PortLabel
+            // 
+            this.wifi602PortLabel.AutoSize = true;
+            this.wifi602PortLabel.Location = new System.Drawing.Point(103, 17);
+            this.wifi602PortLabel.Name = "wifi602PortLabel";
+            this.wifi602PortLabel.Size = new System.Drawing.Size(53, 12);
+            this.wifi602PortLabel.TabIndex = 11;
+            this.wifi602PortLabel.Text = "Used Port:";
+            // 
+            // wifi602KeyLabel
+            // 
+            this.wifi602KeyLabel.AutoSize = true;
+            this.wifi602KeyLabel.Location = new System.Drawing.Point(14, 17);
+            this.wifi602KeyLabel.Name = "wifi602KeyLabel";
+            this.wifi602KeyLabel.Size = new System.Drawing.Size(27, 12);
+            this.wifi602KeyLabel.TabIndex = 1;
+            this.wifi602KeyLabel.Text = "Key:";
+            // 
+            // wifi602KeyCombo
+            // 
+            this.wifi602KeyCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.wifi602KeyCombo.FormattingEnabled = true;
+            this.wifi602KeyCombo.Items.AddRange(new object[] {
+            "UP",
+            "DOWN",
+            "LEFT",
+            "RIGHT",
+            "A",
+            "B"});
+            this.wifi602KeyCombo.Location = new System.Drawing.Point(16, 32);
+            this.wifi602KeyCombo.Name = "wifi602KeyCombo";
+            this.wifi602KeyCombo.Size = new System.Drawing.Size(78, 20);
+            this.wifi602KeyCombo.TabIndex = 0;
+            this.wifi602KeyCombo.SelectedIndexChanged += new System.EventHandler(this.wifi602KeyCombo_SelectedIndexChanged);
             // 
             // acc_radioButton
             // 
@@ -1756,80 +1830,6 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
-            // wifi602_radioButton
-            // 
-            this.wifi602_radioButton.AutoSize = true;
-            this.wifi602_radioButton.Location = new System.Drawing.Point(7, 240);
-            this.wifi602_radioButton.Name = "wifi602_radioButton";
-            this.wifi602_radioButton.Size = new System.Drawing.Size(14, 13);
-            this.wifi602_radioButton.TabIndex = 5;
-            this.wifi602_radioButton.TabStop = true;
-            this.wifi602_radioButton.UseVisualStyleBackColor = true;
-            this.wifi602_radioButton.CheckedChanged += new System.EventHandler(wifi602_radioButton_CheckedChanged);
-            // 
-            // wifi602_groupBox
-            // 
-            this.wifi602_groupBox.Controls.Add(this.wifi602PortCombo);
-            this.wifi602_groupBox.Controls.Add(this.wifi602PortLabel);
-            this.wifi602_groupBox.Controls.Add(this.wifi602KeyLabel);
-            this.wifi602_groupBox.Controls.Add(this.wifi602KeyCombo);
-            this.wifi602_groupBox.Location = new System.Drawing.Point(27, 240);
-            this.wifi602_groupBox.Name = "wifi602_groupBox";
-            this.wifi602_groupBox.Size = new System.Drawing.Size(192, 58);
-            this.wifi602_groupBox.TabIndex = 4;
-            this.wifi602_groupBox.TabStop = false;
-            this.wifi602_groupBox.Text = "Wifi Camera";
-            // 
-            // wifi602KeyLabel
-            // 
-            this.wifi602KeyLabel.AutoSize = true;
-            this.wifi602KeyLabel.Location = new System.Drawing.Point(14, 17);
-            this.wifi602KeyLabel.Name = "wifi602KeyLabel";
-            this.wifi602KeyLabel.Size = new System.Drawing.Size(27, 12);
-            this.wifi602KeyLabel.TabIndex = 1;
-            this.wifi602KeyLabel.Text = "Key:";
-            // 
-            // wifi602KeyCombo
-            // 
-            this.wifi602KeyCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.wifi602KeyCombo.FormattingEnabled = true;
-            this.wifi602KeyCombo.Items.AddRange(new object[] {
-            "UP",
-            "DOWN",
-            "LEFT",
-            "RIGHT",
-            "A",
-            "B"});
-            this.wifi602KeyCombo.Location = new System.Drawing.Point(16, 32);
-            this.wifi602KeyCombo.Name = "wifi602KeyCombo";
-            this.wifi602KeyCombo.Size = new System.Drawing.Size(78, 20);
-            this.wifi602KeyCombo.TabIndex = 0;
-            this.wifi602KeyCombo.SelectedIndexChanged += new System.EventHandler(wifi602KeyCombo_SelectedIndexChanged);
-            // 
-            // wifi602PortCombo
-            // 
-            this.wifi602PortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.wifi602PortCombo.FormattingEnabled = true;
-            this.wifi602PortCombo.Items.AddRange(new object[] {
-            "Serial1",
-            "Serial2",
-            "Serial3"});
-            this.wifi602PortCombo.Location = new System.Drawing.Point(105, 32);
-            this.wifi602PortCombo.Name = "wifi602PortCombo";
-            this.wifi602PortCombo.Size = new System.Drawing.Size(81, 20);
-            this.wifi602PortCombo.TabIndex = 10;
-            this.ttp.SetToolTip(this.wifi602PortCombo, "Set used port for connecting the wifi module.");
-            this.wifi602PortCombo.SelectedIndexChanged += new System.EventHandler(wifi602PortCombo_SelectedIndexChanged);
-            // 
-            // wifi602PortLabel
-            // 
-            this.wifi602PortLabel.AutoSize = true;
-            this.wifi602PortLabel.Location = new System.Drawing.Point(103, 17);
-            this.wifi602PortLabel.Name = "wifi602PortLabel";
-            this.wifi602PortLabel.Size = new System.Drawing.Size(53, 12);
-            this.wifi602PortLabel.TabIndex = 11;
-            this.wifi602PortLabel.Text = "Used Port:";
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -1869,6 +1869,8 @@
             this.MotionTrigger.PerformLayout();
             this.acc_groupBox.ResumeLayout(false);
             this.acc_groupBox.PerformLayout();
+            this.wifi602_groupBox.ResumeLayout(false);
+            this.wifi602_groupBox.PerformLayout();
             this.ps2_groupBox.ResumeLayout(false);
             this.ps2_groupBox.PerformLayout();
             this.bt_groupBox.ResumeLayout(false);
@@ -1882,8 +1884,6 @@
             this.EditMotion_contextMenuStrip.ResumeLayout(false);
             this.Setting_groupBox.ResumeLayout(false);
             this.Setting_groupBox.PerformLayout();
-            this.wifi602_groupBox.ResumeLayout(false);
-            this.wifi602_groupBox.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 

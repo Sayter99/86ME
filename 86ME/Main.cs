@@ -569,70 +569,55 @@ namespace _86ME_ver1
             return need_to_save;
         }
 
+        private void clearPs2()
+        {
+            ps2DATCombo.Items.Clear();
+            ps2CMDCombo.Items.Clear();
+            ps2ATTCombo.Items.Clear();
+            ps2CLKCombo.Items.Clear();
+        }
+
+        private void createPs2(int i)
+        {
+            ps2DATCombo.Items.Add(i.ToString());
+            ps2CMDCombo.Items.Add(i.ToString());
+            ps2ATTCombo.Items.Add(i.ToString());
+            ps2CLKCombo.Items.Add(i.ToString());
+        }
+
         private void initPs2()
         {
             if (board_ver86 == 0) //one
             {
-                ps2DATCombo.Items.Clear();
-                ps2CMDCombo.Items.Clear();
-                ps2ATTCombo.Items.Clear();
-                ps2CLKCombo.Items.Clear();
+                clearPs2();
                 for (int i = 0; i < 45; i++)
-                {
-                    ps2DATCombo.Items.Add(i.ToString());
-                    ps2CMDCombo.Items.Add(i.ToString());
-                    ps2ATTCombo.Items.Add(i.ToString());
-                    ps2CLKCombo.Items.Add(i.ToString());
-                }
+                    createPs2(i);
             }
             else if (board_ver86 == 1) //zero
             {
-                ps2DATCombo.Items.Clear();
-                ps2CMDCombo.Items.Clear();
-                ps2ATTCombo.Items.Clear();
-                ps2CLKCombo.Items.Clear();
+                clearPs2();
                 for (int i = 0; i < 14; i++)
-                {
-                    ps2DATCombo.Items.Add(i.ToString());
-                    ps2CMDCombo.Items.Add(i.ToString());
-                    ps2ATTCombo.Items.Add(i.ToString());
-                    ps2CLKCombo.Items.Add(i.ToString());
-                }
+                    createPs2(i);
                 for (int i = 42; i < 45; i++)
-                {
-                    ps2DATCombo.Items.Add(i.ToString());
-                    ps2CMDCombo.Items.Add(i.ToString());
-                    ps2ATTCombo.Items.Add(i.ToString());
-                    ps2CLKCombo.Items.Add(i.ToString());
-                }
+                    createPs2(i);
             }
             else if (board_ver86 == 2) //edu
             {
-                ps2DATCombo.Items.Clear();
-                ps2CMDCombo.Items.Clear();
-                ps2ATTCombo.Items.Clear();
-                ps2CLKCombo.Items.Clear();
+                clearPs2();
                 for (int i = 0; i < 21; i++)
-                {
-                    ps2DATCombo.Items.Add(i.ToString());
-                    ps2CMDCombo.Items.Add(i.ToString());
-                    ps2ATTCombo.Items.Add(i.ToString());
-                    ps2CLKCombo.Items.Add(i.ToString());
-                }
+                    createPs2(i);
                 for (int i = 31; i < 33; i++)
-                {
-                    ps2DATCombo.Items.Add(i.ToString());
-                    ps2CMDCombo.Items.Add(i.ToString());
-                    ps2ATTCombo.Items.Add(i.ToString());
-                    ps2CLKCombo.Items.Add(i.ToString());
-                }
+                    createPs2(i);
                 for (int i = 42; i < 45; i++)
-                {
-                    ps2DATCombo.Items.Add(i.ToString());
-                    ps2CMDCombo.Items.Add(i.ToString());
-                    ps2ATTCombo.Items.Add(i.ToString());
-                    ps2CLKCombo.Items.Add(i.ToString());
-                }
+                    createPs2(i);
+            }
+            else if (board_ver86 == 3) //ai
+            {
+                clearPs2();
+                for (int i = 0; i < 26; i++)
+                    createPs2(i);
+                createPs2(34);
+                createPs2(36);
             }
         }
 
@@ -746,13 +731,13 @@ namespace _86ME_ver1
                 servo_onOff = ~0UL;
                 autocheck.Checked = false;
 
+                update_newMotionParams(nMotion);
+
                 initPs2();
                 gs.ps2pins[0] = "0";
                 gs.ps2pins[1] = "0";
                 gs.ps2pins[2] = "0";
                 gs.ps2pins[3] = "0";
-
-                update_newMotionParams(nMotion);
 
                 Motion = nMotion;
                 if(Robot_pictureBox.Image != null)
@@ -842,6 +827,12 @@ namespace _86ME_ver1
                         Motion.create_panel(0, 21, 0);
                         Motion.create_panel(31, 33, 21);
                         Motion.create_panel(42, 45, 23);
+                    }
+                    else if (board_ver86 == 3)
+                    {
+                        Motion.create_panel(0, 26, 0);
+                        Motion.create_panel(34, 35, 26);
+                        Motion.create_panel(36, 37, 27);
                     }
                 }
                 if (used_imu != Motion.comboBox2.SelectedIndex)
@@ -1136,8 +1127,11 @@ namespace _86ME_ver1
                                             "86Duino_One",
                                             "86Duino_Zero",
                                             "86Duino_EduCake",
+                                            "86Duino_Ai",
                                             "unknow"};
             string[] servo = new string[] { "---noServo---",
+                                            "EMAX_ES08AII",
+                                            "EMAX_ES3104",
                                             "KONDO_KRS786",
                                             "KONDO_KRS788",
                                             "KONDO_KRS78X",
@@ -1146,6 +1140,7 @@ namespace _86ME_ver1
                                             "HITEC_HSR8498",
                                             "FUTABA_S3003",
                                             "SHAYYE_SYS214050",
+                                            "TOWERPRO_MG90S",
                                             "TOWERPRO_MG995",
                                             "TOWERPRO_MG996",
                                             "TOWERPRO_SG90",
@@ -1203,6 +1198,13 @@ namespace _86ME_ver1
                                     nMotion.create_panel(0, 21, 0);
                                     nMotion.create_panel(31, 33, 21);
                                     nMotion.create_panel(42, 45, 23);
+                                }
+                                else if (string.Compare(rbver[j], "86Duino_Ai") == 0)
+                                {
+                                    nMotion.clear_Channels();
+                                    nMotion.create_panel(0, 26, 0);
+                                    nMotion.create_panel(34, 35, 26);
+                                    nMotion.create_panel(36, 37, 27);
                                 }
                             }
                         }
@@ -3645,6 +3647,8 @@ namespace _86ME_ver1
                     captured[i] = true;
                 else if (String.Compare(Motion.fbox[i].Text, "SHAYYE_SYS214050") == 0)
                     captured[i] = false;
+                else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG90S") == 0)
+                    captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG995") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "TOWERPRO_MG996") == 0)
@@ -3660,6 +3664,10 @@ namespace _86ME_ver1
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_S03T") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "GWS_MICRO") == 0)
+                    captured[i] = false;
+                else if (String.Compare(Motion.fbox[i].Text, "EMAX_ES08AII") == 0)
+                    captured[i] = false;
+                else if (String.Compare(Motion.fbox[i].Text, "EMAX_ES3104") == 0)
                     captured[i] = false;
                 else if (String.Compare(Motion.fbox[i].Text, "OtherServos") == 0)
                     captured[i] = false;
@@ -4201,6 +4209,60 @@ namespace _86ME_ver1
                 }
                 else
                 {
+                    if (Always_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = true;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = false;
+                        wifi602_groupBox.Enabled = false;
+                    }
+                    else if (Keyboard_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = true;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = false;
+                        wifi602_groupBox.Enabled = false;
+                    }
+                    else if (bt_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = true;
+                        ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = false;
+                        wifi602_groupBox.Enabled = false;
+                    }
+                    else if (ps2_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = true;
+                        acc_groupBox.Enabled = false;
+                        wifi602_groupBox.Enabled = false;
+                    }
+                    else if (acc_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = true;
+                        wifi602_groupBox.Enabled = false;
+                    }
+                    else if (wifi602_radioButton.Checked == true)
+                    {
+                        Always_groupBox.Enabled = false;
+                        Keyboard_groupBox.Enabled = false;
+                        bt_groupBox.Enabled = false;
+                        ps2_groupBox.Enabled = false;
+                        acc_groupBox.Enabled = false;
+                        wifi602_groupBox.Enabled = true;
+                    }
                     ps2DATCombo.Text = gs.ps2pins[0];
                     ps2CMDCombo.Text = gs.ps2pins[1];
                     ps2ATTCombo.Text = gs.ps2pins[2];

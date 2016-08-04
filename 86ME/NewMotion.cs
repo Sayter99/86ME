@@ -64,6 +64,7 @@ namespace _86ME_ver1
             comboBox1.Items.AddRange(new object[] { "86Duino_One",
                                                     "86Duino_Zero",
                                                     "86Duino_EduCake",
+                                                    "86Duino_Ai"
                                                     });
             comboBox1.SelectedIndex = 0;
 
@@ -387,7 +388,10 @@ namespace _86ME_ver1
                 sync.Abort();
                 sync = null;
             }
-            if (String.Compare(comboBox1.SelectedItem.ToString(), "---unset---") == 0)
+            if (String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_One") != 0 &&
+                String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_Zero") != 0 &&
+                String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_EduCake") != 0 &&
+                String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_Ai") != 0)
                 MessageBox.Show(NewMotion_lang_dic["NewMotion_err1"]);
             else
                 this.DialogResult = DialogResult.OK;
@@ -433,6 +437,13 @@ namespace _86ME_ver1
                 create_panel(0, 21, 0);
                 create_panel(31, 33, 21);
                 create_panel(42, 45, 23);
+            }
+            else if (string.Compare(comboBox1.Text, "86Duino_Ai") == 0)
+            {
+                clear_Channels();
+                create_panel(0, 26, 0);
+                create_panel(34, 35, 26);
+                create_panel(36, 37, 27);
             }
         }
 
@@ -632,21 +643,24 @@ namespace _86ME_ver1
                 fbar_home[i].Scroll += new ScrollEventHandler(scroll_home);
 
                 fbox[i].Items.AddRange(new object[] { "---noServo---",
-                                                      "KONDO_KRS786",       
-                                                      "KONDO_KRS788",       
-                                                      "KONDO_KRS78X",       
-                                                      "KONDO_KRS4014",      
-                                                      "KONDO_KRS4024",      
-                                                      "HITEC_HSR8498",      
-                                                      "FUTABA_S3003",       
-                                                      "SHAYYE_SYS214050",   
-                                                      "TOWERPRO_MG995",     
+                                                      "EMAX_ES08AII",
+                                                      "EMAX_ES3104",
+                                                      "KONDO_KRS786",
+                                                      "KONDO_KRS788",
+                                                      "KONDO_KRS78X",
+                                                      "KONDO_KRS4014",
+                                                      "KONDO_KRS4024",
+                                                      "HITEC_HSR8498",
+                                                      "FUTABA_S3003",
+                                                      "SHAYYE_SYS214050",
+                                                      "TOWERPRO_MG90S",
+                                                      "TOWERPRO_MG995",
                                                       "TOWERPRO_MG996",
                                                       "TOWERPRO_SG90",
-                                                      "DMP_RS0263",         
-                                                      "DMP_RS1270",         
-                                                      "GWS_S777",           
-                                                      "GWS_S03T",           
+                                                      "DMP_RS0263",
+                                                      "DMP_RS1270",
+                                                      "GWS_S777",
+                                                      "GWS_S03T",
                                                       "GWS_MICRO",
                                                       "OtherServos"});
                 fbox[i].SelectedIndex = 0;
@@ -736,6 +750,16 @@ namespace _86ME_ver1
                             ftext3[i].Text = "600";
                             ftext4[i].Text = "2400";
                             break;
+                        case "EMAX_ES08AII":
+                            fcheck[i].Enabled = true;
+                            ftext3[i].Text = "600";
+                            ftext4[i].Text = "2700";
+                            break;
+                        case "EMAX_ES3104":
+                            fcheck[i].Enabled = true;
+                            ftext3[i].Text = "600";
+                            ftext4[i].Text = "2350";
+                            break;
                         case "KONDO_KRS786":
                             fcheck[i].Enabled = true;
                             ftext3[i].Text = "500";
@@ -775,6 +799,11 @@ namespace _86ME_ver1
                             fcheck[i].Enabled = true;
                             ftext3[i].Text = "600";
                             ftext4[i].Text = "2350";
+                            break;
+                        case "TOWERPRO_MG90S":
+                            fcheck[i].Enabled = true;
+                            ftext3[i].Text = "700";
+                            ftext4[i].Text = "2600";
                             break;
                         case "TOWERPRO_MG995":
                             fcheck[i].Enabled = true;
@@ -818,8 +847,8 @@ namespace _86ME_ver1
                             break;
                         case "OtherServos":
                             fcheck[i].Enabled = true;
-                            ftext3[i].Text = "600";
-                            ftext4[i].Text = "2400";
+                            ftext3[i].Text = "500";
+                            ftext4[i].Text = "2500";
                             break;
                     }
                 }
