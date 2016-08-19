@@ -690,7 +690,7 @@ namespace _86ME_ver1
         {
             if (needToSave() && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                     save_project(load_filename);
                 else if (dialogResult == DialogResult.Cancel)
@@ -1076,7 +1076,7 @@ namespace _86ME_ver1
             bool _needToSave = needToSave();
             if (_needToSave && File.Exists(load_filename))
             {
-                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "Exit", MessageBoxButtons.YesNoCancel);
+                DialogResult dialogResult = MessageBox.Show(Main_lang_dic["saveMsg"], "", MessageBoxButtons.YesNoCancel);
                 if (dialogResult == DialogResult.Yes)
                     save_project(load_filename);
                 else if (dialogResult == DialogResult.Cancel)
@@ -1115,6 +1115,7 @@ namespace _86ME_ver1
 
         private void load_project(string filename)
         {
+            picture_name = null;
             bool picmode = false;
             NewMotion nMotion = new NewMotion(Main_lang_dic);
             string[] rbver = new string[] { "---unset---",
