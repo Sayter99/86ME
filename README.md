@@ -4,7 +4,7 @@
 
 _VERSION_: v1.9
 
-* Add a new trigger for WiFi Camera (WiFi602).
+* Add a new trigger for LEADIY-WiFi Camera (WiFi602).
 * Add a new property for setting compensating range of motions.
 * Add a new property for setting a method to control servos.
 * Add a new button to duplicate/rename/delete/import/export motions.

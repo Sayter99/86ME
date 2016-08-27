@@ -946,7 +946,7 @@
             this.wifi602_groupBox.Size = new System.Drawing.Size(192, 58);
             this.wifi602_groupBox.TabIndex = 4;
             this.wifi602_groupBox.TabStop = false;
-            this.wifi602_groupBox.Text = "WiFi Camera (WIFI602)";
+            this.wifi602_groupBox.Text = "LEADIY-WiFi Camera";
             // 
             // wifi602PortCombo
             // 
