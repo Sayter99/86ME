@@ -831,8 +831,7 @@ namespace _86ME_ver1
                     else if (board_ver86 == 3)
                     {
                         Motion.create_panel(0, 26, 0);
-                        Motion.create_panel(34, 35, 26);
-                        Motion.create_panel(36, 37, 27);
+                        Motion.create_panel(34, 36, 26);
                     }
                 }
                 if (used_imu != Motion.comboBox2.SelectedIndex)
@@ -1204,8 +1203,7 @@ namespace _86ME_ver1
                                 {
                                     nMotion.clear_Channels();
                                     nMotion.create_panel(0, 26, 0);
-                                    nMotion.create_panel(34, 35, 26);
-                                    nMotion.create_panel(36, 37, 27);
+                                    nMotion.create_panel(34, 36, 26);
                                 }
                             }
                         }

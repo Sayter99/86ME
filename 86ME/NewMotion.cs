@@ -63,8 +63,8 @@ namespace _86ME_ver1
             NewMotion_lang_dic = lang_dic;
             comboBox1.Items.AddRange(new object[] { "86Duino_One",
                                                     "86Duino_Zero",
-                                                    "86Duino_EduCake"
-                                                    //"86Duino_Ai"
+                                                    "86Duino_EduCake",
+                                                    "86Duino_Ai"
                                                     });
             comboBox1.SelectedIndex = 0;
 
@@ -442,8 +442,7 @@ namespace _86ME_ver1
             {
                 clear_Channels();
                 create_panel(0, 26, 0);
-                create_panel(34, 35, 26);
-                create_panel(36, 37, 27);
+                create_panel(34, 36, 26);
             }
         }
 
