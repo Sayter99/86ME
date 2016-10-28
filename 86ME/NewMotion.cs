@@ -64,13 +64,14 @@ namespace _86ME_ver1
             comboBox1.Items.AddRange(new object[] { "86Duino_One",
                                                     "86Duino_Zero",
                                                     "86Duino_EduCake",
-                                                    "86Duino_Ai"
+                                                    "86Duino_AI"
                                                     });
             comboBox1.SelectedIndex = 0;
 
             comboBox2.Items.AddRange(new object[] { "NONE",
                                                     "86Duino One On-Board IMU",
                                                     "RM-G146",
+                                                    "86Duino AI On-Board IMU"
                                                     });
             comboBox2.SelectedIndex = 0;
             maskedTextBox1.Text = (q.w).ToString();
@@ -391,7 +392,7 @@ namespace _86ME_ver1
             if (String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_One") != 0 &&
                 String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_Zero") != 0 &&
                 String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_EduCake") != 0 &&
-                String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_Ai") != 0)
+                String.Compare(comboBox1.SelectedItem.ToString(), "86Duino_AI") != 0)
                 MessageBox.Show(NewMotion_lang_dic["NewMotion_err1"]);
             else
                 this.DialogResult = DialogResult.OK;
@@ -438,11 +439,10 @@ namespace _86ME_ver1
                 create_panel(31, 33, 21);
                 create_panel(42, 45, 23);
             }
-            else if (string.Compare(comboBox1.Text, "86Duino_Ai") == 0)
+            else if (string.Compare(comboBox1.Text, "86Duino_AI") == 0)
             {
                 clear_Channels();
-                create_panel(0, 26, 0);
-                create_panel(34, 36, 26);
+                create_panel(0, 36, 0);
             }
         }
 

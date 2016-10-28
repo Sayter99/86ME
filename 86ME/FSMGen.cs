@@ -7,7 +7,7 @@ using System.IO;
 
 namespace _86ME_ver1
 {
-    enum mtest_method { always, keyboard, bluetooth, ps2, acc, wifi602 };
+    enum mtest_method { always, keyboard, bluetooth, ps2, acc, wifi602, analog };
     enum keyboard_method { first, pressed, release };
     enum auto_method { on, off, title };
     enum serial_ports { serial1, serial2, serial3 };
@@ -154,6 +154,19 @@ namespace _86ME_ver1
                         return "wifi602_data[4] < 0";
                     else //B
                         return "wifi602_data[4] > 0";
+                case (int)mtest_method.analog:
+                    if (m.analog_cond == 0)
+                        return "analogRead(A" + m.analog_pin + ") == " + m.analog_value;
+                    else if (m.analog_cond == 1)
+                        return "analogRead(A" + m.analog_pin + ") != " + m.analog_value;
+                    else if (m.analog_cond == 2)
+                        return "analogRead(A" + m.analog_pin + ") >= " + m.analog_value;
+                    else if (m.analog_cond == 3)
+                        return "analogRead(A" + m.analog_pin + ") <= " + m.analog_value;
+                    else if (m.analog_cond == 4)
+                        return "analogRead(A" + m.analog_pin + ") > " + m.analog_value;
+                    else
+                        return "analogRead(A" + m.analog_pin + ") < " + m.analog_value;
                 default:
                     return "1";
             }
@@ -438,8 +451,8 @@ namespace _86ME_ver1
                         }
                     }
                     writer.WriteLine("  servoMultiRealTimeMixing(_mixOffsets);");
-                    writer.WriteLine("EXIT_COMP:");
                 }
+                writer.WriteLine("EXIT_COMP:");
 
                 for (int i = 0; i < ME_Motionlist.Count; i++)
                 {
@@ -625,6 +638,28 @@ namespace _86ME_ver1
                                                 m.name + "::acc_state = 3; " + update_mask + "}");
                     }
                 }
+                for (int i = 0; i < ME_Motionlist.Count; i++) //analog
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    if (m.trigger_method == (int)mtest_method.analog && m.moton_layer == layer)
+                    {
+                        string update_mask = "";
+                        if (layer == 1)
+                            update_mask = "memcpy(servo_mask, " + m.name + "::mask, sizeof(servo_mask));";
+
+                        if (first)
+                        {
+                            writer.WriteLine(space + "if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                update_mask + "}");
+                            first = false;
+                        }
+                        else
+                            writer.WriteLine(space + "else if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                update_mask + "}");
+                    }
+                }
                 for (int i = 0; i < ME_Motionlist.Count; i++) //bt
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -680,7 +715,8 @@ namespace _86ME_ver1
                     if (!(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.on) &&
                         !(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title) &&
                         !(m.trigger_method == (int)mtest_method.bluetooth) && !(m.trigger_method == (int)mtest_method.acc) &&
-                        !(m.trigger_method == (int)mtest_method.wifi602) && m.moton_layer == layer)
+                        !(m.trigger_method == (int)mtest_method.wifi602) && !(m.trigger_method == (int)mtest_method.analog) &&
+                        m.moton_layer == layer)
                     {
                         string cancel_release = "";
                         string update_mask = "";
@@ -1274,9 +1310,6 @@ namespace _86ME_ver1
             {
                 writer.WriteLine("unsigned long _IMU_update_time = millis();");
                 writer.WriteLine("FreeIMU1 _IMU = FreeIMU1();");
-            }
-            if (IMU_compensatory)
-            {
                 writer.WriteLine("long _mixOffsets[45] = {0};");
             }
             if (method_flag[5]) // wifi602
@@ -1331,10 +1364,12 @@ namespace _86ME_ver1
                                  ", " + ps2_pins[2] + ", " + ps2_pins[0] + ", false, false);\n");
             if (method_flag[4]) // acc
             {
-                if (Motion.comboBox2.SelectedIndex == 1) //LSM330DLC
+                if (Motion.comboBox2.SelectedIndex == 1) //LSM330DLC of One
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(0);\n  delay(5);\n");
                 else if (Motion.comboBox2.SelectedIndex == 2) //RM-G146
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(2);\n  delay(5);\n");
+                else if (Motion.comboBox2.SelectedIndex == 3) //LSM330DLC of AI
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(3);\n  delay(5);\n");
                 else // NONE
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.init();\n  delay(5);\n");
             }

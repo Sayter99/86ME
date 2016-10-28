@@ -22,6 +22,9 @@ namespace _86ME_ver1
         public int frames;
         public string ps2_key;
         public int ps2_type;
+        public int analog_pin;
+        public int analog_cond;
+        public int analog_value;
         public int property;
         public int moton_layer;
         public int comp_range;
@@ -41,6 +44,9 @@ namespace _86ME_ver1
             this.frames = 0;
             this.ps2_key = "PSB_SELECT";
             this.ps2_type = 1;
+            this.analog_pin = 0;
+            this.analog_cond = 0;
+            this.analog_value = 0;
             this.property = 0;
             this.moton_layer = 0;
             this.comp_range = 180;
@@ -214,25 +220,31 @@ namespace _86ME_ver1
 
     public class ME_If
     {
+        public int form;
         public int method;
         public int left_var;
         public int right_var;
+        public double right_const;
         public string name;
         public ME_If()
         {
             this.name = null;
+            this.form = 0;
             this.method = 0;
             this.left_var = 0;
             this.right_var = 0;
+            this.right_const = 0.0;
         }
 
         public ME_If Copy()
         {
             ME_If ret = new ME_If();
             ret.name = this.name;
+            ret.form = this.form;
             ret.method = this.method;
             ret.left_var = this.left_var;
             ret.right_var = this.right_var;
+            ret.right_const = this.right_const;
             return ret;
         }
     }

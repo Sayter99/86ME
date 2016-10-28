@@ -507,7 +507,7 @@ namespace _86ME_ver1
             }
         }
 
-        public void accXYZText_Changed(object sender, EventArgs e)
+        private void accXYZText_Changed(object sender, EventArgs e)
         {
             double output;
             if (double.TryParse(((MaskedTextBox)sender).Text, out output))
@@ -522,7 +522,7 @@ namespace _86ME_ver1
             }
         }
 
-        public void accDurationText_Changed(object sender, EventArgs e)
+        private void accDurationText_Changed(object sender, EventArgs e)
         {
             int output;
             if (ME_Motionlist != null)
@@ -531,6 +531,26 @@ namespace _86ME_ver1
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = output;
                 else
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = 0;
+            }
+        }
+
+        public void analogValueText_Changed(object sender, EventArgs e)
+        {
+            int output;
+            if (ME_Motionlist != null)
+            {
+                if (int.TryParse(((MaskedTextBox)sender).Text, out output))
+                {
+                    if (output >= 1024)
+                    {
+                        output = 1023;
+                        ((MaskedTextBox)sender).Text = "1023";
+                        ((MaskedTextBox)sender).SelectionStart = ((MaskedTextBox)sender).Text.Length;
+                    }
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_value = output;
+                }
+                else
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_value = 0;
             }
         }
 
@@ -567,6 +587,34 @@ namespace _86ME_ver1
             else if(Motion != null)
                 return true;
             return need_to_save;
+        }
+
+        private void initAnalog()
+        {
+            if (board_ver86 == 0) //one
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 7; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
+            else if (board_ver86 == 1) //zero
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 6; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
+            else if (board_ver86 == 2) //edu
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 6; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
+            else if (board_ver86 == 3) //ai
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 2; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
         }
 
         private void clearPs2()
@@ -614,10 +662,8 @@ namespace _86ME_ver1
             else if (board_ver86 == 3) //ai
             {
                 clearPs2();
-                for (int i = 0; i < 26; i++)
+                for (int i = 0; i < 36; i++)
                     createPs2(i);
-                createPs2(34);
-                createPs2(36);
             }
         }
 
@@ -733,6 +779,7 @@ namespace _86ME_ver1
 
                 update_newMotionParams(nMotion);
 
+                initAnalog();
                 initPs2();
                 gs.ps2pins[0] = "0";
                 gs.ps2pins[1] = "0";
@@ -863,6 +910,7 @@ namespace _86ME_ver1
             if (ME_Motionlist.Count > 0)
                 if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
                     Motionlist.SelectedIndex = 0;
+            initAnalog();
             initPs2();
             if (change_board)
             {
@@ -993,7 +1041,8 @@ namespace _86ME_ver1
                          m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
                          " " + m.ps2_type + " " + m.bt_mode + " " + m.acc_Settings[0] + " " + m.acc_Settings[1] +
                          " " + m.acc_Settings[2] + " " + m.acc_Settings[3] + " " + m.acc_Settings[4] +
-                         " " + m.acc_Settings[5] + " " + m.acc_Settings[6] + " " + m.wifi602_key + "\n");
+                         " " + m.acc_Settings[5] + " " + m.acc_Settings[6] + " " + m.wifi602_key +
+                         " " + m.analog_pin + " " + m.analog_cond + " " + m.analog_value + "\n");
             writer.Write("Layer " + m.moton_layer + " ");
             for (int j = 0; j < m.used_servos.Count; j++)
             {
@@ -1127,7 +1176,7 @@ namespace _86ME_ver1
                                             "86Duino_One",
                                             "86Duino_Zero",
                                             "86Duino_EduCake",
-                                            "86Duino_Ai",
+                                            "86Duino_AI",
                                             "unknow"};
             string[] servo = new string[] { "---noServo---",
                                             "EMAX_ES08AII",
@@ -1199,11 +1248,10 @@ namespace _86ME_ver1
                                     nMotion.create_panel(31, 33, 21);
                                     nMotion.create_panel(42, 45, 23);
                                 }
-                                else if (string.Compare(rbver[j], "86Duino_Ai") == 0)
+                                else if (string.Compare(rbver[j], "86Duino_AI") == 0)
                                 {
                                     nMotion.clear_Channels();
-                                    nMotion.create_panel(0, 26, 0);
-                                    nMotion.create_panel(34, 36, 26);
+                                    nMotion.create_panel(0, 36, 0);
                                 }
                             }
                         }
@@ -1477,6 +1525,12 @@ namespace _86ME_ver1
                                 {
                                     motiontag.wifi602_key = int.Parse(datas[++i]);
                                 }
+                                if (int.TryParse(datas[i + 1], out try_out))
+                                {
+                                    motiontag.analog_pin = int.Parse(datas[++i]);
+                                    motiontag.analog_cond = int.Parse(datas[++i]);
+                                    motiontag.analog_value = int.Parse(datas[++i]);
+                                }
                             }
                             ME_Motionlist.Add(motiontag);
                         }
@@ -1706,6 +1760,7 @@ namespace _86ME_ver1
                 Robot_pictureBox.Image = null;
             }
 
+            initAnalog();
             initPs2();
 
             Hint_groupBox.Enabled = true;
@@ -1751,6 +1806,7 @@ namespace _86ME_ver1
             bt_radioButton.Enabled = true;
             ps2_radioButton.Enabled = true;
             acc_radioButton.Enabled = true;
+            analog_radioButton.Enabled = true;
             ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
             if (m.trigger_method == (int)mtest_method.always)
             {
@@ -1775,6 +1831,10 @@ namespace _86ME_ver1
             else if (m.trigger_method == (int)mtest_method.wifi602)
             {
                 wifi602_radioButton.Checked = true;
+            }
+            else if (m.trigger_method == (int)mtest_method.analog)
+            {
+                analog_radioButton.Checked = true;
             }
             if (m.auto_method == (int)auto_method.on)
                 AlwaysOn.Checked = true;
@@ -1803,6 +1863,9 @@ namespace _86ME_ver1
             accLZText.Text = m.acc_Settings[4].ToString();
             accHZText.Text = m.acc_Settings[5].ToString();
             accDurationText.Text = m.acc_Settings[6].ToString();
+            analogCondCombo.SelectedIndex = m.analog_cond;
+            analogPinCombo.SelectedIndex = m.analog_pin;
+            analogValueText.Text = m.analog_value.ToString();
             // Motion Property Part
             Blocking.Enabled = true;
             NonBlocking.Enabled = true;
@@ -3244,6 +3307,12 @@ namespace _86ME_ver1
                             {
                                 motiontag.wifi602_key = int.Parse(datas[++i]);
                             }
+                            if (int.TryParse(datas[i + 1], out try_out))
+                            {
+                                motiontag.analog_pin = int.Parse(datas[++i]);
+                                motiontag.analog_cond = int.Parse(datas[++i]);
+                                motiontag.analog_value = int.Parse(datas[++i]);
+                            }
                         }
                         ME_Motionlist.Add(motiontag);
                     }
@@ -4146,6 +4215,18 @@ namespace _86ME_ver1
             Motionlist.SelectedIndex = n + 1;
         }
 
+        private void enableTriggerGroup(GroupBox gb)
+        {
+            Always_groupBox.Enabled = false;
+            Keyboard_groupBox.Enabled = false;
+            bt_groupBox.Enabled = false;
+            ps2_groupBox.Enabled = false;
+            acc_groupBox.Enabled = false;
+            wifi602_groupBox.Enabled = false;
+            analog_groupBox.Enabled = false;
+            gb.Enabled = true;
+        }
+
         private void MotionConfig_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(MotionConfig.SelectedIndex == 0)
@@ -4205,62 +4286,38 @@ namespace _86ME_ver1
                     acc_groupBox.Enabled = false;
                     wifi602_groupBox.Enabled = false;
                     wifi602_radioButton.Enabled = false;
+                    analog_groupBox.Enabled = false;
+                    analog_radioButton.Enabled = false;
                 }
                 else
                 {
                     if (Always_radioButton.Checked == true)
                     {
-                        Always_groupBox.Enabled = true;
-                        Keyboard_groupBox.Enabled = false;
-                        bt_groupBox.Enabled = false;
-                        ps2_groupBox.Enabled = false;
-                        acc_groupBox.Enabled = false;
-                        wifi602_groupBox.Enabled = false;
+                        enableTriggerGroup(Always_groupBox);
                     }
                     else if (Keyboard_radioButton.Checked == true)
                     {
-                        Always_groupBox.Enabled = false;
-                        Keyboard_groupBox.Enabled = true;
-                        bt_groupBox.Enabled = false;
-                        ps2_groupBox.Enabled = false;
-                        acc_groupBox.Enabled = false;
-                        wifi602_groupBox.Enabled = false;
+                        enableTriggerGroup(Keyboard_groupBox);
                     }
                     else if (bt_radioButton.Checked == true)
                     {
-                        Always_groupBox.Enabled = false;
-                        Keyboard_groupBox.Enabled = false;
-                        bt_groupBox.Enabled = true;
-                        ps2_groupBox.Enabled = false;
-                        acc_groupBox.Enabled = false;
-                        wifi602_groupBox.Enabled = false;
+                        enableTriggerGroup(bt_groupBox);
                     }
                     else if (ps2_radioButton.Checked == true)
                     {
-                        Always_groupBox.Enabled = false;
-                        Keyboard_groupBox.Enabled = false;
-                        bt_groupBox.Enabled = false;
-                        ps2_groupBox.Enabled = true;
-                        acc_groupBox.Enabled = false;
-                        wifi602_groupBox.Enabled = false;
+                        enableTriggerGroup(ps2_groupBox);
                     }
                     else if (acc_radioButton.Checked == true)
                     {
-                        Always_groupBox.Enabled = false;
-                        Keyboard_groupBox.Enabled = false;
-                        bt_groupBox.Enabled = false;
-                        ps2_groupBox.Enabled = false;
-                        acc_groupBox.Enabled = true;
-                        wifi602_groupBox.Enabled = false;
+                        enableTriggerGroup(acc_groupBox);
                     }
                     else if (wifi602_radioButton.Checked == true)
                     {
-                        Always_groupBox.Enabled = false;
-                        Keyboard_groupBox.Enabled = false;
-                        bt_groupBox.Enabled = false;
-                        ps2_groupBox.Enabled = false;
-                        acc_groupBox.Enabled = false;
-                        wifi602_groupBox.Enabled = true;
+                        enableTriggerGroup(wifi602_groupBox);
+                    }
+                    else if (analog_radioButton.Checked == true)
+                    {
+                        enableTriggerGroup(analog_groupBox);
                     }
                     ps2DATCombo.Text = gs.ps2pins[0];
                     ps2CMDCombo.Text = gs.ps2pins[1];
@@ -4309,12 +4366,7 @@ namespace _86ME_ver1
                 if (Always_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.always;
-                    Always_groupBox.Enabled = true;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = false;
-                    wifi602_groupBox.Enabled = false;
-                    ps2_groupBox.Enabled = false;
-                    acc_groupBox.Enabled = false;
+                    enableTriggerGroup(Always_groupBox);
                 }
             }
         }
@@ -4326,12 +4378,7 @@ namespace _86ME_ver1
                 if (Keyboard_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.keyboard;
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = true;
-                    bt_groupBox.Enabled = false;
-                    wifi602_groupBox.Enabled = false;
-                    ps2_groupBox.Enabled = false;
-                    acc_groupBox.Enabled = false;
+                    enableTriggerGroup(Keyboard_groupBox);
                 }
             }
         }
@@ -4343,12 +4390,7 @@ namespace _86ME_ver1
                 if (bt_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.bluetooth;
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = true;
-                    wifi602_groupBox.Enabled = false;
-                    ps2_groupBox.Enabled = false;
-                    acc_groupBox.Enabled = false;
+                    enableTriggerGroup(bt_groupBox);
                 }
             }
         }
@@ -4360,12 +4402,7 @@ namespace _86ME_ver1
                 if (ps2_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.ps2;
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = false;
-                    wifi602_groupBox.Enabled = false;
-                    ps2_groupBox.Enabled = true;
-                    acc_groupBox.Enabled = false;
+                    enableTriggerGroup(ps2_groupBox);
                 }
             }
         }
@@ -4377,12 +4414,7 @@ namespace _86ME_ver1
                 if (acc_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.acc;
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = false;
-                    wifi602_groupBox.Enabled = false;
-                    ps2_groupBox.Enabled = false;
-                    acc_groupBox.Enabled = true;
+                    enableTriggerGroup(acc_groupBox);
                 }
             }
         }
@@ -4394,12 +4426,19 @@ namespace _86ME_ver1
                 if (wifi602_radioButton.Checked == true)
                 {
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.wifi602;
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = false;
-                    wifi602_groupBox.Enabled = true;
-                    ps2_groupBox.Enabled = false;
-                    acc_groupBox.Enabled = false;
+                    enableTriggerGroup(wifi602_groupBox);
+                }
+            }
+        }
+
+        private void analog_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
+                if (analog_radioButton.Checked == true)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.analog;
+                    enableTriggerGroup(analog_groupBox);
                 }
             }
         }
@@ -4471,6 +4510,18 @@ namespace _86ME_ver1
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).wifi602_key = wifi602KeyCombo.SelectedIndex;
+        }
+
+        private void analogPinCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_pin = analogPinCombo.SelectedIndex;
+        }
+
+        private void analogCondCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_cond = analogCondCombo.SelectedIndex;
         }
 
         private void ps2DATCombo_SelectedIndexChanged(object sender, EventArgs e)

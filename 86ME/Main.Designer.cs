@@ -87,6 +87,13 @@
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
+            this.analog_radioButton = new System.Windows.Forms.RadioButton();
+            this.analog_groupBox = new System.Windows.Forms.GroupBox();
+            this.analogValueText = new System.Windows.Forms.MaskedTextBox();
+            this.analogCondCombo = new System.Windows.Forms.ComboBox();
+            this.analogValueLabel = new System.Windows.Forms.Label();
+            this.analogPinLabel = new System.Windows.Forms.Label();
+            this.analogPinCombo = new System.Windows.Forms.ComboBox();
             this.wifi602_radioButton = new System.Windows.Forms.RadioButton();
             this.acc_groupBox = new System.Windows.Forms.GroupBox();
             this.getAccData = new System.Windows.Forms.Button();
@@ -190,6 +197,7 @@
             this.MotionConfig.SuspendLayout();
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
+            this.analog_groupBox.SuspendLayout();
             this.acc_groupBox.SuspendLayout();
             this.wifi602_groupBox.SuspendLayout();
             this.ps2_groupBox.SuspendLayout();
@@ -735,6 +743,8 @@
             // 
             this.MotionTrigger.AutoScroll = true;
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
+            this.MotionTrigger.Controls.Add(this.analog_radioButton);
+            this.MotionTrigger.Controls.Add(this.analog_groupBox);
             this.MotionTrigger.Controls.Add(this.wifi602_radioButton);
             this.MotionTrigger.Controls.Add(this.acc_groupBox);
             this.MotionTrigger.Controls.Add(this.wifi602_groupBox);
@@ -753,6 +763,94 @@
             this.MotionTrigger.Size = new System.Drawing.Size(239, 462);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
+            // 
+            // analog_radioButton
+            // 
+            this.analog_radioButton.AutoSize = true;
+            this.analog_radioButton.Location = new System.Drawing.Point(7, 412);
+            this.analog_radioButton.Name = "analog_radioButton";
+            this.analog_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.analog_radioButton.TabIndex = 16;
+            this.analog_radioButton.TabStop = true;
+            this.analog_radioButton.UseVisualStyleBackColor = true;
+            this.analog_radioButton.CheckedChanged += new System.EventHandler(analog_radioButton_CheckedChanged);
+            // 
+            // analog_groupBox
+            // 
+            this.analog_groupBox.Controls.Add(this.analogValueText);
+            this.analog_groupBox.Controls.Add(this.analogCondCombo);
+            this.analog_groupBox.Controls.Add(this.analogValueLabel);
+            this.analog_groupBox.Controls.Add(this.analogPinLabel);
+            this.analog_groupBox.Controls.Add(this.analogPinCombo);
+            this.analog_groupBox.Location = new System.Drawing.Point(27, 412);
+            this.analog_groupBox.Name = "analog_groupBox";
+            this.analog_groupBox.Size = new System.Drawing.Size(192, 58);
+            this.analog_groupBox.TabIndex = 15;
+            this.analog_groupBox.TabStop = false;
+            this.analog_groupBox.Text = "Analog";
+            // 
+            // analogValueText
+            // 
+            this.analogValueText.Location = new System.Drawing.Point(115, 30);
+            this.analogValueText.Name = "analogValueText";
+            this.analogValueText.Size = new System.Drawing.Size(67, 22);
+            this.analogValueText.TabIndex = 43;
+            this.analogValueText.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.analogValueText.TextChanged += new System.EventHandler(this.analogValueText_Changed);
+            this.analogValueText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numbercheck);
+            // 
+            // analogCondCombo
+            // 
+            this.analogCondCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.analogCondCombo.FormattingEnabled = true;
+            this.analogCondCombo.Items.AddRange(new object[] {
+            "=",
+            "≠",
+            "≧",
+            "≦",
+            ">",
+            "<"});
+            this.analogCondCombo.Location = new System.Drawing.Point(63, 32);
+            this.analogCondCombo.Name = "analogCondCombo";
+            this.analogCondCombo.Size = new System.Drawing.Size(46, 20);
+            this.analogCondCombo.TabIndex = 10;
+            this.analogCondCombo.SelectedIndexChanged += new System.EventHandler(this.analogCondCombo_SelectedIndexChanged);
+            // 
+            // analogValueLabel
+            // 
+            this.analogValueLabel.AutoSize = true;
+            this.analogValueLabel.Location = new System.Drawing.Point(115, 17);
+            this.analogValueLabel.Name = "analogValueLabel";
+            this.analogValueLabel.Size = new System.Drawing.Size(35, 12);
+            this.analogValueLabel.TabIndex = 11;
+            this.analogValueLabel.Text = "Value:";
+            // 
+            // analogPinLabel
+            // 
+            this.analogPinLabel.AutoSize = true;
+            this.analogPinLabel.Location = new System.Drawing.Point(14, 17);
+            this.analogPinLabel.Name = "analogPinLabel";
+            this.analogPinLabel.Size = new System.Drawing.Size(23, 12);
+            this.analogPinLabel.TabIndex = 1;
+            this.analogPinLabel.Text = "Pin:";
+            // 
+            // analogPinCombo
+            // 
+            this.analogPinCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.analogPinCombo.FormattingEnabled = true;
+            this.analogPinCombo.Items.AddRange(new object[] {
+            "A0",
+            "A1",
+            "A2",
+            "A3",
+            "A4",
+            "A5",
+            "A6"});
+            this.analogPinCombo.Location = new System.Drawing.Point(16, 32);
+            this.analogPinCombo.Name = "analogPinCombo";
+            this.analogPinCombo.Size = new System.Drawing.Size(41, 20);
+            this.analogPinCombo.TabIndex = 0;
+            this.analogPinCombo.SelectedIndexChanged += new System.EventHandler(this.analogPinCombo_SelectedIndexChanged);
             // 
             // wifi602_radioButton
             // 
@@ -783,7 +881,7 @@
             this.acc_groupBox.Controls.Add(this.accHXText);
             this.acc_groupBox.Controls.Add(this.accLXText);
             this.acc_groupBox.Controls.Add(this.accXLabel);
-            this.acc_groupBox.Location = new System.Drawing.Point(27, 412);
+            this.acc_groupBox.Location = new System.Drawing.Point(27, 476);
             this.acc_groupBox.Name = "acc_groupBox";
             this.acc_groupBox.Size = new System.Drawing.Size(192, 164);
             this.acc_groupBox.TabIndex = 14;
@@ -1001,7 +1099,7 @@
             // acc_radioButton
             // 
             this.acc_radioButton.AutoSize = true;
-            this.acc_radioButton.Location = new System.Drawing.Point(6, 412);
+            this.acc_radioButton.Location = new System.Drawing.Point(6, 476);
             this.acc_radioButton.Name = "acc_radioButton";
             this.acc_radioButton.Size = new System.Drawing.Size(14, 13);
             this.acc_radioButton.TabIndex = 7;
@@ -1867,6 +1965,8 @@
             this.ActionList.ResumeLayout(false);
             this.MotionTrigger.ResumeLayout(false);
             this.MotionTrigger.PerformLayout();
+            this.analog_groupBox.ResumeLayout(false);
+            this.analog_groupBox.PerformLayout();
             this.acc_groupBox.ResumeLayout(false);
             this.acc_groupBox.PerformLayout();
             this.wifi602_groupBox.ResumeLayout(false);
@@ -2039,6 +2139,13 @@
         private System.Windows.Forms.Label wifi602PortLabel;
         private System.Windows.Forms.Label wifi602KeyLabel;
         private System.Windows.Forms.ComboBox wifi602KeyCombo;
+        private System.Windows.Forms.RadioButton analog_radioButton;
+        private System.Windows.Forms.GroupBox analog_groupBox;
+        private System.Windows.Forms.MaskedTextBox analogValueText;
+        private System.Windows.Forms.ComboBox analogCondCombo;
+        private System.Windows.Forms.Label analogValueLabel;
+        private System.Windows.Forms.Label analogPinLabel;
+        private System.Windows.Forms.ComboBox analogPinCombo;
     }
 }
 
