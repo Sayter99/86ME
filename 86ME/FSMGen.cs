@@ -1117,7 +1117,10 @@ namespace _86ME_ver1
                 {
                     ME_If mif = (ME_If)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::IF_" + i + ":");
-                    writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + var2str(mif.right_var) + ")");
+                    if (mif.form == 0)
+                        writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + var2str(mif.right_var) + ")");
+                    else if (mif.form == 1)
+                        writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + mif.right_const + ")");
                     bool hasTarget = false;
                     for (int k = 0; k < m.Events.Count; k++)
                     {

@@ -486,9 +486,7 @@ namespace _86ME_ver1
         public void numbercheck(object sender, KeyPressEventArgs e) //Text number check
         {
             if (((int)e.KeyChar < 48 | (int)e.KeyChar > 57) & (int)e.KeyChar != 8)
-            {
                 e.Handled = true;
-            }
         }
 
         public void floatcheck(object sender, KeyPressEventArgs e) //Text number check
@@ -1113,7 +1111,8 @@ namespace _86ME_ver1
                 else if (m.Events[j] is ME_If)
                 {
                     ME_If mif = (ME_If)m.Events[j];
-                    writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + "\n");
+                    writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + " " + mif.form + " " +
+                                 mif.right_const + "\n");
                 }
             }
             writer.Write("MotionEnd " + m.property + " " + m.comp_range + " " + m.control_method + " " + m.name);
@@ -1729,11 +1728,17 @@ namespace _86ME_ver1
                     }
                     else if (String.Compare(datas[i], "if") == 0)
                     {
+                        int try_out;
                         ME_If mif = new ME_If();
                         mif.left_var = int.Parse(datas[++i]);
                         mif.method = int.Parse(datas[++i]);
                         mif.right_var = int.Parse(datas[++i]);
                         mif.name = datas[++i];
+                        if (int.TryParse(datas[i + 1], out try_out) == true)
+                        {
+                            mif.form = int.Parse(datas[++i]);
+                            mif.right_const = double.Parse(datas[++i]);
+                        }
                         motiontag.Events.Add(mif);
                     }
                 }
@@ -1895,6 +1900,14 @@ namespace _86ME_ver1
                     this.hint_richTextBox.Text = Main_lang_dic["hint9"];
         }
 
+        private void gototext_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == '_')
+                e.Handled = false;
+            else if (char.IsLetterOrDigit(e.KeyChar) == false)
+                e.Handled = true;
+        }
+
         private void gototext(object sender, EventArgs e)// set names of Goto & Flag
         {
             if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Flag)
@@ -1913,8 +1926,12 @@ namespace _86ME_ver1
         {
             ME_If mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
             mif.name = ((MaskedTextBox)sender).Text;
-            Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
-                                                       convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+            if (mif.form == 0)
+                Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                           convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+            else if (mif.form == 1)
+                Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                           mif.right_const.ToString() + " goto " + mif.name;
         }
 
         private void triggerMotion_SelectedIndexChanged(object sender, EventArgs e)
@@ -2046,22 +2063,27 @@ namespace _86ME_ver1
             return 0;
         }
 
-        private bool ifResult(int ind1, int ind2, int method)
+        private bool ifResult(int form, int ind1, int ind2, double c2, int method)
         {
+            double right_val = 0;
+            if (form == 0)
+                right_val = opVal(ind2);
+            else if (form == 1)
+                right_val = c2;
             switch (method)
             {
                 case 0:
-                    return float.Equals(opVal(ind1), opVal(ind2));
+                    return float.Equals(opVal(ind1), right_val);
                 case 1:
-                    return !float.Equals(opVal(ind1), opVal(ind2));
+                    return !float.Equals(opVal(ind1), right_val);
                 case 2:
-                    return opVal(ind1) >= opVal(ind2);
+                    return opVal(ind1) >= right_val;
                 case 3:
-                    return opVal(ind1) <= opVal(ind2);
+                    return opVal(ind1) <= right_val;
                 case 4:
-                    return opVal(ind1) > opVal(ind2);
+                    return opVal(ind1) > right_val;
                 case 5:
-                    return opVal(ind1) < opVal(ind2);
+                    return opVal(ind1) < right_val;
                 default:
                     break;
             }
@@ -2162,18 +2184,30 @@ namespace _86ME_ver1
                     break;
                 case "i0":
                     mif.left_var = ((ComboBox)sender).SelectedIndex;
-                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
-                                                                convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+                    if (mif.form == 0)
+                        Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                    convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+                    else if (mif.form == 1)
+                        Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                    mif.right_const.ToString() + " goto " + mif.name;
                     break;
                 case "i1":
                     mif.method = ((ComboBox)sender).SelectedIndex;
-                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
-                                                                convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+                    if (mif.form == 0)
+                        Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                    convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+                    else if (mif.form == 1)
+                        Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                    mif.right_const.ToString() + " goto " + mif.name;
                     break;
                 case "i2":
                     mif.right_var = ((ComboBox)sender).SelectedIndex;
-                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
-                                                                convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+                    if (mif.form == 0)
+                        Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                    convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+                    else if (mif.form == 1)
+                        Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                    mif.right_const.ToString() + " goto " + mif.name;
                     break;
                 default:
                     break;
@@ -2400,6 +2434,49 @@ namespace _86ME_ver1
             return "";
         }
 
+        private void if_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            ME_If mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            if (((RadioButton)sender).Name == "f1" && ((RadioButton)sender).Checked == true)
+            {
+                mif.form = 0;
+                Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                            convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
+            }
+            else if (((RadioButton)sender).Name == "f2" && ((RadioButton)sender).Checked == true)
+            {
+                mif.form = 1;
+                Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                            mif.right_const.ToString() + " goto " + mif.name;
+            }
+        }
+
+        private void ifconstext(object sender, EventArgs e)
+        {
+            ME_If mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            double output;
+            if (double.TryParse(((MaskedTextBox)sender).Text, out output))
+            {
+                mif.right_const = output;
+                if (mif.form == 1)
+                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                mif.right_const.ToString() + " goto " + mif.name;
+            }
+            else if (((MaskedTextBox)sender).Text == "-" || ((MaskedTextBox)sender).Text == "" ||
+                     ((MaskedTextBox)sender).Text == "-." || ((MaskedTextBox)sender).Text == ".")
+            {
+                mif.right_const = 0;
+                if (mif.form == 1)
+                    Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                                mif.right_const.ToString() + " goto " + mif.name;
+            }
+            else
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg19"]);
+                ((MaskedTextBox)sender).SelectAll();
+            }
+        }
+
         private void Motionlist_SelectedIndexChanged(object sender, EventArgs e) // select motionlist
         {
             if (Motionlist.SelectedIndex == -1)
@@ -2596,6 +2673,7 @@ namespace _86ME_ver1
                     MaskedTextBox xtext = new MaskedTextBox();
                     
                     xtext.Text = ((ME_Flag)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+                    xtext.KeyPress += new KeyPressEventHandler(gototext_KeyPress);
                     xtext.TextChanged += new EventHandler(gototext);
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 45;
@@ -2627,6 +2705,7 @@ namespace _86ME_ver1
                     xlabel.Size = new Size(95, 22);
                     MaskedTextBox xtext = new MaskedTextBox();
                     xtext.Text = ((ME_Goto)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+                    xtext.KeyPress += new KeyPressEventHandler(gototext_KeyPress);
                     xtext.TextChanged += new EventHandler(gototext);
                     xtext.Size = new Size(160, 22);
                     xtext.Left += 100;
@@ -2892,38 +2971,64 @@ namespace _86ME_ver1
 
                     Label lstmt = new Label();
                     lstmt.Text = "if (";
-                    lstmt.Top += 3;
+                    lstmt.Top += 10;
                     lstmt.Left += 5;
-                    lstmt.Font = new Font("Arial", 14);
-                    lstmt.Size = new Size(35, 22);
+                    lstmt.Font = new Font("Arial", 18);
+                    lstmt.Size = new Size(40, 30);
 
                     Label rstmt = new Label();
                     rstmt.Text = ")";
-                    rstmt.Top += 3;
-                    rstmt.Left += 330;
-                    rstmt.Font = new Font("Arial", 14);
-                    rstmt.Size = new Size(22, 22);
+                    rstmt.Top += 10;
+                    rstmt.Left += 360;
+                    rstmt.Font = new Font("Arial", 18);
+                    rstmt.Size = new Size(30, 30);
 
                     Label gstmt = new Label();
                     gstmt.Text = "goto ";
-                    gstmt.Top += 30;
+                    gstmt.Top += 60;
                     gstmt.Left += 5;
                     gstmt.Font = new Font("Arial", 14);
                     gstmt.Size = new Size(50, 22);
 
+                    RadioButton form1 = new RadioButton();
+                    form1.Top += 5;
+                    form1.Left += 223;
+                    form1.Size = new Size(22, 22);
+                    form1.Name = "f1";
+                    RadioButton form2 = new RadioButton();
+                    form2.Top += 35;
+                    form2.Left += 223;
+                    form2.Size = new Size(22, 22);
+                    form2.Name = "f2";
+                    if (mif.form == 0)
+                        form1.Checked = true;
+                    else if (mif.form == 1)
+                        form2.Checked = true;
+                    form1.CheckedChanged += new EventHandler(if_radioButton_CheckedChanged);
+                    form2.CheckedChanged += new EventHandler(if_radioButton_CheckedChanged);
+
                     ComboBox left_var = new ComboBox();
-                    setOpVComboBox(left_var, 5, 50, "i0", false);
+                    setOpVComboBox(left_var, 5, 55, "i0", false);
                     ComboBox op = new ComboBox();
-                    setOpComboBox(op, 5, 155, "i1");
+                    setOpComboBox(op, 5, 160, "i1");
                     ComboBox right_var = new ComboBox();
-                    setOpVComboBox(right_var, 5, 215, "i2", false);
+                    setOpVComboBox(right_var, 5, 245, "i2", false);
+
+                    MaskedTextBox right_const = new MaskedTextBox();
+                    right_const.Size = new Size(100, 22);
+                    right_const.Top += 35;
+                    right_const.Left += 245;
+                    right_const.Text = mif.right_const.ToString();
+                    right_const.KeyPress += new KeyPressEventHandler(floatcheck);
+                    right_const.TextChanged += new EventHandler(ifconstext);
 
                     MaskedTextBox xtextbox = new MaskedTextBox();
                     xtextbox.Size = new Size(80, 22);
-                    xtextbox.Top += 33;
+                    xtextbox.Top += 63;
                     xtextbox.Left += 60;
                     xtextbox.Text = mif.name;
                     xtextbox.TextChanged += new EventHandler(iftext);
+                    xtextbox.KeyPress += new KeyPressEventHandler(gototext_KeyPress);
 
                     left_var.SelectedIndexChanged += new EventHandler(opVar_Handle);
                     op.SelectedIndexChanged += new EventHandler(opVar_Handle);
@@ -2932,9 +3037,12 @@ namespace _86ME_ver1
                     Framelist.Controls.Add(lstmt);
                     Framelist.Controls.Add(rstmt);
                     Framelist.Controls.Add(gstmt);
+                    Framelist.Controls.Add(form1);
+                    Framelist.Controls.Add(form2);
                     Framelist.Controls.Add(left_var);
                     Framelist.Controls.Add(op);
                     Framelist.Controls.Add(right_var);
+                    Framelist.Controls.Add(right_const);
                     Framelist.Controls.Add(xtextbox);
 
                     this.hint_richTextBox.Text = Main_lang_dic["hint16"];
@@ -3512,11 +3620,17 @@ namespace _86ME_ver1
                     }
                     else if (String.Compare(datas[i], "if") == 0)
                     {
+                        int try_out;
                         ME_If mif = new ME_If();
                         mif.left_var = int.Parse(datas[++i]);
                         mif.method = int.Parse(datas[++i]);
                         mif.right_var = int.Parse(datas[++i]);
                         mif.name = datas[++i];
+                        if (int.TryParse(datas[i + 1], out try_out) == true)
+                        {
+                            mif.form = int.Parse(datas[++i]);
+                            mif.right_const = double.Parse(datas[++i]);
+                        }
                         motiontag.Events.Add(mif);
                     }
                 }
@@ -3874,7 +3988,7 @@ namespace _86ME_ver1
                 else if (m.Events[j] is ME_If)
                 {
                     ME_If mif = (ME_If)m.Events[j];
-                    if (ifResult(mif.left_var, mif.right_var, mif.method))
+                    if (ifResult(mif.form, mif.left_var, mif.right_var, mif.right_const, mif.method))
                     {
                         for (int k = 0; k < m.Events.Count; k++)
                         {
@@ -4155,8 +4269,12 @@ namespace _86ME_ver1
                         else if (m.Events[j] is ME_If)
                         {
                             ME_If mif = (ME_If)m.Events[j];
-                            Motionlist.Items.Add("[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
-                                                 convertIndex2Str(mif.right_var, 0) + " goto " + mif.name);
+                            if (mif.form == 0)
+                                Motionlist.Items.Add("[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                     convertIndex2Str(mif.right_var, 0) + " goto " + mif.name);
+                            else if (mif.form == 1)
+                                Motionlist.Items.Add("[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
+                                                     mif.right_const.ToString() + " goto " + mif.name);
                         }
                         else if (m.Events[j] is ME_Compute)
                         {
