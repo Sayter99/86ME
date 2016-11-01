@@ -13,6 +13,8 @@ namespace _86ME_ver1
     public partial class NewMotion : Form
     {
         public Dictionary<string, string> NewMotion_lang_dic;
+        public Dictionary<int, int> mirror = new Dictionary<int,int>();
+        public Dictionary<int, int> last_mirror = new Dictionary<int, int>();
         public Arduino arduino = null;
         public Panel[] fpanel = new Panel[45];
         public Label[] flabel = new Label[45];
@@ -49,6 +51,8 @@ namespace _86ME_ver1
         public int[] channely = new int[45];
         public bool newflag = false;
         string last_picfilename = null;
+        public string mirrorfilename = null;
+        string last_mirrorfilename = null;
         public Thread sync;
         private Progress init_ProcessBar = null;
         private delegate bool IncreaseHandle(int nValue);
@@ -217,6 +221,7 @@ namespace _86ME_ver1
             label4.Text = NewMotion_lang_dic["NewMotion_label4_Text"];
             label5.Text = NewMotion_lang_dic["NewMotion_label5_Text"];
             button3.Text = NewMotion_lang_dic["NewMotion_button3_Text"];
+            button4.Text = NewMotion_lang_dic["NewMotion_button4_Text"];
             init_imu.Text = NewMotion_lang_dic["NewMotion_init_imu_Text"];
             getQ.Text = NewMotion_lang_dic["NewMotion_getQ_Text"];
             ttp.SetToolTip(button3, NewMotion_lang_dic["NewMotion_loadpic_ToolTip"]);
@@ -379,6 +384,8 @@ namespace _86ME_ver1
                 sync = null;
             }
             pic_loaded.Text = last_picfilename;
+            mirror_loaded.Text = last_mirrorfilename;
+            mirror = last_mirror;
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -733,6 +740,63 @@ namespace _86ME_ver1
             {
                 picfilename = null;
             }
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            OpenFileDialog mirror_file = new OpenFileDialog();
+            mirror_file.Filter = "txt(*.txt;*.TXT)|*.txt;*.TXT";
+            mirror_file.FilterIndex = 1;
+            mirror_file.RestoreDirectory = true;
+            mirror_file.FileName = "";
+            if (mirror_file.ShowDialog() == DialogResult.OK)
+            {
+                mirrorfilename = Path.GetFullPath(mirror_file.FileName);
+                if (parseMirror() == false)
+                {
+                    mirrorfilename = last_mirrorfilename;
+                    mirror = last_mirror;
+                    MessageBox.Show(NewMotion_lang_dic["errorMsg23"]);
+                }
+                else
+                {
+                    last_mirrorfilename = mirror_loaded.Text;
+                    string short_mirrorfilename = Path.GetFileName(mirror_file.FileName);
+                    if (short_mirrorfilename.Length < 25)
+                        mirror_loaded.Text = short_mirrorfilename;
+                    else
+                        mirror_loaded.Text = short_mirrorfilename.Substring(0, 22) + "...";
+                }
+            }
+        }
+
+        public bool parseMirror()
+        {
+            mirror.Clear();
+            char[] delimiterChar = { '-' };
+            using (StreamReader reader = new StreamReader(mirrorfilename))
+            {
+                while (!reader.EndOfStream)
+                {
+                    string data = reader.ReadLine();
+                    if (data.Length < 1)
+                        continue;
+                    if (data[0] == '#')
+                        continue;
+                    string[] datas = data.Split(delimiterChar);
+                    if (datas.Length != 2)
+                        return false;
+                    try
+                    {
+                        mirror.Add(int.Parse(datas[0]), int.Parse(datas[1]));
+                    }
+                    catch
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
 
         private void motors_SelectedIndexChanged(object sender, EventArgs e)

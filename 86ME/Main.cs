@@ -991,6 +991,12 @@ namespace _86ME_ver1
                     writer.Write(Motion.channely[i] + " ");
                 writer.Write("\n");
             }
+            if (Motion.mirrorfilename != null)
+            {
+                writer.Write("MirrorFile ");
+                writer.Write("\"" + Motion.mirrorfilename + "\"");
+                writer.Write("\n");
+            }
             // save sync_speed
             writer.WriteLine("Sync " + sync_speed.Value.ToString());
             // save IMU
@@ -1442,6 +1448,36 @@ namespace _86ME_ver1
                         {
                             i++;
                             nMotion.channely[k] = int.Parse(datas[i]);
+                        }
+                    }
+                    else if (String.Compare(datas[i], "MirrorFile") == 0)
+                    {
+                        if (datas[++i][0] == '\"')
+                        {
+                            string mirror = datas[i].Substring(1);
+                            while (mirror[mirror.Length - 1] != '\"')
+                                mirror += " " + datas[++i];
+                            mirror = mirror.Substring(0, mirror.Length - 1);
+                            if (File.Exists(mirror))
+                            {
+                                string short_mirrorfilename = Path.GetFileName(mirror);
+                                nMotion.mirrorfilename = mirror;
+                                if (nMotion.parseMirror())
+                                {
+                                    if (short_mirrorfilename.Length < 25)
+                                        nMotion.mirror_loaded.Text = short_mirrorfilename;
+                                    else
+                                        nMotion.mirror_loaded.Text = short_mirrorfilename.Substring(0, 22) + "...";
+                                }
+                                else
+                                {
+                                    MessageBox.Show(Main_lang_dic["errorMsg23"]);
+                                }
+                            }
+                            else
+                            {
+                                MessageBox.Show(Main_lang_dic["errorMsg23"]);
+                            }
                         }
                     }
                     else if (String.Compare(datas[i], "Servo") == 0)
@@ -3085,36 +3121,39 @@ namespace _86ME_ver1
                 {
                     last_motionlist_idx = -1;
                     motionToolStripMenuItem.Text = Main_lang_dic["AddNewAction_F"];
-                    Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
+                    Motionlist_contextMenuStrip.Items.AddRange(new ToolStripItem[] { motionToolStripMenuItem });
                     Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
-                    Motionlist_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                    Motionlist_contextMenuStrip.Show(new Point(Cursor.Position.X, Cursor.Position.Y));
                     Framelist.Enabled = false;
                 }
                 else if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Frame)
                 {
                     motionToolStripMenuItem.Text = Main_lang_dic["AddNewAction_N"];
-                    Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
+                    Motionlist_contextMenuStrip.Items.AddRange(new ToolStripItem[] { motionToolStripMenuItem });
 
                     if ((((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count - 1) > Motionlist.SelectedIndex)
                         if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1] is ME_Frame)
                             Motionlist_contextMenuStrip.Items.Add(Main_lang_dic["InsertIntermediateFrame"]);
 
-                    for (int i = 2; i < motionevent.Length - 2; i++)
-                        Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
+                    Motionlist_contextMenuStrip.Items.AddRange(new ToolStripMenuItem[] { mirrorToolStripMenuItem });
+                    Motionlist_contextMenuStrip.Items.Add(motionevent[2]);
+                    Motionlist_contextMenuStrip.Items.Add(motionevent[5]);
+
                     Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
-                    Motionlist_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                    Motionlist_contextMenuStrip.Show(new Point(Cursor.Position.X, Cursor.Position.Y));
                 }
                 else if (Motionlist.SelectedItem != null)
                 {
                     motionToolStripMenuItem.Text = Main_lang_dic["AddNewAction_N"];
-                    Motionlist_contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] { motionToolStripMenuItem });
-                    for (int i = 2; i < motionevent.Length - 3; i++)
-                        Motionlist_contextMenuStrip.Items.Add(motionevent[i]);
+                    Motionlist_contextMenuStrip.Items.AddRange(new ToolStripItem[] { motionToolStripMenuItem });
+
+                    Motionlist_contextMenuStrip.Items.Add(motionevent[2]);
+
                     Motionlist_contextMenuStrip.ItemClicked += new ToolStripItemClickedEventHandler(Motionlistevent);
                     Motionlist_contextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(Motionlistcloseevent);
-                    Motionlist_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+                    Motionlist_contextMenuStrip.Show(new Point(Cursor.Position.X, Cursor.Position.Y));
                 }
             }
         }
@@ -3322,6 +3361,102 @@ namespace _86ME_ver1
             Motionlist.SelectedIndex++;
         }
 
+        private void l2rToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (KeyValuePair<int, int> entry in Motion.mirror)
+            {
+                int l = entry.Key;
+                int r = entry.Value;
+                if (l < 45 && r < 45)
+                {
+                    if (String.Compare(Motion.fbox[l].SelectedItem.ToString(), "---noServo---") != 0 &&
+                        String.Compare(Motion.fbox[r].SelectedItem.ToString(), "---noServo---") != 0)
+                    {
+                        int val = int.Parse(ftext[l].Text);
+                        if (val >= (int)Max[r])
+                            ftext[r].Text = Max[r].ToString();
+                        else if (val <= (int)min[r])
+                            ftext[r].Text = min[r].ToString();
+                        else
+                            ftext[r].Text = ftext[l].Text;
+                    }
+                }
+            }
+        }
+
+        private void l2riToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (KeyValuePair<int, int> entry in Motion.mirror)
+            {
+                int l = entry.Key;
+                int r = entry.Value;
+                if (l < 45 && r < 45)
+                {
+                    if (String.Compare(Motion.fbox[l].SelectedItem.ToString(), "---noServo---") != 0 &&
+                        String.Compare(Motion.fbox[r].SelectedItem.ToString(), "---noServo---") != 0)
+                    {
+                        int val = (int)homeframe[l] - int.Parse(ftext[l].Text);
+                        int res = int.Parse(ftext[r].Text);
+                        if (homeframe[r] + val >= Max[r])
+                            res = (int)Max[r];
+                        else if (homeframe[r] + val <= min[r])
+                            res = (int)min[r];
+                        else
+                            res = (int)homeframe[r] + val;
+                        ftext[r].Text = res.ToString();
+                    }
+                }
+            }
+        }
+
+        private void r2lToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (KeyValuePair<int, int> entry in Motion.mirror)
+            {
+                int l = entry.Key;
+                int r = entry.Value;
+                if (l < 45 && r < 45)
+                {
+                    if (String.Compare(Motion.fbox[l].SelectedItem.ToString(), "---noServo---") != 0 &&
+                        String.Compare(Motion.fbox[r].SelectedItem.ToString(), "---noServo---") != 0)
+                    {
+                        int val = int.Parse(ftext[r].Text);
+                        if (val >= (int)Max[l])
+                            ftext[l].Text = Max[l].ToString();
+                        else if (val <= (int)min[l])
+                            ftext[l].Text = min[l].ToString();
+                        else
+                            ftext[l].Text = ftext[r].Text;
+                    }
+                }
+            }
+        }
+
+        private void r2liToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (KeyValuePair<int, int> entry in Motion.mirror)
+            {
+                int l = entry.Key;
+                int r = entry.Value;
+                if (l < 45 && r < 45)
+                {
+                    if (String.Compare(Motion.fbox[l].SelectedItem.ToString(), "---noServo---") != 0 &&
+                        String.Compare(Motion.fbox[r].SelectedItem.ToString(), "---noServo---") != 0)
+                    {
+                        int val = (int)homeframe[r] - int.Parse(ftext[r].Text);
+                        int res = int.Parse(ftext[l].Text);
+                        if (homeframe[l] + val >= Max[l])
+                            res = (int)Max[l];
+                        else if (homeframe[l] + val <= min[l])
+                            res = (int)min[l];
+                        else
+                            res = (int)homeframe[l] + val;
+                        ftext[l].Text = res.ToString();
+                    }
+                }
+            }
+        }
+
         private void NewMotion_Click(object sender, EventArgs e)
         {
             MotionName motionName = new MotionName(Main_lang_dic, "", "Create a New Motion", MotionCombo);
@@ -3349,7 +3484,7 @@ namespace _86ME_ver1
 
         private void EditMotion_Click(object sender, EventArgs e)
         {
-            EditMotion_contextMenuStrip.Show(new Point(System.Windows.Forms.Cursor.Position.X, System.Windows.Forms.Cursor.Position.Y));
+            EditMotion_contextMenuStrip.Show(new Point(Cursor.Position.X, Cursor.Position.Y));
             MotionCombo.Focus();
         }
 
@@ -4804,6 +4939,7 @@ namespace _86ME_ver1
             Action_groupBox.Text = Main_lang_dic["Action_groupBox_Text"];
             ActionList.Text = Main_lang_dic["ActionList_Text"];
             actionToolStripMenuItem.Text = Main_lang_dic["actionToolStripMenuItem_Text"];
+            analog_groupBox.Text = Main_lang_dic["analog_groupBox_Text"];
             autocheck.Text = Main_lang_dic["autocheck_Text"];         
             blockingExplaination.Text = Main_lang_dic["blockingExplaination_Text"];
             bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];

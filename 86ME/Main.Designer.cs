@@ -48,6 +48,11 @@
             this.howToUseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mirrorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.l2rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.l2riToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.r2lToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.r2liToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.motionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -354,6 +359,45 @@
             this.optionToolStripMenuItem.Text = "Options";
             this.optionToolStripMenuItem.Click += new System.EventHandler(this.optionToolStripMenuItem_Click);
             // 
+            // mirrorToolStripMenuItem
+            // 
+            this.mirrorToolStripMenuItem.Name = "mirrorToolStripMenuItem";
+            this.mirrorToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
+            this.mirrorToolStripMenuItem.Text = "Mirror channels";
+            this.mirrorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripMenuItem[]{
+            l2rToolStripMenuItem,
+            l2riToolStripMenuItem,
+            r2lToolStripMenuItem,
+            r2liToolStripMenuItem});
+            // 
+            // l2rToolStripMenuItem
+            // 
+            this.l2rToolStripMenuItem.Name = "l2rToolStripMenuItem";
+            this.l2rToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.l2rToolStripMenuItem.Text = "Left to Right";
+            this.l2rToolStripMenuItem.Click += new System.EventHandler(this.l2rToolStripMenuItem_Click);
+            // 
+            // l2riToolStripMenuItem
+            // 
+            this.l2riToolStripMenuItem.Name = "l2riToolStripMenuItem";
+            this.l2riToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.l2riToolStripMenuItem.Text = "Left to Right with inverse value";
+            this.l2riToolStripMenuItem.Click += new System.EventHandler(this.l2riToolStripMenuItem_Click);
+            // 
+            // r2lToolStripMenuItem
+            // 
+            this.r2lToolStripMenuItem.Name = "r2lToolStripMenuItem";
+            this.r2lToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.r2lToolStripMenuItem.Text = "Right to Left";
+            this.r2lToolStripMenuItem.Click += new System.EventHandler(this.r2lToolStripMenuItem_Click);
+            // 
+            // r2liToolStripMenuItem
+            // 
+            this.r2liToolStripMenuItem.Name = "r2liToolStripMenuItem";
+            this.r2liToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.r2liToolStripMenuItem.Text = "Right to Left with inverse value";
+            this.r2liToolStripMenuItem.Click += new System.EventHandler(this.r2liToolStripMenuItem_Click);
+            // 
             // motionToolStripMenuItem
             // 
             this.motionToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -520,7 +564,7 @@
             // loadFrame
             // 
             this.loadFrame.Image = global::_86ME_ver1.Properties.Resources.load_frame;
-            this.loadFrame.Location = new System.Drawing.Point(52, 47);
+            this.loadFrame.Location = new System.Drawing.Point(52, 46);
             this.loadFrame.Name = "loadFrame";
             this.loadFrame.Size = new System.Drawing.Size(28, 26);
             this.loadFrame.TabIndex = 13;
@@ -531,7 +575,7 @@
             // saveFrame
             // 
             this.saveFrame.Image = global::_86ME_ver1.Properties.Resources.save_frame;
-            this.saveFrame.Location = new System.Drawing.Point(18, 47);
+            this.saveFrame.Location = new System.Drawing.Point(18, 46);
             this.saveFrame.Name = "saveFrame";
             this.saveFrame.Size = new System.Drawing.Size(28, 26);
             this.saveFrame.TabIndex = 12;
@@ -773,7 +817,7 @@
             this.analog_radioButton.TabIndex = 16;
             this.analog_radioButton.TabStop = true;
             this.analog_radioButton.UseVisualStyleBackColor = true;
-            this.analog_radioButton.CheckedChanged += new System.EventHandler(analog_radioButton_CheckedChanged);
+            this.analog_radioButton.CheckedChanged += new System.EventHandler(this.analog_radioButton_CheckedChanged);
             // 
             // analog_groupBox
             // 
@@ -1889,7 +1933,7 @@
             this.DeleteMotionToolStripMenuItem,
             this.ImportMotionToolStripMenuItem,
             this.ExportMotionToolStripMenuItem});
-            this.EditMotion_contextMenuStrip.Name = "contextMenuStrip2";
+            this.EditMotion_contextMenuStrip.Name = "contextMenuStrip3";
             this.EditMotion_contextMenuStrip.Size = new System.Drawing.Size(174, 114);
             // 
             // GenerateAllInOne
@@ -1999,6 +2043,11 @@
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem howToUseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem l2rToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem r2lToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem l2riToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem r2liToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mirrorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem motionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ImportMotionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ExportMotionToolStripMenuItem;

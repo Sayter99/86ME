@@ -39,6 +39,7 @@
             this.label2 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
+            this.button4 = new System.Windows.Forms.Button();
             this.pic_loaded = new System.Windows.Forms.Label();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.getQ = new System.Windows.Forms.Button();
@@ -56,13 +57,14 @@
             this.label4 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
+            this.mirror_loaded = new System.Windows.Forms.Label();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
             // button1
             // 
             this.button1.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button1.Location = new System.Drawing.Point(423, 559);
+            this.button1.Location = new System.Drawing.Point(561, 559);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 23);
             this.button1.TabIndex = 1;
@@ -73,7 +75,7 @@
             // button2
             // 
             this.button2.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button2.Location = new System.Drawing.Point(538, 559);
+            this.button2.Location = new System.Drawing.Point(642, 559);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(75, 23);
             this.button2.TabIndex = 2;
@@ -126,7 +128,7 @@
             // button3
             // 
             this.button3.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button3.Location = new System.Drawing.Point(133, 559);
+            this.button3.Location = new System.Drawing.Point(289, 559);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(125, 23);
             this.button3.TabIndex = 10;
@@ -161,10 +163,22 @@
             this.ttp.ShowAlways = true;
             this.ttp.UseFading = false;
             // 
+            // button4
+            // 
+            this.button4.Cursor = System.Windows.Forms.Cursors.Default;
+            this.button4.Location = new System.Drawing.Point(12, 559);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(125, 23);
+            this.button4.TabIndex = 17;
+            this.button4.Text = "Load Mirror File";
+            this.ttp.SetToolTip(this.button4, "Load a picture for mapping motors while editing frames.");
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
             // pic_loaded
             // 
             this.pic_loaded.AutoSize = true;
-            this.pic_loaded.Location = new System.Drawing.Point(264, 564);
+            this.pic_loaded.Location = new System.Drawing.Point(420, 564);
             this.pic_loaded.Name = "pic_loaded";
             this.pic_loaded.Size = new System.Drawing.Size(0, 12);
             this.pic_loaded.TabIndex = 13;
@@ -334,11 +348,21 @@
             this.label11.TabIndex = 16;
             this.label11.Text = "IMU Src";
             // 
+            // mirror_loaded
+            // 
+            this.mirror_loaded.AutoSize = true;
+            this.mirror_loaded.Location = new System.Drawing.Point(143, 564);
+            this.mirror_loaded.Name = "mirror_loaded";
+            this.mirror_loaded.Size = new System.Drawing.Size(0, 12);
+            this.mirror_loaded.TabIndex = 18;
+            // 
             // NewMotion
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(729, 593);
+            this.Controls.Add(this.mirror_loaded);
+            this.Controls.Add(this.button4);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label10);
@@ -396,5 +420,7 @@
         public System.Windows.Forms.Label label11;
         public System.Windows.Forms.Button getQ;
         public System.Windows.Forms.Button init_imu;
+        public System.Windows.Forms.Label mirror_loaded;
+        private System.Windows.Forms.Button button4;
     }
 }
