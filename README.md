@@ -2,6 +2,11 @@
 ---------
 #### CHANGELOG ####
 
+_VERSION_: v1.91
+
+* Add a new trigger for analog pins.
+* Add a new function "Mirror" that can interchange or copy values between pairs of servos.
+
 _VERSION_: v1.9
 
 * Add a new trigger for LEADIY-WiFi Camera (WiFi602).

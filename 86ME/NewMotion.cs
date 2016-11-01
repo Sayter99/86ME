@@ -762,6 +762,7 @@ namespace _86ME_ver1
                 else
                 {
                     last_mirrorfilename = mirror_loaded.Text;
+                    last_mirror = mirror;
                     string short_mirrorfilename = Path.GetFileName(mirror_file.FileName);
                     if (short_mirrorfilename.Length < 25)
                         mirror_loaded.Text = short_mirrorfilename;

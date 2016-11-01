@@ -59,6 +59,8 @@ namespace _86ME_ver1
         int homecount = 0;
         string load_filename = "";
         string picture_name;
+        string mirror_name;
+        Dictionary<int, int> mirror_dic = new Dictionary<int, int>();
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
@@ -785,6 +787,7 @@ namespace _86ME_ver1
                 gs.ps2pins[3] = "0";
 
                 Motion = nMotion;
+
                 if(Robot_pictureBox.Image != null)
                     Robot_pictureBox.Image = null;
                 if (nMotion.picfilename != null)
@@ -792,6 +795,22 @@ namespace _86ME_ver1
                     picture_name = nMotion.picfilename;
                     draw_background();
                 }
+                else
+                {
+                    picture_name = null;
+                }
+
+                if (nMotion.mirrorfilename != null)
+                {
+                    mirror_name = nMotion.mirrorfilename;
+                    mirror_dic = nMotion.mirror;
+                }
+                else
+                {
+                    mirror_name = null;
+                    mirror_dic.Clear();
+                }
+
                 this.MotionConfig.SelectedIndex = 0;
                 this.hint_richTextBox.Text = Main_lang_dic["hint1"];
                 this.MotionConfig.Enabled = false;
@@ -845,6 +864,12 @@ namespace _86ME_ver1
                     }
                 }
 
+                if (Motion.mirrorfilename != null)
+                {
+                    mirror_name = Motion.mirrorfilename;
+                    mirror_dic = Motion.mirror;
+                }
+
                 if (board_ver86 != Motion.comboBox1.SelectedIndex)
                     change_board = true;
 
@@ -883,7 +908,28 @@ namespace _86ME_ver1
                 {
                     Motion.SetIMUUI(used_imu);
                 }
+
                 Motion.picfilename = picture_name;
+                string short_picfilename = Path.GetFileName(picture_name);
+                if (short_picfilename != null)
+                {
+                    if (short_picfilename.Length < 25)
+                        Motion.pic_loaded.Text = short_picfilename;
+                    else
+                        Motion.pic_loaded.Text = short_picfilename.Substring(0, 22) + "...";
+                }
+
+                Motion.mirrorfilename = mirror_name;
+                Motion.mirror = mirror_dic;
+                string short_mirrorfilename = Path.GetFileName(mirror_name);
+                if (short_mirrorfilename != null)
+                {
+                    if (short_mirrorfilename.Length < 25)
+                        Motion.mirror_loaded.Text = short_mirrorfilename;
+                    else
+                        Motion.mirror_loaded.Text = short_mirrorfilename.Substring(0, 22) + "...";
+                }
+
                 Motion.comboBox1.SelectedIndex = board_ver86;
                 Motion.comboBox2.SelectedIndex = used_imu;
                 Motion.maskedTextBox1.Text = init_quaternion[0].ToString();
@@ -1168,6 +1214,7 @@ namespace _86ME_ver1
 
         private void load_project(string filename)
         {
+            mirror_name = null;
             picture_name = null;
             bool picmode = false;
             NewMotion nMotion = new NewMotion(Main_lang_dic);
@@ -1471,6 +1518,8 @@ namespace _86ME_ver1
                                 }
                                 else
                                 {
+                                    nMotion.mirrorfilename = null;
+                                    nMotion.mirror.Clear();
                                     MessageBox.Show(Main_lang_dic["errorMsg23"]);
                                 }
                             }
@@ -1799,6 +1848,17 @@ namespace _86ME_ver1
             {
                 nMotion.picfilename = null;
                 Robot_pictureBox.Image = null;
+            }
+
+            if (nMotion.mirrorfilename != null)
+            {
+                mirror_name = nMotion.mirrorfilename;
+                mirror_dic = nMotion.mirror;
+            }
+            else
+            {
+                mirror_name = null;
+                mirror_dic.Clear();
             }
 
             initAnalog();
