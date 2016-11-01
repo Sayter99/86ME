@@ -128,7 +128,7 @@
             // button3
             // 
             this.button3.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button3.Location = new System.Drawing.Point(289, 559);
+            this.button3.Location = new System.Drawing.Point(12, 559);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(125, 23);
             this.button3.TabIndex = 10;
@@ -166,19 +166,19 @@
             // button4
             // 
             this.button4.Cursor = System.Windows.Forms.Cursors.Default;
-            this.button4.Location = new System.Drawing.Point(12, 559);
+            this.button4.Location = new System.Drawing.Point(289, 559);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(125, 23);
             this.button4.TabIndex = 17;
-            this.button4.Text = "Load Mirror File";
-            this.ttp.SetToolTip(this.button4, "Load a picture for mapping motors while editing frames.");
+            this.button4.Text = "Load Mirror Config";
+            this.ttp.SetToolTip(this.button4, "Load a mirror file containing the pairwise relationship of servos.");
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // pic_loaded
             // 
             this.pic_loaded.AutoSize = true;
-            this.pic_loaded.Location = new System.Drawing.Point(420, 564);
+            this.pic_loaded.Location = new System.Drawing.Point(143, 564);
             this.pic_loaded.Name = "pic_loaded";
             this.pic_loaded.Size = new System.Drawing.Size(0, 12);
             this.pic_loaded.TabIndex = 13;
@@ -351,7 +351,7 @@
             // mirror_loaded
             // 
             this.mirror_loaded.AutoSize = true;
-            this.mirror_loaded.Location = new System.Drawing.Point(143, 564);
+            this.mirror_loaded.Location = new System.Drawing.Point(420, 564);
             this.mirror_loaded.Name = "mirror_loaded";
             this.mirror_loaded.Size = new System.Drawing.Size(0, 12);
             this.mirror_loaded.TabIndex = 18;

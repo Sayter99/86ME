@@ -3136,7 +3136,8 @@ namespace _86ME_ver1
                         if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex + 1] is ME_Frame)
                             Motionlist_contextMenuStrip.Items.Add(Main_lang_dic["InsertIntermediateFrame"]);
 
-                    Motionlist_contextMenuStrip.Items.AddRange(new ToolStripMenuItem[] { mirrorToolStripMenuItem });
+                    if (Motion.mirrorfilename != null)
+                        Motionlist_contextMenuStrip.Items.AddRange(new ToolStripMenuItem[] { mirrorToolStripMenuItem });
                     Motionlist_contextMenuStrip.Items.Add(motionevent[2]);
                     Motionlist_contextMenuStrip.Items.Add(motionevent[5]);
 
@@ -3359,6 +3360,38 @@ namespace _86ME_ver1
             Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[GotoMotion]");
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, t);
             Motionlist.SelectedIndex++;
+        }
+
+        private void interchangeToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            foreach (KeyValuePair<int, int> entry in Motion.mirror)
+            {
+                int l = entry.Key;
+                int r = entry.Value;
+                if (l < 45 && r < 45)
+                {
+                    if (String.Compare(Motion.fbox[l].SelectedItem.ToString(), "---noServo---") != 0 &&
+                        String.Compare(Motion.fbox[r].SelectedItem.ToString(), "---noServo---") != 0)
+                    {
+                        int l_val = int.Parse(ftext[l].Text);
+                        int r_val = int.Parse(ftext[r].Text);
+
+                        if (l_val >= (int)Max[r])
+                            ftext[r].Text = Max[r].ToString();
+                        else if (l_val <= (int)min[r])
+                            ftext[r].Text = min[r].ToString();
+                        else
+                            ftext[r].Text = l_val.ToString();
+
+                        if (r_val >= (int)Max[l])
+                            ftext[l].Text = Max[l].ToString();
+                        else if (r_val <= (int)min[l])
+                            ftext[l].Text = min[l].ToString();
+                        else
+                            ftext[l].Text = r_val.ToString();
+                    }
+                }
+            }
         }
 
         private void l2rToolStripMenuItem_Click(object sender, EventArgs e)

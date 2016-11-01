@@ -49,6 +49,7 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mirrorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.interchangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.l2rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.l2riToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.r2lToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -363,39 +364,47 @@
             // 
             this.mirrorToolStripMenuItem.Name = "mirrorToolStripMenuItem";
             this.mirrorToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
-            this.mirrorToolStripMenuItem.Text = "Mirror channels";
+            this.mirrorToolStripMenuItem.Text = "Mirror";
             this.mirrorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripMenuItem[]{
             l2rToolStripMenuItem,
             l2riToolStripMenuItem,
             r2lToolStripMenuItem,
-            r2liToolStripMenuItem});
+            r2liToolStripMenuItem,
+            interchangeToolStripMenuItem});
             // 
             // l2rToolStripMenuItem
             // 
             this.l2rToolStripMenuItem.Name = "l2rToolStripMenuItem";
             this.l2rToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.l2rToolStripMenuItem.Text = "Left to Right";
+            this.l2rToolStripMenuItem.Text = "Copy Left to Right";
             this.l2rToolStripMenuItem.Click += new System.EventHandler(this.l2rToolStripMenuItem_Click);
+            // 
+            // interchangeToolStripMenuItem
+            // 
+            this.interchangeToolStripMenuItem.Name = "interchangeToolStripMenuItem";
+            this.interchangeToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.interchangeToolStripMenuItem.Text = "Interchange";
+            this.interchangeToolStripMenuItem.Click += new System.EventHandler(this.interchangeToolStripMenuItem_Click);
             // 
             // l2riToolStripMenuItem
             // 
             this.l2riToolStripMenuItem.Name = "l2riToolStripMenuItem";
             this.l2riToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.l2riToolStripMenuItem.Text = "Left to Right with inverse value";
+            this.l2riToolStripMenuItem.Text = "Copy Left to Right (Inverse)";
             this.l2riToolStripMenuItem.Click += new System.EventHandler(this.l2riToolStripMenuItem_Click);
             // 
             // r2lToolStripMenuItem
             // 
             this.r2lToolStripMenuItem.Name = "r2lToolStripMenuItem";
             this.r2lToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.r2lToolStripMenuItem.Text = "Right to Left";
+            this.r2lToolStripMenuItem.Text = "Copy Right to Left";
             this.r2lToolStripMenuItem.Click += new System.EventHandler(this.r2lToolStripMenuItem_Click);
             // 
             // r2liToolStripMenuItem
             // 
             this.r2liToolStripMenuItem.Name = "r2liToolStripMenuItem";
             this.r2liToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.r2liToolStripMenuItem.Text = "Right to Left with inverse value";
+            this.r2liToolStripMenuItem.Text = "Copy Right to Left (Inverse)";
             this.r2liToolStripMenuItem.Click += new System.EventHandler(this.r2liToolStripMenuItem_Click);
             // 
             // motionToolStripMenuItem
@@ -2047,6 +2056,7 @@
         private System.Windows.Forms.ToolStripMenuItem r2lToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem l2riToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem r2liToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem interchangeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem mirrorToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem motionToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem ImportMotionToolStripMenuItem;

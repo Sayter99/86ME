@@ -226,6 +226,7 @@ namespace _86ME_ver1
             getQ.Text = NewMotion_lang_dic["NewMotion_getQ_Text"];
             ttp.SetToolTip(button3, NewMotion_lang_dic["NewMotion_loadpic_ToolTip"]);
             ttp.SetToolTip(checkBox2, NewMotion_lang_dic["NewMotion_minMax_ToolTip"]);
+            ttp.SetToolTip(button4, NewMotion_lang_dic["NewMotion_button4_ToolTip"]);
             for (int i = 0; i < 45; i++)
             {
                 fcheck[i].Text = NewMotion_lang_dic["NewMotion_fcheckText"];
@@ -745,7 +746,7 @@ namespace _86ME_ver1
         private void button4_Click(object sender, EventArgs e)
         {
             OpenFileDialog mirror_file = new OpenFileDialog();
-            mirror_file.Filter = "txt(*.txt;*.TXT)|*.txt;*.TXT";
+            mirror_file.Filter = "cfg(*.cfg;*.CFG)|*.cfg;*.CFG";
             mirror_file.FilterIndex = 1;
             mirror_file.RestoreDirectory = true;
             mirror_file.FileName = "";
