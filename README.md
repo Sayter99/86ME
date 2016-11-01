@@ -92,7 +92,7 @@ _VERSION_: v1.0
 #### INSTALLATION ####
 
 1. System reqirement: Windows XP/Vista/7/8/8.1/10 with .NET framework 4.
-2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.9.zip).
+2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.91.zip).
 3. Unzip 86ME and execute 86ME.exe to start.
 
 #### DOCUMENTS ####
@@ -100,6 +100,7 @@ _VERSION_: v1.0
 The 86ME tutorial pages for installation instructions and usage.
 
 * [Current Ver](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Version 1.9](http://www.86duino.com/index.php?p=17180&lang=TW)
 * [Version 1.7](http://www.86duino.com/index.php?p=15750&lang=TW)
 * [Version 1.6](http://www.86duino.com/index.php?p=14738&lang=TW)
 * [Version 1.5](http://www.86duino.com/index.php?p=13111&lang=TW)
