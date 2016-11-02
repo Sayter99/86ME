@@ -425,131 +425,137 @@ namespace _86ME_ver1
         {
             while (_serialPort.IsOpen)
             {
-                if (_serialPort.BytesToRead > 0)
+                try
                 {
-                    lock (this)
+                    if (_serialPort.BytesToRead > 0)
                     {
-                        int inputData = _serialPort.ReadByte();
-                        int command;
-
-                        if (parsingSysex)
+                        lock (this)
                         {
-                            if (inputData == END_SYSEX)
+                            int inputData = _serialPort.ReadByte();
+                            int command;
+
+                            if (parsingSysex)
                             {
-                                parsingSysex = false;
-                                if (storedInputData[0] == 0x6A)
+                                if (inputData == END_SYSEX)
                                 {
-                                    captured_data = (int)((storedInputData[2] << 7) + storedInputData[1]);
-                                    dataRecieved = true;
-                                }
-                                else if (storedInputData[0] == 0x6E) // PIN_STATE_RESPONSE
-                                {
-                                    if (storedInputData[1] == 0)
+                                    parsingSysex = false;
+                                    if (storedInputData[0] == 0x6A)
                                     {
-                                        byte[] b2u = new byte[4];
-                                        for (int i = 0; i < 4; i++)
-                                            b2u[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
-                                        captured_data = System.BitConverter.ToUInt32(b2u, 0);
+                                        captured_data = (int)((storedInputData[2] << 7) + storedInputData[1]);
                                         dataRecieved = true;
                                     }
-                                    else if (storedInputData[1] == 1)
+                                    else if (storedInputData[0] == 0x6E) // PIN_STATE_RESPONSE
                                     {
-                                        byte[] b2i = new byte[4];
-                                        for (int i = 0; i < 4; i++)
-                                            b2i[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
-                                        captured_data = System.BitConverter.ToInt32(b2i, 0);
-                                        dataRecieved = true;
-                                    }
-                                    else if (storedInputData[1] < 8 && storedInputData[1] >= 2)
-                                    {
-                                        captured_data = (int)((storedInputData[3] << 7) + storedInputData[2]);
-                                        dataRecieved = true;
-                                    }
-                                    else
-                                    {
-                                        byte[] b2f = new byte[4];
-                                        for (int i = 0; i < 4; i++)
-                                            b2f[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
-                                        captured_float = System.BitConverter.ToSingle(b2f, 0);
-                                        dataRecieved = true;
-                                    }
-                                }
-                                else if (storedInputData[0] == 0x77) // I2C_REPLY
-                                {
-                                    if (storedInputData[1] == 0x00) // Quaternion
-                                    {
-                                        for (int i = 0; i < 4; i++)
+                                        if (storedInputData[1] == 0)
+                                        {
+                                            byte[] b2u = new byte[4];
+                                            for (int i = 0; i < 4; i++)
+                                                b2u[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
+                                            captured_data = System.BitConverter.ToUInt32(b2u, 0);
+                                            dataRecieved = true;
+                                        }
+                                        else if (storedInputData[1] == 1)
+                                        {
+                                            byte[] b2i = new byte[4];
+                                            for (int i = 0; i < 4; i++)
+                                                b2i[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
+                                            captured_data = System.BitConverter.ToInt32(b2i, 0);
+                                            dataRecieved = true;
+                                        }
+                                        else if (storedInputData[1] < 8 && storedInputData[1] >= 2)
+                                        {
+                                            captured_data = (int)((storedInputData[3] << 7) + storedInputData[2]);
+                                            dataRecieved = true;
+                                        }
+                                        else
                                         {
                                             byte[] b2f = new byte[4];
-                                            for (int j = 0; j < 4; j++)
-                                                b2f[j] = (byte)((storedInputData[2 + j + i*4]) | ((storedInputData[18 + i] << (4 + j)) & 0x80));
-                                            quaternion[i] = System.BitConverter.ToSingle(b2f, 0);
+                                            for (int i = 0; i < 4; i++)
+                                                b2f[i] = (byte)((storedInputData[2 + i]) | ((storedInputData[6] << (4 + i)) & 0x80));
+                                            captured_float = System.BitConverter.ToSingle(b2f, 0);
+                                            dataRecieved = true;
                                         }
-                                        dataRecieved = true;
                                     }
-                                    else if (storedInputData[1] == 0x01) // IMU_init
+                                    else if (storedInputData[0] == 0x77) // I2C_REPLY
                                     {
-                                        captured_data = storedInputData[2] & 0x7F;
-                                        dataRecieved = true;
+                                        if (storedInputData[1] == 0x00) // Quaternion
+                                        {
+                                            for (int i = 0; i < 4; i++)
+                                            {
+                                                byte[] b2f = new byte[4];
+                                                for (int j = 0; j < 4; j++)
+                                                    b2f[j] = (byte)((storedInputData[2 + j + i * 4]) | ((storedInputData[18 + i] << (4 + j)) & 0x80));
+                                                quaternion[i] = System.BitConverter.ToSingle(b2f, 0);
+                                            }
+                                            dataRecieved = true;
+                                        }
+                                        else if (storedInputData[1] == 0x01) // IMU_init
+                                        {
+                                            captured_data = storedInputData[2] & 0x7F;
+                                            dataRecieved = true;
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    storedInputData[sysexBytesRead] = inputData;
+                                    sysexBytesRead++;
+                                }
+                            }
+                            else if (waitForData > 0 && inputData < 128)
+                            {
+                                waitForData--;
+                                storedInputData[waitForData] = inputData;
+
+                                if (executeMultiByteCommand != 0 && waitForData == 0)
+                                {
+                                    //we got everything
+                                    switch (executeMultiByteCommand)
+                                    {
+                                        case DIGITAL_MESSAGE:
+                                            setDigitalInputs(multiByteChannel, (storedInputData[0] << 7) + storedInputData[1]);
+                                            break;
+                                        case ANALOG_MESSAGE:
+                                            setAnalogInput(multiByteChannel, (storedInputData[0] << 7) + storedInputData[1]);
+                                            break;
+                                        case REPORT_VERSION:
+                                            setVersion(storedInputData[1], storedInputData[0]);
+                                            break;
                                     }
                                 }
                             }
                             else
                             {
-                                storedInputData[sysexBytesRead] = inputData;
-                                sysexBytesRead++;
-                            }
-                        }
-                        else if (waitForData > 0 && inputData < 128)
-                        {
-                            waitForData--;
-                            storedInputData[waitForData] = inputData;
-
-                            if (executeMultiByteCommand != 0 && waitForData == 0)
-                            {
-                                //we got everything
-                                switch (executeMultiByteCommand)
+                                if (inputData < 0xF0)
+                                {
+                                    command = inputData & 0xF0;
+                                    multiByteChannel = inputData & 0x0F;
+                                }
+                                else
+                                {
+                                    command = inputData;
+                                    // commands in the 0xF* range don't use channel data
+                                }
+                                switch (command)
                                 {
                                     case DIGITAL_MESSAGE:
-                                        setDigitalInputs(multiByteChannel, (storedInputData[0] << 7) + storedInputData[1]);
-                                        break;
+
                                     case ANALOG_MESSAGE:
-                                        setAnalogInput(multiByteChannel, (storedInputData[0] << 7) + storedInputData[1]);
-                                        break;
                                     case REPORT_VERSION:
-                                        setVersion(storedInputData[1], storedInputData[0]);
+                                        waitForData = 2;
+                                        executeMultiByteCommand = command;
+                                        break;
+                                    case START_SYSEX:
+                                        parsingSysex = true;
+                                        sysexBytesRead = 0;
                                         break;
                                 }
-                            }
-                        }
-                        else
-                        {
-                            if (inputData < 0xF0)
-                            {
-                                command = inputData & 0xF0;
-                                multiByteChannel = inputData & 0x0F;
-                            }
-                            else
-                            {
-                                command = inputData;
-                                // commands in the 0xF* range don't use channel data
-                            }
-                            switch (command)
-                            {
-                                case DIGITAL_MESSAGE:
-
-                                case ANALOG_MESSAGE:
-                                case REPORT_VERSION:
-                                    waitForData = 2;
-                                    executeMultiByteCommand = command;
-                                    break;
-                                case START_SYSEX:
-                                    parsingSysex = true;
-                                    sysexBytesRead = 0;
-                                    break;
                             }
                         }
                     }
+                }
+                catch
+                {
                 }
             }
         }
