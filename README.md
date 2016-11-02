@@ -2,7 +2,7 @@
 ---------
 #### CHANGELOG ####
 
-_VERSION_: v1.91
+_VERSION_: v1.95
 
 * Add a new trigger for analog pins.
 * Add a new function "Mirror" that can interchange or copy values between pairs of servos.
@@ -92,7 +92,7 @@ _VERSION_: v1.0
 #### INSTALLATION ####
 
 1. System reqirement: Windows XP/Vista/7/8/8.1/10 with .NET framework 4.
-2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.91.zip).
+2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.95.zip).
 3. Unzip 86ME and execute 86ME.exe to start.
 
 #### DOCUMENTS ####
