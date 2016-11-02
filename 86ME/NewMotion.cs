@@ -14,7 +14,6 @@ namespace _86ME_ver1
     {
         public Dictionary<string, string> NewMotion_lang_dic;
         public Dictionary<int, int> mirror = new Dictionary<int,int>();
-        public Dictionary<int, int> last_mirror = new Dictionary<int, int>();
         public Arduino arduino = null;
         public Panel[] fpanel = new Panel[45];
         public Label[] flabel = new Label[45];
@@ -50,9 +49,7 @@ namespace _86ME_ver1
         public int[] channelx = new int[45];
         public int[] channely = new int[45];
         public bool newflag = false;
-        string last_picfilename = null;
         public string mirrorfilename = null;
-        string last_mirrorfilename = null;
         public Thread sync;
         private Progress init_ProcessBar = null;
         private delegate bool IncreaseHandle(int nValue);
@@ -384,9 +381,6 @@ namespace _86ME_ver1
                 sync.Abort();
                 sync = null;
             }
-            pic_loaded.Text = last_picfilename;
-            mirror_loaded.Text = last_mirrorfilename;
-            mirror = last_mirror;
             this.DialogResult = DialogResult.Cancel;
         }
 
@@ -729,7 +723,6 @@ namespace _86ME_ver1
             if (ofdPic.ShowDialog() == DialogResult.OK)
             {
                 picfilename = Path.GetFullPath(ofdPic.FileName);
-                last_picfilename = pic_loaded.Text;
                 string short_picfilename = Path.GetFileName(ofdPic.FileName);
                 if (short_picfilename.Length < 25)
                     pic_loaded.Text = short_picfilename;
@@ -755,14 +748,12 @@ namespace _86ME_ver1
                 mirrorfilename = Path.GetFullPath(mirror_file.FileName);
                 if (parseMirror() == false)
                 {
-                    mirrorfilename = last_mirrorfilename;
-                    mirror = last_mirror;
+                    mirrorfilename = null;
+                    mirror.Clear();
                     MessageBox.Show(NewMotion_lang_dic["errorMsg23"]);
                 }
                 else
                 {
-                    last_mirrorfilename = mirror_loaded.Text;
-                    last_mirror = mirror;
                     string short_mirrorfilename = Path.GetFileName(mirror_file.FileName);
                     if (short_mirrorfilename.Length < 25)
                         mirror_loaded.Text = short_mirrorfilename;
@@ -776,6 +767,8 @@ namespace _86ME_ver1
         {
             mirror.Clear();
             char[] delimiterChar = { '-' };
+            if (mirrorfilename == null)
+                return false;
             using (StreamReader reader = new StreamReader(mirrorfilename))
             {
                 while (!reader.EndOfStream)

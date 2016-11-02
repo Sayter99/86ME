@@ -58,9 +58,8 @@ namespace _86ME_ver1
         int framecount = 0;
         int homecount = 0;
         string load_filename = "";
-        string picture_name;
-        string mirror_name;
-        Dictionary<int, int> mirror_dic = new Dictionary<int, int>();
+        string picture_name = null;
+        string mirror_name = null;
         uint[] homeframe = new uint[45];
         uint[] Max = new uint[45];
         uint[] min = new uint[45];
@@ -803,12 +802,10 @@ namespace _86ME_ver1
                 if (nMotion.mirrorfilename != null)
                 {
                     mirror_name = nMotion.mirrorfilename;
-                    mirror_dic = nMotion.mirror;
                 }
                 else
                 {
                     mirror_name = null;
-                    mirror_dic.Clear();
                 }
 
                 this.MotionConfig.SelectedIndex = 0;
@@ -867,7 +864,6 @@ namespace _86ME_ver1
                 if (Motion.mirrorfilename != null)
                 {
                     mirror_name = Motion.mirrorfilename;
-                    mirror_dic = Motion.mirror;
                 }
 
                 if (board_ver86 != Motion.comboBox1.SelectedIndex)
@@ -910,6 +906,7 @@ namespace _86ME_ver1
                 }
 
                 Motion.picfilename = picture_name;
+                Motion.newflag = false;
                 string short_picfilename = Path.GetFileName(picture_name);
                 if (short_picfilename != null)
                 {
@@ -918,16 +915,26 @@ namespace _86ME_ver1
                     else
                         Motion.pic_loaded.Text = short_picfilename.Substring(0, 22) + "...";
                 }
+                else
+                {
+                    Motion.pic_loaded.Text = "";
+                }
 
                 Motion.mirrorfilename = mirror_name;
-                Motion.mirror = mirror_dic;
-                string short_mirrorfilename = Path.GetFileName(mirror_name);
-                if (short_mirrorfilename != null)
+                if (Motion.parseMirror())
                 {
-                    if (short_mirrorfilename.Length < 25)
-                        Motion.mirror_loaded.Text = short_mirrorfilename;
-                    else
-                        Motion.mirror_loaded.Text = short_mirrorfilename.Substring(0, 22) + "...";
+                    string short_mirrorfilename = Path.GetFileName(mirror_name);
+                    if (short_mirrorfilename != null)
+                    {
+                        if (short_mirrorfilename.Length < 25)
+                            Motion.mirror_loaded.Text = short_mirrorfilename;
+                        else
+                            Motion.mirror_loaded.Text = short_mirrorfilename.Substring(0, 22) + "...";
+                    }
+                }
+                else
+                {
+                    Motion.mirror_loaded.Text = "";
                 }
 
                 Motion.comboBox1.SelectedIndex = board_ver86;
@@ -1853,12 +1860,10 @@ namespace _86ME_ver1
             if (nMotion.mirrorfilename != null)
             {
                 mirror_name = nMotion.mirrorfilename;
-                mirror_dic = nMotion.mirror;
             }
             else
             {
                 mirror_name = null;
-                mirror_dic.Clear();
             }
 
             initAnalog();
