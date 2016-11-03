@@ -189,7 +189,7 @@ namespace _86ME_ver1
         {
             if (readThread != null)
             {
-                readThread.Join(500);
+                readThread.Abort();
                 readThread = null;
             }
             try
