@@ -49,11 +49,11 @@
             this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mirrorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.interchangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.l2rToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.l2riToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.r2lToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.r2liToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.interchangeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.motionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.frameToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.homeToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -93,6 +93,16 @@
             this.ActionList = new System.Windows.Forms.TabPage();
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
+            this.ESP8266_groupBox = new System.Windows.Forms.GroupBox();
+            this.ESP8266ModeCombo = new System.Windows.Forms.ComboBox();
+            this.ESP8266ModeLabel = new System.Windows.Forms.Label();
+            this.ESP8266BaudCombo = new System.Windows.Forms.ComboBox();
+            this.ESP8266BaudLabel = new System.Windows.Forms.Label();
+            this.ESP8266PortCombo = new System.Windows.Forms.ComboBox();
+            this.ESP8266PortLabel = new System.Windows.Forms.Label();
+            this.ESP8266KeyLabel = new System.Windows.Forms.Label();
+            this.ESP8266KeyText = new System.Windows.Forms.TextBox();
+            this.ESP8266_radioButton = new System.Windows.Forms.RadioButton();
             this.analog_radioButton = new System.Windows.Forms.RadioButton();
             this.analog_groupBox = new System.Windows.Forms.GroupBox();
             this.analogValueText = new System.Windows.Forms.MaskedTextBox();
@@ -191,6 +201,8 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.ESP8266CHPDCombo = new System.Windows.Forms.ComboBox();
+            this.ESP8266CHPDLabel = new System.Windows.Forms.Label();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -203,6 +215,7 @@
             this.MotionConfig.SuspendLayout();
             this.ActionList.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
+            this.ESP8266_groupBox.SuspendLayout();
             this.analog_groupBox.SuspendLayout();
             this.acc_groupBox.SuspendLayout();
             this.wifi602_groupBox.SuspendLayout();
@@ -362,50 +375,50 @@
             // 
             // mirrorToolStripMenuItem
             // 
+            this.mirrorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.l2rToolStripMenuItem,
+            this.l2riToolStripMenuItem,
+            this.r2lToolStripMenuItem,
+            this.r2liToolStripMenuItem,
+            this.interchangeToolStripMenuItem});
             this.mirrorToolStripMenuItem.Name = "mirrorToolStripMenuItem";
             this.mirrorToolStripMenuItem.Size = new System.Drawing.Size(61, 22);
             this.mirrorToolStripMenuItem.Text = "Mirror";
-            this.mirrorToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripMenuItem[]{
-            l2rToolStripMenuItem,
-            l2riToolStripMenuItem,
-            r2lToolStripMenuItem,
-            r2liToolStripMenuItem,
-            interchangeToolStripMenuItem});
             // 
             // l2rToolStripMenuItem
             // 
             this.l2rToolStripMenuItem.Name = "l2rToolStripMenuItem";
-            this.l2rToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.l2rToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.l2rToolStripMenuItem.Text = "Copy Left to Right";
             this.l2rToolStripMenuItem.Click += new System.EventHandler(this.l2rToolStripMenuItem_Click);
-            // 
-            // interchangeToolStripMenuItem
-            // 
-            this.interchangeToolStripMenuItem.Name = "interchangeToolStripMenuItem";
-            this.interchangeToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
-            this.interchangeToolStripMenuItem.Text = "Interchange";
-            this.interchangeToolStripMenuItem.Click += new System.EventHandler(this.interchangeToolStripMenuItem_Click);
             // 
             // l2riToolStripMenuItem
             // 
             this.l2riToolStripMenuItem.Name = "l2riToolStripMenuItem";
-            this.l2riToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.l2riToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.l2riToolStripMenuItem.Text = "Copy Left to Right (Inverse)";
             this.l2riToolStripMenuItem.Click += new System.EventHandler(this.l2riToolStripMenuItem_Click);
             // 
             // r2lToolStripMenuItem
             // 
             this.r2lToolStripMenuItem.Name = "r2lToolStripMenuItem";
-            this.r2lToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.r2lToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.r2lToolStripMenuItem.Text = "Copy Right to Left";
             this.r2lToolStripMenuItem.Click += new System.EventHandler(this.r2lToolStripMenuItem_Click);
             // 
             // r2liToolStripMenuItem
             // 
             this.r2liToolStripMenuItem.Name = "r2liToolStripMenuItem";
-            this.r2liToolStripMenuItem.Size = new System.Drawing.Size(244, 22);
+            this.r2liToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
             this.r2liToolStripMenuItem.Text = "Copy Right to Left (Inverse)";
             this.r2liToolStripMenuItem.Click += new System.EventHandler(this.r2liToolStripMenuItem_Click);
+            // 
+            // interchangeToolStripMenuItem
+            // 
+            this.interchangeToolStripMenuItem.Name = "interchangeToolStripMenuItem";
+            this.interchangeToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.interchangeToolStripMenuItem.Text = "Interchange";
+            this.interchangeToolStripMenuItem.Click += new System.EventHandler(this.interchangeToolStripMenuItem_Click);
             // 
             // motionToolStripMenuItem
             // 
@@ -796,6 +809,8 @@
             // 
             this.MotionTrigger.AutoScroll = true;
             this.MotionTrigger.BackColor = System.Drawing.Color.White;
+            this.MotionTrigger.Controls.Add(this.ESP8266_groupBox);
+            this.MotionTrigger.Controls.Add(this.ESP8266_radioButton);
             this.MotionTrigger.Controls.Add(this.analog_radioButton);
             this.MotionTrigger.Controls.Add(this.analog_groupBox);
             this.MotionTrigger.Controls.Add(this.wifi602_radioButton);
@@ -816,6 +831,128 @@
             this.MotionTrigger.Size = new System.Drawing.Size(239, 462);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
+            // 
+            // ESP8266_groupBox
+            // 
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266CHPDCombo);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266CHPDLabel);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266ModeCombo);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266ModeLabel);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266BaudCombo);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266BaudLabel);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266PortCombo);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266PortLabel);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266KeyLabel);
+            this.ESP8266_groupBox.Controls.Add(this.ESP8266KeyText);
+            this.ESP8266_groupBox.Location = new System.Drawing.Point(27, 646);
+            this.ESP8266_groupBox.Name = "ESP8266_groupBox";
+            this.ESP8266_groupBox.Size = new System.Drawing.Size(192, 140);
+            this.ESP8266_groupBox.TabIndex = 18;
+            this.ESP8266_groupBox.TabStop = false;
+            this.ESP8266_groupBox.Text = "ESP8266";
+            // 
+            // ESP8266ModeCombo
+            // 
+            this.ESP8266ModeCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ESP8266ModeCombo.FormattingEnabled = true;
+            this.ESP8266ModeCombo.Items.AddRange(new object[] {
+            "OneShot",
+            "Continuous"});
+            this.ESP8266ModeCombo.Location = new System.Drawing.Point(105, 30);
+            this.ESP8266ModeCombo.Name = "ESP8266ModeCombo";
+            this.ESP8266ModeCombo.Size = new System.Drawing.Size(81, 20);
+            this.ESP8266ModeCombo.TabIndex = 9;
+            this.ESP8266ModeCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266ModeCombo_SelectedIndexChanged);
+            // 
+            // ESP8266ModeLabel
+            // 
+            this.ESP8266ModeLabel.AutoSize = true;
+            this.ESP8266ModeLabel.Location = new System.Drawing.Point(103, 14);
+            this.ESP8266ModeLabel.Name = "ESP8266ModeLabel";
+            this.ESP8266ModeLabel.Size = new System.Drawing.Size(35, 12);
+            this.ESP8266ModeLabel.TabIndex = 8;
+            this.ESP8266ModeLabel.Text = "Mode:";
+            // 
+            // ESP8266BaudCombo
+            // 
+            this.ESP8266BaudCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ESP8266BaudCombo.FormattingEnabled = true;
+            this.ESP8266BaudCombo.Items.AddRange(new object[] {
+            "9600",
+            "19200",
+            "38400",
+            "57600",
+            "115200"});
+            this.ESP8266BaudCombo.Location = new System.Drawing.Point(16, 70);
+            this.ESP8266BaudCombo.Name = "ESP8266BaudCombo";
+            this.ESP8266BaudCombo.Size = new System.Drawing.Size(78, 20);
+            this.ESP8266BaudCombo.TabIndex = 7;
+            this.ttp.SetToolTip(this.ESP8266BaudCombo, "Set used baud rate of connected ESP8266.");
+            this.ESP8266BaudCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266BaudCombo_SelectedIndexChanged);
+            // 
+            // ESP8266BaudLabel
+            // 
+            this.ESP8266BaudLabel.AutoSize = true;
+            this.ESP8266BaudLabel.Location = new System.Drawing.Point(14, 54);
+            this.ESP8266BaudLabel.Name = "ESP8266BaudLabel";
+            this.ESP8266BaudLabel.Size = new System.Drawing.Size(57, 12);
+            this.ESP8266BaudLabel.TabIndex = 6;
+            this.ESP8266BaudLabel.Text = "Baud Rate:";
+            // 
+            // ESP8266PortCombo
+            // 
+            this.ESP8266PortCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ESP8266PortCombo.FormattingEnabled = true;
+            this.ESP8266PortCombo.Items.AddRange(new object[] {
+            "Serial1",
+            "Serial2",
+            "Serial3"});
+            this.ESP8266PortCombo.Location = new System.Drawing.Point(105, 69);
+            this.ESP8266PortCombo.Name = "ESP8266PortCombo";
+            this.ESP8266PortCombo.Size = new System.Drawing.Size(81, 20);
+            this.ESP8266PortCombo.TabIndex = 4;
+            this.ttp.SetToolTip(this.ESP8266PortCombo, "Set used port for connecting the ESP8266.");
+            this.ESP8266PortCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266PortCombo_SelectedIndexChanged);
+            // 
+            // ESP8266PortLabel
+            // 
+            this.ESP8266PortLabel.AutoSize = true;
+            this.ESP8266PortLabel.Location = new System.Drawing.Point(103, 54);
+            this.ESP8266PortLabel.Name = "ESP8266PortLabel";
+            this.ESP8266PortLabel.Size = new System.Drawing.Size(53, 12);
+            this.ESP8266PortLabel.TabIndex = 5;
+            this.ESP8266PortLabel.Text = "Used Port:";
+            // 
+            // ESP8266KeyLabel
+            // 
+            this.ESP8266KeyLabel.AutoSize = true;
+            this.ESP8266KeyLabel.Location = new System.Drawing.Point(14, 14);
+            this.ESP8266KeyLabel.Name = "ESP8266KeyLabel";
+            this.ESP8266KeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.ESP8266KeyLabel.TabIndex = 4;
+            this.ESP8266KeyLabel.Text = "Key: ";
+            // 
+            // ESP8266KeyText
+            // 
+            this.ESP8266KeyText.Location = new System.Drawing.Point(16, 29);
+            this.ESP8266KeyText.MaxLength = 20;
+            this.ESP8266KeyText.Name = "ESP8266KeyText";
+            this.ESP8266KeyText.Size = new System.Drawing.Size(78, 22);
+            this.ESP8266KeyText.TabIndex = 0;
+            this.ttp.SetToolTip(this.ESP8266KeyText, "Set a string for triggering the selected motion by ESP8266.");
+            this.ESP8266KeyText.TextChanged += new System.EventHandler(this.ESP8266KeyText_TextChanged);
+            this.ESP8266KeyText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.ESP8266_KeyPress);
+            // 
+            // ESP8266_radioButton
+            // 
+            this.ESP8266_radioButton.AutoSize = true;
+            this.ESP8266_radioButton.Location = new System.Drawing.Point(7, 646);
+            this.ESP8266_radioButton.Name = "ESP8266_radioButton";
+            this.ESP8266_radioButton.Size = new System.Drawing.Size(14, 13);
+            this.ESP8266_radioButton.TabIndex = 17;
+            this.ESP8266_radioButton.TabStop = true;
+            this.ESP8266_radioButton.UseVisualStyleBackColor = true;
+            this.ESP8266_radioButton.CheckedChanged += new System.EventHandler(this.ESP8266_radioButton_CheckedChanged);
             // 
             // analog_radioButton
             // 
@@ -1389,7 +1526,7 @@
             this.btBaudCombo.Name = "btBaudCombo";
             this.btBaudCombo.Size = new System.Drawing.Size(78, 20);
             this.btBaudCombo.TabIndex = 7;
-            this.ttp.SetToolTip(this.btBaudCombo, "Set used baudrate of connected bluetooth.");
+            this.ttp.SetToolTip(this.btBaudCombo, "Set used baud rate of connected bluetooth.");
             this.btBaudCombo.SelectedIndexChanged += new System.EventHandler(this.btBaudCombo_SelectedIndexChanged);
             // 
             // btBaudLabel
@@ -1981,6 +2118,30 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
+            // ESP8266CHPDCombo
+            // 
+            this.ESP8266CHPDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ESP8266CHPDCombo.FormattingEnabled = true;
+            this.ESP8266CHPDCombo.Items.AddRange(new object[] {
+            "Serial1",
+            "Serial2",
+            "Serial3"});
+            this.ESP8266CHPDCombo.Location = new System.Drawing.Point(105, 110);
+            this.ESP8266CHPDCombo.Name = "ESP8266CHPDCombo";
+            this.ESP8266CHPDCombo.Size = new System.Drawing.Size(81, 20);
+            this.ESP8266CHPDCombo.TabIndex = 10;
+            this.ttp.SetToolTip(this.ESP8266CHPDCombo, "Set used port for connecting the ESP8266.");
+            this.ESP8266CHPDCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266CHPDCombo_SelectedIndexChanged);
+            // 
+            // ESP8266CHPDLabel
+            // 
+            this.ESP8266CHPDLabel.AutoSize = true;
+            this.ESP8266CHPDLabel.Location = new System.Drawing.Point(103, 95);
+            this.ESP8266CHPDLabel.Name = "ESP8266CHPDLabel";
+            this.ESP8266CHPDLabel.Size = new System.Drawing.Size(44, 12);
+            this.ESP8266CHPDLabel.TabIndex = 11;
+            this.ESP8266CHPDLabel.Text = "CH_PD:";
+            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -2018,6 +2179,8 @@
             this.ActionList.ResumeLayout(false);
             this.MotionTrigger.ResumeLayout(false);
             this.MotionTrigger.PerformLayout();
+            this.ESP8266_groupBox.ResumeLayout(false);
+            this.ESP8266_groupBox.PerformLayout();
             this.analog_groupBox.ResumeLayout(false);
             this.analog_groupBox.PerformLayout();
             this.acc_groupBox.ResumeLayout(false);
@@ -2205,6 +2368,18 @@
         private System.Windows.Forms.Label analogValueLabel;
         private System.Windows.Forms.Label analogPinLabel;
         private System.Windows.Forms.ComboBox analogPinCombo;
+        private System.Windows.Forms.GroupBox ESP8266_groupBox;
+        private System.Windows.Forms.ComboBox ESP8266ModeCombo;
+        private System.Windows.Forms.Label ESP8266ModeLabel;
+        private System.Windows.Forms.ComboBox ESP8266BaudCombo;
+        private System.Windows.Forms.Label ESP8266BaudLabel;
+        private System.Windows.Forms.ComboBox ESP8266PortCombo;
+        private System.Windows.Forms.Label ESP8266PortLabel;
+        private System.Windows.Forms.Label ESP8266KeyLabel;
+        private System.Windows.Forms.TextBox ESP8266KeyText;
+        private System.Windows.Forms.RadioButton ESP8266_radioButton;
+        private System.Windows.Forms.ComboBox ESP8266CHPDCombo;
+        private System.Windows.Forms.Label ESP8266CHPDLabel;
     }
 }
 

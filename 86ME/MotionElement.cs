@@ -25,6 +25,8 @@ namespace _86ME_ver1
         public int analog_pin;
         public int analog_cond;
         public int analog_value;
+        public string esp8266_key;
+        public string esp8266_mode;
         public int property;
         public int moton_layer;
         public int comp_range;
@@ -47,6 +49,8 @@ namespace _86ME_ver1
             this.analog_pin = 0;
             this.analog_cond = 0;
             this.analog_value = 0;
+            this.esp8266_key = "";
+            this.esp8266_mode = "OneShot";
             this.property = 0;
             this.moton_layer = 0;
             this.comp_range = 180;

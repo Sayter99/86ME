@@ -7,7 +7,7 @@ using System.IO;
 
 namespace _86ME_ver1
 {
-    enum mtest_method { always, keyboard, bluetooth, ps2, acc, wifi602, analog };
+    enum mtest_method { always, keyboard, bluetooth, ps2, acc, wifi602, analog, esp8266 };
     enum keyboard_method { first, pressed, release };
     enum auto_method { on, off, title };
     enum serial_ports { serial1, serial2, serial3 };
@@ -20,6 +20,9 @@ namespace _86ME_ver1
         public string bt_baud;
         public string bt_port;
         public string wifi602_port;
+        public string esp8266_baud;
+        public string esp8266_port;
+        public string esp8266_chpd;
 
         public GlobalSettings()
         {
@@ -27,6 +30,9 @@ namespace _86ME_ver1
             this.bt_port = "Serial1";
             this.bt_baud = "9600";
             this.ps2pins = new string[4] { "0", "0", "0", "0" };
+            this.esp8266_port = "Serial1";
+            this.esp8266_baud = "115200";
+            this.esp8266_chpd = "0";
         }
     }
 
@@ -41,6 +47,9 @@ namespace _86ME_ver1
         private string[] ps2_pins = new string[4];
         private string bt_baud;
         private string bt_port;
+        private string esp8266_baud;
+        private string esp8266_port;
+        private string esp8266_chpd;
         private string wifi602_port;
         private int opVar_num = 50;
         private bool IMU_compensatory = false;
@@ -54,6 +63,9 @@ namespace _86ME_ver1
             gs.ps2pins.CopyTo(this.ps2_pins, 0);
             this.bt_baud = gs.bt_baud;
             this.bt_port = gs.bt_port;
+            this.esp8266_baud = gs.esp8266_baud;
+            this.esp8266_port = gs.esp8266_port;
+            this.esp8266_chpd = gs.esp8266_chpd;
             this.wifi602_port = gs.wifi602_port;
             this.invQ.w = double.Parse(Motion.maskedTextBox1.Text);
             this.invQ.x = double.Parse(Motion.maskedTextBox2.Text);
@@ -167,6 +179,8 @@ namespace _86ME_ver1
                         return "analogRead(A" + m.analog_pin + ") > " + m.analog_value;
                     else
                         return "analogRead(A" + m.analog_pin + ") < " + m.analog_value;
+                case (int)mtest_method.esp8266:
+                    return "strncmp(wifi_cmd, \"" + m.esp8266_key + "\"," + m.esp8266_key.Length + ") == 0";
                 default:
                     return "1";
             }
@@ -586,6 +600,15 @@ namespace _86ME_ver1
             {
                 writer.WriteLine("  read_wifi602pad(" + wifi602_port + ");");
             }
+            if (method_flag[7])
+            {
+                writer.WriteLine("  uint8_t robot_name[13] = \"86DuinoROBOT\";");
+                writer.WriteLine("  wifi.send(2, robot_name, 12);");
+                writer.WriteLine("  uint32_t wifi_recvlen = wifi.recv(&wifi_mux_id, wifi_buffer, sizeof(wifi_buffer), 100);");
+                writer.WriteLine("  if (wifi_recvlen > 0){ strncpy(wifi_cmd, (char*)wifi_buffer, wifi_recvlen);" +
+                                 " wifi_cmd[wifi_recvlen] = \'\\0\'; }");
+                writer.WriteLine("  else { if(renew_esp8266) wifi_cmd[0] = \'\\0\'; }");
+            }
             writer.WriteLine(space + "if(isBlocked(0)) goto L1;");
             for (int layer = 0; layer < 2; layer++)
             {
@@ -660,6 +683,33 @@ namespace _86ME_ver1
                                                 update_mask + "}");
                     }
                 }
+                for (int i = 0; i < ME_Motionlist.Count; i++) //esp8266
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    if (m.trigger_method == (int)mtest_method.esp8266 && m.moton_layer == layer)
+                    {
+                        string renew_esp8266 = "";
+                        string update_mask = "";
+                        if (layer == 1)
+                            update_mask = "memcpy(servo_mask, " + m.name + "::mask, sizeof(servo_mask));";
+
+                        if (String.Compare(m.esp8266_mode, "OneShot") == 0)
+                            renew_esp8266 = "renew_esp8266 = true;";
+                        else
+                            renew_esp8266 = "renew_esp8266 = false;";
+                        if (first)
+                        {
+                            writer.WriteLine(space + "if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                renew_esp8266 + update_mask + "}");
+                            first = false;
+                        }
+                        else
+                            writer.WriteLine(space + "else if(" + trigger_condition(m) + ") " +
+                                                "{_curr_motion[" + layer + "] = _" + m.name.ToUpper() + ";" +
+                                                renew_esp8266 + update_mask + "}");
+                    }
+                }
                 for (int i = 0; i < ME_Motionlist.Count; i++) //bt
                 {
                     ME_Motion m = (ME_Motion)ME_Motionlist[i];
@@ -716,7 +766,7 @@ namespace _86ME_ver1
                         !(m.trigger_method == (int)mtest_method.always && m.auto_method == (int)auto_method.title) &&
                         !(m.trigger_method == (int)mtest_method.bluetooth) && !(m.trigger_method == (int)mtest_method.acc) &&
                         !(m.trigger_method == (int)mtest_method.wifi602) && !(m.trigger_method == (int)mtest_method.analog) &&
-                        m.moton_layer == layer)
+                        !(m.trigger_method == (int)mtest_method.esp8266) && m.moton_layer == layer)
                     {
                         string cancel_release = "";
                         string update_mask = "";
@@ -1210,6 +1260,8 @@ namespace _86ME_ver1
                 writer.WriteLine("#include <PS2X_lib.h>");
             if (method_flag[4]) // acc
                 writer.WriteLine("#include <EEPROM.h>\n#include \"FreeIMU1.h\"\n#include <Wire.h>");
+            if (method_flag[7]) // esp8266
+                writer.WriteLine("#include <ESP8266.h>");
             writer.WriteLine();
 
             writer.WriteLine("double _86ME_var[50] = {0};");
@@ -1335,6 +1387,14 @@ namespace _86ME_ver1
                                  "        tmp[4] > 100? wifi602_data[4] = tmp[4] - 256 : wifi602_data[4] = tmp[4];\n" +
                                  "      }\n      wifi602_frame_start = false;\n    }\n  }\n}");
             }
+            if (method_flag[7]) // esp8266
+            {
+                writer.WriteLine("char wifi_cmd[128] = {0};");
+                writer.WriteLine("bool renew_esp8266 = true;");
+                writer.WriteLine("ESP8266 wifi;");
+                writer.WriteLine("uint8_t wifi_buffer[128] = {0};");
+                writer.WriteLine("uint8_t wifi_mux_id;");
+            }
             writer.WriteLine();
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -1359,9 +1419,10 @@ namespace _86ME_ver1
             writer.WriteLine("void setup()");
             writer.WriteLine("{");
             writer.WriteLine("  srand(time(NULL));");
+
             if (method_flag[2]) // bt
                 writer.WriteLine("  " + bt_port + ".begin(" + bt_baud + ");");
-            writer.WriteLine();
+
             if (method_flag[3]) // ps2
                 writer.WriteLine("  ps2x.config_gamepad(" + ps2_pins[3] + ", " + ps2_pins[1] +
                                  ", " + ps2_pins[2] + ", " + ps2_pins[0] + ", false, false);\n");
@@ -1376,8 +1437,18 @@ namespace _86ME_ver1
                 else // NONE
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.init();\n  delay(5);\n");
             }
+
             if (method_flag[5]) // wifi602
                 writer.WriteLine("  " + wifi602_port + ".begin(115200);");
+
+            if (method_flag[7]) // esp8266
+            {
+                writer.WriteLine("  wifi.init(" + esp8266_port + ", " + esp8266_baud + ", " + esp8266_chpd + ");");
+                writer.WriteLine("  wifi.enableMUX();");
+                writer.WriteLine("  wifi.startTCPServer(23);");
+                writer.WriteLine("  wifi.registerUDP(2, \"255.255.255.255\", 6000);");
+            }
+
             for (int i = 0; i < channels.Count; i++)
             {
                 int min = int.Parse(Motion.ftext3[channels[i]].Text);

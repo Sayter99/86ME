@@ -616,53 +616,55 @@ namespace _86ME_ver1
             }
         }
 
-        private void clearPs2()
+        private void clearGSpins()
         {
             ps2DATCombo.Items.Clear();
             ps2CMDCombo.Items.Clear();
             ps2ATTCombo.Items.Clear();
             ps2CLKCombo.Items.Clear();
+            ESP8266CHPDCombo.Items.Clear();
         }
 
-        private void createPs2(int i)
+        private void createGSpins(int i)
         {
             ps2DATCombo.Items.Add(i.ToString());
             ps2CMDCombo.Items.Add(i.ToString());
             ps2ATTCombo.Items.Add(i.ToString());
             ps2CLKCombo.Items.Add(i.ToString());
+            ESP8266CHPDCombo.Items.Add(i.ToString());
         }
 
-        private void initPs2()
+        private void initGSpins()
         {
             if (board_ver86 == 0) //one
             {
-                clearPs2();
+                clearGSpins();
                 for (int i = 0; i < 45; i++)
-                    createPs2(i);
+                    createGSpins(i);
             }
             else if (board_ver86 == 1) //zero
             {
-                clearPs2();
+                clearGSpins();
                 for (int i = 0; i < 14; i++)
-                    createPs2(i);
+                    createGSpins(i);
                 for (int i = 42; i < 45; i++)
-                    createPs2(i);
+                    createGSpins(i);
             }
             else if (board_ver86 == 2) //edu
             {
-                clearPs2();
+                clearGSpins();
                 for (int i = 0; i < 21; i++)
-                    createPs2(i);
+                    createGSpins(i);
                 for (int i = 31; i < 33; i++)
-                    createPs2(i);
+                    createGSpins(i);
                 for (int i = 42; i < 45; i++)
-                    createPs2(i);
+                    createGSpins(i);
             }
             else if (board_ver86 == 3) //ai
             {
-                clearPs2();
+                clearGSpins();
                 for (int i = 0; i < 36; i++)
-                    createPs2(i);
+                    createGSpins(i);
             }
         }
 
@@ -779,11 +781,12 @@ namespace _86ME_ver1
                 update_newMotionParams(nMotion);
 
                 initAnalog();
-                initPs2();
+                initGSpins();
                 gs.ps2pins[0] = "0";
                 gs.ps2pins[1] = "0";
                 gs.ps2pins[2] = "0";
                 gs.ps2pins[3] = "0";
+                gs.esp8266_chpd = "0";
 
                 Motion = nMotion;
 
@@ -962,13 +965,14 @@ namespace _86ME_ver1
                 if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
                     Motionlist.SelectedIndex = 0;
             initAnalog();
-            initPs2();
+            initGSpins();
             if (change_board)
             {
                 gs.ps2pins[0] = "0";
                 gs.ps2pins[1] = "0";
                 gs.ps2pins[2] = "0";
                 gs.ps2pins[3] = "0";
+                gs.esp8266_chpd = "0";
                 change_board = false;
             }
         }
@@ -993,7 +997,8 @@ namespace _86ME_ver1
             writer.Write("BoardVer ");
             writer.Write(Motion.comboBox1.SelectedItem.ToString());
             writer.Write(" " + gs.ps2pins[0] + " " + gs.ps2pins[1] + " " + gs.ps2pins[2] + " " + gs.ps2pins[3] + " " +
-                         gs.bt_baud + " " + gs.bt_port + " " + gs.wifi602_port);
+                         gs.bt_baud + " " + gs.bt_port + " " + gs.wifi602_port + " " + gs.esp8266_baud + " " + gs.esp8266_port +
+                         " " + gs.esp8266_chpd);
             writer.Write("\n");
             writer.Write("Servo ");
             for (int i = 0; i < 45; i++)
@@ -1094,12 +1099,14 @@ namespace _86ME_ver1
         private void saveMotion(ME_Motion m, TextWriter writer)
         {
             string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
+            string esp8266_key = (m.esp8266_key == "" ? "---noESP8266Key---" : m.esp8266_key);
             writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
                          m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
                          " " + m.ps2_type + " " + m.bt_mode + " " + m.acc_Settings[0] + " " + m.acc_Settings[1] +
                          " " + m.acc_Settings[2] + " " + m.acc_Settings[3] + " " + m.acc_Settings[4] +
                          " " + m.acc_Settings[5] + " " + m.acc_Settings[6] + " " + m.wifi602_key +
-                         " " + m.analog_pin + " " + m.analog_cond + " " + m.analog_value + "\n");
+                         " " + m.analog_pin + " " + m.analog_cond + " " + m.analog_value + " " + esp8266_key +
+                         " " + m.esp8266_mode + "\n");
             writer.Write("Layer " + m.moton_layer + " ");
             for (int j = 0; j < m.used_servos.Count; j++)
             {
@@ -1329,6 +1336,12 @@ namespace _86ME_ver1
                         if (String.Compare(datas[i + 1], "Servo") != 0)
                         {
                             gs.wifi602_port = datas[++i];
+                        }
+                        if (String.Compare(datas[i + 1], "Servo") != 0)
+                        {
+                            gs.esp8266_baud = datas[++i];
+                            gs.esp8266_port = datas[++i];
+                            gs.esp8266_chpd = datas[++i];
                         }
                     }
                     else if (String.Compare(datas[i], "Offset") == 0)
@@ -1582,7 +1595,7 @@ namespace _86ME_ver1
                             if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
                                 String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
                                 String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                                int.TryParse(datas[i + 1], out try_out))
+                                String.Compare("Layer", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
                             { // triggers
                                 motiontag.trigger_method = int.Parse(datas[++i]);
                                 motiontag.auto_method = int.Parse(datas[++i]);
@@ -1621,6 +1634,18 @@ namespace _86ME_ver1
                                     motiontag.analog_pin = int.Parse(datas[++i]);
                                     motiontag.analog_cond = int.Parse(datas[++i]);
                                     motiontag.analog_value = int.Parse(datas[++i]);
+                                }
+                                if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                                    String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                                    String.Compare("Layer", datas[i + 1]) != 0)
+                                {
+                                    i++;
+                                    if (String.Compare("---noESP8266Key---", datas[i]) == 0)
+                                        motiontag.esp8266_key = "";
+                                    else
+                                        motiontag.esp8266_key = datas[i];
+                                    motiontag.esp8266_mode = datas[++i];
                                 }
                             }
                             ME_Motionlist.Add(motiontag);
@@ -1867,7 +1892,7 @@ namespace _86ME_ver1
             }
 
             initAnalog();
-            initPs2();
+            initGSpins();
 
             Hint_groupBox.Enabled = true;
             Motion_groupBox.Enabled = true;
@@ -1899,69 +1924,59 @@ namespace _86ME_ver1
             motion_stop.Enabled = false;
         }
 
-        private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
+        private void update_triggers()
         {
-            MotionConfig.Enabled = true;
-            update_motionlist();
-            move_up.Enabled = false;
-            move_down.Enabled = false;
-            current_motionlist_idx = -1;
-            // Motion Trigger part
             Always_radioButton.Enabled = true;
             Keyboard_radioButton.Enabled = true;
             bt_radioButton.Enabled = true;
             ps2_radioButton.Enabled = true;
             acc_radioButton.Enabled = true;
             analog_radioButton.Enabled = true;
+            ESP8266_radioButton.Enabled = true;
+
             ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
             if (m.trigger_method == (int)mtest_method.always)
-            {
                 Always_radioButton.Checked = true;
-            }
-            else if(m.trigger_method == (int)mtest_method.keyboard)
-            {
+            else if (m.trigger_method == (int)mtest_method.keyboard)
                 Keyboard_radioButton.Checked = true;
-            }
             else if (m.trigger_method == (int)mtest_method.bluetooth)
-            {
                 bt_radioButton.Checked = true;
-            }
             else if (m.trigger_method == (int)mtest_method.ps2)
-            {
                 ps2_radioButton.Checked = true;
-            }
             else if (m.trigger_method == (int)mtest_method.acc)
-            {
                 acc_radioButton.Checked = true;
-            }
             else if (m.trigger_method == (int)mtest_method.wifi602)
-            {
                 wifi602_radioButton.Checked = true;
-            }
             else if (m.trigger_method == (int)mtest_method.analog)
-            {
                 analog_radioButton.Checked = true;
-            }
+            else if (m.trigger_method == (int)mtest_method.esp8266)
+                ESP8266_radioButton.Checked = true;
+
             if (m.auto_method == (int)auto_method.on)
                 AlwaysOn.Checked = true;
             else if (m.auto_method == (int)auto_method.off)
                 AlwaysOff.Checked = true;
             else if (m.auto_method == (int)auto_method.title)
                 TitleMotion.Checked = true;
+
             KeyboardCombo.SelectedIndex = m.trigger_key;
             KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
+
             btKeyText.Text = m.bt_key;
             btModeCombo.Text = m.bt_mode;
             btPortCombo.Text = gs.bt_port;
             btBaudCombo.Text = gs.bt_baud;
+
             wifi602PortCombo.Text = gs.wifi602_port;
             wifi602KeyCombo.SelectedIndex = m.wifi602_key;
+
             ps2DATCombo.Text = gs.ps2pins[0];
             ps2CMDCombo.Text = gs.ps2pins[1];
             ps2ATTCombo.Text = gs.ps2pins[2];
             ps2CLKCombo.Text = gs.ps2pins[3];
             ps2KeyCombo.Text = m.ps2_key;
             ps2TypeCombo.SelectedIndex = m.ps2_type;
+
             accLXText.Text = m.acc_Settings[0].ToString();
             accHXText.Text = m.acc_Settings[1].ToString();
             accLYText.Text = m.acc_Settings[2].ToString();
@@ -1969,10 +1984,30 @@ namespace _86ME_ver1
             accLZText.Text = m.acc_Settings[4].ToString();
             accHZText.Text = m.acc_Settings[5].ToString();
             accDurationText.Text = m.acc_Settings[6].ToString();
+
             analogCondCombo.SelectedIndex = m.analog_cond;
             analogPinCombo.SelectedIndex = m.analog_pin;
             analogValueText.Text = m.analog_value.ToString();
-            // Motion Property Part
+
+            ESP8266KeyText.Text = m.esp8266_key;
+            ESP8266ModeCombo.Text = m.esp8266_mode;
+            ESP8266BaudCombo.Text = gs.esp8266_baud;
+            ESP8266PortCombo.Text = gs.esp8266_port;
+            ESP8266CHPDCombo.Text = gs.esp8266_chpd;
+        }
+
+        private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            MotionConfig.Enabled = true;
+            update_motionlist();
+            move_up.Enabled = false;
+            move_down.Enabled = false;
+            current_motionlist_idx = -1;
+
+            update_triggers();
+
+            // Motion Properties
+            ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
             Blocking.Enabled = true;
             NonBlocking.Enabled = true;
             if (m.property == (int)motion_property.blocking)
@@ -2001,9 +2036,15 @@ namespace _86ME_ver1
                     this.hint_richTextBox.Text = Main_lang_dic["hint9"];
         }
 
+        private void ESP8266_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == ' ' || e.KeyChar == '\"' || e.KeyChar == '\'')
+                e.Handled = true;
+        }
+
         private void gototext_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (e.KeyChar == '_')
+            if (e.KeyChar == '_' || e.KeyChar == '\b')
                 e.Handled = false;
             else if (char.IsLetterOrDigit(e.KeyChar) == false)
                 e.Handled = true;
@@ -3614,7 +3655,7 @@ namespace _86ME_ver1
                         if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
                             String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
                             String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                            int.TryParse(datas[i + 1], out try_out))
+                            String.Compare("Layer", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
                         { // triggers
                             motiontag.trigger_method = int.Parse(datas[++i]);
                             motiontag.auto_method = int.Parse(datas[++i]);
@@ -3653,6 +3694,18 @@ namespace _86ME_ver1
                                 motiontag.analog_pin = int.Parse(datas[++i]);
                                 motiontag.analog_cond = int.Parse(datas[++i]);
                                 motiontag.analog_value = int.Parse(datas[++i]);
+                            }
+                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
+                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
+                                    String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
+                                    String.Compare("Layer", datas[i + 1]) != 0)
+                            {
+                                i++;
+                                if (String.Compare("---noESP8266Key---", datas[i]) == 0)
+                                    motiontag.esp8266_key = "";
+                                else
+                                    motiontag.esp8266_key = datas[i];
+                                motiontag.esp8266_mode = datas[++i];
                             }
                         }
                         ME_Motionlist.Add(motiontag);
@@ -4575,6 +4628,7 @@ namespace _86ME_ver1
             acc_groupBox.Enabled = false;
             wifi602_groupBox.Enabled = false;
             analog_groupBox.Enabled = false;
+            ESP8266_groupBox.Enabled = false;
             gb.Enabled = true;
         }
 
@@ -4670,10 +4724,15 @@ namespace _86ME_ver1
                     {
                         enableTriggerGroup(analog_groupBox);
                     }
+                    else if (ESP8266_radioButton.Checked == true)
+                    {
+                        enableTriggerGroup(ESP8266_groupBox);
+                    }
                     ps2DATCombo.Text = gs.ps2pins[0];
                     ps2CMDCombo.Text = gs.ps2pins[1];
                     ps2ATTCombo.Text = gs.ps2pins[2];
                     ps2CLKCombo.Text = gs.ps2pins[3];
+                    ESP8266CHPDCombo.Text = gs.esp8266_chpd;
                 }
                 this.hint_richTextBox.Text = Main_lang_dic["hint9"];
             }
@@ -4794,6 +4853,18 @@ namespace _86ME_ver1
             }
         }
 
+        private void ESP8266_radioButton_CheckedChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+            {
+                if (ESP8266_radioButton.Checked == true)
+                {
+                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.esp8266;
+                    enableTriggerGroup(ESP8266_groupBox);
+                }
+            }
+        }
+
         private void AlwaysOn_CheckedChanged(object sender, EventArgs e)
         {
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
@@ -4852,9 +4923,36 @@ namespace _86ME_ver1
             gs.bt_baud = btBaudCombo.Text;
         }
 
+        private void ESP8266KeyText_TextChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).esp8266_key = ESP8266KeyText.Text;
+        }
+
+        private void ESP8266ModeCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
+                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).esp8266_mode = ESP8266ModeCombo.Text;
+        }
+
+        private void ESP8266BaudCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gs.esp8266_baud = ESP8266BaudCombo.Text;
+        }
+
+        private void ESP8266PortCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gs.esp8266_port = ESP8266PortCombo.Text;
+        }
+
         private void wifi602PortCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             gs.wifi602_port = wifi602PortCombo.Text;
+        }
+
+        private void ESP8266CHPDCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            gs.esp8266_chpd = ESP8266CHPDCombo.Text;
         }
 
         private void wifi602KeyCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -5087,6 +5185,9 @@ namespace _86ME_ver1
             ttp.SetToolTip(btPortCombo, Main_lang_dic["btPortCombo_ToolTip"]);
             ttp.SetToolTip(capturebutton, Main_lang_dic["capturebutton_ToolTip"]);
             ttp.SetToolTip(EditMotion, Main_lang_dic["EditMotion_ToolTip"]);
+            ttp.SetToolTip(ESP8266BaudCombo, Main_lang_dic["ESP8266BaudCombo_ToolTip"]);
+            ttp.SetToolTip(ESP8266KeyText, Main_lang_dic["ESP8266KeyText_ToolTip"]);
+            ttp.SetToolTip(ESP8266PortCombo, Main_lang_dic["ESP8266PortCombo_ToolTip"]);
             ttp.SetToolTip(Generate, Main_lang_dic["Generate_ToolTip"]);
             ttp.SetToolTip(GenerateAllInOne, Main_lang_dic["GenerateAllInOne_ToolTip"]);
             ttp.SetToolTip(KeyboardTypeCombo, Main_lang_dic["KeyboardTypeCombo_ToolTip"]);
