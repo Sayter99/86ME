@@ -188,33 +188,68 @@ namespace _86ME_ver1
 
         private string op2str(int left, int val1, int val2, int n, int form)
         {
-            switch (form)
+            if (left < opVar_num)
             {
-                case 0:
-                    if (n == 0) return "    " + var2str(left) + " = " + var2str(val1) + "+" + var2str(val2) + ";";
-                    else if (n == 1) return "    " + var2str(left) + " = " + var2str(val1) + "-" + var2str(val2) + ";";
-                    else if (n == 2) return "    " + var2str(left) + " = " + var2str(val1) + "*" + var2str(val2) + ";";
-                    else if (n == 3) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = " + var2str(val1) +
-                                            "/" + var2str(val2) + ";\n    else " + var2str(left) + " = 0;";
-                    else if (n == 4) return "    " + var2str(left) + " = pow(" + var2str(val1) + ", " + var2str(val2) + ");";
-                    else if (n == 5) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = fmod(" + var2str(val1) +
-                                            ", " + var2str(val2) + ");\n    else " + var2str(left) + " = 0;";
-                    else if (n == 6) return "    " + var2str(left) + " = (int)" + var2str(val1) + " & (int)" + var2str(val2) + ";";
-                    else if (n == 7) return "    " + var2str(left) + " = (int)" + var2str(val1) + " | (int)" + var2str(val2) + ";";
-                    break;
-                case 1:
-                    if (n == 0) return "    " + var2str(left) + " = ~((int)" + var2str(val2) + ");";
-                    else if (n == 1) return "    " + var2str(left) + " = sqrt(" + var2str(val2) + ");";
-                    else if (n == 2) return "    " + var2str(left) + " = exp(" + var2str(val2) + ");";
-                    else if (n == 3) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = log(" + var2str(val2) + ");\n" +
-                                            "    else " + var2str(val2) + " = 0;";
-                    else if (n == 4) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = log10(" + var2str(val2) + ");\n" +
-                                            "    else " + var2str(val2) + " = 0;";
-                    else if (n == 5) return "    " + var2str(left) + " = fabs(" + var2str(val2) + ");";
-                    else if (n == 6) return "    " + var2str(left) + " = -" + var2str(val2) + ";";
-                    else if (n == 7) return "    " + var2str(left) + " = cos(" + var2str(val2) + ");";
-                    else if (n == 8) return "    " + var2str(left) + " = sin(" + var2str(val2) + ");";
-                    break;
+                switch (form)
+                {
+                    case 0:
+                        if (n == 0) return "    " + var2str(left) + " = " + var2str(val1) + "+" + var2str(val2) + ";";
+                        else if (n == 1) return "    " + var2str(left) + " = " + var2str(val1) + "-" + var2str(val2) + ";";
+                        else if (n == 2) return "    " + var2str(left) + " = " + var2str(val1) + "*" + var2str(val2) + ";";
+                        else if (n == 3) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = " + var2str(val1) +
+                                                "/" + var2str(val2) + ";\n    else " + var2str(left) + " = 0;";
+                        else if (n == 4) return "    " + var2str(left) + " = pow(" + var2str(val1) + ", " + var2str(val2) + ");";
+                        else if (n == 5) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = fmod(" + var2str(val1) +
+                                                ", " + var2str(val2) + ");\n    else " + var2str(left) + " = 0;";
+                        else if (n == 6) return "    " + var2str(left) + " = (int)" + var2str(val1) + " & (int)" + var2str(val2) + ";";
+                        else if (n == 7) return "    " + var2str(left) + " = (int)" + var2str(val1) + " | (int)" + var2str(val2) + ";";
+                        break;
+                    case 1:
+                        if (n == 0) return "    " + var2str(left) + " = ~((int)" + var2str(val2) + ");";
+                        else if (n == 1) return "    " + var2str(left) + " = sqrt(" + var2str(val2) + ");";
+                        else if (n == 2) return "    " + var2str(left) + " = exp(" + var2str(val2) + ");";
+                        else if (n == 3) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = log(" + var2str(val2) + ");\n" +
+                                                "    else " + var2str(val2) + " = 0;";
+                        else if (n == 4) return "    if(" + var2str(val2) + " != 0) " + var2str(left) + " = log10(" + var2str(val2) + ");\n" +
+                                                "    else " + var2str(val2) + " = 0;";
+                        else if (n == 5) return "    " + var2str(left) + " = fabs(" + var2str(val2) + ");";
+                        else if (n == 6) return "    " + var2str(left) + " = -" + var2str(val2) + ";";
+                        else if (n == 7) return "    " + var2str(left) + " = cos(" + var2str(val2) + ");";
+                        else if (n == 8) return "    " + var2str(left) + " = sin(" + var2str(val2) + ");";
+                        break;
+                }
+            }
+            else
+            {
+                int gpio_pin = left - opVar_num;
+                switch (form)
+                {
+                    case 0:
+                        if (n == 0) return "    digitalWrite(" + gpio_pin + ", (int)" + var2str(val1) + "+ (int)" + var2str(val2) + ");";
+                        else if (n == 1) return "    digitalWrite(" + gpio_pin + ", (int)" + var2str(val1) + "- (int)" + var2str(val2) + ");";
+                        else if (n == 2) return "    digitalWrite(" + gpio_pin + ", (int)" + var2str(val1) + "* (int)" + var2str(val2) + ");";
+                        else if (n == 3) return "    if(" + var2str(val2) + " != 0) digitalWrite(" + gpio_pin + ", (int)(" + var2str(val1) +
+                                                "/" + var2str(val2) + "));\n    else digitalWrite(" + gpio_pin + ", 0);";
+                        else if (n == 4) return "    digitalWrite(" + gpio_pin + ", (int)pow(" + var2str(val1) + ", " + var2str(val2) + "));";
+                        else if (n == 5) return "    if(" + var2str(val2) + " != 0) digitalWrite(" + gpio_pin + ", (int)fmod(" + var2str(val1) +
+                                                ", " + var2str(val2) + "));\n    else digitalWrite(" + gpio_pin + ", 0);";
+                        else if (n == 6) return "    digitalWrite(" + gpio_pin + ", (int)" + var2str(val1) + " & (int)" + var2str(val2) + ");";
+                        else if (n == 7) return "    digitalWrite(" + gpio_pin + ", (int)" + var2str(val1) + " | (int)" + var2str(val2) + ");";
+                        break;
+                    case 1:
+                        if (n == 0) return "    digitalWrite(" + gpio_pin + ", ~((int)" + var2str(val2) + "));";
+                        else if (n == 1) return "    digitalWrite(" + gpio_pin + ", (int)sqrt(" + var2str(val2) + "));";
+                        else if (n == 2) return "    digitalWrite(" + gpio_pin + ", (int)exp(" + var2str(val2) + "));";
+                        else if (n == 3) return "    if(" + var2str(val2) + " != 0) digitalWrite(" + gpio_pin + ", (int)log(" + var2str(val2) +
+                                                "));\n    else digitalWrite(" + gpio_pin + ", 0);";
+                        else if (n == 4) return "    if(" + var2str(val2) + " != 0) digitalWrite(" + gpio_pin + ", (int)log10(" + var2str(val2) +
+                                                "));\n    else digitalWrite(" + var2str(val2) + ", 0);";
+                        else if (n == 5) return "    digitalWrite(" + gpio_pin + ", (int)fabs(" + var2str(val2) + "));";
+                        else if (n == 6) return "    digitalWrite(" + gpio_pin + ", (int)(-" + var2str(val2) + "));";
+                        else if (n == 7) return "    digitalWrite(" + gpio_pin + ", (int)cos(" + var2str(val2) + "));";
+                        else if (n == 8) return "    digitalWrite(" + gpio_pin + ", (int)sin(" + var2str(val2) + "));";
+                        break;
+                }
             }
             return "";
         }
@@ -254,6 +289,8 @@ namespace _86ME_ver1
                 return "_roll";
             else if (n == opVar_num + 12)
                 return "_pitch";
+            else if (n < opVar_num + 58 && n >= opVar_num + 13)
+                return "digitalRead(" + (n - opVar_num - 13) + ")";
             else
                 return "_86ME_var[" + n + "]";
         }
@@ -603,10 +640,10 @@ namespace _86ME_ver1
             if (method_flag[7])
             {
                 writer.WriteLine("  uint8_t robot_name[13] = \"86DuinoROBOT\";");
-                writer.WriteLine("  wifi.send(2, robot_name, 12);");
-                writer.WriteLine("  uint32_t wifi_recvlen = wifi.recv(&wifi_mux_id, wifi_buffer, sizeof(wifi_buffer), 100);");
+                writer.WriteLine("  wifi.send_nb(2, robot_name, 12);");
+                writer.WriteLine("  uint32_t wifi_recvlen = wifi.recv_nb(&wifi_mux_id, wifi_buffer, sizeof(wifi_buffer));");
                 writer.WriteLine("  if (wifi_recvlen > 0){ strncpy(wifi_cmd, (char*)wifi_buffer, wifi_recvlen);" +
-                                 " wifi_cmd[wifi_recvlen] = \'\\0\'; }");
+                                 " wifi_cmd[wifi_recvlen] = \'\\0\';}");
                 writer.WriteLine("  else { if(renew_esp8266) wifi_cmd[0] = \'\\0\'; }");
             }
             writer.WriteLine(space + "if(isBlocked(0)) goto L1;");
@@ -1167,8 +1204,14 @@ namespace _86ME_ver1
                 {
                     ME_If mif = (ME_If)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::IF_" + i + ":");
+                    if (mif.left_var >= opVar_num + 13)
+                        writer.WriteLine(space4 + "pinMode(" + (mif.left_var - opVar_num - 13) + ", INPUT);");
                     if (mif.form == 0)
+                    {
+                        if (mif.left_var >= opVar_num + 13)
+                            writer.WriteLine(space4 + "pinMode(" + (mif.right_var - opVar_num - 13) + ", INPUT);");
                         writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + var2str(mif.right_var) + ")");
+                    }
                     else if (mif.form == 1)
                         writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + mif.right_const + ")");
                     bool hasTarget = false;
@@ -1210,16 +1253,60 @@ namespace _86ME_ver1
                     switch(op.form)
                     {
                         case 0:
+                            if (op.f1_var1 >= opVar_num + 13)
+                            {
+                                int gpio_pin = op.f1_var1 - opVar_num - 13;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
+                            }
+                            if (op.f1_var2 >= opVar_num + 13)
+                            {
+                                int gpio_pin = op.f1_var2 - opVar_num - 13;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
+                            }
+                            if (op.left_var >= opVar_num)
+                            {
+                                int gpio_pin = op.left_var - opVar_num;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");
+                            }
                             writer.WriteLine(op2str(op.left_var, op.f1_var1, op.f1_var2, op.f1_op, 0));
                             break;
                         case 1:
+                            if (op.f1_var1 >= opVar_num + 13)
+                            {
+                                int gpio_pin = op.f1_var1 - opVar_num - 13;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
+                            }
+                            if (op.left_var >= opVar_num)
+                            {
+                                int gpio_pin = op.left_var - opVar_num;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");
+                            }
                             writer.WriteLine(op2str(op.left_var, 0, op.f2_var, op.f2_op, 1));
                             break;
                         case 2:
-                            writer.WriteLine(space4 + var2str(op.left_var) + " = " + var2str(op.f3_var) + ";");
+                            if (op.f3_var >= opVar_num + 13)
+                            {
+                                int gpio_pin = op.f3_var - opVar_num - 13;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
+                            }
+                            if (op.left_var >= opVar_num)
+                            {
+                                int gpio_pin = op.left_var - opVar_num;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");
+                                writer.WriteLine(space4 + "digitalWrite(" + gpio_pin + ", (int)" + var2str(op.f3_var) + ");");
+                            }
+                            else
+                                writer.WriteLine(space4 + var2str(op.left_var) + " = " + var2str(op.f3_var) + ";");
                             break;
                         case 3:
-                            writer.WriteLine(space4 + var2str(op.left_var) + " = " + op.f4_const + ";");
+                            if (op.left_var >= opVar_num)
+                            {
+                                int gpio_pin = op.left_var - opVar_num;
+                                writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");
+                                writer.WriteLine(space4 + "digitalWrite(" + gpio_pin + ", " + (int)(op.f4_const) + ");");
+                            }
+                            else
+                                writer.WriteLine(space4 + var2str(op.left_var) + " = " + op.f4_const + ";");
                             break;
                         default:
                             break;
@@ -1268,7 +1355,7 @@ namespace _86ME_ver1
             writer.WriteLine("double _roll = 0;");
             writer.WriteLine("double _pitch = 0;");
             writer.WriteLine("double _comp_range = 180;");
-            writer.WriteLine("double _IMU_val[9] = {0};");
+            writer.WriteLine("double _IMU_val[12] = {0};");
             writer.WriteLine("double _IMU_Q[4] = {1, 0, 0, 0};");
             writer.WriteLine("double _omega[2] = {0};");
             writer.WriteLine("int _IMU_init_status;");

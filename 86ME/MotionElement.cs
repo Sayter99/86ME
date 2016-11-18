@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Linq;
 using System.Collections;
 
 namespace _86ME_ver1
@@ -97,10 +98,11 @@ namespace _86ME_ver1
             ret.moton_layer = this.moton_layer;
             ret.comp_range = this.comp_range;
             ret.control_method = this.control_method;
-            ret.acc_Settings = this.acc_Settings;
-            ret.goto_var = this.goto_var;
-            ret.states = this.states;
-            ret.used_servos = this.used_servos;
+            for (int i = 0; i < this.acc_Settings.Length; i++)
+                ret.acc_Settings[i] = this.acc_Settings[i];
+            ret.goto_var = this.goto_var.ToList();
+            ret.states = this.states.ToList();
+            ret.used_servos = this.used_servos.ToList();
             return ret;
         }
     }

@@ -77,6 +77,8 @@ namespace _86ME_ver1
         int mdx, mdy;
         bool[] freshflag = new bool[2];
         bool picmode_move = false;
+        int main_state = 0;
+        DateTime main_key_time;
         bool[] captured = new bool[45];
         string[] motionevent = new string[8];
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
@@ -89,6 +91,7 @@ namespace _86ME_ver1
             Hint_groupBox.Enabled = false;
             Motion_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
+            saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
@@ -112,6 +115,7 @@ namespace _86ME_ver1
             Hint_groupBox.Enabled = false;
             Motion_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
+            saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
@@ -384,6 +388,47 @@ namespace _86ME_ver1
                 Motion.channely[int.Parse(((Label)sender).Name)] = fpanel[int.Parse(((Label)sender).Name)].Top;
                 Motion.channelx[int.Parse(((Label)sender).Name)] = fpanel[int.Parse(((Label)sender).Name)].Left;
                 picmode_move = true;
+            }
+        }
+
+        private void Main_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.F1)
+                System.Diagnostics.Process.Start("http://www.86duino.com/index.php?p=11544&lang=TW");
+            if (e.Control && e.KeyCode == Keys.S)
+                saveFileToolStripMenuItem_Click(sender, e);
+
+            if (e.KeyCode == Keys.S)
+            {
+                main_state = 1;
+                main_key_time = DateTime.Now;
+            }
+            if (e.KeyCode == Keys.A && main_state == 1)
+            {
+                if ((DateTime.Now - main_key_time).TotalMilliseconds < 1000)
+                    main_state = 2;
+            }
+            if (e.KeyCode == Keys.Y && main_state == 2)
+            {
+                if ((DateTime.Now - main_key_time).TotalMilliseconds < 1000)
+                    main_state = 3;
+            }
+            if (e.KeyCode == Keys.T && main_state == 3)
+            {
+                if ((DateTime.Now - main_key_time).TotalMilliseconds < 1000)
+                    main_state = 4;
+            }
+            if (e.KeyCode == Keys.E && main_state == 4)
+            {
+                if ((DateTime.Now - main_key_time).TotalMilliseconds < 1000)
+                    main_state = 5;
+            }
+            if (e.KeyCode == Keys.R && main_state == 5)
+            {
+                if ((DateTime.Now - main_key_time).TotalMilliseconds < 1000)
+                {
+                    main_state = 0;
+                }
             }
         }
 
@@ -764,6 +809,7 @@ namespace _86ME_ver1
                 load_filename = "";
                 Hint_groupBox.Enabled = true;
                 Motion_groupBox.Enabled = true;
+                saveAsFileToolStripMenuItem.Enabled = true;
                 saveFileToolStripMenuItem.Enabled = true;
                 editToolStripMenuItem.Enabled = true;
                 ME_Motionlist = new ArrayList();
@@ -977,7 +1023,15 @@ namespace _86ME_ver1
             }
         }
 
-        private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)    //save project
+        private void saveFileToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (File.Exists(load_filename))
+                save_project(load_filename);
+            else
+                saveAsFileToolStripMenuItem_Click(sender, e);
+        }
+
+        private void saveAsFileToolStripMenuItem_Click(object sender, EventArgs e)    //save project
         {
             SaveFileDialog dialog = new SaveFileDialog();
             dialog.Filter = "rbm files (*.rbm)|*.rbm";
@@ -1897,6 +1951,7 @@ namespace _86ME_ver1
             Hint_groupBox.Enabled = true;
             Motion_groupBox.Enabled = true;
             editToolStripMenuItem.Enabled = true;
+            saveAsFileToolStripMenuItem.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
             Motion = nMotion;
 
@@ -2202,6 +2257,25 @@ namespace _86ME_ver1
                     MessageBox.Show(Main_lang_dic["errorMsg1"]);
                 }
             }
+            else if (index < opVar_num + 58 && index >= opVar_num + 13)
+            {
+                if (string.Compare(com_port, "OFF") != 0)
+                {
+                    try
+                    {
+                        arduino.pin_capture(index - opVar_num);
+                        DateTime time_start = DateTime.Now;
+                        while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 500) ;
+                        arduino.dataRecieved = false;
+                        return arduino.captured_data;
+                    }
+                    catch
+                    {
+                        com_port = "OFF";
+                        MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                    }
+                }
+            }
             return 0;
         }
 
@@ -2435,6 +2509,8 @@ namespace _86ME_ver1
                 cb.Items.Add("GyroRoll");
                 cb.Items.Add("GyroPitch");
             }
+            for (int i = 0; i < 45; i++)
+                cb.Items.Add("GPIO" + i);
             switch (name)
             {
                 case "0":
@@ -2509,6 +2585,8 @@ namespace _86ME_ver1
                     return "Roll";
                 else if (n == opVar_num + 12)
                     return "Pitch";
+                else if (n > opVar_num + 12)
+                    return "GPIO" + (n - opVar_num - 13);
             }
             else if (type == 1)
             {
@@ -2554,6 +2632,13 @@ namespace _86ME_ver1
                     default: break;
                 }
             }
+            else if (type == 4)
+            {
+                if (n < opVar_num)
+                    return "V" + n;
+                else if (n >= opVar_num)
+                    return "GPIO" + (n - opVar_num);
+            }
             return "";
         }
 
@@ -2562,14 +2647,14 @@ namespace _86ME_ver1
             switch(op.form)
             {
                 case 0:
-                    return convertIndex2Str(op.left_var, 0) + "=" + convertIndex2Str(op.f1_var1, 0) +
+                    return convertIndex2Str(op.left_var, 4) + "=" + convertIndex2Str(op.f1_var1, 0) +
                            convertIndex2Str(op.f1_op, 1) + convertIndex2Str(op.f1_var2, 0);
                 case 1:
-                    return convertIndex2Str(op.left_var, 0) + "=" + convertIndex2Str(op.f2_op, 2) + convertIndex2Str(op.f2_var, 0);
+                    return convertIndex2Str(op.left_var, 4) + "=" + convertIndex2Str(op.f2_op, 2) + convertIndex2Str(op.f2_var, 0);
                 case 2:
-                    return convertIndex2Str(op.left_var, 0) + "=" + convertIndex2Str(op.f3_var, 0);
+                    return convertIndex2Str(op.left_var, 4) + "=" + convertIndex2Str(op.f3_var, 0);
                 case 3:
-                    return convertIndex2Str(op.left_var, 0) + "=" + op.f4_const.ToString();
+                    return convertIndex2Str(op.left_var, 4) + "=" + op.f4_const.ToString();
                 default:
                     break;
             }
@@ -4149,6 +4234,7 @@ namespace _86ME_ver1
         public void MotionOnTest(ME_Motion m)
         {
             optionsToolStripMenuItem.Enabled = false;
+            saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             fileToolStripMenuItem.Enabled = false;
             actionToolStripMenuItem.Enabled = false;
@@ -4253,22 +4339,68 @@ namespace _86ME_ver1
                 else if (m.Events[j] is ME_Compute)
                 {
                     ME_Compute op = (ME_Compute)m.Events[j];
-                    switch(op.form)
+                    if (op.left_var < 50)
                     {
-                        case 0:
-                            operand_var[op.left_var] = opOperate(opVal(op.f1_var1), opVal(op.f1_var2), 0, op.f1_op);
-                            break;
-                        case 1:
-                            operand_var[op.left_var] = opOperate(0, opVal(op.f2_var), 1, op.f2_op);
-                            break;
-                        case 2:
-                            operand_var[op.left_var] = opVal(op.f3_var);
-                            break;
-                        case 3:
-                            operand_var[op.left_var] = (float)op.f4_const;
-                            break;
-                        default:
-                            break;
+                        switch (op.form)
+                        {
+                            case 0:
+                                operand_var[op.left_var] = opOperate(opVal(op.f1_var1), opVal(op.f1_var2), 0, op.f1_op);
+                                break;
+                            case 1:
+                                operand_var[op.left_var] = opOperate(0, opVal(op.f2_var), 1, op.f2_op);
+                                break;
+                            case 2:
+                                operand_var[op.left_var] = opVal(op.f3_var);
+                                break;
+                            case 3:
+                                operand_var[op.left_var] = (float)op.f4_const;
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else
+                    {
+                        if (string.Compare(com_port, "OFF") != 0)
+                        {
+                            try
+                            {
+                                switch (op.form)
+                                {
+                                    case 0:
+                                        if (opOperate(opVal(op.f1_var1), opVal(op.f1_var2), 0, op.f1_op) == 0)
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.LOW);
+                                        else
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.HIGH);
+                                        break;
+                                    case 1:
+                                        if (opOperate(0, opVal(op.f2_var), 1, op.f2_op) == 0)
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.LOW);
+                                        else
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.HIGH);
+                                        break;
+                                    case 2:
+                                        if (opVal(op.f3_var) == 0)
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.LOW);
+                                        else
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.HIGH);
+                                        break;
+                                    case 3:
+                                        if ((float)op.f4_const == 0.0)
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.LOW);
+                                        else
+                                            arduino.digitalWrite(op.left_var - opVar_num, Arduino.HIGH);
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            catch
+                            {
+                                com_port = "OFF";
+                                MessageBox.Show(Main_lang_dic["errorMsg1"]);
+                            }
+                        }
                     }
                 }
                 else if (m.Events[j] is ME_If)
@@ -4294,6 +4426,7 @@ namespace _86ME_ver1
             mtest_start_pos = 0;
 
             optionsToolStripMenuItem.Enabled = true;
+            saveAsFileToolStripMenuItem.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
             fileToolStripMenuItem.Enabled = true;
             actionToolStripMenuItem.Enabled = true;
@@ -4354,6 +4487,7 @@ namespace _86ME_ver1
             {
                 mtest_start_pos = 0;
                 optionsToolStripMenuItem.Enabled = true;
+                saveAsFileToolStripMenuItem.Enabled = true;
                 saveFileToolStripMenuItem.Enabled = true;
                 fileToolStripMenuItem.Enabled = true;
                 actionToolStripMenuItem.Enabled = true;
@@ -5167,6 +5301,7 @@ namespace _86ME_ver1
             optionsToolStripMenuItem.Text = Main_lang_dic["optionsToolStripMenuItem_Text"];
             preferenceToolStripMenuItem.Text = Main_lang_dic["preferenceToolStripMenuItem_Text"];
             ps2_groupBox.Text = Main_lang_dic["ps2_groupBox_Text"];
+            saveAsFileToolStripMenuItem.Text = Main_lang_dic["saveAsFileToolStripMenuItem_Text"];
             saveFileToolStripMenuItem.Text = Main_lang_dic["saveFileToolStripMenuItem_Text"];
             Setting_groupBox.Text = Main_lang_dic["Setting_groupBox_Text"];
             slow.Text = Main_lang_dic["slow_Text"];

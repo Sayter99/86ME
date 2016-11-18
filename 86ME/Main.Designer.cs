@@ -34,7 +34,7 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.actionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveAsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -94,6 +94,8 @@
             this.Motionlist = new System.Windows.Forms.ListBox();
             this.MotionTrigger = new System.Windows.Forms.TabPage();
             this.ESP8266_groupBox = new System.Windows.Forms.GroupBox();
+            this.ESP8266CHPDCombo = new System.Windows.Forms.ComboBox();
+            this.ESP8266CHPDLabel = new System.Windows.Forms.Label();
             this.ESP8266ModeCombo = new System.Windows.Forms.ComboBox();
             this.ESP8266ModeLabel = new System.Windows.Forms.Label();
             this.ESP8266BaudCombo = new System.Windows.Forms.ComboBox();
@@ -201,8 +203,7 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.ESP8266CHPDCombo = new System.Windows.Forms.ComboBox();
-            this.ESP8266CHPDLabel = new System.Windows.Forms.Label();
+            this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -248,6 +249,7 @@
             this.fileToolStripMenuItem,
             this.actionToolStripMenuItem,
             this.saveFileToolStripMenuItem,
+            this.saveAsFileToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
@@ -256,28 +258,28 @@
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.fileToolStripMenuItem.Text = "New Project";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // actionToolStripMenuItem
             // 
             this.actionToolStripMenuItem.Name = "actionToolStripMenuItem";
-            this.actionToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.actionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.actionToolStripMenuItem.Text = "Load Project";
             this.actionToolStripMenuItem.Click += new System.EventHandler(this.actionToolStripMenuItem_Click);
             // 
-            // saveFileToolStripMenuItem
+            // saveAsFileToolStripMenuItem
             // 
-            this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
-            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
-            this.saveFileToolStripMenuItem.Text = "Save Project";
-            this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
+            this.saveAsFileToolStripMenuItem.Name = "saveAsFileToolStripMenuItem";
+            this.saveAsFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsFileToolStripMenuItem.Text = "Save As ...";
+            this.saveAsFileToolStripMenuItem.Click += new System.EventHandler(this.saveAsFileToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -850,6 +852,30 @@
             this.ESP8266_groupBox.TabIndex = 18;
             this.ESP8266_groupBox.TabStop = false;
             this.ESP8266_groupBox.Text = "ESP8266";
+            // 
+            // ESP8266CHPDCombo
+            // 
+            this.ESP8266CHPDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.ESP8266CHPDCombo.FormattingEnabled = true;
+            this.ESP8266CHPDCombo.Items.AddRange(new object[] {
+            "Serial1",
+            "Serial2",
+            "Serial3"});
+            this.ESP8266CHPDCombo.Location = new System.Drawing.Point(105, 110);
+            this.ESP8266CHPDCombo.Name = "ESP8266CHPDCombo";
+            this.ESP8266CHPDCombo.Size = new System.Drawing.Size(81, 20);
+            this.ESP8266CHPDCombo.TabIndex = 10;
+            this.ttp.SetToolTip(this.ESP8266CHPDCombo, "Set used port for connecting the ESP8266.");
+            this.ESP8266CHPDCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266CHPDCombo_SelectedIndexChanged);
+            // 
+            // ESP8266CHPDLabel
+            // 
+            this.ESP8266CHPDLabel.AutoSize = true;
+            this.ESP8266CHPDLabel.Location = new System.Drawing.Point(103, 95);
+            this.ESP8266CHPDLabel.Name = "ESP8266CHPDLabel";
+            this.ESP8266CHPDLabel.Size = new System.Drawing.Size(44, 12);
+            this.ESP8266CHPDLabel.TabIndex = 11;
+            this.ESP8266CHPDLabel.Text = "CH_PD:";
             // 
             // ESP8266ModeCombo
             // 
@@ -2118,29 +2144,12 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
-            // ESP8266CHPDCombo
+            // saveFileToolStripMenuItem
             // 
-            this.ESP8266CHPDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.ESP8266CHPDCombo.FormattingEnabled = true;
-            this.ESP8266CHPDCombo.Items.AddRange(new object[] {
-            "Serial1",
-            "Serial2",
-            "Serial3"});
-            this.ESP8266CHPDCombo.Location = new System.Drawing.Point(105, 110);
-            this.ESP8266CHPDCombo.Name = "ESP8266CHPDCombo";
-            this.ESP8266CHPDCombo.Size = new System.Drawing.Size(81, 20);
-            this.ESP8266CHPDCombo.TabIndex = 10;
-            this.ttp.SetToolTip(this.ESP8266CHPDCombo, "Set used port for connecting the ESP8266.");
-            this.ESP8266CHPDCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266CHPDCombo_SelectedIndexChanged);
-            // 
-            // ESP8266CHPDLabel
-            // 
-            this.ESP8266CHPDLabel.AutoSize = true;
-            this.ESP8266CHPDLabel.Location = new System.Drawing.Point(103, 95);
-            this.ESP8266CHPDLabel.Name = "ESP8266CHPDLabel";
-            this.ESP8266CHPDLabel.Size = new System.Drawing.Size(44, 12);
-            this.ESP8266CHPDLabel.TabIndex = 11;
-            this.ESP8266CHPDLabel.Text = "CH_PD:";
+            this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
+            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveFileToolStripMenuItem.Text = "Save Project";
+            this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
             // 
             // Main
             // 
@@ -2155,6 +2164,7 @@
             this.Controls.Add(this.Action_groupBox);
             this.Controls.Add(this.Setting_groupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.MainMenuStrip = this.Main_menuStrip;
             this.MaximumSize = new System.Drawing.Size(1056, 736);
             this.MinimumSize = new System.Drawing.Size(1056, 736);
@@ -2163,6 +2173,7 @@
             this.Text = "86Duino Motion Editor";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Main_FormClosing);
             this.Load += new System.EventHandler(this.Main_Load);
+            this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Main_KeyDown);
             this.Main_menuStrip.ResumeLayout(false);
             this.Main_menuStrip.PerformLayout();
             this.Action_groupBox.ResumeLayout(false);
@@ -2211,7 +2222,7 @@
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem actionToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem saveAsFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem helpToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem howToUseToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem optionToolStripMenuItem;
@@ -2380,6 +2391,7 @@
         private System.Windows.Forms.RadioButton ESP8266_radioButton;
         private System.Windows.Forms.ComboBox ESP8266CHPDCombo;
         private System.Windows.Forms.Label ESP8266CHPDLabel;
+        private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
     }
 }
 

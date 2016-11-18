@@ -257,18 +257,14 @@ namespace _86ME_ver1
         /// <param name="value">Value either Arduino.LOW or Arduino.HIGH.</param>
         public void digitalWrite(int pin, int value)
         {
-            int portNumber = (pin >> 3) & 0x0F;
-            byte[] message = new byte[3];
+            byte[] message = new byte[5];
 
-            if (value == 0)
-                digitalOutputData[portNumber] &= ~(1 << (pin & 0x07));
-            else
-                digitalOutputData[portNumber] |= (1 << (pin & 0x07));
-
-            message[0] = (byte)(DIGITAL_MESSAGE | portNumber);
-            message[1] = (byte)(digitalOutputData[portNumber] & 0x7F);
-            message[2] = (byte)(digitalOutputData[portNumber] >> 7);
-            _serialPort.Write(message, 0, 3);
+            message[0] = 0xF0;
+            message[1] = (byte)(DIGITAL_MESSAGE);
+            message[2] = (byte)(pin & 0x0F);
+            message[3] = (byte)(value & 0x7F);
+            message[4] = 0xF7;
+            _serialPort.Write(message, 0, 5);
         }
 
         /// <summary>
@@ -463,6 +459,11 @@ namespace _86ME_ver1
                                             dataRecieved = true;
                                         }
                                         else if (storedInputData[1] < 8 && storedInputData[1] >= 2)
+                                        {
+                                            captured_data = (int)((storedInputData[3] << 7) + storedInputData[2]);
+                                            dataRecieved = true;
+                                        }
+                                        else if (storedInputData[1] < 58 && storedInputData[1] >= 13)
                                         {
                                             captured_data = (int)((storedInputData[3] << 7) + storedInputData[2]);
                                             dataRecieved = true;
