@@ -1531,6 +1531,7 @@ namespace _86ME_ver1
             if (method_flag[7]) // esp8266
             {
                 writer.WriteLine("  wifi.init(" + esp8266_port + ", " + esp8266_baud + ", " + esp8266_chpd + ");");
+                writer.WriteLine("  wifi.setOprToSoftAP();");
                 writer.WriteLine("  wifi.enableMUX();");
                 writer.WriteLine("  wifi.startTCPServer(23);");
                 writer.WriteLine("  wifi.registerUDP(2, \"255.255.255.255\", 6000);");
