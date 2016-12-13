@@ -1358,7 +1358,7 @@ namespace _86ME_ver1
             writer.WriteLine("double _IMU_val[12] = {0};");
             writer.WriteLine("double _IMU_Q[4] = {1, 0, 0, 0};");
             writer.WriteLine("double _omega[2] = {0};");
-            writer.WriteLine("int _IMU_init_status;");
+            writer.WriteLine("int _IMU_init_status = 0;");
             if (channels.Count > 0)
             {
                 writer.WriteLine("int servo_mask[" + channels.Count + "] = {0};");
@@ -1522,7 +1522,7 @@ namespace _86ME_ver1
                 else if (Motion.comboBox2.SelectedIndex == 3) //LSM330DLC of AI
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(3);\n  delay(5);\n");
                 else // NONE
-                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.init();\n  delay(5);\n");
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init();\n  delay(5);\n");
             }
 
             if (method_flag[5]) // wifi602
