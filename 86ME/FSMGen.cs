@@ -54,6 +54,8 @@ namespace _86ME_ver1
         private int opVar_num = 50;
         private bool IMU_compensatory = false;
         private Quaternion invQ = new Quaternion();
+        string[] ps2_vkeys = {"PSB_PAD_UP", "PSB_PAD_DOWN", "PSB_PAD_LEFT", "PSB_PAD_RIGHT", "PSB_L1", "PSB_L2",
+                              "PSB_R1", "PSB_R2", "PSB_TRIANGLE", "PSB_CIRCLE", "PSB_CROSS", "PSB_SQUARE"};
 
         public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, GlobalSettings gs)
         {
@@ -291,6 +293,16 @@ namespace _86ME_ver1
                 return "_pitch";
             else if (n < opVar_num + 58 && n >= opVar_num + 13)
                 return "digitalRead(" + (n - opVar_num - 13) + ")";
+            else if (n < opVar_num + 70 && n >= opVar_num + 58)
+            {
+                string _vkey = "(0";
+                if (method_flag[3])
+                {
+                    _vkey += " || ps2x.Button(" + ps2_vkeys[n - opVar_num - 58] + ")";
+                }
+                _vkey += ")";
+                return _vkey;
+            }
             else
                 return "_86ME_var[" + n + "]";
         }
@@ -1204,11 +1216,11 @@ namespace _86ME_ver1
                 {
                     ME_If mif = (ME_If)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::IF_" + i + ":");
-                    if (mif.left_var >= opVar_num + 13)
+                    if (mif.left_var >= opVar_num + 13 && mif.left_var < opVar_num + 58)
                         writer.WriteLine(space4 + "pinMode(" + (mif.left_var - opVar_num - 13) + ", INPUT);");
                     if (mif.form == 0)
                     {
-                        if (mif.left_var >= opVar_num + 13)
+                        if (mif.right_var >= opVar_num + 13 && mif.right_var < opVar_num + 58)
                             writer.WriteLine(space4 + "pinMode(" + (mif.right_var - opVar_num - 13) + ", INPUT);");
                         writer.WriteLine(space4 + "if(" + var2str(mif.left_var) + method2str(mif.method) + var2str(mif.right_var) + ")");
                     }
@@ -1253,17 +1265,17 @@ namespace _86ME_ver1
                     switch(op.form)
                     {
                         case 0:
-                            if (op.f1_var1 >= opVar_num + 13)
+                            if (op.f1_var1 >= opVar_num + 13 && op.f1_var1 < opVar_num + 58)
                             {
                                 int gpio_pin = op.f1_var1 - opVar_num - 13;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
                             }
-                            if (op.f1_var2 >= opVar_num + 13)
+                            if (op.f1_var2 >= opVar_num + 13 && op.f1_var2 < opVar_num + 58)
                             {
                                 int gpio_pin = op.f1_var2 - opVar_num - 13;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
                             }
-                            if (op.left_var >= opVar_num)
+                            if (op.left_var >= opVar_num && op.left_var < opVar_num + 45)
                             {
                                 int gpio_pin = op.left_var - opVar_num;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");
@@ -1271,12 +1283,12 @@ namespace _86ME_ver1
                             writer.WriteLine(op2str(op.left_var, op.f1_var1, op.f1_var2, op.f1_op, 0));
                             break;
                         case 1:
-                            if (op.f1_var1 >= opVar_num + 13)
+                            if (op.f1_var1 >= opVar_num + 13 && op.f1_var1 < opVar_num + 58)
                             {
                                 int gpio_pin = op.f1_var1 - opVar_num - 13;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
                             }
-                            if (op.left_var >= opVar_num)
+                            if (op.left_var >= opVar_num && op.left_var < opVar_num + 45)
                             {
                                 int gpio_pin = op.left_var - opVar_num;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");
@@ -1284,12 +1296,12 @@ namespace _86ME_ver1
                             writer.WriteLine(op2str(op.left_var, 0, op.f2_var, op.f2_op, 1));
                             break;
                         case 2:
-                            if (op.f3_var >= opVar_num + 13)
+                            if (op.f3_var >= opVar_num + 13 && op.f3_var < opVar_num + 58)
                             {
                                 int gpio_pin = op.f3_var - opVar_num - 13;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", INPUT);");
                             }
-                            if (op.left_var >= opVar_num)
+                            if (op.left_var >= opVar_num && op.left_var < opVar_num + 45)
                             {
                                 int gpio_pin = op.left_var - opVar_num;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");
@@ -1299,7 +1311,7 @@ namespace _86ME_ver1
                                 writer.WriteLine(space4 + var2str(op.left_var) + " = " + var2str(op.f3_var) + ";");
                             break;
                         case 3:
-                            if (op.left_var >= opVar_num)
+                            if (op.left_var >= opVar_num && op.left_var < opVar_num + 45)
                             {
                                 int gpio_pin = op.left_var - opVar_num;
                                 writer.WriteLine(space4 + "pinMode(" + gpio_pin + ", OUTPUT);");

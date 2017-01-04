@@ -30,6 +30,9 @@ namespace _86ME_ver1
     public partial class Main : Form
     {
         Dictionary<string, string> Main_lang_dic;
+        int[] virtual_key = new int[12] {-1, -1, -1, -1 , -1, -1, -1, -1, -1, -1, -1, -1};
+        string[] vkeys = {"VKeyUp", "VKeyDown", "VKeyLeft", "VKeyRight", "VKeyL1", "VKeyL2",
+                          "VKeyR1", "VKeyR2", "VKeyTriangle", "VKeyCircle", "VKeyCross", "VKeySquare"};
         ulong servo_onOff = ~0UL;
         int opVar_num = 50;
         double[] operand_var = new double[100];
@@ -2276,6 +2279,10 @@ namespace _86ME_ver1
                     }
                 }
             }
+            else if (index < opVar_num + 70 && index >= opVar_num + 58)
+            {
+                return virtual_key[index - opVar_num - 58];
+            }
             return 0;
         }
 
@@ -2484,12 +2491,6 @@ namespace _86ME_ver1
 
         private void setOpVComboBox(ComboBox cb, int top, int left, string name, bool isLeft)
         {
-            ME_Compute op = new ME_Compute();
-            ME_If mif = new ME_If();
-            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Compute)
-                op = (ME_Compute)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
-            else
-                mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
             cb.Name = name;
             cb.Size = new Size(100, 22);
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -2511,6 +2512,23 @@ namespace _86ME_ver1
             }
             for (int i = 0; i < 45; i++)
                 cb.Items.Add("GPIO" + i);
+
+            ME_Compute op = new ME_Compute();
+            ME_If mif = new ME_If();
+            if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex] is ME_Compute)
+            {
+                op = (ME_Compute)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+            }
+            else
+            {
+                mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
+                if (name == "i0")
+                {
+                    for (int i = 0; i < vkeys.Length; i++)
+                        cb.Items.Add(vkeys[i]);
+                }
+            }
+
             switch (name)
             {
                 case "0":
@@ -2585,8 +2603,10 @@ namespace _86ME_ver1
                     return "Roll";
                 else if (n == opVar_num + 12)
                     return "Pitch";
-                else if (n > opVar_num + 12)
+                else if (n > opVar_num + 12 && n <= opVar_num + 57)
                     return "GPIO" + (n - opVar_num - 13);
+                else if (n > opVar_num + 57 && n <= opVar_num + 69)
+                    return vkeys[n - opVar_num - 58];
             }
             else if (type == 1)
             {
