@@ -1612,7 +1612,7 @@ namespace _86ME_ver1
                         writer.WriteLine("  servoBeginSplineMotion(NATURAL_CUBIC, " +
                                          m.name + "_frm, _" + m.name + "_frm_time, " + m.frames + ");");
                     else if (m.control_method == 3)
-                        writer.WriteLine("  servoBeginSplineMotion(CATMULLROM_CUBIC, " +
+                        writer.WriteLine("  servoBeginSplineMotion(CATMULL_ROM, " +
                                          m.name + "_frm, _" + m.name + "_frm_time, " + m.frames + ");");
                 }
             }

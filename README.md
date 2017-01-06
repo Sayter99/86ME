@@ -8,7 +8,7 @@ _VERSION_: v1.95
 * Add a new trigger for analog pins.
 * Add a new function "Mirror" that can interchange or copy values between pairs of servos.
 * Add keys of a virtual keyboard in "If".
-* Add a new control method "Catmull-Rom Cubic"
+* Add a new control method "Catmull-Rom Spline"
 * Action "Compute" supports GPIO now.
 
 _VERSION_: v1.9

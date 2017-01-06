@@ -1826,7 +1826,7 @@
             "Linear",
             "Constrained Cubic",
             "Natural Cubic",
-            "Catmull-Rom Cubic"});
+            "Catmull-Rom Spline"});
             this.MotionControlCombo.Location = new System.Drawing.Point(86, 267);
             this.MotionControlCombo.Name = "MotionControlCombo";
             this.MotionControlCombo.Size = new System.Drawing.Size(147, 20);
