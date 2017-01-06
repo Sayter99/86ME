@@ -7,6 +7,8 @@ _VERSION_: v1.95
 * Add a new trigger for ESP8266.
 * Add a new trigger for analog pins.
 * Add a new function "Mirror" that can interchange or copy values between pairs of servos.
+* Add keys of a virtual keyboard in "If".
+* Add a new control method "Catmull-Rom Cubic"
 * Action "Compute" supports GPIO now.
 
 _VERSION_: v1.9
