@@ -12,18 +12,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Text;
 using System.Windows.Forms;
 using System.IO;
-using System.IO.Ports;
 using System.Collections;
 using System.Threading;
-using System.Media;
-using System.Globalization;
-using System.Text.RegularExpressions;
 
 namespace _86ME_ver1
 {

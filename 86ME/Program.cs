@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Windows.Forms;
-using System.Threading;
 using System.IO;
-using System.Globalization;
 
 namespace _86ME_ver1
 {
