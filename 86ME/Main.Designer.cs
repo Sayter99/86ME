@@ -1,4 +1,4 @@
-﻿namespace _86ME_ver1
+﻿namespace _86ME_ver2
 {
     partial class Main
     {
@@ -34,6 +34,7 @@
             this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.actionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -203,7 +204,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.saveFileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -252,34 +252,41 @@
             this.saveAsFileToolStripMenuItem,
             this.exitToolStripMenuItem});
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(38, 20);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
             this.newToolStripMenuItem.Text = "File";
             // 
             // fileToolStripMenuItem
             // 
             this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-            this.fileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.fileToolStripMenuItem.Text = "New Project";
             this.fileToolStripMenuItem.Click += new System.EventHandler(this.fileToolStripMenuItem_Click);
             // 
             // actionToolStripMenuItem
             // 
             this.actionToolStripMenuItem.Name = "actionToolStripMenuItem";
-            this.actionToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.actionToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.actionToolStripMenuItem.Text = "Load Project";
             this.actionToolStripMenuItem.Click += new System.EventHandler(this.actionToolStripMenuItem_Click);
+            // 
+            // saveFileToolStripMenuItem
+            // 
+            this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
+            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
+            this.saveFileToolStripMenuItem.Text = "Save Project";
+            this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
             // 
             // saveAsFileToolStripMenuItem
             // 
             this.saveAsFileToolStripMenuItem.Name = "saveAsFileToolStripMenuItem";
-            this.saveAsFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsFileToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.saveAsFileToolStripMenuItem.Text = "Save As ...";
             this.saveAsFileToolStripMenuItem.Click += new System.EventHandler(this.saveAsFileToolStripMenuItem_Click);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
             // 
@@ -288,13 +295,13 @@
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.editToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
             // 
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(191, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.editToolStripMenuItem.Text = "Robot Configuration";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.optionToolStripMenuItem_Click);
             // 
@@ -303,7 +310,7 @@
             this.preferenceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.languageToolStripMenuItem});
             this.preferenceToolStripMenuItem.Name = "preferenceToolStripMenuItem";
-            this.preferenceToolStripMenuItem.Size = new System.Drawing.Size(79, 20);
+            this.preferenceToolStripMenuItem.Size = new System.Drawing.Size(75, 20);
             this.preferenceToolStripMenuItem.Text = "Preference";
             // 
             // languageToolStripMenuItem
@@ -314,34 +321,34 @@
             this.zhSToolStripMenuItem,
             this.jaToolStripMenuItem});
             this.languageToolStripMenuItem.Name = "languageToolStripMenuItem";
-            this.languageToolStripMenuItem.Size = new System.Drawing.Size(131, 22);
+            this.languageToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.languageToolStripMenuItem.Text = "Language";
             // 
             // englishToolStripMenuItem
             // 
             this.englishToolStripMenuItem.Name = "englishToolStripMenuItem";
-            this.englishToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.englishToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.englishToolStripMenuItem.Text = "English";
             this.englishToolStripMenuItem.Click += new System.EventHandler(this.englishToolStripMenuItem_Click);
             // 
             // zhToolStripMenuItem
             // 
             this.zhToolStripMenuItem.Name = "zhToolStripMenuItem";
-            this.zhToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.zhToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.zhToolStripMenuItem.Text = "繁體中文";
             this.zhToolStripMenuItem.Click += new System.EventHandler(this.zhToolStripMenuItem_Click);
             // 
             // zhSToolStripMenuItem
             // 
             this.zhSToolStripMenuItem.Name = "zhSToolStripMenuItem";
-            this.zhSToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.zhSToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.zhSToolStripMenuItem.Text = "简体中文";
             this.zhSToolStripMenuItem.Click += new System.EventHandler(this.zhHToolStripMenuItem_Click);
             // 
             // jaToolStripMenuItem
             // 
             this.jaToolStripMenuItem.Name = "jaToolStripMenuItem";
-            this.jaToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.jaToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
             this.jaToolStripMenuItem.Text = "日本語";
             this.jaToolStripMenuItem.Click += new System.EventHandler(this.jaToolStripMenuItem_Click);
             // 
@@ -351,20 +358,20 @@
             this.howToUseToolStripMenuItem,
             this.aboutToolStripMenuItem});
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(46, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             // 
             // howToUseToolStripMenuItem
             // 
             this.howToUseToolStripMenuItem.Name = "howToUseToolStripMenuItem";
-            this.howToUseToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.howToUseToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.howToUseToolStripMenuItem.Text = "Tutorials";
             this.howToUseToolStripMenuItem.Click += new System.EventHandler(this.howToUseToolStripMenuItem_Click);
             // 
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(120, 22);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
@@ -390,35 +397,35 @@
             // l2rToolStripMenuItem
             // 
             this.l2rToolStripMenuItem.Name = "l2rToolStripMenuItem";
-            this.l2rToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.l2rToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.l2rToolStripMenuItem.Text = "Copy Left to Right";
             this.l2rToolStripMenuItem.Click += new System.EventHandler(this.l2rToolStripMenuItem_Click);
             // 
             // l2riToolStripMenuItem
             // 
             this.l2riToolStripMenuItem.Name = "l2riToolStripMenuItem";
-            this.l2riToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.l2riToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.l2riToolStripMenuItem.Text = "Copy Left to Right (Inverse)";
             this.l2riToolStripMenuItem.Click += new System.EventHandler(this.l2riToolStripMenuItem_Click);
             // 
             // r2lToolStripMenuItem
             // 
             this.r2lToolStripMenuItem.Name = "r2lToolStripMenuItem";
-            this.r2lToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.r2lToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.r2lToolStripMenuItem.Text = "Copy Right to Left";
             this.r2lToolStripMenuItem.Click += new System.EventHandler(this.r2lToolStripMenuItem_Click);
             // 
             // r2liToolStripMenuItem
             // 
             this.r2liToolStripMenuItem.Name = "r2liToolStripMenuItem";
-            this.r2liToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.r2liToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.r2liToolStripMenuItem.Text = "Copy Right to Left (Inverse)";
             this.r2liToolStripMenuItem.Click += new System.EventHandler(this.r2liToolStripMenuItem_Click);
             // 
             // interchangeToolStripMenuItem
             // 
             this.interchangeToolStripMenuItem.Name = "interchangeToolStripMenuItem";
-            this.interchangeToolStripMenuItem.Size = new System.Drawing.Size(226, 22);
+            this.interchangeToolStripMenuItem.Size = new System.Drawing.Size(218, 22);
             this.interchangeToolStripMenuItem.Text = "Interchange";
             this.interchangeToolStripMenuItem.Click += new System.EventHandler(this.interchangeToolStripMenuItem_Click);
             // 
@@ -441,98 +448,98 @@
             // frameToolStripMenuItem
             // 
             this.frameToolStripMenuItem.Name = "frameToolStripMenuItem";
-            this.frameToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.frameToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.frameToolStripMenuItem.Text = "Frame";
             this.frameToolStripMenuItem.Click += new System.EventHandler(this.frameToolStripMenuItem_Click);
             // 
             // homeToolStripMenuItem
             // 
             this.homeToolStripMenuItem.Name = "homeToolStripMenuItem";
-            this.homeToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.homeToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.homeToolStripMenuItem.Text = "HomeFrame";
             this.homeToolStripMenuItem.Click += new System.EventHandler(this.homeToolStripMenuItem_Click);
             // 
             // delayToolStripMenuItem
             // 
             this.delayToolStripMenuItem.Name = "delayToolStripMenuItem";
-            this.delayToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.delayToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.delayToolStripMenuItem.Text = "Delay";
             this.delayToolStripMenuItem.Click += new System.EventHandler(this.delayToolStripMenuItem_Click);
             // 
             // flagToolStripMenuItem
             // 
             this.flagToolStripMenuItem.Name = "flagToolStripMenuItem";
-            this.flagToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.flagToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.flagToolStripMenuItem.Text = "Flag";
             this.flagToolStripMenuItem.Click += new System.EventHandler(this.flagToolStripMenuItem_Click);
             // 
             // gotoToolStripMenuItem
             // 
             this.gotoToolStripMenuItem.Name = "gotoToolStripMenuItem";
-            this.gotoToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.gotoToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.gotoToolStripMenuItem.Text = "Goto";
             this.gotoToolStripMenuItem.Click += new System.EventHandler(this.gotoToolStripMenuItem_Click);
             // 
             // triggerToolStripMenuItem
             // 
             this.triggerToolStripMenuItem.Name = "triggerToolStripMenuItem";
-            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.triggerToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.triggerToolStripMenuItem.Text = "GotoMotion";
             this.triggerToolStripMenuItem.Click += new System.EventHandler(this.triggerToolStripMenuItem_Click);
             // 
             // ifToolStripMenuItem
             // 
             this.ifToolStripMenuItem.Name = "ifToolStripMenuItem";
-            this.ifToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.ifToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.ifToolStripMenuItem.Text = "If";
             this.ifToolStripMenuItem.Click += new System.EventHandler(this.ifToolStripMenuItem_Click);
             // 
             // operandToolStripMenuItem
             // 
             this.operandToolStripMenuItem.Name = "operandToolStripMenuItem";
-            this.operandToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.operandToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.operandToolStripMenuItem.Text = "Compute";
             this.operandToolStripMenuItem.Click += new System.EventHandler(this.operandToolStripMenuItem_Click);
             // 
             // releaseToolStripMenuItem
             // 
             this.releaseToolStripMenuItem.Name = "releaseToolStripMenuItem";
-            this.releaseToolStripMenuItem.Size = new System.Drawing.Size(145, 22);
+            this.releaseToolStripMenuItem.Size = new System.Drawing.Size(140, 22);
             this.releaseToolStripMenuItem.Text = "Release";
             this.releaseToolStripMenuItem.Click += new System.EventHandler(this.releaseToolStripMenuItem_Click);
             // 
             // ImportMotionToolStripMenuItem
             // 
             this.ImportMotionToolStripMenuItem.Name = "ImportMotionToolStripMenuItem";
-            this.ImportMotionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.ImportMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.ImportMotionToolStripMenuItem.Text = "Import Motion";
             this.ImportMotionToolStripMenuItem.Click += new System.EventHandler(this.ImportMotionToolStripMenuItem_Click);
             // 
             // ExportMotionToolStripMenuItem
             // 
             this.ExportMotionToolStripMenuItem.Name = "ExportMotionToolStripMenuItem";
-            this.ExportMotionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.ExportMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.ExportMotionToolStripMenuItem.Text = "Export Motion";
             this.ExportMotionToolStripMenuItem.Click += new System.EventHandler(this.ExportMotionToolStripMenuItem_Click);
             // 
             // RenameMotionToolStripMenuItem
             // 
             this.RenameMotionToolStripMenuItem.Name = "RenameMotionToolStripMenuItem";
-            this.RenameMotionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.RenameMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.RenameMotionToolStripMenuItem.Text = "Rename Motion";
             this.RenameMotionToolStripMenuItem.Click += new System.EventHandler(this.RenameMotionToolStripMenuItem_Click);
             // 
             // DeleteMotionToolStripMenuItem
             // 
             this.DeleteMotionToolStripMenuItem.Name = "DeleteMotionToolStripMenuItem";
-            this.DeleteMotionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.DeleteMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.DeleteMotionToolStripMenuItem.Text = "Delete Motion";
             this.DeleteMotionToolStripMenuItem.Click += new System.EventHandler(this.DeleteMotionToolStripMenuItem_Click);
             // 
             // DuplicateMotionToolStripMenuItem
             // 
             this.DuplicateMotionToolStripMenuItem.Name = "DuplicateMotionToolStripMenuItem";
-            this.DuplicateMotionToolStripMenuItem.Size = new System.Drawing.Size(173, 22);
+            this.DuplicateMotionToolStripMenuItem.Size = new System.Drawing.Size(166, 22);
             this.DuplicateMotionToolStripMenuItem.Text = "Duplicate Motion";
             this.DuplicateMotionToolStripMenuItem.Click += new System.EventHandler(this.DuplicateMotionToolStripMenuItem_Click);
             // 
@@ -542,9 +549,9 @@
             this.Action_groupBox.Controls.Add(this.Hint_groupBox);
             this.Action_groupBox.Controls.Add(this.action_panel);
             this.Action_groupBox.Controls.Add(this.panel2);
-            this.Action_groupBox.Location = new System.Drawing.Point(13, 94);
+            this.Action_groupBox.Location = new System.Drawing.Point(13, 102);
             this.Action_groupBox.Name = "Action_groupBox";
-            this.Action_groupBox.Size = new System.Drawing.Size(720, 594);
+            this.Action_groupBox.Size = new System.Drawing.Size(720, 644);
             this.Action_groupBox.TabIndex = 1;
             this.Action_groupBox.TabStop = false;
             this.Action_groupBox.Text = "Action";
@@ -554,7 +561,7 @@
             this.Hint_groupBox.Controls.Add(this.hint_richTextBox);
             this.Hint_groupBox.Location = new System.Drawing.Point(321, 0);
             this.Hint_groupBox.Name = "Hint_groupBox";
-            this.Hint_groupBox.Size = new System.Drawing.Size(399, 106);
+            this.Hint_groupBox.Size = new System.Drawing.Size(399, 115);
             this.Hint_groupBox.TabIndex = 2;
             this.Hint_groupBox.TabStop = false;
             this.Hint_groupBox.Text = "Hint";
@@ -564,10 +571,10 @@
             this.hint_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hint_richTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
             this.hint_richTextBox.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.hint_richTextBox.Location = new System.Drawing.Point(3, 18);
+            this.hint_richTextBox.Location = new System.Drawing.Point(3, 16);
             this.hint_richTextBox.Name = "hint_richTextBox";
             this.hint_richTextBox.ReadOnly = true;
-            this.hint_richTextBox.Size = new System.Drawing.Size(393, 85);
+            this.hint_richTextBox.Size = new System.Drawing.Size(393, 96);
             this.hint_richTextBox.TabIndex = 0;
             this.hint_richTextBox.Text = "   ___   __   ____        _\n  ( _ ) / /_ |  _ \\ _   _(_)_ __   ___\n  / _ \\| \'_ \\|" +
     " | | | | | | | \'_ \\ / _ \\\n | (_) | (_) | |_| | |_| | | | | | (_) |\n  \\___/ \\___/" +
@@ -580,17 +587,17 @@
             this.action_panel.Controls.Add(this.delayUnitLabel);
             this.action_panel.Controls.Add(this.delaytext);
             this.action_panel.Controls.Add(this.DelayLabel);
-            this.action_panel.Location = new System.Drawing.Point(12, 21);
+            this.action_panel.Location = new System.Drawing.Point(12, 23);
             this.action_panel.Name = "action_panel";
-            this.action_panel.Size = new System.Drawing.Size(303, 85);
+            this.action_panel.Size = new System.Drawing.Size(303, 92);
             this.action_panel.TabIndex = 4;
             // 
             // loadFrame
             // 
-            this.loadFrame.Image = global::_86ME_ver1.Properties.Resources.load_frame;
-            this.loadFrame.Location = new System.Drawing.Point(52, 46);
+            this.loadFrame.Image = global::_86ME_ver2.Properties.Resources.load_frame;
+            this.loadFrame.Location = new System.Drawing.Point(52, 50);
             this.loadFrame.Name = "loadFrame";
-            this.loadFrame.Size = new System.Drawing.Size(28, 26);
+            this.loadFrame.Size = new System.Drawing.Size(28, 28);
             this.loadFrame.TabIndex = 13;
             this.ttp.SetToolTip(this.loadFrame, "Load a frame from file to set servos.");
             this.loadFrame.UseVisualStyleBackColor = true;
@@ -598,10 +605,10 @@
             // 
             // saveFrame
             // 
-            this.saveFrame.Image = global::_86ME_ver1.Properties.Resources.save_frame;
-            this.saveFrame.Location = new System.Drawing.Point(18, 46);
+            this.saveFrame.Image = global::_86ME_ver2.Properties.Resources.save_frame;
+            this.saveFrame.Location = new System.Drawing.Point(18, 50);
             this.saveFrame.Name = "saveFrame";
-            this.saveFrame.Size = new System.Drawing.Size(28, 26);
+            this.saveFrame.Size = new System.Drawing.Size(28, 28);
             this.saveFrame.TabIndex = 12;
             this.ttp.SetToolTip(this.saveFrame, "Save current frame as a txt file.");
             this.saveFrame.UseVisualStyleBackColor = true;
@@ -610,17 +617,17 @@
             // delayUnitLabel
             // 
             this.delayUnitLabel.AutoSize = true;
-            this.delayUnitLabel.Location = new System.Drawing.Point(188, 15);
+            this.delayUnitLabel.Location = new System.Drawing.Point(188, 16);
             this.delayUnitLabel.Name = "delayUnitLabel";
-            this.delayUnitLabel.Size = new System.Drawing.Size(18, 12);
+            this.delayUnitLabel.Size = new System.Drawing.Size(20, 13);
             this.delayUnitLabel.TabIndex = 11;
             this.delayUnitLabel.Text = "ms";
             // 
             // delaytext
             // 
-            this.delaytext.Location = new System.Drawing.Point(88, 11);
+            this.delaytext.Location = new System.Drawing.Point(88, 12);
             this.delaytext.Name = "delaytext";
-            this.delaytext.Size = new System.Drawing.Size(91, 22);
+            this.delaytext.Size = new System.Drawing.Size(91, 20);
             this.delaytext.TabIndex = 6;
             this.delaytext.Text = "0";
             this.delaytext.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
@@ -630,21 +637,21 @@
             // DelayLabel
             // 
             this.DelayLabel.AutoSize = true;
-            this.DelayLabel.Location = new System.Drawing.Point(17, 15);
+            this.DelayLabel.Location = new System.Drawing.Point(17, 16);
             this.DelayLabel.Name = "DelayLabel";
-            this.DelayLabel.Size = new System.Drawing.Size(35, 12);
+            this.DelayLabel.Size = new System.Drawing.Size(37, 13);
             this.DelayLabel.TabIndex = 5;
             this.DelayLabel.Text = "Delay:";
             // 
             // panel2
             // 
             this.panel2.AutoScroll = true;
-            this.panel2.BackColor = System.Drawing.SystemColors.Window;
+            this.panel2.BackColor = System.Drawing.SystemColors.InactiveCaption;
             this.panel2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
             this.panel2.Controls.Add(this.Framelist);
-            this.panel2.Location = new System.Drawing.Point(12, 112);
+            this.panel2.Location = new System.Drawing.Point(12, 121);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(700, 476);
+            this.panel2.Size = new System.Drawing.Size(700, 516);
             this.panel2.TabIndex = 6;
             // 
             // Framelist
@@ -655,7 +662,7 @@
             this.Framelist.Controls.Add(this.Robot_pictureBox);
             this.Framelist.Location = new System.Drawing.Point(3, 3);
             this.Framelist.Name = "Framelist";
-            this.Framelist.Size = new System.Drawing.Size(694, 470);
+            this.Framelist.Size = new System.Drawing.Size(694, 509);
             this.Framelist.TabIndex = 5;
             // 
             // Robot_pictureBox
@@ -664,7 +671,7 @@
             this.Robot_pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.Robot_pictureBox.Location = new System.Drawing.Point(0, 0);
             this.Robot_pictureBox.Name = "Robot_pictureBox";
-            this.Robot_pictureBox.Size = new System.Drawing.Size(694, 470);
+            this.Robot_pictureBox.Size = new System.Drawing.Size(694, 509);
             this.Robot_pictureBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.Robot_pictureBox.TabIndex = 0;
             this.Robot_pictureBox.TabStop = false;
@@ -672,25 +679,25 @@
             // fast
             // 
             this.fast.AutoSize = true;
-            this.fast.Location = new System.Drawing.Point(160, 37);
+            this.fast.Location = new System.Drawing.Point(160, 40);
             this.fast.Name = "fast";
-            this.fast.Size = new System.Drawing.Size(21, 12);
+            this.fast.Size = new System.Drawing.Size(24, 13);
             this.fast.TabIndex = 14;
             this.fast.Text = "fast";
             // 
             // slow
             // 
             this.slow.AutoSize = true;
-            this.slow.Location = new System.Drawing.Point(80, 37);
+            this.slow.Location = new System.Drawing.Point(80, 40);
             this.slow.Name = "slow";
-            this.slow.Size = new System.Drawing.Size(26, 12);
+            this.slow.Size = new System.Drawing.Size(28, 13);
             this.slow.TabIndex = 13;
             this.slow.Text = "slow";
             // 
             // sync_speed
             // 
             this.sync_speed.LargeChange = 1;
-            this.sync_speed.Location = new System.Drawing.Point(77, 11);
+            this.sync_speed.Location = new System.Drawing.Point(77, 12);
             this.sync_speed.Maximum = 5;
             this.sync_speed.Minimum = 1;
             this.sync_speed.Name = "sync_speed";
@@ -704,9 +711,9 @@
             // motorRelease
             // 
             this.motorRelease.Cursor = System.Windows.Forms.Cursors.Default;
-            this.motorRelease.Location = new System.Drawing.Point(198, 18);
+            this.motorRelease.Location = new System.Drawing.Point(198, 20);
             this.motorRelease.Name = "motorRelease";
-            this.motorRelease.Size = new System.Drawing.Size(117, 23);
+            this.motorRelease.Size = new System.Drawing.Size(117, 25);
             this.motorRelease.TabIndex = 10;
             this.motorRelease.Text = "Free Motors";
             this.ttp.SetToolTip(this.motorRelease, "Caution! It will release all motors.");
@@ -716,9 +723,9 @@
             // autocheck
             // 
             this.autocheck.AutoSize = true;
-            this.autocheck.Location = new System.Drawing.Point(30, 23);
+            this.autocheck.Location = new System.Drawing.Point(30, 25);
             this.autocheck.Name = "autocheck";
-            this.autocheck.Size = new System.Drawing.Size(47, 16);
+            this.autocheck.Size = new System.Drawing.Size(50, 17);
             this.autocheck.TabIndex = 9;
             this.autocheck.Text = "Sync";
             this.ttp.SetToolTip(this.autocheck, "Synchronize the current frame to motors.");
@@ -728,9 +735,9 @@
             // capturebutton
             // 
             this.capturebutton.Cursor = System.Windows.Forms.Cursors.Default;
-            this.capturebutton.Location = new System.Drawing.Point(324, 18);
+            this.capturebutton.Location = new System.Drawing.Point(324, 20);
             this.capturebutton.Name = "capturebutton";
-            this.capturebutton.Size = new System.Drawing.Size(117, 23);
+            this.capturebutton.Size = new System.Drawing.Size(117, 25);
             this.capturebutton.TabIndex = 7;
             this.capturebutton.Text = "Capture";
             this.ttp.SetToolTip(this.capturebutton, "Caution! It will release all motors first and get the positions of motors to curr" +
@@ -751,9 +758,9 @@
             this.Motion_groupBox.Controls.Add(this.MotionTest);
             this.Motion_groupBox.Controls.Add(this.NewMotion);
             this.Motion_groupBox.Controls.Add(this.MotionCombo);
-            this.Motion_groupBox.Location = new System.Drawing.Point(739, 28);
+            this.Motion_groupBox.Location = new System.Drawing.Point(739, 30);
             this.Motion_groupBox.Name = "Motion_groupBox";
-            this.Motion_groupBox.Size = new System.Drawing.Size(289, 601);
+            this.Motion_groupBox.Size = new System.Drawing.Size(289, 651);
             this.Motion_groupBox.TabIndex = 3;
             this.Motion_groupBox.TabStop = false;
             this.Motion_groupBox.Text = "Motion";
@@ -761,10 +768,10 @@
             // EditMotion
             // 
             this.EditMotion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.EditMotion.Image = global::_86ME_ver1.Properties.Resources.gear;
-            this.EditMotion.Location = new System.Drawing.Point(225, 37);
+            this.EditMotion.Image = global::_86ME_ver2.Properties.Resources.gear;
+            this.EditMotion.Location = new System.Drawing.Point(225, 40);
             this.EditMotion.Name = "EditMotion";
-            this.EditMotion.Size = new System.Drawing.Size(24, 24);
+            this.EditMotion.Size = new System.Drawing.Size(24, 26);
             this.EditMotion.TabIndex = 11;
             this.EditMotion.UseVisualStyleBackColor = true;
             this.EditMotion.Click += new System.EventHandler(this.EditMotion_Click);
@@ -774,10 +781,10 @@
             this.MotionConfig.Controls.Add(this.ActionList);
             this.MotionConfig.Controls.Add(this.MotionTrigger);
             this.MotionConfig.Controls.Add(this.MotionProperty);
-            this.MotionConfig.Location = new System.Drawing.Point(7, 66);
+            this.MotionConfig.Location = new System.Drawing.Point(7, 72);
             this.MotionConfig.Name = "MotionConfig";
             this.MotionConfig.SelectedIndex = 0;
-            this.MotionConfig.Size = new System.Drawing.Size(247, 488);
+            this.MotionConfig.Size = new System.Drawing.Size(247, 529);
             this.MotionConfig.TabIndex = 10;
             this.MotionConfig.SelectedIndexChanged += new System.EventHandler(this.MotionConfig_SelectedIndexChanged);
             // 
@@ -787,13 +794,14 @@
             this.ActionList.Location = new System.Drawing.Point(4, 22);
             this.ActionList.Name = "ActionList";
             this.ActionList.Padding = new System.Windows.Forms.Padding(3);
-            this.ActionList.Size = new System.Drawing.Size(239, 462);
+            this.ActionList.Size = new System.Drawing.Size(239, 503);
             this.ActionList.TabIndex = 0;
             this.ActionList.Text = "Action List";
             this.ActionList.UseVisualStyleBackColor = true;
             // 
             // Motionlist
             // 
+            this.Motionlist.BackColor = System.Drawing.SystemColors.Window;
             this.Motionlist.Font = new System.Drawing.Font("Calibri", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Motionlist.FormattingEnabled = true;
             this.Motionlist.IntegralHeight = false;
@@ -801,7 +809,7 @@
             this.Motionlist.Location = new System.Drawing.Point(1, 3);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
-            this.Motionlist.Size = new System.Drawing.Size(235, 456);
+            this.Motionlist.Size = new System.Drawing.Size(235, 494);
             this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Motionlist_KeyDown);
@@ -830,7 +838,7 @@
             this.MotionTrigger.Location = new System.Drawing.Point(4, 22);
             this.MotionTrigger.Name = "MotionTrigger";
             this.MotionTrigger.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionTrigger.Size = new System.Drawing.Size(239, 462);
+            this.MotionTrigger.Size = new System.Drawing.Size(239, 503);
             this.MotionTrigger.TabIndex = 1;
             this.MotionTrigger.Text = "Trigger";
             // 
@@ -846,9 +854,9 @@
             this.ESP8266_groupBox.Controls.Add(this.ESP8266PortLabel);
             this.ESP8266_groupBox.Controls.Add(this.ESP8266KeyLabel);
             this.ESP8266_groupBox.Controls.Add(this.ESP8266KeyText);
-            this.ESP8266_groupBox.Location = new System.Drawing.Point(27, 646);
+            this.ESP8266_groupBox.Location = new System.Drawing.Point(27, 700);
             this.ESP8266_groupBox.Name = "ESP8266_groupBox";
-            this.ESP8266_groupBox.Size = new System.Drawing.Size(192, 140);
+            this.ESP8266_groupBox.Size = new System.Drawing.Size(192, 152);
             this.ESP8266_groupBox.TabIndex = 18;
             this.ESP8266_groupBox.TabStop = false;
             this.ESP8266_groupBox.Text = "ESP8266";
@@ -861,9 +869,9 @@
             "Serial1",
             "Serial2",
             "Serial3"});
-            this.ESP8266CHPDCombo.Location = new System.Drawing.Point(105, 110);
+            this.ESP8266CHPDCombo.Location = new System.Drawing.Point(105, 119);
             this.ESP8266CHPDCombo.Name = "ESP8266CHPDCombo";
-            this.ESP8266CHPDCombo.Size = new System.Drawing.Size(81, 20);
+            this.ESP8266CHPDCombo.Size = new System.Drawing.Size(81, 21);
             this.ESP8266CHPDCombo.TabIndex = 10;
             this.ttp.SetToolTip(this.ESP8266CHPDCombo, "Set used port for connecting the ESP8266.");
             this.ESP8266CHPDCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266CHPDCombo_SelectedIndexChanged);
@@ -871,9 +879,9 @@
             // ESP8266CHPDLabel
             // 
             this.ESP8266CHPDLabel.AutoSize = true;
-            this.ESP8266CHPDLabel.Location = new System.Drawing.Point(103, 95);
+            this.ESP8266CHPDLabel.Location = new System.Drawing.Point(103, 103);
             this.ESP8266CHPDLabel.Name = "ESP8266CHPDLabel";
-            this.ESP8266CHPDLabel.Size = new System.Drawing.Size(44, 12);
+            this.ESP8266CHPDLabel.Size = new System.Drawing.Size(46, 13);
             this.ESP8266CHPDLabel.TabIndex = 11;
             this.ESP8266CHPDLabel.Text = "CH_PD:";
             // 
@@ -884,18 +892,18 @@
             this.ESP8266ModeCombo.Items.AddRange(new object[] {
             "OneShot",
             "Continuous"});
-            this.ESP8266ModeCombo.Location = new System.Drawing.Point(105, 30);
+            this.ESP8266ModeCombo.Location = new System.Drawing.Point(105, 33);
             this.ESP8266ModeCombo.Name = "ESP8266ModeCombo";
-            this.ESP8266ModeCombo.Size = new System.Drawing.Size(81, 20);
+            this.ESP8266ModeCombo.Size = new System.Drawing.Size(81, 21);
             this.ESP8266ModeCombo.TabIndex = 9;
             this.ESP8266ModeCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266ModeCombo_SelectedIndexChanged);
             // 
             // ESP8266ModeLabel
             // 
             this.ESP8266ModeLabel.AutoSize = true;
-            this.ESP8266ModeLabel.Location = new System.Drawing.Point(103, 14);
+            this.ESP8266ModeLabel.Location = new System.Drawing.Point(103, 15);
             this.ESP8266ModeLabel.Name = "ESP8266ModeLabel";
-            this.ESP8266ModeLabel.Size = new System.Drawing.Size(35, 12);
+            this.ESP8266ModeLabel.Size = new System.Drawing.Size(37, 13);
             this.ESP8266ModeLabel.TabIndex = 8;
             this.ESP8266ModeLabel.Text = "Mode:";
             // 
@@ -909,9 +917,9 @@
             "38400",
             "57600",
             "115200"});
-            this.ESP8266BaudCombo.Location = new System.Drawing.Point(16, 70);
+            this.ESP8266BaudCombo.Location = new System.Drawing.Point(16, 76);
             this.ESP8266BaudCombo.Name = "ESP8266BaudCombo";
-            this.ESP8266BaudCombo.Size = new System.Drawing.Size(78, 20);
+            this.ESP8266BaudCombo.Size = new System.Drawing.Size(78, 21);
             this.ESP8266BaudCombo.TabIndex = 7;
             this.ttp.SetToolTip(this.ESP8266BaudCombo, "Set used baud rate of connected ESP8266.");
             this.ESP8266BaudCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266BaudCombo_SelectedIndexChanged);
@@ -919,9 +927,9 @@
             // ESP8266BaudLabel
             // 
             this.ESP8266BaudLabel.AutoSize = true;
-            this.ESP8266BaudLabel.Location = new System.Drawing.Point(14, 54);
+            this.ESP8266BaudLabel.Location = new System.Drawing.Point(14, 59);
             this.ESP8266BaudLabel.Name = "ESP8266BaudLabel";
-            this.ESP8266BaudLabel.Size = new System.Drawing.Size(57, 12);
+            this.ESP8266BaudLabel.Size = new System.Drawing.Size(61, 13);
             this.ESP8266BaudLabel.TabIndex = 6;
             this.ESP8266BaudLabel.Text = "Baud Rate:";
             // 
@@ -933,9 +941,9 @@
             "Serial1",
             "Serial2",
             "Serial3"});
-            this.ESP8266PortCombo.Location = new System.Drawing.Point(105, 69);
+            this.ESP8266PortCombo.Location = new System.Drawing.Point(105, 75);
             this.ESP8266PortCombo.Name = "ESP8266PortCombo";
-            this.ESP8266PortCombo.Size = new System.Drawing.Size(81, 20);
+            this.ESP8266PortCombo.Size = new System.Drawing.Size(81, 21);
             this.ESP8266PortCombo.TabIndex = 4;
             this.ttp.SetToolTip(this.ESP8266PortCombo, "Set used port for connecting the ESP8266.");
             this.ESP8266PortCombo.SelectedIndexChanged += new System.EventHandler(this.ESP8266PortCombo_SelectedIndexChanged);
@@ -943,27 +951,27 @@
             // ESP8266PortLabel
             // 
             this.ESP8266PortLabel.AutoSize = true;
-            this.ESP8266PortLabel.Location = new System.Drawing.Point(103, 54);
+            this.ESP8266PortLabel.Location = new System.Drawing.Point(103, 59);
             this.ESP8266PortLabel.Name = "ESP8266PortLabel";
-            this.ESP8266PortLabel.Size = new System.Drawing.Size(53, 12);
+            this.ESP8266PortLabel.Size = new System.Drawing.Size(57, 13);
             this.ESP8266PortLabel.TabIndex = 5;
             this.ESP8266PortLabel.Text = "Used Port:";
             // 
             // ESP8266KeyLabel
             // 
             this.ESP8266KeyLabel.AutoSize = true;
-            this.ESP8266KeyLabel.Location = new System.Drawing.Point(14, 14);
+            this.ESP8266KeyLabel.Location = new System.Drawing.Point(14, 15);
             this.ESP8266KeyLabel.Name = "ESP8266KeyLabel";
-            this.ESP8266KeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.ESP8266KeyLabel.Size = new System.Drawing.Size(31, 13);
             this.ESP8266KeyLabel.TabIndex = 4;
             this.ESP8266KeyLabel.Text = "Key: ";
             // 
             // ESP8266KeyText
             // 
-            this.ESP8266KeyText.Location = new System.Drawing.Point(16, 29);
+            this.ESP8266KeyText.Location = new System.Drawing.Point(16, 31);
             this.ESP8266KeyText.MaxLength = 20;
             this.ESP8266KeyText.Name = "ESP8266KeyText";
-            this.ESP8266KeyText.Size = new System.Drawing.Size(78, 22);
+            this.ESP8266KeyText.Size = new System.Drawing.Size(78, 20);
             this.ESP8266KeyText.TabIndex = 0;
             this.ttp.SetToolTip(this.ESP8266KeyText, "Set a string for triggering the selected motion by ESP8266.");
             this.ESP8266KeyText.TextChanged += new System.EventHandler(this.ESP8266KeyText_TextChanged);
@@ -972,7 +980,7 @@
             // ESP8266_radioButton
             // 
             this.ESP8266_radioButton.AutoSize = true;
-            this.ESP8266_radioButton.Location = new System.Drawing.Point(7, 646);
+            this.ESP8266_radioButton.Location = new System.Drawing.Point(7, 700);
             this.ESP8266_radioButton.Name = "ESP8266_radioButton";
             this.ESP8266_radioButton.Size = new System.Drawing.Size(14, 13);
             this.ESP8266_radioButton.TabIndex = 17;
@@ -983,7 +991,7 @@
             // analog_radioButton
             // 
             this.analog_radioButton.AutoSize = true;
-            this.analog_radioButton.Location = new System.Drawing.Point(7, 412);
+            this.analog_radioButton.Location = new System.Drawing.Point(7, 446);
             this.analog_radioButton.Name = "analog_radioButton";
             this.analog_radioButton.Size = new System.Drawing.Size(14, 13);
             this.analog_radioButton.TabIndex = 16;
@@ -998,18 +1006,18 @@
             this.analog_groupBox.Controls.Add(this.analogValueLabel);
             this.analog_groupBox.Controls.Add(this.analogPinLabel);
             this.analog_groupBox.Controls.Add(this.analogPinCombo);
-            this.analog_groupBox.Location = new System.Drawing.Point(27, 412);
+            this.analog_groupBox.Location = new System.Drawing.Point(27, 446);
             this.analog_groupBox.Name = "analog_groupBox";
-            this.analog_groupBox.Size = new System.Drawing.Size(192, 58);
+            this.analog_groupBox.Size = new System.Drawing.Size(192, 63);
             this.analog_groupBox.TabIndex = 15;
             this.analog_groupBox.TabStop = false;
             this.analog_groupBox.Text = "Analog";
             // 
             // analogValueText
             // 
-            this.analogValueText.Location = new System.Drawing.Point(115, 30);
+            this.analogValueText.Location = new System.Drawing.Point(115, 33);
             this.analogValueText.Name = "analogValueText";
-            this.analogValueText.Size = new System.Drawing.Size(67, 22);
+            this.analogValueText.Size = new System.Drawing.Size(67, 20);
             this.analogValueText.TabIndex = 43;
             this.analogValueText.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.analogValueText.TextChanged += new System.EventHandler(this.analogValueText_Changed);
@@ -1026,27 +1034,27 @@
             "≦",
             ">",
             "<"});
-            this.analogCondCombo.Location = new System.Drawing.Point(63, 32);
+            this.analogCondCombo.Location = new System.Drawing.Point(63, 35);
             this.analogCondCombo.Name = "analogCondCombo";
-            this.analogCondCombo.Size = new System.Drawing.Size(46, 20);
+            this.analogCondCombo.Size = new System.Drawing.Size(46, 21);
             this.analogCondCombo.TabIndex = 10;
             this.analogCondCombo.SelectedIndexChanged += new System.EventHandler(this.analogCondCombo_SelectedIndexChanged);
             // 
             // analogValueLabel
             // 
             this.analogValueLabel.AutoSize = true;
-            this.analogValueLabel.Location = new System.Drawing.Point(115, 17);
+            this.analogValueLabel.Location = new System.Drawing.Point(115, 18);
             this.analogValueLabel.Name = "analogValueLabel";
-            this.analogValueLabel.Size = new System.Drawing.Size(35, 12);
+            this.analogValueLabel.Size = new System.Drawing.Size(37, 13);
             this.analogValueLabel.TabIndex = 11;
             this.analogValueLabel.Text = "Value:";
             // 
             // analogPinLabel
             // 
             this.analogPinLabel.AutoSize = true;
-            this.analogPinLabel.Location = new System.Drawing.Point(14, 17);
+            this.analogPinLabel.Location = new System.Drawing.Point(14, 18);
             this.analogPinLabel.Name = "analogPinLabel";
-            this.analogPinLabel.Size = new System.Drawing.Size(23, 12);
+            this.analogPinLabel.Size = new System.Drawing.Size(25, 13);
             this.analogPinLabel.TabIndex = 1;
             this.analogPinLabel.Text = "Pin:";
             // 
@@ -1062,16 +1070,16 @@
             "A4",
             "A5",
             "A6"});
-            this.analogPinCombo.Location = new System.Drawing.Point(16, 32);
+            this.analogPinCombo.Location = new System.Drawing.Point(16, 35);
             this.analogPinCombo.Name = "analogPinCombo";
-            this.analogPinCombo.Size = new System.Drawing.Size(41, 20);
+            this.analogPinCombo.Size = new System.Drawing.Size(41, 21);
             this.analogPinCombo.TabIndex = 0;
             this.analogPinCombo.SelectedIndexChanged += new System.EventHandler(this.analogPinCombo_SelectedIndexChanged);
             // 
             // wifi602_radioButton
             // 
             this.wifi602_radioButton.AutoSize = true;
-            this.wifi602_radioButton.Location = new System.Drawing.Point(7, 240);
+            this.wifi602_radioButton.Location = new System.Drawing.Point(7, 260);
             this.wifi602_radioButton.Name = "wifi602_radioButton";
             this.wifi602_radioButton.Size = new System.Drawing.Size(14, 13);
             this.wifi602_radioButton.TabIndex = 5;
@@ -1097,18 +1105,18 @@
             this.acc_groupBox.Controls.Add(this.accHXText);
             this.acc_groupBox.Controls.Add(this.accLXText);
             this.acc_groupBox.Controls.Add(this.accXLabel);
-            this.acc_groupBox.Location = new System.Drawing.Point(27, 476);
+            this.acc_groupBox.Location = new System.Drawing.Point(27, 516);
             this.acc_groupBox.Name = "acc_groupBox";
-            this.acc_groupBox.Size = new System.Drawing.Size(192, 164);
+            this.acc_groupBox.Size = new System.Drawing.Size(192, 178);
             this.acc_groupBox.TabIndex = 14;
             this.acc_groupBox.TabStop = false;
             this.acc_groupBox.Text = "Accelerometer";
             // 
             // getAccData
             // 
-            this.getAccData.Location = new System.Drawing.Point(30, 106);
+            this.getAccData.Location = new System.Drawing.Point(30, 115);
             this.getAccData.Name = "getAccData";
-            this.getAccData.Size = new System.Drawing.Size(154, 23);
+            this.getAccData.Size = new System.Drawing.Size(154, 25);
             this.getAccData.TabIndex = 42;
             this.getAccData.Text = "Auto Detect";
             this.getAccData.UseVisualStyleBackColor = true;
@@ -1117,17 +1125,17 @@
             // accDurationUnit
             // 
             this.accDurationUnit.AutoSize = true;
-            this.accDurationUnit.Location = new System.Drawing.Point(168, 141);
+            this.accDurationUnit.Location = new System.Drawing.Point(168, 153);
             this.accDurationUnit.Name = "accDurationUnit";
-            this.accDurationUnit.Size = new System.Drawing.Size(18, 12);
+            this.accDurationUnit.Size = new System.Drawing.Size(20, 13);
             this.accDurationUnit.TabIndex = 14;
             this.accDurationUnit.Text = "ms";
             // 
             // accDurationText
             // 
-            this.accDurationText.Location = new System.Drawing.Point(77, 135);
+            this.accDurationText.Location = new System.Drawing.Point(77, 146);
             this.accDurationText.Name = "accDurationText";
-            this.accDurationText.Size = new System.Drawing.Size(85, 22);
+            this.accDurationText.Size = new System.Drawing.Size(85, 20);
             this.accDurationText.TabIndex = 41;
             this.accDurationText.TextChanged += new System.EventHandler(this.accDurationText_Changed);
             this.accDurationText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.numbercheck);
@@ -1135,26 +1143,26 @@
             // accw3
             // 
             this.accw3.AutoSize = true;
-            this.accw3.Location = new System.Drawing.Point(103, 80);
+            this.accw3.Location = new System.Drawing.Point(103, 87);
             this.accw3.Name = "accw3";
-            this.accw3.Size = new System.Drawing.Size(11, 12);
+            this.accw3.Size = new System.Drawing.Size(14, 13);
             this.accw3.TabIndex = 40;
             this.accw3.Text = "~";
             // 
             // accHZText
             // 
-            this.accHZText.Location = new System.Drawing.Point(122, 77);
+            this.accHZText.Location = new System.Drawing.Point(122, 83);
             this.accHZText.Name = "accHZText";
-            this.accHZText.Size = new System.Drawing.Size(62, 22);
+            this.accHZText.Size = new System.Drawing.Size(62, 20);
             this.accHZText.TabIndex = 39;
             this.accHZText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
             this.accHZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accLZText
             // 
-            this.accLZText.Location = new System.Drawing.Point(32, 77);
+            this.accLZText.Location = new System.Drawing.Point(32, 83);
             this.accLZText.Name = "accLZText";
-            this.accLZText.Size = new System.Drawing.Size(62, 22);
+            this.accLZText.Size = new System.Drawing.Size(62, 20);
             this.accLZText.TabIndex = 38;
             this.accLZText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
             this.accLZText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
@@ -1162,35 +1170,35 @@
             // accZLabel
             // 
             this.accZLabel.AutoSize = true;
-            this.accZLabel.Location = new System.Drawing.Point(14, 80);
+            this.accZLabel.Location = new System.Drawing.Point(14, 87);
             this.accZLabel.Name = "accZLabel";
-            this.accZLabel.Size = new System.Drawing.Size(18, 12);
+            this.accZLabel.Size = new System.Drawing.Size(20, 13);
             this.accZLabel.TabIndex = 37;
             this.accZLabel.Text = "Z: ";
             // 
             // accw2
             // 
             this.accw2.AutoSize = true;
-            this.accw2.Location = new System.Drawing.Point(103, 52);
+            this.accw2.Location = new System.Drawing.Point(103, 56);
             this.accw2.Name = "accw2";
-            this.accw2.Size = new System.Drawing.Size(11, 12);
+            this.accw2.Size = new System.Drawing.Size(14, 13);
             this.accw2.TabIndex = 36;
             this.accw2.Text = "~";
             // 
             // accHYText
             // 
-            this.accHYText.Location = new System.Drawing.Point(122, 49);
+            this.accHYText.Location = new System.Drawing.Point(122, 53);
             this.accHYText.Name = "accHYText";
-            this.accHYText.Size = new System.Drawing.Size(62, 22);
+            this.accHYText.Size = new System.Drawing.Size(62, 20);
             this.accHYText.TabIndex = 35;
             this.accHYText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
             this.accHYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accLYText
             // 
-            this.accLYText.Location = new System.Drawing.Point(32, 49);
+            this.accLYText.Location = new System.Drawing.Point(32, 53);
             this.accLYText.Name = "accLYText";
-            this.accLYText.Size = new System.Drawing.Size(62, 22);
+            this.accLYText.Size = new System.Drawing.Size(62, 20);
             this.accLYText.TabIndex = 34;
             this.accLYText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
             this.accLYText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
@@ -1198,44 +1206,44 @@
             // accYLabel
             // 
             this.accYLabel.AutoSize = true;
-            this.accYLabel.Location = new System.Drawing.Point(14, 52);
+            this.accYLabel.Location = new System.Drawing.Point(14, 56);
             this.accYLabel.Name = "accYLabel";
-            this.accYLabel.Size = new System.Drawing.Size(19, 12);
+            this.accYLabel.Size = new System.Drawing.Size(20, 13);
             this.accYLabel.TabIndex = 33;
             this.accYLabel.Text = "Y: ";
             // 
             // accDurationLabel
             // 
             this.accDurationLabel.AutoSize = true;
-            this.accDurationLabel.Location = new System.Drawing.Point(14, 138);
+            this.accDurationLabel.Location = new System.Drawing.Point(14, 150);
             this.accDurationLabel.Name = "accDurationLabel";
-            this.accDurationLabel.Size = new System.Drawing.Size(57, 12);
+            this.accDurationLabel.Size = new System.Drawing.Size(58, 13);
             this.accDurationLabel.TabIndex = 32;
             this.accDurationLabel.Text = "Wait Time:";
             // 
             // accw1
             // 
             this.accw1.AutoSize = true;
-            this.accw1.Location = new System.Drawing.Point(103, 24);
+            this.accw1.Location = new System.Drawing.Point(103, 26);
             this.accw1.Name = "accw1";
-            this.accw1.Size = new System.Drawing.Size(11, 12);
+            this.accw1.Size = new System.Drawing.Size(14, 13);
             this.accw1.TabIndex = 29;
             this.accw1.Text = "~";
             // 
             // accHXText
             // 
-            this.accHXText.Location = new System.Drawing.Point(122, 21);
+            this.accHXText.Location = new System.Drawing.Point(122, 23);
             this.accHXText.Name = "accHXText";
-            this.accHXText.Size = new System.Drawing.Size(62, 22);
+            this.accHXText.Size = new System.Drawing.Size(62, 20);
             this.accHXText.TabIndex = 26;
             this.accHXText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
             this.accHXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
             // 
             // accLXText
             // 
-            this.accLXText.Location = new System.Drawing.Point(32, 21);
+            this.accLXText.Location = new System.Drawing.Point(32, 23);
             this.accLXText.Name = "accLXText";
-            this.accLXText.Size = new System.Drawing.Size(62, 22);
+            this.accLXText.Size = new System.Drawing.Size(62, 20);
             this.accLXText.TabIndex = 16;
             this.accLXText.TextChanged += new System.EventHandler(this.accXYZText_Changed);
             this.accLXText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.floatcheck);
@@ -1243,9 +1251,9 @@
             // accXLabel
             // 
             this.accXLabel.AutoSize = true;
-            this.accXLabel.Location = new System.Drawing.Point(14, 24);
+            this.accXLabel.Location = new System.Drawing.Point(14, 26);
             this.accXLabel.Name = "accXLabel";
-            this.accXLabel.Size = new System.Drawing.Size(19, 12);
+            this.accXLabel.Size = new System.Drawing.Size(20, 13);
             this.accXLabel.TabIndex = 15;
             this.accXLabel.Text = "X: ";
             // 
@@ -1255,9 +1263,9 @@
             this.wifi602_groupBox.Controls.Add(this.wifi602PortLabel);
             this.wifi602_groupBox.Controls.Add(this.wifi602KeyLabel);
             this.wifi602_groupBox.Controls.Add(this.wifi602KeyCombo);
-            this.wifi602_groupBox.Location = new System.Drawing.Point(27, 240);
+            this.wifi602_groupBox.Location = new System.Drawing.Point(27, 260);
             this.wifi602_groupBox.Name = "wifi602_groupBox";
-            this.wifi602_groupBox.Size = new System.Drawing.Size(192, 58);
+            this.wifi602_groupBox.Size = new System.Drawing.Size(192, 63);
             this.wifi602_groupBox.TabIndex = 4;
             this.wifi602_groupBox.TabStop = false;
             this.wifi602_groupBox.Text = "LEADIY-WiFi Camera";
@@ -1270,9 +1278,9 @@
             "Serial1",
             "Serial2",
             "Serial3"});
-            this.wifi602PortCombo.Location = new System.Drawing.Point(105, 32);
+            this.wifi602PortCombo.Location = new System.Drawing.Point(105, 35);
             this.wifi602PortCombo.Name = "wifi602PortCombo";
-            this.wifi602PortCombo.Size = new System.Drawing.Size(81, 20);
+            this.wifi602PortCombo.Size = new System.Drawing.Size(81, 21);
             this.wifi602PortCombo.TabIndex = 10;
             this.ttp.SetToolTip(this.wifi602PortCombo, "Set used port for connecting the wifi module.");
             this.wifi602PortCombo.SelectedIndexChanged += new System.EventHandler(this.wifi602PortCombo_SelectedIndexChanged);
@@ -1280,18 +1288,18 @@
             // wifi602PortLabel
             // 
             this.wifi602PortLabel.AutoSize = true;
-            this.wifi602PortLabel.Location = new System.Drawing.Point(103, 17);
+            this.wifi602PortLabel.Location = new System.Drawing.Point(103, 18);
             this.wifi602PortLabel.Name = "wifi602PortLabel";
-            this.wifi602PortLabel.Size = new System.Drawing.Size(53, 12);
+            this.wifi602PortLabel.Size = new System.Drawing.Size(57, 13);
             this.wifi602PortLabel.TabIndex = 11;
             this.wifi602PortLabel.Text = "Used Port:";
             // 
             // wifi602KeyLabel
             // 
             this.wifi602KeyLabel.AutoSize = true;
-            this.wifi602KeyLabel.Location = new System.Drawing.Point(14, 17);
+            this.wifi602KeyLabel.Location = new System.Drawing.Point(14, 18);
             this.wifi602KeyLabel.Name = "wifi602KeyLabel";
-            this.wifi602KeyLabel.Size = new System.Drawing.Size(27, 12);
+            this.wifi602KeyLabel.Size = new System.Drawing.Size(28, 13);
             this.wifi602KeyLabel.TabIndex = 1;
             this.wifi602KeyLabel.Text = "Key:";
             // 
@@ -1306,16 +1314,16 @@
             "RIGHT",
             "A",
             "B"});
-            this.wifi602KeyCombo.Location = new System.Drawing.Point(16, 32);
+            this.wifi602KeyCombo.Location = new System.Drawing.Point(16, 35);
             this.wifi602KeyCombo.Name = "wifi602KeyCombo";
-            this.wifi602KeyCombo.Size = new System.Drawing.Size(78, 20);
+            this.wifi602KeyCombo.Size = new System.Drawing.Size(78, 21);
             this.wifi602KeyCombo.TabIndex = 0;
             this.wifi602KeyCombo.SelectedIndexChanged += new System.EventHandler(this.wifi602KeyCombo_SelectedIndexChanged);
             // 
             // acc_radioButton
             // 
             this.acc_radioButton.AutoSize = true;
-            this.acc_radioButton.Location = new System.Drawing.Point(6, 476);
+            this.acc_radioButton.Location = new System.Drawing.Point(6, 516);
             this.acc_radioButton.Name = "acc_radioButton";
             this.acc_radioButton.Size = new System.Drawing.Size(14, 13);
             this.acc_radioButton.TabIndex = 7;
@@ -1337,9 +1345,9 @@
             this.ps2_groupBox.Controls.Add(this.ps2KeyLabel);
             this.ps2_groupBox.Controls.Add(this.ps2TypeLabel);
             this.ps2_groupBox.Controls.Add(this.ps2KeyCombo);
-            this.ps2_groupBox.Location = new System.Drawing.Point(27, 304);
+            this.ps2_groupBox.Location = new System.Drawing.Point(27, 329);
             this.ps2_groupBox.Name = "ps2_groupBox";
-            this.ps2_groupBox.Size = new System.Drawing.Size(192, 102);
+            this.ps2_groupBox.Size = new System.Drawing.Size(192, 111);
             this.ps2_groupBox.TabIndex = 6;
             this.ps2_groupBox.TabStop = false;
             this.ps2_groupBox.Text = "PS2 Controller";
@@ -1348,9 +1356,9 @@
             // 
             this.ps2CLKCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2CLKCombo.FormattingEnabled = true;
-            this.ps2CLKCombo.Location = new System.Drawing.Point(145, 73);
+            this.ps2CLKCombo.Location = new System.Drawing.Point(145, 79);
             this.ps2CLKCombo.Name = "ps2CLKCombo";
-            this.ps2CLKCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2CLKCombo.Size = new System.Drawing.Size(41, 21);
             this.ps2CLKCombo.TabIndex = 13;
             this.ttp.SetToolTip(this.ps2CLKCombo, "Set used pin of CLK.");
             this.ps2CLKCombo.SelectedIndexChanged += new System.EventHandler(this.ps2CLKCombo_SelectedIndexChanged);
@@ -1359,9 +1367,9 @@
             // 
             this.ps2ATTCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2ATTCombo.FormattingEnabled = true;
-            this.ps2ATTCombo.Location = new System.Drawing.Point(102, 73);
+            this.ps2ATTCombo.Location = new System.Drawing.Point(102, 79);
             this.ps2ATTCombo.Name = "ps2ATTCombo";
-            this.ps2ATTCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2ATTCombo.Size = new System.Drawing.Size(41, 21);
             this.ps2ATTCombo.TabIndex = 12;
             this.ttp.SetToolTip(this.ps2ATTCombo, "Set used pin of ATT.");
             this.ps2ATTCombo.SelectedIndexChanged += new System.EventHandler(this.ps2ATTCombo_SelectedIndexChanged);
@@ -1370,9 +1378,9 @@
             // 
             this.ps2CMDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2CMDCombo.FormattingEnabled = true;
-            this.ps2CMDCombo.Location = new System.Drawing.Point(59, 73);
+            this.ps2CMDCombo.Location = new System.Drawing.Point(59, 79);
             this.ps2CMDCombo.Name = "ps2CMDCombo";
-            this.ps2CMDCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2CMDCombo.Size = new System.Drawing.Size(41, 21);
             this.ps2CMDCombo.TabIndex = 11;
             this.ttp.SetToolTip(this.ps2CMDCombo, "Set used pin of CMD.");
             this.ps2CMDCombo.SelectedIndexChanged += new System.EventHandler(this.ps2CMDCombo_SelectedIndexChanged);
@@ -1381,9 +1389,9 @@
             // 
             this.ps2DATCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ps2DATCombo.FormattingEnabled = true;
-            this.ps2DATCombo.Location = new System.Drawing.Point(16, 73);
+            this.ps2DATCombo.Location = new System.Drawing.Point(16, 79);
             this.ps2DATCombo.Name = "ps2DATCombo";
-            this.ps2DATCombo.Size = new System.Drawing.Size(41, 20);
+            this.ps2DATCombo.Size = new System.Drawing.Size(41, 21);
             this.ps2DATCombo.TabIndex = 6;
             this.ttp.SetToolTip(this.ps2DATCombo, "Set used pin of DAT.");
             this.ps2DATCombo.SelectedIndexChanged += new System.EventHandler(this.ps2DATCombo_SelectedIndexChanged);
@@ -1391,36 +1399,36 @@
             // ps2CLKLabel
             // 
             this.ps2CLKLabel.AutoSize = true;
-            this.ps2CLKLabel.Location = new System.Drawing.Point(143, 58);
+            this.ps2CLKLabel.Location = new System.Drawing.Point(143, 63);
             this.ps2CLKLabel.Name = "ps2CLKLabel";
-            this.ps2CLKLabel.Size = new System.Drawing.Size(34, 12);
+            this.ps2CLKLabel.Size = new System.Drawing.Size(33, 13);
             this.ps2CLKLabel.TabIndex = 10;
             this.ps2CLKLabel.Text = "CLK: ";
             // 
             // ps2ATTLabel
             // 
             this.ps2ATTLabel.AutoSize = true;
-            this.ps2ATTLabel.Location = new System.Drawing.Point(100, 58);
+            this.ps2ATTLabel.Location = new System.Drawing.Point(100, 63);
             this.ps2ATTLabel.Name = "ps2ATTLabel";
-            this.ps2ATTLabel.Size = new System.Drawing.Size(33, 12);
+            this.ps2ATTLabel.Size = new System.Drawing.Size(34, 13);
             this.ps2ATTLabel.TabIndex = 9;
             this.ps2ATTLabel.Text = "ATT: ";
             // 
             // ps2CMDLabel
             // 
             this.ps2CMDLabel.AutoSize = true;
-            this.ps2CMDLabel.Location = new System.Drawing.Point(57, 58);
+            this.ps2CMDLabel.Location = new System.Drawing.Point(57, 63);
             this.ps2CMDLabel.Name = "ps2CMDLabel";
-            this.ps2CMDLabel.Size = new System.Drawing.Size(37, 12);
+            this.ps2CMDLabel.Size = new System.Drawing.Size(37, 13);
             this.ps2CMDLabel.TabIndex = 8;
             this.ps2CMDLabel.Text = "CMD: ";
             // 
             // ps2DATLabel
             // 
             this.ps2DATLabel.AutoSize = true;
-            this.ps2DATLabel.Location = new System.Drawing.Point(14, 58);
+            this.ps2DATLabel.Location = new System.Drawing.Point(14, 63);
             this.ps2DATLabel.Name = "ps2DATLabel";
-            this.ps2DATLabel.Size = new System.Drawing.Size(31, 12);
+            this.ps2DATLabel.Size = new System.Drawing.Size(32, 13);
             this.ps2DATLabel.TabIndex = 7;
             this.ps2DATLabel.Text = "DAT:";
             // 
@@ -1432,9 +1440,9 @@
             "First Press",
             "Pressed",
             "Release"});
-            this.ps2TypeCombo.Location = new System.Drawing.Point(117, 33);
+            this.ps2TypeCombo.Location = new System.Drawing.Point(117, 36);
             this.ps2TypeCombo.Name = "ps2TypeCombo";
-            this.ps2TypeCombo.Size = new System.Drawing.Size(69, 20);
+            this.ps2TypeCombo.Size = new System.Drawing.Size(69, 21);
             this.ps2TypeCombo.TabIndex = 6;
             this.ttp.SetToolTip(this.ps2TypeCombo, resources.GetString("ps2TypeCombo.ToolTip"));
             this.ps2TypeCombo.SelectedIndexChanged += new System.EventHandler(this.ps2TypeCombo_SelectedIndexChanged);
@@ -1442,18 +1450,18 @@
             // ps2KeyLabel
             // 
             this.ps2KeyLabel.AutoSize = true;
-            this.ps2KeyLabel.Location = new System.Drawing.Point(14, 18);
+            this.ps2KeyLabel.Location = new System.Drawing.Point(14, 20);
             this.ps2KeyLabel.Name = "ps2KeyLabel";
-            this.ps2KeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.ps2KeyLabel.Size = new System.Drawing.Size(31, 13);
             this.ps2KeyLabel.TabIndex = 4;
             this.ps2KeyLabel.Text = "Key: ";
             // 
             // ps2TypeLabel
             // 
             this.ps2TypeLabel.AutoSize = true;
-            this.ps2TypeLabel.Location = new System.Drawing.Point(115, 18);
+            this.ps2TypeLabel.Location = new System.Drawing.Point(115, 20);
             this.ps2TypeLabel.Name = "ps2TypeLabel";
-            this.ps2TypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.ps2TypeLabel.Size = new System.Drawing.Size(34, 13);
             this.ps2TypeLabel.TabIndex = 5;
             this.ps2TypeLabel.Text = "Type:";
             // 
@@ -1482,16 +1490,16 @@
             "PSB_CIRCLE",
             "PSB_CROSS",
             "PSB_SQUARE"});
-            this.ps2KeyCombo.Location = new System.Drawing.Point(16, 33);
+            this.ps2KeyCombo.Location = new System.Drawing.Point(16, 36);
             this.ps2KeyCombo.Name = "ps2KeyCombo";
-            this.ps2KeyCombo.Size = new System.Drawing.Size(95, 20);
+            this.ps2KeyCombo.Size = new System.Drawing.Size(95, 21);
             this.ps2KeyCombo.TabIndex = 4;
             this.ps2KeyCombo.SelectedIndexChanged += new System.EventHandler(this.ps2KeyCombo_SelectedIndexChanged);
             // 
             // ps2_radioButton
             // 
             this.ps2_radioButton.AutoSize = true;
-            this.ps2_radioButton.Location = new System.Drawing.Point(7, 304);
+            this.ps2_radioButton.Location = new System.Drawing.Point(7, 329);
             this.ps2_radioButton.Name = "ps2_radioButton";
             this.ps2_radioButton.Size = new System.Drawing.Size(14, 13);
             this.ps2_radioButton.TabIndex = 6;
@@ -1509,9 +1517,9 @@
             this.bt_groupBox.Controls.Add(this.btPortLabel);
             this.bt_groupBox.Controls.Add(this.btKeyLabel);
             this.bt_groupBox.Controls.Add(this.btKeyText);
-            this.bt_groupBox.Location = new System.Drawing.Point(27, 132);
+            this.bt_groupBox.Location = new System.Drawing.Point(27, 143);
             this.bt_groupBox.Name = "bt_groupBox";
-            this.bt_groupBox.Size = new System.Drawing.Size(192, 102);
+            this.bt_groupBox.Size = new System.Drawing.Size(192, 111);
             this.bt_groupBox.TabIndex = 5;
             this.bt_groupBox.TabStop = false;
             this.bt_groupBox.Text = "Bluetooth";
@@ -1523,18 +1531,18 @@
             this.btModeCombo.Items.AddRange(new object[] {
             "OneShot",
             "Continuous"});
-            this.btModeCombo.Location = new System.Drawing.Point(105, 30);
+            this.btModeCombo.Location = new System.Drawing.Point(105, 33);
             this.btModeCombo.Name = "btModeCombo";
-            this.btModeCombo.Size = new System.Drawing.Size(81, 20);
+            this.btModeCombo.Size = new System.Drawing.Size(81, 21);
             this.btModeCombo.TabIndex = 9;
             this.btModeCombo.SelectedIndexChanged += new System.EventHandler(this.btTypeCombo_SelectedIndexChanged);
             // 
             // btModeLabel
             // 
             this.btModeLabel.AutoSize = true;
-            this.btModeLabel.Location = new System.Drawing.Point(103, 14);
+            this.btModeLabel.Location = new System.Drawing.Point(103, 15);
             this.btModeLabel.Name = "btModeLabel";
-            this.btModeLabel.Size = new System.Drawing.Size(35, 12);
+            this.btModeLabel.Size = new System.Drawing.Size(37, 13);
             this.btModeLabel.TabIndex = 8;
             this.btModeLabel.Text = "Mode:";
             // 
@@ -1548,9 +1556,9 @@
             "38400",
             "57600",
             "115200"});
-            this.btBaudCombo.Location = new System.Drawing.Point(16, 70);
+            this.btBaudCombo.Location = new System.Drawing.Point(16, 76);
             this.btBaudCombo.Name = "btBaudCombo";
-            this.btBaudCombo.Size = new System.Drawing.Size(78, 20);
+            this.btBaudCombo.Size = new System.Drawing.Size(78, 21);
             this.btBaudCombo.TabIndex = 7;
             this.ttp.SetToolTip(this.btBaudCombo, "Set used baud rate of connected bluetooth.");
             this.btBaudCombo.SelectedIndexChanged += new System.EventHandler(this.btBaudCombo_SelectedIndexChanged);
@@ -1558,9 +1566,9 @@
             // btBaudLabel
             // 
             this.btBaudLabel.AutoSize = true;
-            this.btBaudLabel.Location = new System.Drawing.Point(14, 54);
+            this.btBaudLabel.Location = new System.Drawing.Point(14, 59);
             this.btBaudLabel.Name = "btBaudLabel";
-            this.btBaudLabel.Size = new System.Drawing.Size(57, 12);
+            this.btBaudLabel.Size = new System.Drawing.Size(61, 13);
             this.btBaudLabel.TabIndex = 6;
             this.btBaudLabel.Text = "Baud Rate:";
             // 
@@ -1572,9 +1580,9 @@
             "Serial1",
             "Serial2",
             "Serial3"});
-            this.btPortCombo.Location = new System.Drawing.Point(105, 69);
+            this.btPortCombo.Location = new System.Drawing.Point(105, 75);
             this.btPortCombo.Name = "btPortCombo";
-            this.btPortCombo.Size = new System.Drawing.Size(81, 20);
+            this.btPortCombo.Size = new System.Drawing.Size(81, 21);
             this.btPortCombo.TabIndex = 4;
             this.ttp.SetToolTip(this.btPortCombo, "Set used port for connecting the bluetooth module.");
             this.btPortCombo.SelectedIndexChanged += new System.EventHandler(this.btPortCombo_SelectedIndexChanged);
@@ -1582,27 +1590,27 @@
             // btPortLabel
             // 
             this.btPortLabel.AutoSize = true;
-            this.btPortLabel.Location = new System.Drawing.Point(103, 54);
+            this.btPortLabel.Location = new System.Drawing.Point(103, 59);
             this.btPortLabel.Name = "btPortLabel";
-            this.btPortLabel.Size = new System.Drawing.Size(53, 12);
+            this.btPortLabel.Size = new System.Drawing.Size(57, 13);
             this.btPortLabel.TabIndex = 5;
             this.btPortLabel.Text = "Used Port:";
             // 
             // btKeyLabel
             // 
             this.btKeyLabel.AutoSize = true;
-            this.btKeyLabel.Location = new System.Drawing.Point(14, 14);
+            this.btKeyLabel.Location = new System.Drawing.Point(14, 15);
             this.btKeyLabel.Name = "btKeyLabel";
-            this.btKeyLabel.Size = new System.Drawing.Size(30, 12);
+            this.btKeyLabel.Size = new System.Drawing.Size(31, 13);
             this.btKeyLabel.TabIndex = 4;
             this.btKeyLabel.Text = "Key: ";
             // 
             // btKeyText
             // 
-            this.btKeyText.Location = new System.Drawing.Point(16, 29);
+            this.btKeyText.Location = new System.Drawing.Point(16, 31);
             this.btKeyText.MaxLength = 1;
             this.btKeyText.Name = "btKeyText";
-            this.btKeyText.Size = new System.Drawing.Size(78, 22);
+            this.btKeyText.Size = new System.Drawing.Size(78, 20);
             this.btKeyText.TabIndex = 0;
             this.ttp.SetToolTip(this.btKeyText, "Set a character for triggering the selected motion by bluetooth.");
             this.btKeyText.TextChanged += new System.EventHandler(this.btKeyText_TextChanged);
@@ -1610,7 +1618,7 @@
             // bt_radioButton
             // 
             this.bt_radioButton.AutoSize = true;
-            this.bt_radioButton.Location = new System.Drawing.Point(7, 132);
+            this.bt_radioButton.Location = new System.Drawing.Point(7, 143);
             this.bt_radioButton.Name = "bt_radioButton";
             this.bt_radioButton.Size = new System.Drawing.Size(14, 13);
             this.bt_radioButton.TabIndex = 4;
@@ -1621,7 +1629,7 @@
             // Keyboard_radioButton
             // 
             this.Keyboard_radioButton.AutoSize = true;
-            this.Keyboard_radioButton.Location = new System.Drawing.Point(7, 68);
+            this.Keyboard_radioButton.Location = new System.Drawing.Point(7, 74);
             this.Keyboard_radioButton.Name = "Keyboard_radioButton";
             this.Keyboard_radioButton.Size = new System.Drawing.Size(14, 13);
             this.Keyboard_radioButton.TabIndex = 3;
@@ -1633,7 +1641,7 @@
             // 
             this.Always_radioButton.AutoSize = true;
             this.Always_radioButton.Checked = true;
-            this.Always_radioButton.Location = new System.Drawing.Point(7, 7);
+            this.Always_radioButton.Location = new System.Drawing.Point(7, 8);
             this.Always_radioButton.Name = "Always_radioButton";
             this.Always_radioButton.Size = new System.Drawing.Size(14, 13);
             this.Always_radioButton.TabIndex = 2;
@@ -1647,9 +1655,9 @@
             this.Keyboard_groupBox.Controls.Add(this.keyboardTypeLabel);
             this.Keyboard_groupBox.Controls.Add(this.KeyboardKeyLabel);
             this.Keyboard_groupBox.Controls.Add(this.KeyboardCombo);
-            this.Keyboard_groupBox.Location = new System.Drawing.Point(27, 68);
+            this.Keyboard_groupBox.Location = new System.Drawing.Point(27, 74);
             this.Keyboard_groupBox.Name = "Keyboard_groupBox";
-            this.Keyboard_groupBox.Size = new System.Drawing.Size(192, 58);
+            this.Keyboard_groupBox.Size = new System.Drawing.Size(192, 63);
             this.Keyboard_groupBox.TabIndex = 1;
             this.Keyboard_groupBox.TabStop = false;
             this.Keyboard_groupBox.Text = "Keyboard";
@@ -1662,9 +1670,9 @@
             "First Press",
             "Pressed",
             "Release"});
-            this.KeyboardTypeCombo.Location = new System.Drawing.Point(117, 32);
+            this.KeyboardTypeCombo.Location = new System.Drawing.Point(117, 35);
             this.KeyboardTypeCombo.Name = "KeyboardTypeCombo";
-            this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 20);
+            this.KeyboardTypeCombo.Size = new System.Drawing.Size(69, 21);
             this.KeyboardTypeCombo.TabIndex = 3;
             this.ttp.SetToolTip(this.KeyboardTypeCombo, resources.GetString("KeyboardTypeCombo.ToolTip"));
             this.KeyboardTypeCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardTypeCombo_SelectedIndexChanged);
@@ -1672,18 +1680,18 @@
             // keyboardTypeLabel
             // 
             this.keyboardTypeLabel.AutoSize = true;
-            this.keyboardTypeLabel.Location = new System.Drawing.Point(115, 17);
+            this.keyboardTypeLabel.Location = new System.Drawing.Point(115, 18);
             this.keyboardTypeLabel.Name = "keyboardTypeLabel";
-            this.keyboardTypeLabel.Size = new System.Drawing.Size(32, 12);
+            this.keyboardTypeLabel.Size = new System.Drawing.Size(34, 13);
             this.keyboardTypeLabel.TabIndex = 2;
             this.keyboardTypeLabel.Text = "Type:";
             // 
             // KeyboardKeyLabel
             // 
             this.KeyboardKeyLabel.AutoSize = true;
-            this.KeyboardKeyLabel.Location = new System.Drawing.Point(14, 17);
+            this.KeyboardKeyLabel.Location = new System.Drawing.Point(14, 18);
             this.KeyboardKeyLabel.Name = "KeyboardKeyLabel";
-            this.KeyboardKeyLabel.Size = new System.Drawing.Size(27, 12);
+            this.KeyboardKeyLabel.Size = new System.Drawing.Size(28, 13);
             this.KeyboardKeyLabel.TabIndex = 1;
             this.KeyboardKeyLabel.Text = "Key:";
             // 
@@ -1724,9 +1732,9 @@
             "KEY_UP",
             "KEY_DOWN",
             "KEY_ESC"});
-            this.KeyboardCombo.Location = new System.Drawing.Point(16, 32);
+            this.KeyboardCombo.Location = new System.Drawing.Point(16, 35);
             this.KeyboardCombo.Name = "KeyboardCombo";
-            this.KeyboardCombo.Size = new System.Drawing.Size(95, 20);
+            this.KeyboardCombo.Size = new System.Drawing.Size(95, 21);
             this.KeyboardCombo.TabIndex = 0;
             this.KeyboardCombo.SelectedIndexChanged += new System.EventHandler(this.KeyboardCombo_SelectedIndexChanged);
             // 
@@ -1735,9 +1743,9 @@
             this.Always_groupBox.Controls.Add(this.TitleMotion);
             this.Always_groupBox.Controls.Add(this.AlwaysOff);
             this.Always_groupBox.Controls.Add(this.AlwaysOn);
-            this.Always_groupBox.Location = new System.Drawing.Point(27, 6);
+            this.Always_groupBox.Location = new System.Drawing.Point(27, 7);
             this.Always_groupBox.Name = "Always_groupBox";
-            this.Always_groupBox.Size = new System.Drawing.Size(192, 56);
+            this.Always_groupBox.Size = new System.Drawing.Size(192, 61);
             this.Always_groupBox.TabIndex = 0;
             this.Always_groupBox.TabStop = false;
             this.Always_groupBox.Text = "Auto";
@@ -1745,9 +1753,9 @@
             // TitleMotion
             // 
             this.TitleMotion.AutoSize = true;
-            this.TitleMotion.Location = new System.Drawing.Point(105, 13);
+            this.TitleMotion.Location = new System.Drawing.Point(105, 14);
             this.TitleMotion.Name = "TitleMotion";
-            this.TitleMotion.Size = new System.Drawing.Size(61, 16);
+            this.TitleMotion.Size = new System.Drawing.Size(64, 17);
             this.TitleMotion.TabIndex = 2;
             this.TitleMotion.TabStop = true;
             this.TitleMotion.Text = "Start Up";
@@ -1758,9 +1766,9 @@
             // AlwaysOff
             // 
             this.AlwaysOff.AutoSize = true;
-            this.AlwaysOff.Location = new System.Drawing.Point(16, 30);
+            this.AlwaysOff.Location = new System.Drawing.Point(16, 33);
             this.AlwaysOff.Name = "AlwaysOff";
-            this.AlwaysOff.Size = new System.Drawing.Size(76, 16);
+            this.AlwaysOff.Size = new System.Drawing.Size(75, 17);
             this.AlwaysOff.TabIndex = 1;
             this.AlwaysOff.Text = "Always Off";
             this.ttp.SetToolTip(this.AlwaysOff, "Let the selected motion NEVER perform.");
@@ -1771,9 +1779,9 @@
             // 
             this.AlwaysOn.AutoSize = true;
             this.AlwaysOn.Checked = true;
-            this.AlwaysOn.Location = new System.Drawing.Point(16, 13);
+            this.AlwaysOn.Location = new System.Drawing.Point(16, 14);
             this.AlwaysOn.Name = "AlwaysOn";
-            this.AlwaysOn.Size = new System.Drawing.Size(74, 16);
+            this.AlwaysOn.Size = new System.Drawing.Size(75, 17);
             this.AlwaysOn.TabIndex = 0;
             this.AlwaysOn.TabStop = true;
             this.AlwaysOn.Text = "Always On";
@@ -1803,7 +1811,7 @@
             this.MotionProperty.Location = new System.Drawing.Point(4, 22);
             this.MotionProperty.Name = "MotionProperty";
             this.MotionProperty.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionProperty.Size = new System.Drawing.Size(239, 462);
+            this.MotionProperty.Size = new System.Drawing.Size(239, 503);
             this.MotionProperty.TabIndex = 2;
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
@@ -1812,7 +1820,7 @@
             // 
             this.MotionControlLabel.AutoSize = true;
             this.MotionControlLabel.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MotionControlLabel.Location = new System.Drawing.Point(13, 270);
+            this.MotionControlLabel.Location = new System.Drawing.Point(13, 293);
             this.MotionControlLabel.Name = "MotionControlLabel";
             this.MotionControlLabel.Size = new System.Drawing.Size(67, 12);
             this.MotionControlLabel.TabIndex = 17;
@@ -1827,25 +1835,25 @@
             "Constrained Cubic",
             "Natural Cubic",
             "Catmull-Rom Spline"});
-            this.MotionControlCombo.Location = new System.Drawing.Point(86, 267);
+            this.MotionControlCombo.Location = new System.Drawing.Point(86, 289);
             this.MotionControlCombo.Name = "MotionControlCombo";
-            this.MotionControlCombo.Size = new System.Drawing.Size(147, 20);
+            this.MotionControlCombo.Size = new System.Drawing.Size(147, 21);
             this.MotionControlCombo.TabIndex = 16;
             this.MotionControlCombo.SelectedIndexChanged += new System.EventHandler(this.MotionControlCombo_SelectedIndexChanged);
             // 
             // MotionControlExplanation
             // 
             this.MotionControlExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.MotionControlExplanation.Location = new System.Drawing.Point(15, 293);
+            this.MotionControlExplanation.Location = new System.Drawing.Point(15, 317);
             this.MotionControlExplanation.Name = "MotionControlExplanation";
-            this.MotionControlExplanation.Size = new System.Drawing.Size(218, 41);
+            this.MotionControlExplanation.Size = new System.Drawing.Size(218, 44);
             this.MotionControlExplanation.TabIndex = 15;
             this.MotionControlExplanation.Text = "Choose the motion\'s trajectory planning method.";
             // 
             // separateLine3
             // 
             this.separateLine3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine3.Location = new System.Drawing.Point(-2, 336);
+            this.separateLine3.Location = new System.Drawing.Point(-2, 364);
             this.separateLine3.Name = "separateLine3";
             this.separateLine3.Size = new System.Drawing.Size(243, 1);
             this.separateLine3.TabIndex = 13;
@@ -1853,9 +1861,9 @@
             // CompRangeExplanation
             // 
             this.CompRangeExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.CompRangeExplanation.Location = new System.Drawing.Point(15, 369);
+            this.CompRangeExplanation.Location = new System.Drawing.Point(15, 400);
             this.CompRangeExplanation.Name = "CompRangeExplanation";
-            this.CompRangeExplanation.Size = new System.Drawing.Size(218, 86);
+            this.CompRangeExplanation.Size = new System.Drawing.Size(218, 93);
             this.CompRangeExplanation.TabIndex = 12;
             this.CompRangeExplanation.Text = "Set the valid angle (0~180 degree, 0 means to close this function) of IMU compens" +
     "ating. The IMU compensating just can be enabled in this range (-setting angle ~ " +
@@ -1863,9 +1871,9 @@
             // 
             // CompRangeText
             // 
-            this.CompRangeText.Location = new System.Drawing.Point(175, 345);
+            this.CompRangeText.Location = new System.Drawing.Point(175, 374);
             this.CompRangeText.Name = "CompRangeText";
-            this.CompRangeText.Size = new System.Drawing.Size(58, 22);
+            this.CompRangeText.Size = new System.Drawing.Size(58, 20);
             this.CompRangeText.TabIndex = 11;
             this.CompRangeText.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             this.CompRangeText.TextChanged += new System.EventHandler(this.CompRangeText_TextChanged);
@@ -1875,7 +1883,7 @@
             // 
             this.CompRange.AutoSize = true;
             this.CompRange.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.CompRange.Location = new System.Drawing.Point(13, 348);
+            this.CompRange.Location = new System.Drawing.Point(13, 377);
             this.CompRange.Name = "CompRange";
             this.CompRange.Size = new System.Drawing.Size(156, 12);
             this.CompRange.TabIndex = 10;
@@ -1884,7 +1892,7 @@
             // separateLine2
             // 
             this.separateLine2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine2.Location = new System.Drawing.Point(-2, 258);
+            this.separateLine2.Location = new System.Drawing.Point(-2, 280);
             this.separateLine2.Name = "separateLine2";
             this.separateLine2.Size = new System.Drawing.Size(243, 1);
             this.separateLine2.TabIndex = 9;
@@ -1892,9 +1900,9 @@
             // motionLayerExplanation
             // 
             this.motionLayerExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.motionLayerExplanation.Location = new System.Drawing.Point(15, 189);
+            this.motionLayerExplanation.Location = new System.Drawing.Point(15, 205);
             this.motionLayerExplanation.Name = "motionLayerExplanation";
-            this.motionLayerExplanation.Size = new System.Drawing.Size(218, 72);
+            this.motionLayerExplanation.Size = new System.Drawing.Size(218, 78);
             this.motionLayerExplanation.TabIndex = 8;
             this.motionLayerExplanation.Text = "This feature makes motions can be triggered parallelly in different layers. And L" +
     "ayer 1\'s priority is higher than 0\'s.";
@@ -1902,7 +1910,7 @@
             // separateLine
             // 
             this.separateLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine.Location = new System.Drawing.Point(-2, 155);
+            this.separateLine.Location = new System.Drawing.Point(-2, 168);
             this.separateLine.Name = "separateLine";
             this.separateLine.Size = new System.Drawing.Size(243, 1);
             this.separateLine.TabIndex = 7;
@@ -1914,9 +1922,9 @@
             this.MotionLayerCombo.Items.AddRange(new object[] {
             "0",
             "1"});
-            this.MotionLayerCombo.Location = new System.Drawing.Point(104, 163);
+            this.MotionLayerCombo.Location = new System.Drawing.Point(104, 177);
             this.MotionLayerCombo.Name = "MotionLayerCombo";
-            this.MotionLayerCombo.Size = new System.Drawing.Size(129, 20);
+            this.MotionLayerCombo.Size = new System.Drawing.Size(129, 21);
             this.MotionLayerCombo.TabIndex = 6;
             this.MotionLayerCombo.SelectedIndexChanged += new System.EventHandler(this.MotionLayerCombo_SelectedIndexChanged);
             // 
@@ -1924,7 +1932,7 @@
             // 
             this.MotionLayer.AutoSize = true;
             this.MotionLayer.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MotionLayer.Location = new System.Drawing.Point(13, 166);
+            this.MotionLayer.Location = new System.Drawing.Point(13, 180);
             this.MotionLayer.Name = "MotionLayer";
             this.MotionLayer.Size = new System.Drawing.Size(85, 12);
             this.MotionLayer.TabIndex = 5;
@@ -1933,18 +1941,18 @@
             // nonblockingExplanation
             // 
             this.nonblockingExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.nonblockingExplanation.Location = new System.Drawing.Point(15, 112);
+            this.nonblockingExplanation.Location = new System.Drawing.Point(15, 121);
             this.nonblockingExplanation.Name = "nonblockingExplanation";
-            this.nonblockingExplanation.Size = new System.Drawing.Size(218, 54);
+            this.nonblockingExplanation.Size = new System.Drawing.Size(218, 59);
             this.nonblockingExplanation.TabIndex = 4;
             this.nonblockingExplanation.Text = "This motion can be interrupted while another motion is triggered.";
             // 
             // blockingExplaination
             // 
             this.blockingExplaination.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.blockingExplaination.Location = new System.Drawing.Point(15, 45);
+            this.blockingExplaination.Location = new System.Drawing.Point(15, 49);
             this.blockingExplaination.Name = "blockingExplaination";
-            this.blockingExplaination.Size = new System.Drawing.Size(218, 39);
+            this.blockingExplaination.Size = new System.Drawing.Size(218, 42);
             this.blockingExplaination.TabIndex = 3;
             this.blockingExplaination.Text = "This motion can NOT be interrupted by another motion.";
             // 
@@ -1952,7 +1960,7 @@
             // 
             this.NonBlocking.AutoSize = true;
             this.NonBlocking.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.NonBlocking.Location = new System.Drawing.Point(15, 90);
+            this.NonBlocking.Location = new System.Drawing.Point(15, 98);
             this.NonBlocking.Name = "NonBlocking";
             this.NonBlocking.Size = new System.Drawing.Size(100, 16);
             this.NonBlocking.TabIndex = 2;
@@ -1965,7 +1973,7 @@
             this.Blocking.AutoSize = true;
             this.Blocking.Checked = true;
             this.Blocking.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Blocking.Location = new System.Drawing.Point(15, 23);
+            this.Blocking.Location = new System.Drawing.Point(15, 25);
             this.Blocking.Name = "Blocking";
             this.Blocking.Size = new System.Drawing.Size(74, 16);
             this.Blocking.TabIndex = 1;
@@ -1979,17 +1987,17 @@
             this.MotionPropertyLabel.AutoSize = true;
             this.MotionPropertyLabel.Location = new System.Drawing.Point(7, 4);
             this.MotionPropertyLabel.Name = "MotionPropertyLabel";
-            this.MotionPropertyLabel.Size = new System.Drawing.Size(198, 12);
+            this.MotionPropertyLabel.Size = new System.Drawing.Size(204, 13);
             this.MotionPropertyLabel.TabIndex = 0;
             this.MotionPropertyLabel.Text = "Set the properties of the choosed motion :";
             // 
             // motion_stop
             // 
             this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
-            this.motion_stop.Image = global::_86ME_ver1.Properties.Resources.stop;
-            this.motion_stop.Location = new System.Drawing.Point(166, 560);
+            this.motion_stop.Image = global::_86ME_ver2.Properties.Resources.stop;
+            this.motion_stop.Location = new System.Drawing.Point(166, 607);
             this.motion_stop.Name = "motion_stop";
-            this.motion_stop.Size = new System.Drawing.Size(43, 35);
+            this.motion_stop.Size = new System.Drawing.Size(43, 38);
             this.motion_stop.TabIndex = 9;
             this.ttp.SetToolTip(this.motion_stop, "Stop the process of playing frames.\nThis operation cannot be recovered, so the ne" +
         "xt play will start from the first item.");
@@ -1999,10 +2007,10 @@
             // motion_pause
             // 
             this.motion_pause.Cursor = System.Windows.Forms.Cursors.Default;
-            this.motion_pause.Image = global::_86ME_ver1.Properties.Resources.pause;
-            this.motion_pause.Location = new System.Drawing.Point(117, 560);
+            this.motion_pause.Image = global::_86ME_ver2.Properties.Resources.pause;
+            this.motion_pause.Location = new System.Drawing.Point(117, 607);
             this.motion_pause.Name = "motion_pause";
-            this.motion_pause.Size = new System.Drawing.Size(43, 35);
+            this.motion_pause.Size = new System.Drawing.Size(43, 38);
             this.motion_pause.TabIndex = 8;
             this.ttp.SetToolTip(this.motion_pause, "Pause the process of playing frames,\nthe paused process can be continue by clicki" +
         "ng \"Play\" again.");
@@ -2013,10 +2021,10 @@
             // 
             this.move_down.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_down.Enabled = false;
-            this.move_down.Image = global::_86ME_ver1.Properties.Resources.down_arrow;
-            this.move_down.Location = new System.Drawing.Point(258, 316);
+            this.move_down.Image = global::_86ME_ver2.Properties.Resources.down_arrow;
+            this.move_down.Location = new System.Drawing.Point(258, 342);
             this.move_down.Name = "move_down";
-            this.move_down.Size = new System.Drawing.Size(25, 37);
+            this.move_down.Size = new System.Drawing.Size(25, 40);
             this.move_down.TabIndex = 7;
             this.ttp.SetToolTip(this.move_down, "Move down the selected item of the motion list.");
             this.move_down.UseVisualStyleBackColor = true;
@@ -2026,10 +2034,10 @@
             // 
             this.move_up.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_up.Enabled = false;
-            this.move_up.Image = global::_86ME_ver1.Properties.Resources.up_arrow;
-            this.move_up.Location = new System.Drawing.Point(258, 273);
+            this.move_up.Image = global::_86ME_ver2.Properties.Resources.up_arrow;
+            this.move_up.Location = new System.Drawing.Point(258, 296);
             this.move_up.Name = "move_up";
-            this.move_up.Size = new System.Drawing.Size(25, 37);
+            this.move_up.Size = new System.Drawing.Size(25, 40);
             this.move_up.TabIndex = 6;
             this.ttp.SetToolTip(this.move_up, "Move up the selected item of the motion list.");
             this.move_up.UseVisualStyleBackColor = true;
@@ -2038,20 +2046,20 @@
             // MotionNameLabel
             // 
             this.MotionNameLabel.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.MotionNameLabel.Location = new System.Drawing.Point(7, 18);
+            this.MotionNameLabel.Location = new System.Drawing.Point(7, 20);
             this.MotionNameLabel.Name = "MotionNameLabel";
             this.MotionNameLabel.ReadOnly = true;
-            this.MotionNameLabel.Size = new System.Drawing.Size(100, 15);
+            this.MotionNameLabel.Size = new System.Drawing.Size(100, 13);
             this.MotionNameLabel.TabIndex = 4;
             this.MotionNameLabel.Text = "Motion Name:";
             // 
             // MotionTest
             // 
             this.MotionTest.Cursor = System.Windows.Forms.Cursors.Default;
-            this.MotionTest.Image = global::_86ME_ver1.Properties.Resources.play;
-            this.MotionTest.Location = new System.Drawing.Point(68, 560);
+            this.MotionTest.Image = global::_86ME_ver2.Properties.Resources.play;
+            this.MotionTest.Location = new System.Drawing.Point(68, 607);
             this.MotionTest.Name = "MotionTest";
-            this.MotionTest.Size = new System.Drawing.Size(43, 35);
+            this.MotionTest.Size = new System.Drawing.Size(43, 38);
             this.MotionTest.TabIndex = 3;
             this.ttp.SetToolTip(this.MotionTest, "Play the current motion list from the first item to the end.");
             this.MotionTest.UseVisualStyleBackColor = true;
@@ -2061,10 +2069,10 @@
             // 
             this.NewMotion.Cursor = System.Windows.Forms.Cursors.Default;
             this.NewMotion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.NewMotion.Image = global::_86ME_ver1.Properties.Resources.add;
-            this.NewMotion.Location = new System.Drawing.Point(196, 37);
+            this.NewMotion.Image = global::_86ME_ver2.Properties.Resources.add;
+            this.NewMotion.Location = new System.Drawing.Point(196, 40);
             this.NewMotion.Name = "NewMotion";
-            this.NewMotion.Size = new System.Drawing.Size(24, 24);
+            this.NewMotion.Size = new System.Drawing.Size(24, 26);
             this.NewMotion.TabIndex = 2;
             this.ttp.SetToolTip(this.NewMotion, "Create a new motion list for editing.");
             this.NewMotion.UseVisualStyleBackColor = true;
@@ -2074,18 +2082,18 @@
             // 
             this.MotionCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.MotionCombo.FormattingEnabled = true;
-            this.MotionCombo.Location = new System.Drawing.Point(7, 39);
+            this.MotionCombo.Location = new System.Drawing.Point(7, 42);
             this.MotionCombo.Name = "MotionCombo";
-            this.MotionCombo.Size = new System.Drawing.Size(183, 20);
+            this.MotionCombo.Size = new System.Drawing.Size(183, 21);
             this.MotionCombo.TabIndex = 0;
             this.MotionCombo.SelectedIndexChanged += new System.EventHandler(this.MotionCombo_SelectedIndexChanged);
             // 
             // Generate
             // 
             this.Generate.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Generate.Location = new System.Drawing.Point(746, 635);
+            this.Generate.Location = new System.Drawing.Point(746, 688);
             this.Generate.Name = "Generate";
-            this.Generate.Size = new System.Drawing.Size(267, 23);
+            this.Generate.Size = new System.Drawing.Size(267, 25);
             this.Generate.TabIndex = 4;
             this.Generate.Text = "Generate 86Duino Sketch (with Frame Files)";
             this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will b" +
@@ -2107,14 +2115,14 @@
             this.ImportMotionToolStripMenuItem,
             this.ExportMotionToolStripMenuItem});
             this.EditMotion_contextMenuStrip.Name = "contextMenuStrip3";
-            this.EditMotion_contextMenuStrip.Size = new System.Drawing.Size(174, 114);
+            this.EditMotion_contextMenuStrip.Size = new System.Drawing.Size(167, 114);
             // 
             // GenerateAllInOne
             // 
             this.GenerateAllInOne.Cursor = System.Windows.Forms.Cursors.Default;
-            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 665);
+            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 720);
             this.GenerateAllInOne.Name = "GenerateAllInOne";
-            this.GenerateAllInOne.Size = new System.Drawing.Size(267, 23);
+            this.GenerateAllInOne.Size = new System.Drawing.Size(267, 25);
             this.GenerateAllInOne.TabIndex = 5;
             this.GenerateAllInOne.Text = "Generate 86Duino Sketch (All in One)";
             this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in " +
@@ -2138,26 +2146,19 @@
             this.Setting_groupBox.Controls.Add(this.capturebutton);
             this.Setting_groupBox.Controls.Add(this.sync_speed);
             this.Setting_groupBox.Controls.Add(this.autocheck);
-            this.Setting_groupBox.Location = new System.Drawing.Point(13, 28);
+            this.Setting_groupBox.Location = new System.Drawing.Point(13, 30);
             this.Setting_groupBox.Name = "Setting_groupBox";
-            this.Setting_groupBox.Size = new System.Drawing.Size(720, 60);
+            this.Setting_groupBox.Size = new System.Drawing.Size(720, 65);
             this.Setting_groupBox.TabIndex = 15;
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
-            // saveFileToolStripMenuItem
-            // 
-            this.saveFileToolStripMenuItem.Name = "saveFileToolStripMenuItem";
-            this.saveFileToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.saveFileToolStripMenuItem.Text = "Save Project";
-            this.saveFileToolStripMenuItem.Click += new System.EventHandler(this.saveFileToolStripMenuItem_Click);
-            // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1040, 697);
+            this.ClientSize = new System.Drawing.Size(1040, 755);
             this.Controls.Add(this.GenerateAllInOne);
             this.Controls.Add(this.Generate);
             this.Controls.Add(this.Main_menuStrip);
@@ -2167,8 +2168,8 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.Main_menuStrip;
-            this.MaximumSize = new System.Drawing.Size(1056, 736);
-            this.MinimumSize = new System.Drawing.Size(1056, 736);
+            this.MaximumSize = new System.Drawing.Size(1056, 794);
+            this.MinimumSize = new System.Drawing.Size(1056, 794);
             this.Name = "Main";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "86Duino Motion Editor";

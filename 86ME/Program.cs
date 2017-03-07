@@ -2,7 +2,7 @@
 using System.Windows.Forms;
 using System.IO;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     static class Program
     {

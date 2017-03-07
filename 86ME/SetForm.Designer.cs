@@ -1,4 +1,4 @@
-﻿namespace _86ME_ver1
+﻿namespace _86ME_ver2
 {
     partial class SetForm
     {

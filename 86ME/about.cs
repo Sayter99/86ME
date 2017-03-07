@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     public partial class about : Form
     {

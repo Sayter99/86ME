@@ -17,8 +17,9 @@ using System.Windows.Forms;
 using System.IO;
 using System.Collections;
 using System.Threading;
+using Newtonsoft.Json;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     public partial class Main : Form
     {
@@ -78,6 +79,7 @@ namespace _86ME_ver1
         bool[] captured = new bool[45];
         string[] motionevent = new string[8];
         char[] delimiterChars = { ' ', '\t', '\r', '\n' };
+        JsonSerializerSettings json_settings;
         public Main(Dictionary<string, string> lang_dic)
         {
             InitializeComponent();
@@ -99,6 +101,11 @@ namespace _86ME_ver1
             accHZText.Name = "5";
             accDurationText.Name = "6";
             Main_lang_dic = lang_dic;
+            json_settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Formatting = Formatting.None
+            };
             applyLang();
         }
 
@@ -123,6 +130,11 @@ namespace _86ME_ver1
             accHZText.Name = "5";
             accDurationText.Text = "6";
             Main_lang_dic = lang_dic;
+            json_settings = new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All,
+                Formatting = Formatting.None
+            };
             applyLang();
             init_load_file = filename;
             Application.Idle += new EventHandler(init_load);
@@ -158,7 +170,7 @@ namespace _86ME_ver1
                     ftext[i] = new MaskedTextBox();
                     fbar[i] = new HScrollBar();
                     fpanel[i].Size = new Size(267, 30);
-                    fpanel[i].BackColor = Color.Transparent;
+                    fpanel[i].BackColor = Color.White;
                     fpanel[i].BorderStyle = BorderStyle.FixedSingle;
                     if (Motion.picfilename == null || Motion.newflag == true)
                     {
@@ -220,7 +232,7 @@ namespace _86ME_ver1
                     fonoff[i].FlatStyle = FlatStyle.Flat;
                     fonoff[i].FlatAppearance.BorderSize = 0;
                     fonoff[i].Image = Properties.Resources.on;
-                    fonoff[i].BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+                    fonoff[i].BackgroundImageLayout = ImageLayout.Center;
                     fonoff[i].Size = new Size(23, 23);
                     fonoff[i].Left += 241;
                     fonoff[i].Name = i.ToString();
@@ -1044,103 +1056,58 @@ namespace _86ME_ver1
         {
             TextWriter writer = new StreamWriter(filename);
 
-            writer.Write("BoardVer ");
-            writer.Write(Motion.comboBox1.SelectedItem.ToString());
-            writer.Write(" " + gs.ps2pins[0] + " " + gs.ps2pins[1] + " " + gs.ps2pins[2] + " " + gs.ps2pins[3] + " " +
-                         gs.bt_baud + " " + gs.bt_port + " " + gs.wifi602_port + " " + gs.esp8266_baud + " " + gs.esp8266_port +
-                         " " + gs.esp8266_chpd);
-            writer.Write("\n");
-            writer.Write("Servo ");
+            ME_RBM rbm = new ME_RBM();
+            rbm.board = Motion.comboBox1.SelectedItem.ToString();
+            if (Motion.mirrorfilename != null)
+                rbm.mirror = Motion.mirrorfilename;
+            rbm.sync = sync_speed.Value;
+            rbm.imu[0] = Motion.comboBox2.SelectedItem.ToString();
+            rbm.imu[1] = Motion.q.w.ToString();
+            rbm.imu[2] = Motion.q.x.ToString();
+            rbm.imu[3] = Motion.q.y.ToString();
+            rbm.imu[4] = Motion.q.z.ToString();
             for (int i = 0; i < 45; i++)
             {
-                ComboBox cb = Motion.fbox[i];
-                writer.Write(cb.Text);
-                if (i != 44)
-                    writer.Write(" ");
+                rbm.servos[i] = Motion.fbox[i].Text;
+
+                if (string.Compare(Motion.ftext[i].Text, "") == 0)
+                    Motion.ftext[i].Text = "0";
+                rbm.offsets[i] = int.Parse(Motion.ftext[i].Text);
+
+                if (string.Compare(Motion.ftext2[i].Text, "") == 0)
+                    Motion.ftext2[i].Text = "1500";
+                rbm.home[i] = uint.Parse(Motion.ftext2[i].Text);
+
+                if (string.Compare(Motion.ftext3[i].Text, "") == 0)
+                    Motion.ftext3[i].Text = "600";
+                rbm.range[i] = uint.Parse(Motion.ftext3[i].Text);
+
+                if (string.Compare(Motion.ftext4[i].Text, "") == 0)
+                    Motion.ftext4[i].Text = "2400";
+                rbm.range[i + 45] = uint.Parse(Motion.ftext4[i].Text);
+
+                if (Motion.picfilename != null)
+                {
+                    rbm.picture[0] = Motion.picfilename;
+                    rbm.picture[i + 1] = Motion.channelx[i].ToString();
+                    rbm.picture[i + 45 + 1] = Motion.channely[i].ToString();
+                }
+
+                if (string.Compare(Motion.ftext5[i].Text, "") == 0)
+                    Motion.ftext5[i].Text = "0";
+                rbm.pgain[i] = Motion.ftext5[i].Text;
+
+                if (string.Compare(Motion.ftext6[i].Text, "") == 0)
+                    Motion.ftext6[i].Text = "0";
+                rbm.sgain[i] = Motion.ftext6[i].Text;
+
+                rbm.gainsrc1[i] = Motion.fbox2[i].Text;
+                rbm.gainsrc2[i] = Motion.fbox3[i].Text;
             }
-            writer.Write("\n");
-            writer.Write("Offset ");
-            for (int j = 0; j < 45; j++)
-            {
-                if (string.Compare(Motion.ftext[j].Text, "") == 0)
-                    Motion.ftext[j].Text = "0";
-                writer.Write(Motion.ftext[j].Text + " ");
-            }
-            writer.Write("\n");
-            writer.Write("Homeframe ");
-            for (int j = 0; j < 45; j++)
-            {
-                if (string.Compare(Motion.ftext[j].Text, "") == 0)
-                    Motion.ftext2[j].Text = "1500";
-                writer.Write(Motion.ftext2[j].Text + " ");
-            }
-            writer.Write("\n");
-            writer.Write("Range ");
-            for (int j = 0; j < 45; j++)
-            {
-                if (string.Compare(Motion.ftext3[j].Text, "") == 0)
-                    Motion.ftext3[j].Text = "600";
-                writer.Write(Motion.ftext3[j].Text + " ");
-            }
-            for (int j = 0; j < 45; j++)
-            {
-                if (string.Compare(Motion.ftext4[j].Text, "") == 0)
-                    Motion.ftext4[j].Text = "2400";
-                writer.Write(Motion.ftext4[j].Text + " ");
-            }
-            writer.Write("\n");
-            if (Motion.picfilename != null)
-            {
-                writer.Write("picmode ");
-                writer.Write(Motion.picfilename + " ");
-                for (int i = 0; i < 45; i++)
-                    writer.Write(Motion.channelx[i] + " ");
-                for (int i = 0; i < 45; i++)
-                    writer.Write(Motion.channely[i] + " ");
-                writer.Write("\n");
-            }
-            if (Motion.mirrorfilename != null)
-            {
-                writer.Write("MirrorFile ");
-                writer.Write("\"" + Motion.mirrorfilename + "\"");
-                writer.Write("\n");
-            }
-            // save sync_speed
-            writer.WriteLine("Sync " + sync_speed.Value.ToString());
-            // save IMU
-            writer.WriteLine("IMU " + Motion.comboBox2.SelectedIndex + " " + Motion.q.w + " " + Motion.q.x +
-                             " " + Motion.q.y + " " + Motion.q.z);
-            writer.Write("PGain ");
-            for (int j = 0; j < 45; j++)
-            {
-                if (string.Compare(Motion.ftext5[j].Text, "") == 0)
-                    Motion.ftext5[j].Text = "0";
-                writer.Write(Motion.ftext5[j].Text + " ");
-            }
-            writer.WriteLine();
-            writer.Write("SGain ");
-            for (int j = 0; j < 45; j++)
-            {
-                if (string.Compare(Motion.ftext6[j].Text, "") == 0)
-                    Motion.ftext6[j].Text = "0";
-                writer.Write(Motion.ftext6[j].Text + " ");
-            }
-            writer.WriteLine();
-            writer.Write("Source ");
-            for (int j = 0; j < 45; j++)
-                writer.Write(Motion.fbox2[j].Text + " ");
-            writer.WriteLine();
-            writer.Write("Source2 ");
-            for (int j = 0; j < 45; j++)
-                writer.Write(Motion.fbox3[j].Text + " ");
-            writer.WriteLine();
-            for (int i = 0; i < ME_Motionlist.Count; i++) // save existing motions 
-            {
-                ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                saveMotion(m, writer);
-                if (i != ME_Motionlist.Count - 1)
-                    writer.Write("\n");
-            }
+            rbm.motions = ME_Motionlist;
+
+            string json = JsonConvert.SerializeObject(rbm, json_settings);
+            writer.Write(json);
 
             writer.Dispose();
             writer.Close();
@@ -1148,93 +1115,13 @@ namespace _86ME_ver1
 
         private void saveMotion(ME_Motion m, TextWriter writer)
         {
-            string bt_key = (m.bt_key == "" ? "---noBtKey---" : m.bt_key);
-            string esp8266_key = (m.esp8266_key == "" ? "---noESP8266Key---" : m.esp8266_key);
-            writer.Write("Motion " + m.name + " " + m.trigger_method + " " + m.auto_method + " " +
-                         m.trigger_key + " " + m.trigger_keyType + " " + bt_key + " " + m.ps2_key +
-                         " " + m.ps2_type + " " + m.bt_mode + " " + m.acc_Settings[0] + " " + m.acc_Settings[1] +
-                         " " + m.acc_Settings[2] + " " + m.acc_Settings[3] + " " + m.acc_Settings[4] +
-                         " " + m.acc_Settings[5] + " " + m.acc_Settings[6] + " " + m.wifi602_key +
-                         " " + m.analog_pin + " " + m.analog_cond + " " + m.analog_value + " " + esp8266_key +
-                         " " + m.esp8266_mode + "\n");
-            writer.Write("Layer " + m.moton_layer + " ");
-            for (int j = 0; j < m.used_servos.Count; j++)
-            {
-                writer.Write(m.used_servos[j]);
-                if (j != m.used_servos.Count - 1)
-                    writer.Write(" ");
-            }
-            writer.WriteLine();
-            for (int j = 0; j < m.Events.Count; j++)
-            {
-                if (m.Events[j] is ME_Frame)
-                {
-                    ME_Frame f = (ME_Frame)m.Events[j];
-                    if (f.type == 1)
-                        writer.Write("frame " + f.delay.ToString() + " ");
-                    else if (f.type == 0)
-                        writer.Write("home " + f.delay.ToString() + " ");
-                    int count = 0;
-                    for (int k = 0; k < 45; k++)
-                    {
-                        if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                        {
-                            count++;
-                        }
-                    }
-                    for (int k = 0; k < 45; k++)
-                    {
-                        if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
-                        {
-                            count--;
-                            writer.Write(f.frame[k].ToString());
-                            if (count != 0)
-                                writer.Write(" ");
-                        }
-                    }
-                    writer.Write("\n");
-                }
-                else if (m.Events[j] is ME_Delay)
-                {
-                    ME_Delay d = (ME_Delay)m.Events[j];
-                    writer.Write("delay " + d.delay.ToString() + "\n");
-                }
-                else if (m.Events[j] is ME_Goto)
-                {
-                    ME_Goto g = (ME_Goto)m.Events[j];
-                    writer.Write("goto " + g.name + " " + g.is_goto.ToString() + " " + g.loops + " " + g.infinite + "\n");
-                }
-                else if (m.Events[j] is ME_Flag)
-                {
-                    ME_Flag fl = (ME_Flag)m.Events[j];
-                    writer.Write("flag " + fl.name + "\n");
-                }
-                else if (m.Events[j] is ME_Trigger)
-                {
-                    ME_Trigger t = (ME_Trigger)m.Events[j];
-                    writer.Write("trigger " + t.name + " " + t.method + "\n");
-                }
-                else if (m.Events[j] is ME_Release)
-                {
-                    writer.Write("release\n");
-                }
-                else if (m.Events[j] is ME_Compute)
-                {
-                    ME_Compute op = (ME_Compute)m.Events[j];
-                    writer.Write("compute " + op.left_var + " " + op.form + " " + op.f1_var1 + " " + op.f1_op + " " + op.f1_var2 +
-                                 " " + op.f2_op + " " + op.f2_var + " " + op.f3_var + " " + op.f4_const + "\n");
-                }
-                else if (m.Events[j] is ME_If)
-                {
-                    ME_If mif = (ME_If)m.Events[j];
-                    writer.Write("if " + mif.left_var + " " + mif.method + " " + mif.right_var + " " + mif.name + " " + mif.form + " " +
-                                 mif.right_const + "\n");
-                }
-            }
-            writer.Write("MotionEnd " + m.property + " " + m.comp_range + " " + m.control_method + " " + m.name);
+            ME_MOT mot = new ME_MOT();
+            mot.motion = m;
+            string json = JsonConvert.SerializeObject(mot, json_settings);
+            writer.Write(json);
         }
 
-        private void actionToolStripMenuItem_Click(object sender, EventArgs e)//load project
+        private void actionToolStripMenuItem_Click(object sender, EventArgs e) //load project
         {
             bool _needToSave = needToSave();
             if (_needToSave && File.Exists(load_filename))
@@ -1271,9 +1158,10 @@ namespace _86ME_ver1
             autocheck.Checked = false;
             load_project(filename);
             MotionConfig.SelectedIndex = 0;
-            if (ME_Motionlist.Count > 0)
-                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
-                    Motionlist.SelectedIndex = 0;
+            if (ME_Motionlist != null)
+                if (ME_Motionlist.Count > 0)
+                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
+                        Motionlist.SelectedIndex = 0;
         }
 
         private void load_project(string filename)
@@ -1282,633 +1170,248 @@ namespace _86ME_ver1
             picture_name = null;
             bool picmode = false;
             NewMotion nMotion = new NewMotion(Main_lang_dic);
-            string[] rbver = new string[] { "---unset---",
-                                            "RB_100b1",
-                                            "RB_100b2",
-                                            "RB_100b3",
-                                            "RB_100",
-                                            "RB_100RD",
-                                            "RB_110",
-                                            "86Duino_One",
-                                            "86Duino_Zero",
-                                            "86Duino_EduCake",
-                                            "86Duino_AI",
-                                            "unknow"};
-            string[] servo = new string[] { "---noServo---",
-                                            "EMAX_ES08AII",
-                                            "EMAX_ES3104",
-                                            "KONDO_KRS786",
-                                            "KONDO_KRS788",
-                                            "KONDO_KRS78X",
-                                            "KONDO_KRS4014",
-                                            "KONDO_KRS4024",
-                                            "HITEC_HSR8498",
-                                            "FUTABA_S3003",
-                                            "SHAYYE_SYS214050",
-                                            "TOWERPRO_MG90S",
-                                            "TOWERPRO_MG995",
-                                            "TOWERPRO_MG996",
-                                            "TOWERPRO_SG90",
-                                            "DMP_RS0263",
-                                            "DMP_RS1270",
-                                            "GWS_S777",
-                                            "GWS_S03T",
-                                            "GWS_MICRO",
-                                            "OtherServos"};
+            string[] boards = new string[] { "86Duino_One",
+                                             "86Duino_Zero",
+                                             "86Duino_EduCake",
+                                             "86Duino_AI"};
+            string[] servos = new string[] { "---noServo---",
+                                             "EMAX_ES08AII",
+                                             "EMAX_ES3104",
+                                             "KONDO_KRS786",
+                                             "KONDO_KRS788",
+                                             "KONDO_KRS78X",
+                                             "KONDO_KRS4014",
+                                             "KONDO_KRS4024",
+                                             "HITEC_HSR8498",
+                                             "FUTABA_S3003",
+                                             "SHAYYE_SYS214050",
+                                             "TOWERPRO_MG90S",
+                                             "TOWERPRO_MG995",
+                                             "TOWERPRO_MG996",
+                                             "TOWERPRO_SG90",
+                                             "DMP_RS0263",
+                                             "DMP_RS1270",
+                                             "GWS_S777",
+                                             "GWS_S03T",
+                                             "GWS_MICRO",
+                                             "OtherServos"};
+            string[] imus =   new string[] { "NONE",
+                                             "86Duino One On-Board IMU",
+                                             "RM-G146",
+                                             "86Duino AI On-Board IMU"};
 
-            using (StreamReader reader = new StreamReader(filename))
+            ME_RBM rbm;
+            try
             {
-                load_filename = filename;
+                rbm = JsonConvert.DeserializeObject<ME_RBM>(File.ReadAllText(filename), json_settings);
+            }
+            catch
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg5"]);
+                return;
+            }
 
-                string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                if (datas.Length < 239)
+            string current_ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            if (rbm.version[0] != current_ver[0])
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg24"] + rbm.version + ". Current: 86ME_v" + current_ver);
+                return;
+            }
+
+            load_filename = filename;
+            ME_Motionlist = new ArrayList();
+            MotionCombo.Items.Clear();
+            MotionCombo.Text = "";
+            Motionlist.Items.Clear();
+            delaytext.Text = default_delay.ToString();
+            for (int i = 0; i < boards.Length; i++)
+            {
+                if (string.Compare(rbm.board, boards[i]) == 0)
                 {
-                    MessageBox.Show(Main_lang_dic["errorMsg5"]);
-                    return;
-                }
-                if (datas[0] != "BoardVer")
-                {
-                    MessageBox.Show(Main_lang_dic["errorMsg5"]);
-                    return;
-                }
-
-                ME_Motionlist = new ArrayList();
-                ME_Motion motiontag = null;
-                MotionCombo.Items.Clear();
-                MotionCombo.Text = "";
-                Motionlist.Items.Clear();
-                delaytext.Text = default_delay.ToString();
-
-                for (int i = 0; i < datas.Length; i++)
-                {
-                    if (String.Compare(datas[i], "BoardVer") == 0)
+                    board_ver86 = i;
+                    nMotion.comboBox1.SelectedIndex = i;
+                    if (i == 1)
                     {
-                        i++;
-                        for (int j = 0; j < rbver.Length; j++)
-                        {
-                            if (String.Compare(datas[i], rbver[j]) == 0)
-                            {
-                                //***fix bug after remove rb
-                                nMotion.comboBox1.SelectedIndex = j - 7;
-                                board_ver86 = j - 7;
-                                if (string.Compare(rbver[j], "86Duino_Zero") == 0)
-                                {
-                                    nMotion.clear_Channels();
-                                    nMotion.create_panel(0, 14, 0);
-                                    nMotion.create_panel(42, 45, 14);
-                                }
-                                else if (string.Compare(rbver[j], "86Duino_EduCake") == 0)
-                                {
-                                    nMotion.clear_Channels();
-                                    nMotion.create_panel(0, 21, 0);
-                                    nMotion.create_panel(31, 33, 21);
-                                    nMotion.create_panel(42, 45, 23);
-                                }
-                                else if (string.Compare(rbver[j], "86Duino_AI") == 0)
-                                {
-                                    nMotion.clear_Channels();
-                                    nMotion.create_panel(0, 36, 0);
-                                }
-                            }
-                        }
-                        if (String.Compare(datas[i + 1], "Servo") != 0)
-                        {
-                            gs.ps2pins[0] = datas[++i];
-                            gs.ps2pins[1] = datas[++i];
-                            gs.ps2pins[2] = datas[++i];
-                            gs.ps2pins[3] = datas[++i];
-                        }
-                        if (String.Compare(datas[i + 1], "Servo") != 0)
-                        {
-                            gs.bt_baud = datas[++i];
-                            gs.bt_port = datas[++i];
-                        }
-                        if (String.Compare(datas[i + 1], "Servo") != 0)
-                        {
-                            gs.wifi602_port = datas[++i];
-                        }
-                        if (String.Compare(datas[i + 1], "Servo") != 0)
-                        {
-                            gs.esp8266_baud = datas[++i];
-                            gs.esp8266_port = datas[++i];
-                            gs.esp8266_chpd = datas[++i];
-                        }
+                        nMotion.clear_Channels();
+                        nMotion.create_panel(0, 14, 0);
+                        nMotion.create_panel(42, 45, 14);
                     }
-                    else if (String.Compare(datas[i], "Offset") == 0)
+                    else if (i == 2)
                     {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.ftext[k].Text = datas[i];
-                            try
-                            {
-                                offset[k] = int.Parse(datas[i]);
-                            }
-                            catch
-                            {
-                                nMotion.ftext[k].Text = "0";
-                                offset[k] = 0;
-                                MessageBox.Show(Main_lang_dic["errorMsg6"]);
-                            }
-                        }
+                        nMotion.clear_Channels();
+                        nMotion.create_panel(0, 21, 0);
+                        nMotion.create_panel(31, 33, 21);
+                        nMotion.create_panel(42, 45, 23);
                     }
-                    else if (String.Compare(datas[i], "Homeframe") == 0)
+                    else if (i == 3)
                     {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.ftext2[k].Text = datas[i];
-                            try
-                            {
-                                homeframe[k] = uint.Parse(datas[i]);
-                            }
-                            catch
-                            {
-                                nMotion.ftext2[k].Text = "1500";
-                                homeframe[k] = 1500;
-                                MessageBox.Show(Main_lang_dic["errorMsg7"]);
-                            }
-                        }
-                    }
-                    else if (String.Compare(datas[i], "Range") == 0)
-                    {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.ftext3[k].Text = datas[i];
-                            try
-                            {
-                                min[k] = uint.Parse(datas[i]);
-                            }
-                            catch
-                            {
-                                nMotion.ftext3[k].Text = "600";
-                                min[k] = 600;
-                                MessageBox.Show(Main_lang_dic["errorMsg8"]);
-                            }
-                        }
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.ftext4[k].Text = datas[i];
-                            try
-                            {
-                                Max[k] = uint.Parse(datas[i]);
-                            }
-                            catch
-                            {
-                                nMotion.ftext4[k].Text = "2400";
-                                Max[k] = 2400;
-                                MessageBox.Show(Main_lang_dic["errorMsg8"]);
-                            }
-                        }
-                    }
-                    else if (String.Compare(datas[i], "Sync") == 0)
-                    {
-                        sync_speed.Value = int.Parse(datas[++i]);
-                    }
-                    else if (String.Compare(datas[i], "IMU") == 0)
-                    {
-                        used_imu = int.Parse(datas[++i]);
-                        if (used_imu != 0)
-                        {
-                            if (string.Compare(com_port, "OFF") != 0)
-                                nMotion.init_imu.Enabled = true;
-                            nMotion.maskedTextBox1.Enabled = true;
-                            nMotion.maskedTextBox2.Enabled = true;
-                            nMotion.maskedTextBox3.Enabled = true;
-                            nMotion.maskedTextBox4.Enabled = true;
-                            nMotion.label10.Enabled = true;
-                            nMotion.label11.Enabled = true;
-                            for (int k = 0; k < 45; k++)
-                            {
-                                nMotion.fbox2[k].Enabled = true;
-                                nMotion.ftext5[k].Enabled = true;
-                                nMotion.fbox3[k].Enabled = true;
-                                nMotion.ftext6[k].Enabled = true;
-                                nMotion.fcheck_ps[k].Enabled = true;
-                            }
-                        }
-                        nMotion.comboBox2.SelectedIndex = used_imu;
-                        nMotion.maskedTextBox1.Text = datas[++i];
-                        nMotion.maskedTextBox2.Text = datas[++i];
-                        nMotion.maskedTextBox3.Text = datas[++i];
-                        nMotion.maskedTextBox4.Text = datas[++i];
-                        init_quaternion[0] = double.Parse(nMotion.maskedTextBox1.Text);
-                        init_quaternion[1] = double.Parse(nMotion.maskedTextBox2.Text);
-                        init_quaternion[2] = double.Parse(nMotion.maskedTextBox3.Text);
-                        init_quaternion[3] = double.Parse(nMotion.maskedTextBox4.Text);
-                    }
-                    else if (String.Compare(datas[i], "PGain") == 0)
-                    {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.ftext5[k].Text = datas[i];
-                            p_gain[k] = double.Parse(datas[i]);
-                        }
-                    }
-                    else if (String.Compare(datas[i], "SGain") == 0)
-                    {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.ftext6[k].Text = datas[i];
-                            s_gain[k] = double.Parse(datas[i]);
-                        }
-                    }
-                    else if (String.Compare(datas[i], "Source") == 0)
-                    {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            nMotion.fbox2[k].Text = datas[++i];
-                            gain_source[k] = nMotion.fbox2[k].SelectedIndex;
-                        }
-                    }
-                    else if (String.Compare(datas[i], "Source2") == 0)
-                    {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            nMotion.fbox3[k].Text = datas[++i];
-                            gain_source2[k] = nMotion.fbox3[k].SelectedIndex;
-                        }
-                    }
-                    else if (String.Compare(datas[i], "picmode") == 0)
-                    {
-                        picmode = true;
-                        i++;
-                        nMotion.picfilename = datas[i];
-                        while (String.Compare(Path.GetExtension(datas[i]), "") == 0 || !File.Exists(nMotion.picfilename))
-                        {
-                            i++;
-                            int value;
-                            bool success = int.TryParse(datas[i], out value);
-                            if (!success)
-                                nMotion.picfilename += " " + datas[i];
-                            else
-                            {
-                                i--;
-                                break;
-                            }
-                        }
-                        string short_picfilename = Path.GetFileName(nMotion.picfilename);
-                        if (short_picfilename.Length < 25)
-                            nMotion.pic_loaded.Text = short_picfilename;
-                        else
-                            nMotion.pic_loaded.Text = short_picfilename.Substring(0, 22) + "...";
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.channelx[k] = int.Parse(datas[i]);
-                        }
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            nMotion.channely[k] = int.Parse(datas[i]);
-                        }
-                    }
-                    else if (String.Compare(datas[i], "MirrorFile") == 0)
-                    {
-                        if (datas[++i][0] == '\"')
-                        {
-                            string mirror = datas[i].Substring(1);
-                            while (mirror[mirror.Length - 1] != '\"')
-                                mirror += " " + datas[++i];
-                            mirror = mirror.Substring(0, mirror.Length - 1);
-                            if (File.Exists(mirror))
-                            {
-                                string short_mirrorfilename = Path.GetFileName(mirror);
-                                nMotion.mirrorfilename = mirror;
-                                if (nMotion.parseMirror())
-                                {
-                                    if (short_mirrorfilename.Length < 25)
-                                        nMotion.mirror_loaded.Text = short_mirrorfilename;
-                                    else
-                                        nMotion.mirror_loaded.Text = short_mirrorfilename.Substring(0, 22) + "...";
-                                }
-                                else
-                                {
-                                    nMotion.mirrorfilename = null;
-                                    nMotion.mirror.Clear();
-                                    MessageBox.Show(Main_lang_dic["errorMsg23"]);
-                                }
-                            }
-                            else
-                            {
-                                MessageBox.Show(Main_lang_dic["errorMsg23"]);
-                            }
-                        }
-                    }
-                    else if (String.Compare(datas[i], "Servo") == 0)
-                    {
-                        for (int k = 0; k < 45; k++)
-                        {
-                            i++;
-                            bool servo_fine = false;
-                            for (int j = 0; j < servo.Length; j++)
-                            {
-                                if (String.Compare(datas[i], servo[j]) == 0)
-                                {
-                                    servo_fine = true;
-                                    nMotion.fbox[k].SelectedIndex = j;
-                                    motor_info[k] = j;
-                                }
-                            }
-                            if (servo_fine == false)
-                            {
-                                nMotion.fbox[k].SelectedIndex = 0;
-                                motor_info[k] = 0;
-                                MessageBox.Show(Main_lang_dic["errorMsg9"]);
-                                i--;
-                                break;
-                            }
-                        }
-                    }
-
-                    else if (String.Compare(datas[i], "Motion") == 0)
-                    {
-                        i++;
-                        for (int j = 0; j < ME_Motionlist.Count; j++)
-                        {
-                            motiontag = (ME_Motion)ME_Motionlist[j];
-                            if (String.Compare(datas[i], motiontag.name) != 0)
-                                motiontag = null;
-                            else
-                                break;
-                        }
-                        if (motiontag == null)
-                        {
-                            motiontag = new ME_Motion();
-                            motiontag.name = datas[i];
-                            int try_out;
-                            double try_out_d;
-                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                                String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                                String.Compare("Layer", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
-                            { // triggers
-                                motiontag.trigger_method = int.Parse(datas[++i]);
-                                motiontag.auto_method = int.Parse(datas[++i]);
-                                motiontag.trigger_key = int.Parse(datas[++i]);
-                                motiontag.trigger_keyType = int.Parse(datas[++i]);
-                                i++;
-                                if (String.Compare("---noBtKey---", datas[i]) == 0)
-                                    motiontag.bt_key = "";
-                                else
-                                    motiontag.bt_key = datas[i];
-                                if (int.TryParse(datas[++i], out try_out) == false)
-                                    i--;
-                                motiontag.ps2_key = datas[++i];
-                                motiontag.ps2_type = int.Parse(datas[++i]);
-                                if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                                    String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                                    String.Compare("Layer", datas[i + 1]) != 0)
-                                    motiontag.bt_mode = datas[++i];
-                                if (double.TryParse(datas[i + 1], out try_out_d))
-                                {
-                                    motiontag.acc_Settings[0] = double.Parse(datas[++i]);
-                                    motiontag.acc_Settings[1] = double.Parse(datas[++i]);
-                                    motiontag.acc_Settings[2] = double.Parse(datas[++i]);
-                                    motiontag.acc_Settings[3] = double.Parse(datas[++i]);
-                                    motiontag.acc_Settings[4] = double.Parse(datas[++i]);
-                                    motiontag.acc_Settings[5] = double.Parse(datas[++i]);
-                                    motiontag.acc_Settings[6] = int.Parse(datas[++i]);
-                                }
-                                if (int.TryParse(datas[i + 1], out try_out))
-                                {
-                                    motiontag.wifi602_key = int.Parse(datas[++i]);
-                                }
-                                if (int.TryParse(datas[i + 1], out try_out))
-                                {
-                                    motiontag.analog_pin = int.Parse(datas[++i]);
-                                    motiontag.analog_cond = int.Parse(datas[++i]);
-                                    motiontag.analog_value = int.Parse(datas[++i]);
-                                }
-                                if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                                    String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                                    String.Compare("Layer", datas[i + 1]) != 0)
-                                {
-                                    i++;
-                                    if (String.Compare("---noESP8266Key---", datas[i]) == 0)
-                                        motiontag.esp8266_key = "";
-                                    else
-                                        motiontag.esp8266_key = datas[i];
-                                    motiontag.esp8266_mode = datas[++i];
-                                }
-                            }
-                            ME_Motionlist.Add(motiontag);
-                        }
-                    }
-                    else if (String.Compare(datas[i], "Layer") == 0)
-                    {
-                        i++;
-                        int try_out;
-                        if (int.TryParse(datas[i], out try_out) == true)
-                            motiontag.moton_layer = try_out;
-                        while (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                            String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                            int.TryParse(datas[i + 1], out try_out))
-                        {
-                            i++;
-                            motiontag.used_servos.Add(try_out);
-                        }
-                    }
-                    else if (String.Compare(datas[i], "MotionEnd") == 0)
-                    {
-                        int try_out;
-                        i++;
-                        if (i < datas.Length && int.TryParse(datas[i], out try_out) == true)
-                            motiontag.property = try_out;
-                        else
-                            i--;
-                        i++;
-                        if (i < datas.Length && int.TryParse(datas[i], out try_out) == true)
-                            motiontag.comp_range = try_out;
-                        else
-                            i--;
-                        i++;
-                        if (i < datas.Length && int.TryParse(datas[i], out try_out) == true)
-                            motiontag.control_method = try_out;
-                        else
-                            i--;
-                        if (motiontag != null)
-                            if (String.Compare(datas[++i], motiontag.name) == 0)
-                                motiontag = null;
-                    }
-                    else if (String.Compare(datas[i], "frame") == 0)
-                    {
-                        ME_Frame nframe = new ME_Frame();
-                        nframe.type = 1;
-                        i++;
-                        try
-                        {
-                            nframe.delay = int.Parse(datas[i]);
-                        }
-                        catch
-                        {
-                            nframe.delay = default_delay;
-                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                        }
-                        int j = 0;
-                        while (j < 45)
-                        {
-                            if (String.Compare(nMotion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
-                            {
-                                i++;
-                                try
-                                {
-                                    nframe.frame[j] = int.Parse(datas[i]);
-                                }
-                                catch
-                                {
-                                    nframe.frame[j] = 0;
-                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                                }
-                            }
-                            else
-                            {
-                                nframe.frame[j] = 0;
-                            }
-                            j++;
-                        }
-                        motiontag.Events.Add(nframe);
-                    }
-                    else if (String.Compare(datas[i], "home") == 0)
-                    {
-                        ME_Frame nframe = new ME_Frame();
-                        nframe.type = 0;
-                        i++;
-                        try
-                        {
-                            nframe.delay = int.Parse(datas[i]);
-                        }
-                        catch
-                        {
-                            nframe.delay = default_delay;
-                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                        }
-                        int j = 0;
-                        while (j < 45)
-                        {
-                            if (String.Compare(nMotion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
-                            {
-                                i++;
-                                try
-                                {
-                                    nframe.frame[j] = int.Parse(datas[i]);
-                                }
-                                catch
-                                {
-                                    nframe.frame[j] = 0;
-                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                                }
-                            }
-                            else
-                            {
-                                nframe.frame[j] = 0;
-                            }
-                            j++;
-                        }
-                        motiontag.Events.Add(nframe);
-                    }
-                    else if (String.Compare(datas[i], "delay") == 0)
-                    {
-                        ME_Delay ndelay = new ME_Delay();
-                        i++;
-                        try
-                        {
-                            ndelay.delay = int.Parse(datas[i]);
-                        }
-                        catch
-                        {
-                            ndelay.delay = default_delay;
-                            MessageBox.Show(Main_lang_dic["errorMsg11"]);
-                        }
-                        motiontag.Events.Add(ndelay);
-                    }
-                    else if (String.Compare(datas[i], "flag") == 0)
-                    {
-                        ME_Flag nflag = new ME_Flag();
-                        i++;
-                        nflag.name = datas[i];
-                        motiontag.Events.Add(nflag);
-                    }
-                    else if (String.Compare(datas[i], "goto") == 0)
-                    {
-                        ME_Goto ngoto = new ME_Goto();
-                        i++;
-                        ngoto.name = datas[i];
-                        i++;
-                        if (String.Compare(datas[i], "True") == 0)
-                            ngoto.is_goto = true;
-                        else
-                            ngoto.is_goto = false;
-                        i++;
-                        int value;
-                        bool success = int.TryParse(datas[i], out value);
-                        if (!success)
-                        {
-                            i--;
-                            motiontag.Events.Add(ngoto);
-                            continue;
-                        }
-                        ngoto.loops = datas[i];
-                        ngoto.current_loop = value;
-                        i++;
-                        if (String.Compare(datas[i], "True") == 0)
-                            ngoto.infinite = true;
-                        else if (String.Compare(datas[i], "False") == 0)
-                            ngoto.infinite = false;
-                        else
-                            i--;
-
-                        motiontag.Events.Add(ngoto);
-                    }
-                    else if (String.Compare(datas[i], "trigger") == 0)
-                    {
-                        ME_Trigger ntr = new ME_Trigger();
-                        ntr.name = datas[++i];
-                        ntr.method = int.Parse(datas[++i]);
-                        motiontag.Events.Add(ntr);
-                    }
-                    else if (String.Compare(datas[i], "release") == 0)
-                    {
-                        ME_Release nr = new ME_Release();
-                        motiontag.Events.Add(nr);
-                    }
-                    else if (String.Compare(datas[i], "compute") == 0)
-                    {
-                        ME_Compute op = new ME_Compute();
-                        op.left_var = int.Parse(datas[++i]);
-                        op.form = int.Parse(datas[++i]);
-                        op.f1_var1 = int.Parse(datas[++i]);
-                        op.f1_op = int.Parse(datas[++i]);
-                        op.f1_var2 = int.Parse(datas[++i]);
-                        op.f2_op = int.Parse(datas[++i]);
-                        op.f2_var = int.Parse(datas[++i]);
-                        op.f3_var = int.Parse(datas[++i]);
-                        op.f4_const = double.Parse(datas[++i]);
-                        motiontag.Events.Add(op);
-                    }
-                    else if (String.Compare(datas[i], "if") == 0)
-                    {
-                        int try_out;
-                        ME_If mif = new ME_If();
-                        mif.left_var = int.Parse(datas[++i]);
-                        mif.method = int.Parse(datas[++i]);
-                        mif.right_var = int.Parse(datas[++i]);
-                        mif.name = datas[++i];
-                        if (int.TryParse(datas[i + 1], out try_out) == true)
-                        {
-                            mif.form = int.Parse(datas[++i]);
-                            mif.right_const = double.Parse(datas[++i]);
-                        }
-                        motiontag.Events.Add(mif);
+                        nMotion.clear_Channels();
+                        nMotion.create_panel(0, 36, 0);
                     }
                 }
+            }
+            //Servos
+            for (int i = 0; i < 45; i++)
+            {
+                bool servo_fine = false;
+                for (int j = 0; j < servos.Length; j++)
+                {
+                    if (String.Compare(rbm.servos[i], servos[j]) == 0)
+                    {
+                        servo_fine = true;
+                        nMotion.fbox[i].SelectedIndex = j;
+                        motor_info[i] = j;
+                    }
+                }
+                if (servo_fine == false)
+                {
+                    nMotion.fbox[i].SelectedIndex = 0;
+                    motor_info[i] = 0;
+                    MessageBox.Show(Main_lang_dic["errorMsg9"]);
+                    break;
+                }
+            }
+            for (int i = 0; i < 45; i++)
+            {
+                //Offset
+                nMotion.ftext[i].Text = rbm.offsets[i].ToString();
+                offset[i] = rbm.offsets[i];
+                //Home
+                nMotion.ftext2[i].Text = rbm.home[i].ToString();
+                homeframe[i] = rbm.home[i];
+                //Range
+                nMotion.ftext3[i].Text = rbm.range[i].ToString();
+                nMotion.ftext4[i].Text = rbm.range[i + 45].ToString();
+                min[i] = rbm.range[i];
+                Max[i] = rbm.range[i + 45];
+                //GainSrc
+                nMotion.fbox2[i].Text = rbm.gainsrc1[i];
+                nMotion.fbox3[i].Text = rbm.gainsrc2[i];
+                gain_source[i] = nMotion.fbox2[i].SelectedIndex;
+                gain_source2[i] = nMotion.fbox3[i].SelectedIndex;
+            }
+            //Sync
+            sync_speed.Value = rbm.sync;
+            //IMU
+            try
+            {
+                used_imu = 0;
+                for (int i = 0; i < imus.Length; i++)
+                {
+                    if (string.Compare(imus[i], rbm.imu[0]) == 0)
+                        used_imu = i;
+                }
+                if (used_imu != 0)
+                {
+                    if (string.Compare(com_port, "OFF") != 0)
+                        nMotion.init_imu.Enabled = true;
+                    nMotion.maskedTextBox1.Enabled = true;
+                    nMotion.maskedTextBox2.Enabled = true;
+                    nMotion.maskedTextBox3.Enabled = true;
+                    nMotion.maskedTextBox4.Enabled = true;
+                    nMotion.label10.Enabled = true;
+                    nMotion.label11.Enabled = true;
+                    for (int j = 0; j < 45; j++)
+                    {
+                        nMotion.fbox2[j].Enabled = true;
+                        nMotion.ftext5[j].Enabled = true;
+                        nMotion.fbox3[j].Enabled = true;
+                        nMotion.ftext6[j].Enabled = true;
+                        nMotion.fcheck_ps[j].Enabled = true;
+                    }
+                }
+                nMotion.comboBox2.SelectedIndex = used_imu;
+                nMotion.maskedTextBox1.Text = rbm.imu[1];
+                nMotion.maskedTextBox2.Text = rbm.imu[2];
+                nMotion.maskedTextBox3.Text = rbm.imu[3];
+                nMotion.maskedTextBox4.Text = rbm.imu[4];
+                init_quaternion[0] = double.Parse(rbm.imu[1]);
+                init_quaternion[1] = double.Parse(rbm.imu[2]);
+                init_quaternion[2] = double.Parse(rbm.imu[3]);
+                init_quaternion[3] = double.Parse(rbm.imu[4]);
+            }
+            catch
+            {
+                used_imu = 0;
+                nMotion.maskedTextBox1.Text = "1";
+                nMotion.maskedTextBox2.Text = "0";
+                nMotion.maskedTextBox3.Text = "0";
+                nMotion.maskedTextBox4.Text = "0";
+                init_quaternion[0] = 1;
+                init_quaternion[1] = 0;
+                init_quaternion[2] = 0;
+                init_quaternion[3] = 0;
+                MessageBox.Show(Main_lang_dic["errorMsg25"]);
+            }
+            //PGain, SGain
+            for (int i = 0; i < 45; i++)
+            {
+                try
+                {
+                    nMotion.ftext5[i].Text = rbm.pgain[i];
+                    nMotion.ftext6[i].Text = rbm.sgain[i];
+                    p_gain[i] = double.Parse(rbm.pgain[i]);
+                    s_gain[i] = double.Parse(rbm.sgain[i]);
+                }
+                catch
+                {
+                    nMotion.ftext5[i].Text = "0";
+                    nMotion.ftext6[i].Text = "0";
+                    p_gain[i] = 0;
+                    s_gain[i] = 0;
+                    MessageBox.Show(Main_lang_dic["errorMsg25"]);
+                }
+            }
+            //Picture
+            if (rbm.picture[0] != null)
+            {
+                if (File.Exists(rbm.picture[0]))
+                {
+                    picmode = true;
+                    nMotion.picfilename = rbm.picture[0];
+                    string short_picfilename = Path.GetFileName(nMotion.picfilename);
+                    if (short_picfilename.Length < 25)
+                        nMotion.pic_loaded.Text = short_picfilename;
+                    else
+                        nMotion.pic_loaded.Text = short_picfilename.Substring(0, 22) + "...";
+                    for (int i = 0; i < 45; i++)
+                    {
+                        nMotion.channelx[i] = int.Parse(rbm.picture[i + 1]);
+                        nMotion.channely[i] = int.Parse(rbm.picture[i + 45 + 1]);
+                    }
+                }
+            }
+            //Mirror
+            if (rbm.mirror != null)
+            {
+                if (File.Exists(rbm.mirror))
+                {
+                    string short_mirrorfilename = Path.GetFileName(rbm.mirror);
+                    nMotion.mirrorfilename = rbm.mirror;
+                    if (nMotion.parseMirror())
+                    {
+                        if (short_mirrorfilename.Length < 25)
+                            nMotion.mirror_loaded.Text = short_mirrorfilename;
+                        else
+                            nMotion.mirror_loaded.Text = short_mirrorfilename.Substring(0, 22) + "...";
+                    }
+                    else
+                    {
+                        nMotion.mirrorfilename = null;
+                        nMotion.mirror.Clear();
+                        MessageBox.Show(Main_lang_dic["errorMsg23"]);
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(Main_lang_dic["errorMsg23"]);
+                }
+            }
+            //Motion
+            for (int i = 0; i < rbm.motions.Count; i++)
+            {
+                ME_Motionlist.Add((ME_Motion)(rbm.motions[i]));
+                MotionCombo.Items.Add(((ME_Motion)(rbm.motions[i])).name);
             }
 
             nMotion.write_back();
@@ -1950,12 +1453,6 @@ namespace _86ME_ver1
             saveAsFileToolStripMenuItem.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
             Motion = nMotion;
-
-            for (int i = 0; i < ME_Motionlist.Count; i++)
-            {
-                ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                MotionCombo.Items.Add(m.name);
-            }
 
             if (MotionCombo.Items.Count > 0)
                 MotionCombo.SelectedIndex = 0;
@@ -3698,7 +3195,7 @@ namespace _86ME_ver1
         {
             MotionName motionName = new MotionName(Main_lang_dic, "", "Create a New Motion", MotionCombo);
             motionName.ShowDialog();
-            if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
+            if (motionName.DialogResult == DialogResult.OK)
             {
                 MotionCombo.Items.Add(motionName.name);
                 ME_Motion m = new ME_Motion();
@@ -3733,292 +3230,34 @@ namespace _86ME_ver1
             String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
             if (filename == null)
                 return;
-            using (StreamReader reader = new StreamReader(filename))
-            {
-                string[] datas = reader.ReadToEnd().Split(delimiterChars);
-                ME_Motion motiontag = new ME_Motion();
-                for (int i = 0; i < datas.Length; i++)
-                {
-                    if (String.Compare(datas[i], "Motion") == 0)
-                    {
-                        i++;
-                        MotionName motionName = new MotionName(Main_lang_dic, datas[i], "Enter the Imported Motion Name", MotionCombo);
-                        motionName.ShowDialog();
-                        if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
-                            motiontag.name = motionName.name;
-                        else
-                            return;
-                        int try_out;
-                        double try_out_d;
-                        if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                            String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                            String.Compare("Layer", datas[i + 1]) != 0 && int.TryParse(datas[i + 1], out try_out))
-                        { // triggers
-                            motiontag.trigger_method = int.Parse(datas[++i]);
-                            motiontag.auto_method = int.Parse(datas[++i]);
-                            motiontag.trigger_key = int.Parse(datas[++i]);
-                            motiontag.trigger_keyType = int.Parse(datas[++i]);
-                            i++;
-                            if (String.Compare("---noBtKey---", datas[i]) == 0)
-                                motiontag.bt_key = "";
-                            else
-                                motiontag.bt_key = datas[i];
-                            if (int.TryParse(datas[++i], out try_out) == false)
-                                i--;
-                            motiontag.ps2_key = datas[++i];
-                            motiontag.ps2_type = int.Parse(datas[++i]);
-                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                                String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                                String.Compare("Layer", datas[i + 1]) != 0)
-                                motiontag.bt_mode = datas[++i];
-                            if (double.TryParse(datas[i + 1], out try_out_d))
-                            {
-                                motiontag.acc_Settings[0] = double.Parse(datas[++i]);
-                                motiontag.acc_Settings[1] = double.Parse(datas[++i]);
-                                motiontag.acc_Settings[2] = double.Parse(datas[++i]);
-                                motiontag.acc_Settings[3] = double.Parse(datas[++i]);
-                                motiontag.acc_Settings[4] = double.Parse(datas[++i]);
-                                motiontag.acc_Settings[5] = double.Parse(datas[++i]);
-                                motiontag.acc_Settings[6] = int.Parse(datas[++i]);
-                            }
-                            if (int.TryParse(datas[i + 1], out try_out))
-                            {
-                                motiontag.wifi602_key = int.Parse(datas[++i]);
-                            }
-                            if (int.TryParse(datas[i + 1], out try_out))
-                            {
-                                motiontag.analog_pin = int.Parse(datas[++i]);
-                                motiontag.analog_cond = int.Parse(datas[++i]);
-                                motiontag.analog_value = int.Parse(datas[++i]);
-                            }
-                            if (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                                    String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                                    String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                                    String.Compare("Layer", datas[i + 1]) != 0)
-                            {
-                                i++;
-                                if (String.Compare("---noESP8266Key---", datas[i]) == 0)
-                                    motiontag.esp8266_key = "";
-                                else
-                                    motiontag.esp8266_key = datas[i];
-                                motiontag.esp8266_mode = datas[++i];
-                            }
-                        }
-                        ME_Motionlist.Add(motiontag);
-                    }
-                    else if (String.Compare(datas[i], "Layer") == 0)
-                    {
-                        i++;
-                        int try_out;
-                        if (int.TryParse(datas[i], out try_out) == true)
-                            motiontag.moton_layer = try_out;
-                        while (String.Compare("frame", datas[i + 1]) != 0 && String.Compare("home", datas[i + 1]) != 0 &&
-                            String.Compare("delay", datas[i + 1]) != 0 && String.Compare("flag", datas[i + 1]) != 0 &&
-                            String.Compare("goto", datas[i + 1]) != 0 && String.Compare("MotionEnd", datas[i + 1]) != 0 &&
-                            int.TryParse(datas[i + 1], out try_out))
-                        {
-                            i++;
-                            motiontag.used_servos.Add(try_out);
-                        }
-                    }
-                    else if (String.Compare(datas[i], "MotionEnd") == 0)
-                    {
-                        int try_out;
-                        i++;
-                        if (i < datas.Length && int.TryParse(datas[i], out try_out) == true)
-                            motiontag.property = try_out;
-                        else
-                            i--;
-                        i++;
-                        if (i < datas.Length && int.TryParse(datas[i], out try_out) == true)
-                            motiontag.comp_range = try_out;
-                        else
-                            i--;
-                        i++;
-                        if (i < datas.Length && int.TryParse(datas[i], out try_out) == true)
-                            motiontag.control_method = try_out;
-                        else
-                            i--;
-                        if (motiontag != null)
-                        {
-                            MotionCombo.Items.Add(motiontag.name);
-                            MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
-                        }
-                    }
-                    else if (String.Compare(datas[i], "frame") == 0)
-                    {
-                        ME_Frame nframe = new ME_Frame();
-                        nframe.type = 1;
-                        i++;
-                        try
-                        {
-                            nframe.delay = int.Parse(datas[i]);
-                        }
-                        catch
-                        {
-                            nframe.delay = default_delay;
-                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                        }
-                        int j = 0;
-                        while (j < 45)
-                        {
-                            if (String.Compare(Motion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
-                            {
-                                i++;
-                                try
-                                {
-                                    nframe.frame[j] = int.Parse(datas[i]);
-                                }
-                                catch
-                                {
-                                    nframe.frame[j] = 0;
-                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                                }
-                            }
-                            else
-                            {
-                                nframe.frame[j] = 0;
-                            }
-                            j++;
-                        }
-                        motiontag.Events.Add(nframe);
-                    }
-                    else if (String.Compare(datas[i], "home") == 0)
-                    {
-                        ME_Frame nframe = new ME_Frame();
-                        nframe.type = 0;
-                        i++;
-                        try
-                        {
-                            nframe.delay = int.Parse(datas[i]);
-                        }
-                        catch
-                        {
-                            nframe.delay = default_delay;
-                            MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                        }
-                        int j = 0;
-                        while (j < 45)
-                        {
-                            if (String.Compare(Motion.fbox[j].SelectedItem.ToString(), "---noServo---") != 0)
-                            {
-                                i++;
-                                try
-                                {
-                                    nframe.frame[j] = int.Parse(datas[i]);
-                                }
-                                catch
-                                {
-                                    nframe.frame[j] = 0;
-                                    MessageBox.Show(Main_lang_dic["errorMsg10"]);
-                                }
-                            }
-                            else
-                            {
-                                nframe.frame[j] = 0;
-                            }
-                            j++;
-                        }
-                        motiontag.Events.Add(nframe);
-                    }
-                    else if (String.Compare(datas[i], "delay") == 0)
-                    {
-                        ME_Delay ndelay = new ME_Delay();
-                        i++;
-                        try
-                        {
-                            ndelay.delay = int.Parse(datas[i]);
-                        }
-                        catch
-                        {
-                            ndelay.delay = default_delay;
-                            MessageBox.Show(Main_lang_dic["errorMsg11"]);
-                        }
-                        motiontag.Events.Add(ndelay);
-                    }
-                    else if (String.Compare(datas[i], "flag") == 0)
-                    {
-                        ME_Flag nflag = new ME_Flag();
-                        i++;
-                        nflag.name = datas[i];
-                        motiontag.Events.Add(nflag);
-                    }
-                    else if (String.Compare(datas[i], "goto") == 0)
-                    {
-                        ME_Goto ngoto = new ME_Goto();
-                        i++;
-                        ngoto.name = datas[i];
-                        i++;
-                        if (String.Compare(datas[i], "True") == 0)
-                            ngoto.is_goto = true;
-                        else
-                            ngoto.is_goto = false;
-                        i++;
-                        int value;
-                        bool success = int.TryParse(datas[i], out value);
-                        if (!success)
-                        {
-                            i--;
-                            motiontag.Events.Add(ngoto);
-                            continue;
-                        }
-                        ngoto.loops = datas[i];
-                        ngoto.current_loop = value;
-                        i++;
-                        if (String.Compare(datas[i], "True") == 0)
-                            ngoto.infinite = true;
-                        else if (String.Compare(datas[i], "False") == 0)
-                            ngoto.infinite = false;
-                        else
-                            i--;
 
-                        motiontag.Events.Add(ngoto);
-                    }
-                    else if (String.Compare(datas[i], "trigger") == 0)
-                    {
-                        ME_Trigger ntr = new ME_Trigger();
-                        ntr.name = datas[++i];
-                        ntr.method = int.Parse(datas[++i]);
-                        motiontag.Events.Add(ntr);
-                    }
-                    else if (String.Compare(datas[i], "release") == 0)
-                    {
-                        ME_Release nr = new ME_Release();
-                        motiontag.Events.Add(nr);
-                    }
-                    else if (String.Compare(datas[i], "compute") == 0)
-                    {
-                        ME_Compute op = new ME_Compute();
-                        op.left_var = int.Parse(datas[++i]);
-                        op.form = int.Parse(datas[++i]);
-                        op.f1_var1 = int.Parse(datas[++i]);
-                        op.f1_op = int.Parse(datas[++i]);
-                        op.f1_var2 = int.Parse(datas[++i]);
-                        op.f2_op = int.Parse(datas[++i]);
-                        op.f2_var = int.Parse(datas[++i]);
-                        op.f3_var = int.Parse(datas[++i]);
-                        op.f4_const = double.Parse(datas[++i]);
-                        motiontag.Events.Add(op);
-                    }
-                    else if (String.Compare(datas[i], "if") == 0)
-                    {
-                        int try_out;
-                        ME_If mif = new ME_If();
-                        mif.left_var = int.Parse(datas[++i]);
-                        mif.method = int.Parse(datas[++i]);
-                        mif.right_var = int.Parse(datas[++i]);
-                        mif.name = datas[++i];
-                        if (int.TryParse(datas[i + 1], out try_out) == true)
-                        {
-                            mif.form = int.Parse(datas[++i]);
-                            mif.right_const = double.Parse(datas[++i]);
-                        }
-                        motiontag.Events.Add(mif);
-                    }
-                }
+            ME_MOT im;
+            try
+            {
+                im = JsonConvert.DeserializeObject<ME_MOT>(File.ReadAllText(filename), json_settings);
             }
+            catch
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg5"]);
+                return;
+            }
+
+            string current_ver = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            if (im.version[0] != current_ver[0])
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg24"] + im.version + ". Current: 86ME_v" + current_ver);
+                return;
+            }
+            MotionName motionName = new MotionName(Main_lang_dic, im.motion.name, "Enter the Imported Motion Name", MotionCombo);
+            motionName.ShowDialog();
+            if (motionName.DialogResult == DialogResult.OK)
+                im.motion.name = motionName.name;
+            else
+                return;
+
+            ME_Motionlist.Add(im.motion);
+            MotionCombo.Items.Add(im.motion.name);
+            MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
         }
 
         private void ExportMotionToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4050,7 +3289,7 @@ namespace _86ME_ver1
                 {
                     MotionName motionName = new MotionName(Main_lang_dic, MotionCombo.Text, "Rename the Motion", MotionCombo);
                     motionName.ShowDialog();
-                    if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
+                    if (motionName.DialogResult == DialogResult.OK)
                     {
                         ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).name = motionName.name;
                         MotionCombo.Items[MotionCombo.SelectedIndex] = motionName.name;
@@ -4070,7 +3309,7 @@ namespace _86ME_ver1
                 if (MotionCombo.SelectedItem != null)
                 {
                     DialogResult res = MessageBox.Show(Main_lang_dic["warning1"], "Confirm", MessageBoxButtons.YesNo);
-                    if (res == System.Windows.Forms.DialogResult.Yes)
+                    if (res == DialogResult.Yes)
                     {
                         Motionlist.Items.Clear();
                         Motionlist.Controls.Clear();
@@ -4094,7 +3333,7 @@ namespace _86ME_ver1
                 {
                     MotionName motionName = new MotionName(Main_lang_dic, MotionCombo.Text + "_new", "Duplicate the Motion", MotionCombo);
                     motionName.ShowDialog();
-                    if (motionName.DialogResult == System.Windows.Forms.DialogResult.OK)
+                    if (motionName.DialogResult == DialogResult.OK)
                     {
                         ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Copy();
                         m.name = motionName.name;

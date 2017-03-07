@@ -4,7 +4,7 @@ using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     enum mtest_method { always, keyboard, bluetooth, ps2, acc, wifi602, analog, esp8266 };
     enum keyboard_method { first, pressed, release };
@@ -13,7 +13,7 @@ namespace _86ME_ver1
     enum motion_property { blocking, nonblocking };
     enum internal_trigger { call, jump };
 
-    class GlobalSettings
+    public class GlobalSettings
     {
         public string[] ps2pins;
         public string bt_baud;

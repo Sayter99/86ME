@@ -1,7 +1,7 @@
 ﻿using System.Windows.Forms;
 using System.Threading;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     public partial class Progress : Form
     {

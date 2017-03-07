@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     public class ME_Motion
     {
@@ -290,6 +290,52 @@ namespace _86ME_ver1
             ret.f3_var = this.f3_var;
             ret.f4_const = this.f4_const;
             return ret;
+        }
+    }
+
+    public class ME_RBM
+    {
+        public string version;
+        public string board;
+        public GlobalSettings gs = new GlobalSettings();
+        public string[] servos;
+        public int[] offsets;
+        public uint[] home;
+        public uint[] range;
+        public string[] picture;
+        public string mirror;
+        public int sync;
+        public string[] imu;
+        public string[] pgain;
+        public string[] sgain;
+        public string[] gainsrc1;
+        public string[] gainsrc2;
+        public ArrayList motions;
+        public ME_RBM()
+        {
+            this.version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            this.board = "86Duino_One";
+            this.servos = new string[45];
+            this.offsets = new int[45];
+            this.home = new uint[45];
+            this.range = new uint[90];
+            this.picture = new string[91];
+            this.sync = 5;
+            this.imu = new string[5];
+            this.pgain = new string[45];
+            this.sgain = new string[45];
+            this.gainsrc1 = new string[45];
+            this.gainsrc2 = new string[45];
+        }
+    }
+
+    public class ME_MOT
+    {
+        public string version;
+        public ME_Motion motion;
+        public ME_MOT()
+        {
+            this.version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
         }
     }
 }

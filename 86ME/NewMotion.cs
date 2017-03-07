@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Threading;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     public partial class NewMotion : Form
     {
@@ -561,7 +561,7 @@ namespace _86ME_ver1
                 fcheck_ps[i].FlatStyle = FlatStyle.Flat;
                 fcheck_ps[i].FlatAppearance.BorderSize = 0;
                 fcheck_ps[i].Image = Properties.Resources.p;
-                fcheck_ps[i].BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+                fcheck_ps[i].BackgroundImageLayout = ImageLayout.Center;
                 fcheck_ps[i].Size = new Size(23, 22);
                 fcheck_ps[i].Left += 552;
                 fcheck_ps[i].Name = i.ToString();

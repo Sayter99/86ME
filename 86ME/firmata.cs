@@ -34,7 +34,7 @@ using System.Linq;
 using System.IO.Ports;
 using System.Threading;
 
-namespace _86ME_ver1
+namespace _86ME_ver2
 {
     /*
      * Together with the Firmata 2 firmware (an Arduino sketch uploaded to the

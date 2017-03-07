@@ -1,4 +1,4 @@
-﻿namespace _86ME_ver1
+﻿namespace _86ME_ver2
 {
     partial class about
     {
@@ -43,10 +43,10 @@
             this.richTextBox1.BackColor = System.Drawing.SystemColors.ControlLightLight;
             this.richTextBox1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.richTextBox1.Font = new System.Drawing.Font("Consolas", 11F);
-            this.richTextBox1.Location = new System.Drawing.Point(12, 67);
+            this.richTextBox1.Location = new System.Drawing.Point(12, 73);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.ReadOnly = true;
-            this.richTextBox1.Size = new System.Drawing.Size(260, 154);
+            this.richTextBox1.Size = new System.Drawing.Size(260, 167);
             this.richTextBox1.TabIndex = 0;
             this.richTextBox1.Text = "86ME is an open source project and it is derived from RoboME of RBgod. (https://g" +
     "ithub.com/RoBoardGod/RoBoME)";
@@ -54,9 +54,9 @@
             // 
             // fb_button
             // 
-            this.fb_button.Location = new System.Drawing.Point(12, 227);
+            this.fb_button.Location = new System.Drawing.Point(12, 246);
             this.fb_button.Name = "fb_button";
-            this.fb_button.Size = new System.Drawing.Size(75, 23);
+            this.fb_button.Size = new System.Drawing.Size(75, 25);
             this.fb_button.TabIndex = 1;
             this.fb_button.Text = "FaceBook";
             this.fb_button.UseVisualStyleBackColor = true;
@@ -65,9 +65,9 @@
             // web_button
             // 
             this.web_button.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.web_button.Location = new System.Drawing.Point(105, 227);
+            this.web_button.Location = new System.Drawing.Point(105, 246);
             this.web_button.Name = "web_button";
-            this.web_button.Size = new System.Drawing.Size(75, 23);
+            this.web_button.Size = new System.Drawing.Size(75, 25);
             this.web_button.TabIndex = 2;
             this.web_button.Text = "86Duino";
             this.web_button.UseVisualStyleBackColor = true;
@@ -76,9 +76,9 @@
             // github_button
             // 
             this.github_button.ImeMode = System.Windows.Forms.ImeMode.NoControl;
-            this.github_button.Location = new System.Drawing.Point(197, 227);
+            this.github_button.Location = new System.Drawing.Point(197, 246);
             this.github_button.Name = "github_button";
-            this.github_button.Size = new System.Drawing.Size(75, 23);
+            this.github_button.Size = new System.Drawing.Size(75, 25);
             this.github_button.TabIndex = 3;
             this.github_button.Text = "GitHub";
             this.github_button.UseVisualStyleBackColor = true;
@@ -98,7 +98,7 @@
             // 
             this.license_label.AutoSize = true;
             this.license_label.Font = new System.Drawing.Font("Consolas", 10F);
-            this.license_label.Location = new System.Drawing.Point(12, 26);
+            this.license_label.Location = new System.Drawing.Point(12, 28);
             this.license_label.Name = "license_label";
             this.license_label.Size = new System.Drawing.Size(160, 17);
             this.license_label.TabIndex = 5;
@@ -108,18 +108,18 @@
             // 
             this.version_label.AutoSize = true;
             this.version_label.Font = new System.Drawing.Font("Consolas", 10F);
-            this.version_label.Location = new System.Drawing.Point(12, 47);
+            this.version_label.Location = new System.Drawing.Point(12, 51);
             this.version_label.Name = "version_label";
             this.version_label.Size = new System.Drawing.Size(216, 17);
             this.version_label.TabIndex = 7;
-            this.version_label.Text = "Version: 1.9.5, 2017/01/06";
+            this.version_label.Text = "Version: 2.0.0, 2017/03/06";
             // 
             // about
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoValidate = System.Windows.Forms.AutoValidate.EnablePreventFocusChange;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(284, 283);
             this.Controls.Add(this.version_label);
             this.Controls.Add(this.license_label);
             this.Controls.Add(this.author_label);
@@ -128,8 +128,8 @@
             this.Controls.Add(this.fb_button);
             this.Controls.Add(this.richTextBox1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximumSize = new System.Drawing.Size(300, 300);
-            this.MinimumSize = new System.Drawing.Size(300, 300);
+            this.MaximumSize = new System.Drawing.Size(300, 322);
+            this.MinimumSize = new System.Drawing.Size(300, 322);
             this.Name = "about";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
