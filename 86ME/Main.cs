@@ -4750,7 +4750,9 @@ namespace _86ME_ver2
 
         private void variablesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Dictionary<string, double> previous = compute_var;
+            Dictionary<string, double> previous = new Dictionary<string, double>();
+            foreach (KeyValuePair<string, double> entry in compute_var)
+                previous.Add(entry.Key, entry.Value);
             List<string> used_variables = new List<string>();
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
