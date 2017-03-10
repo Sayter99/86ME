@@ -837,6 +837,7 @@ namespace _86ME_ver2
                 last_motionlist_idx = -1;
                 servo_onOff = ~0UL;
                 autocheck.Checked = false;
+                compute_var.Clear();
 
                 update_newMotionParams(nMotion);
 
