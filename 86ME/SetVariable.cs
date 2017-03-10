@@ -142,26 +142,27 @@ namespace _86ME_ver2
                     VarListView.Items[i].SubItems[0].Text = (origin_num - 1).ToString();
                     for (int j = 0; j < used_element.Count; j++)
                     {
+                        int prev_num = global_var.Count;
                         if (used_element[j] is ME_If)
                         {
                             ME_If mif = (ME_If)used_element[j];
-                            if (mif.left_var == i)
+                            if (mif.left_var == i && mif.left_var < prev_num)
                                 mif.left_var = mif.left_var - 1;
-                            if (mif.right_var == i)
+                            if (mif.right_var == i && mif.right_const < prev_num)
                                 mif.right_var = mif.right_var - 1;
                         }
                         else if (used_element[j] is ME_Compute)
                         {
                             ME_Compute op = (ME_Compute)used_element[j];
-                            if (op.left_var == i)
+                            if (op.left_var == i && op.left_var < prev_num)
                                 op.left_var = op.left_var - 1;
-                            if (op.f1_var1 == i)
+                            if (op.f1_var1 == i && op.f1_var1 < prev_num)
                                 op.f1_var1 = op.f1_var1 - 1;
-                            if (op.f1_var2 == i)
+                            if (op.f1_var2 == i && op.f1_var2 < prev_num)
                                 op.f1_var2 = op.f1_var2 - 1;
-                            if (op.f2_var == i)
+                            if (op.f2_var == i && op.f2_var < prev_num)
                                 op.f2_var = op.f2_var - 1;
-                            if (op.f3_var == i)
+                            if (op.f3_var == i && op.f3_var < prev_num)
                                 op.f3_var = op.f3_var - 1;
                         }
                     }
