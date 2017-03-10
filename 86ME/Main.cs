@@ -28,8 +28,8 @@ namespace _86ME_ver2
         string[] vkeys = {"VKeyUp", "VKeyDown", "VKeyLeft", "VKeyRight", "VKeyL1", "VKeyL2",
                           "VKeyR1", "VKeyR2", "VKeyTriangle", "VKeyCircle", "VKeyCross", "VKeySquare"};
         ulong servo_onOff = ~0UL;
-        int opVar_num = 50;
-        double[] operand_var = new double[100];
+        double[] operand_var = new double[50];
+        public Dictionary<string, double> compute_var = new Dictionary<string, double>();
         GlobalSettings gs = new GlobalSettings();
         bool change_board = false;
         public string init_load_file = "";
@@ -44,7 +44,7 @@ namespace _86ME_ver2
         int last_motionlist_idx = -1;
         public string com_port;
         Arduino arduino;
-        private Panel[] fpanel = new Panel[45];
+        Panel[] fpanel = new Panel[45];
         Label[] flabel = new Label[45];
         MaskedTextBox[] ftext = new MaskedTextBox[45];
         CheckBox[] fcheck = new CheckBox[45];
@@ -92,6 +92,8 @@ namespace _86ME_ver2
             saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
+            commandsToolStripMenuItem.Enabled = false;
+            variablesToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
             accLXText.Name = "0";
             accHXText.Name = "1";
@@ -121,6 +123,8 @@ namespace _86ME_ver2
             saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
+            commandsToolStripMenuItem.Enabled = false;
+            variablesToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
             accLXText.Name = "0";
             accHXText.Name = "1";
@@ -820,6 +824,8 @@ namespace _86ME_ver2
                 saveAsFileToolStripMenuItem.Enabled = true;
                 saveFileToolStripMenuItem.Enabled = true;
                 editToolStripMenuItem.Enabled = true;
+                commandsToolStripMenuItem.Enabled = true;
+                variablesToolStripMenuItem.Enabled = true;
                 ME_Motionlist = new ArrayList();
                 MotionCombo.Items.Clear();
                 MotionCombo.Text = "";
@@ -889,7 +895,7 @@ namespace _86ME_ver2
             }
         }
 
-        private void optionToolStripMenuItem_Click(object sender, EventArgs e)  //option
+        private void optionToolStripMenuItem_Click(object sender, EventArgs e)  //option -> robot configuration
         {
             Motion.NewMotion_lang_dic = Main_lang_dic;
             Motion.applyLang();
@@ -1105,6 +1111,7 @@ namespace _86ME_ver2
                 rbm.gainsrc2[i] = Motion.fbox3[i].Text;
             }
             rbm.motions = ME_Motionlist;
+            rbm.cmpvar = compute_var;
 
             string json = JsonConvert.SerializeObject(rbm, json_settings);
             writer.Write(json);
@@ -1380,6 +1387,10 @@ namespace _86ME_ver2
                         nMotion.channely[i] = int.Parse(rbm.picture[i + 45 + 1]);
                     }
                 }
+                else
+                {
+                    MessageBox.Show(Main_lang_dic["errorMsg3"]);
+                }
             }
             //Mirror
             if (rbm.mirror != null)
@@ -1413,6 +1424,10 @@ namespace _86ME_ver2
                 ME_Motionlist.Add((ME_Motion)(rbm.motions[i]));
                 MotionCombo.Items.Add(((ME_Motion)(rbm.motions[i])).name);
             }
+            //Variables
+            compute_var = rbm.cmpvar;
+            if (compute_var.Count > operand_var.Length)
+                operand_var = new double[compute_var.Count];
 
             nMotion.write_back();
 
@@ -1450,6 +1465,8 @@ namespace _86ME_ver2
             Hint_groupBox.Enabled = true;
             Motion_groupBox.Enabled = true;
             editToolStripMenuItem.Enabled = true;
+            commandsToolStripMenuItem.Enabled = true;
+            variablesToolStripMenuItem.Enabled = true;
             saveAsFileToolStripMenuItem.Enabled = true;
             saveFileToolStripMenuItem.Enabled = true;
             Motion = nMotion;
@@ -1550,7 +1567,6 @@ namespace _86ME_ver2
             update_motionlist();
             move_up.Enabled = false;
             move_down.Enabled = false;
-            current_motionlist_idx = -1;
 
             update_triggers();
 
@@ -1626,20 +1642,20 @@ namespace _86ME_ver2
 
         private void triggerMotion_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((ComboBox)sender).Text;
-            Motionlist.Items[current_motionlist_idx] = "[GotoMotion] " + ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+            ((ME_GotoMotion)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name = ((ComboBox)sender).Text;
+            Motionlist.Items[current_motionlist_idx] = "[GotoMotion] " + ((ME_GotoMotion)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
         }
 
         private void callRadio_CheckedChanged(object sender, EventArgs e)
         {
             if(((RadioButton)sender).Checked == true )
-                ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method = (int)internal_trigger.call;
+                ((ME_GotoMotion)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method = (int)internal_trigger.call;
         }
 
         private void jumpRadio_CheckedChanged(object sender, EventArgs e)
         {
             if (((RadioButton)sender).Checked == true)
-                ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method = (int)internal_trigger.jump;
+                ((ME_GotoMotion)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method = (int)internal_trigger.jump;
         }
 
         private void enable_goto(object sender, EventArgs e)
@@ -1683,6 +1699,7 @@ namespace _86ME_ver2
 
         private double opVal(int index)
         {
+            int opVar_num = compute_var.Count;
             if (index < opVar_num)
             {
                 return operand_var[index];
@@ -1786,9 +1803,9 @@ namespace _86ME_ver2
             switch (method)
             {
                 case 0:
-                    return float.Equals(opVal(ind1), right_val);
+                    return double.Equals(opVal(ind1), right_val);
                 case 1:
-                    return !float.Equals(opVal(ind1), right_val);
+                    return !double.Equals(opVal(ind1), right_val);
                 case 2:
                     return opVal(ind1) >= right_val;
                 case 3:
@@ -1986,8 +2003,11 @@ namespace _86ME_ver2
             cb.DropDownStyle = ComboBoxStyle.DropDownList;
             cb.Top += top;
             cb.Left += left;
-            for (int i = 0; i < opVar_num; i++)
-                cb.Items.Add("V" + i);
+            if (compute_var.Count > 0)
+            {
+                foreach (KeyValuePair<string, double> entry in compute_var)
+                    cb.Items.Add(entry.Key);
+            }
             if (!isLeft)
             {
                 cb.Items.Add("NowTime");
@@ -2073,10 +2093,11 @@ namespace _86ME_ver2
 
         private string convertIndex2Str(int n, int type)
         {
+            int opVar_num = compute_var.Count;
             if (type == 0)
             {
                 if (n < opVar_num)
-                    return "V" + n;
+                    return getComputeVar(n, false);
                 else if (n == opVar_num)
                     return "NowTime";
                 else if (n == opVar_num + 1)
@@ -2145,7 +2166,7 @@ namespace _86ME_ver2
             else if (type == 4)
             {
                 if (n < opVar_num)
-                    return "V" + n;
+                    return getComputeVar(n, true);
                 else if (n >= opVar_num)
                     return "GPIO" + (n - opVar_num);
             }
@@ -2543,8 +2564,8 @@ namespace _86ME_ver2
                     call_radio.Text = Main_lang_dic["call_radioText"];
                     jump_radio.Text = Main_lang_dic["jump_radioText"];
 
-                    xcombo.Text = ((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
-                    if (((ME_Trigger)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method == (int)internal_trigger.call)
+                    xcombo.Text = ((ME_GotoMotion)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).name;
+                    if (((ME_GotoMotion)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex]).method == (int)internal_trigger.call)
                         call_radio.Checked = true;
                     else
                         jump_radio.Checked = true;
@@ -2876,7 +2897,6 @@ namespace _86ME_ver2
                     Framelist.Enabled = false;
                     update_motionlist();
                     draw_background();
-                    last_motionlist_idx = -1;
                 }
             }
         }
@@ -2913,7 +2933,6 @@ namespace _86ME_ver2
                             Framelist.Enabled = false;
                             update_motionlist();
                             draw_background();
-                            last_motionlist_idx = -1;
                             break;
                         case 3:
                             Framelist.Enabled = false;
@@ -2985,7 +3004,9 @@ namespace _86ME_ver2
         private void ifToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ME_If mif = new ME_If();
-            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[If] v0=v0 goto");
+            string variable = getComputeVar(0, false);
+            string formula = variable + "=" + variable;
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[If] " + formula + " goto");
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, mif);
             Motionlist.SelectedIndex++;
         }
@@ -2993,7 +3014,10 @@ namespace _86ME_ver2
         private void operandToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ME_Compute op = new ME_Compute();
-            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Compute] v0=v0+v0");
+            string l = getComputeVar(0, true);
+            string r = getComputeVar(0, false);
+            string formula = l + "=" + r + "+" + r;
+            Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[Compute] " + formula);
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, op);
             Motionlist.SelectedIndex++;
         }
@@ -3057,7 +3081,7 @@ namespace _86ME_ver2
 
         private void triggerToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ME_Trigger t = new ME_Trigger();
+            ME_GotoMotion t = new ME_GotoMotion();
             Motionlist.Items.Insert(Motionlist.SelectedIndex + 1, "[GotoMotion]");
             ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Insert(Motionlist.SelectedIndex + 1, t);
             Motionlist.SelectedIndex++;
@@ -3352,9 +3376,9 @@ namespace _86ME_ver2
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
                 for (int j = 0; j < m.Events.Count; j++)
                 {
-                    if (m.Events[j] is ME_Trigger)
+                    if (m.Events[j] is ME_GotoMotion)
                     {
-                        ME_Trigger t = (ME_Trigger)m.Events[j];
+                        ME_GotoMotion t = (ME_GotoMotion)m.Events[j];
                         bool has_target = false;
                         for (int k = 0; k < ME_Motionlist.Count; k++)
                             if (((ME_Motion)ME_Motionlist[k]).name == t.name)
@@ -3508,6 +3532,7 @@ namespace _86ME_ver2
             if (ME_Motionlist == null)
                 return;
 
+            int opVar_num = compute_var.Count;
             for (int j = mtest_start_pos; j < m.Events.Count; j++)
             {
                 if (MotionConfig.SelectedIndex == 0)
@@ -3591,7 +3616,7 @@ namespace _86ME_ver2
                 else if (m.Events[j] is ME_Compute)
                 {
                     ME_Compute op = (ME_Compute)m.Events[j];
-                    if (op.left_var < 50)
+                    if (op.left_var < opVar_num)
                     {
                         switch (op.form)
                         {
@@ -3692,6 +3717,9 @@ namespace _86ME_ver2
             MotionCombo.Enabled = true;
             NewMotion.Enabled = true;
             EditMotion.Enabled = true;
+
+            for (int j = 0; j < operand_var.Length; j++)
+                operand_var[j] = 0;
 
             for (int j = 0; j < m.Events.Count; j++)
             {
@@ -3846,7 +3874,7 @@ namespace _86ME_ver2
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count);
             g.generate_withFiles();
         }
 
@@ -3859,7 +3887,7 @@ namespace _86ME_ver2
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count);
             g.generate_AllinOne();
         }
 
@@ -3929,9 +3957,9 @@ namespace _86ME_ver2
                             ME_Flag fl = (ME_Flag)m.Events[j];
                             Motionlist.Items.Add("[Flag] " + fl.name);
                         }
-                        else if (m.Events[j] is ME_Trigger)
+                        else if (m.Events[j] is ME_GotoMotion)
                         {
-                            ME_Trigger t = (ME_Trigger)m.Events[j];
+                            ME_GotoMotion t = (ME_GotoMotion)m.Events[j];
                             Motionlist.Items.Add("[GotoMotion] " + t.name);
                         }
                         else if (m.Events[j] is ME_Release)
@@ -3960,6 +3988,7 @@ namespace _86ME_ver2
             MotionTest.Enabled = true;
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
+            last_motionlist_idx = -1;
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -4526,6 +4555,7 @@ namespace _86ME_ver2
             blockingExplaination.Text = Main_lang_dic["blockingExplaination_Text"];
             bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];
             capturebutton.Text = Main_lang_dic["capturebutton_Text"];
+            commandsToolStripMenuItem.Text = Main_lang_dic["commandsToolStripMenuItem_Text"];
             CompRangeExplanation.Text = Main_lang_dic["CompRangeExplanation_Text"];
             MotionControlExplanation.Text = Main_lang_dic["MotionControlExplanation_Text"];
             editToolStripMenuItem.Text = Main_lang_dic["editToolStripMenuItem_Text"];
@@ -4557,6 +4587,8 @@ namespace _86ME_ver2
             saveFileToolStripMenuItem.Text = Main_lang_dic["saveFileToolStripMenuItem_Text"];
             Setting_groupBox.Text = Main_lang_dic["Setting_groupBox_Text"];
             slow.Text = Main_lang_dic["slow_Text"];
+            variablesToolStripMenuItem.Text = Main_lang_dic["variablesToolStripMenuItem_Text"];
+
             DuplicateMotionToolStripMenuItem.Text = Main_lang_dic["DuplicateMotion"];
             DeleteMotionToolStripMenuItem.Text = Main_lang_dic["DeleteMotion"];
             RenameMotionToolStripMenuItem.Text = Main_lang_dic["RenameMotion"];
@@ -4612,7 +4644,7 @@ namespace _86ME_ver2
 
         private void englishToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            string _86ME_path = Application.StartupPath;
             if (File.Exists(_86ME_path + "\\locales\\en.ini"))
             {
                 TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
@@ -4627,7 +4659,7 @@ namespace _86ME_ver2
 
         private void zhToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            string _86ME_path = Application.StartupPath;
             if (File.Exists(_86ME_path + "\\locales\\zh-TW.ini"))
             {
                 TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
@@ -4642,7 +4674,7 @@ namespace _86ME_ver2
 
         private void zhHToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            string _86ME_path = Application.StartupPath;
             if (File.Exists(_86ME_path + "\\locales\\zh-Hans.ini"))
             {
                 TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
@@ -4657,7 +4689,7 @@ namespace _86ME_ver2
 
         private void jaToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string _86ME_path = System.Windows.Forms.Application.StartupPath;
+            string _86ME_path = Application.StartupPath;
             if (File.Exists(_86ME_path + "\\locales\\ja.ini"))
             {
                 TextWriter writer = new StreamWriter(_86ME_path + "\\locale.ini");
@@ -4669,7 +4701,7 @@ namespace _86ME_ver2
                 applyLang();
             }
         }
-
+        
         private void getAccData_Click(object sender, EventArgs e)
         {
             if (string.Compare(com_port, "OFF") != 0 && Motion.getQ.Enabled == true)
@@ -4702,6 +4734,125 @@ namespace _86ME_ver2
             {
                 MessageBox.Show(Main_lang_dic["errorMsg20"]);
             }
+        }
+
+        private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetCommand sc = new SetCommand();
+            sc.ShowDialog();
+            if (sc.DialogResult == DialogResult.OK)
+            {
+            }
+            else
+            {
+            }
+        }
+
+        private void variablesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Dictionary<string, double> previous = compute_var;
+            List<string> used_variables = new List<string>();
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                for (int j = 0; j < m.Events.Count; j++)
+                {
+                    if (m.Events[j] is ME_If)
+                    {
+                        ME_If mif = (ME_If)m.Events[j];
+                        if (mif.left_var < previous.Count && !used_variables.Contains(convertIndex2Str(mif.left_var, 0)))
+                            used_variables.Add(convertIndex2Str(mif.left_var, 0));
+                        if (mif.right_var < previous.Count && !used_variables.Contains(convertIndex2Str(mif.right_var, 0)))
+                            used_variables.Add(convertIndex2Str(mif.right_var, 0));
+                    }
+                    else if (m.Events[j] is ME_Compute)
+                    {
+                        ME_Compute op = (ME_Compute)m.Events[j];
+                        if (op.left_var < previous.Count && !used_variables.Contains(convertIndex2Str(op.left_var, 4)))
+                            used_variables.Add(convertIndex2Str(op.left_var, 4));
+                        if (op.f1_var1 < previous.Count && !used_variables.Contains(convertIndex2Str(op.f1_var1, 0)))
+                            used_variables.Add(convertIndex2Str(op.f1_var1, 0));
+                        if (op.f1_var2 < previous.Count && !used_variables.Contains(convertIndex2Str(op.f1_var2, 0)))
+                            used_variables.Add(convertIndex2Str(op.f1_var2, 0));
+                        if (op.f2_var < previous.Count && !used_variables.Contains(convertIndex2Str(op.f2_var, 0)))
+                            used_variables.Add(convertIndex2Str(op.f2_var, 0));
+                        if (op.f3_var < previous.Count && !used_variables.Contains(convertIndex2Str(op.f3_var, 0)))
+                            used_variables.Add(convertIndex2Str(op.f3_var, 0));
+                    }
+                }
+            }
+            SetVariable sc = new SetVariable(compute_var, Main_lang_dic, ME_Motionlist, used_variables);
+            sc.ShowDialog();
+            if (sc.DialogResult == DialogResult.OK) // update variables of ME_IF, ME_COMPUTE
+            {
+                if (compute_var.Count > operand_var.Length)
+                    operand_var = new double[compute_var.Count];
+                Dictionary<string, double> current = compute_var;
+                RenewIfCompute(previous, current);
+            }
+        }
+
+        private void RenewIfCompute(Dictionary<string, double> prev, Dictionary<string, double> curr)
+        {
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                for (int j = 0; j < m.Events.Count; j++)
+                {
+                    if (m.Events[j] is ME_If)
+                    {
+                        ME_If mif = (ME_If)m.Events[j];
+                        mif.left_var = RenewVariable(mif.left_var, prev, curr);
+                        mif.right_var = RenewVariable(mif.right_var, prev, curr);
+                    }
+                    else if (m.Events[j] is ME_Compute)
+                    {
+                        ME_Compute op = (ME_Compute)m.Events[j];
+                        op.left_var = RenewVariable(op.left_var, prev, curr);
+                        op.f1_var1 = RenewVariable(op.f1_var1, prev, curr);
+                        op.f1_var2 = RenewVariable(op.f1_var2, prev, curr);
+                        op.f2_var = RenewVariable(op.f2_var, prev, curr);
+                        op.f3_var = RenewVariable(op.f3_var, prev, curr);
+                    }
+                }
+            }
+            int ms = Motionlist.SelectedIndex;
+            update_motionlist();
+            Motionlist.SelectedIndex = ms;
+        }
+
+        private int RenewVariable(int var, Dictionary<string, double> prev, Dictionary<string, double> curr)
+        {
+            int ret = var;
+            int curr_num = curr.Count;
+            int prev_num = prev.Count;
+            if (curr_num != prev_num)
+            {
+                if (var >= prev_num)
+                    ret += (curr_num - prev_num);
+            }
+            return ret;
+        }
+
+        private string getComputeVar(int n, bool isOpLeft)
+        {
+            string ret = "";
+            if (isOpLeft)
+                ret = "GPIO0";
+            else
+                ret = "NowTime";
+            if (compute_var.Count > 0 && n < compute_var.Count)
+            {
+                int i = 0;
+                foreach (KeyValuePair<string, double> entry in compute_var)
+                {
+                    if (i < n)
+                        i++;
+                    else
+                        return entry.Key;
+                }
+            }
+            return ret;
         }
     }
 }

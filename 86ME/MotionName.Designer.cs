@@ -38,17 +38,17 @@
             // 
             // motionNameText
             // 
-            this.motionNameText.Location = new System.Drawing.Point(90, 6);
+            this.motionNameText.Location = new System.Drawing.Point(90, 7);
             this.motionNameText.Name = "motionNameText";
-            this.motionNameText.Size = new System.Drawing.Size(265, 22);
+            this.motionNameText.Size = new System.Drawing.Size(265, 20);
             this.motionNameText.TabIndex = 0;
-            this.motionNameText.KeyDown += new System.Windows.Forms.KeyEventHandler(motionNameText_KeyDown);
+            this.motionNameText.KeyDown += new System.Windows.Forms.KeyEventHandler(this.motionNameText_KeyDown);
             // 
             // OKButton
             // 
-            this.OKButton.Location = new System.Drawing.Point(199, 63);
+            this.OKButton.Location = new System.Drawing.Point(199, 68);
             this.OKButton.Name = "OKButton";
-            this.OKButton.Size = new System.Drawing.Size(75, 23);
+            this.OKButton.Size = new System.Drawing.Size(75, 25);
             this.OKButton.TabIndex = 1;
             this.OKButton.Text = "OK";
             this.OKButton.UseVisualStyleBackColor = true;
@@ -56,9 +56,9 @@
             // 
             // Cancel
             // 
-            this.Cancel.Location = new System.Drawing.Point(280, 63);
+            this.Cancel.Location = new System.Drawing.Point(280, 68);
             this.Cancel.Name = "Cancel";
-            this.Cancel.Size = new System.Drawing.Size(75, 23);
+            this.Cancel.Size = new System.Drawing.Size(75, 25);
             this.Cancel.TabIndex = 2;
             this.Cancel.Text = "Cancel";
             this.Cancel.UseVisualStyleBackColor = true;
@@ -67,9 +67,9 @@
             // motionNameLabel
             // 
             this.motionNameLabel.AutoSize = true;
-            this.motionNameLabel.Location = new System.Drawing.Point(12, 9);
+            this.motionNameLabel.Location = new System.Drawing.Point(12, 10);
             this.motionNameLabel.Name = "motionNameLabel";
-            this.motionNameLabel.Size = new System.Drawing.Size(72, 12);
+            this.motionNameLabel.Size = new System.Drawing.Size(73, 13);
             this.motionNameLabel.TabIndex = 3;
             this.motionNameLabel.Text = "Motion Name:";
             // 
@@ -77,16 +77,15 @@
             // 
             this.warningLabel.AutoSize = true;
             this.warningLabel.ForeColor = System.Drawing.Color.Red;
-            this.warningLabel.Location = new System.Drawing.Point(12, 35);
+            this.warningLabel.Location = new System.Drawing.Point(12, 38);
             this.warningLabel.Name = "warningLabel";
-            this.warningLabel.Size = new System.Drawing.Size(0, 12);
+            this.warningLabel.Size = new System.Drawing.Size(0, 13);
             this.warningLabel.TabIndex = 4;
             // 
             // MotionName
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(367, 98);
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
+            this.ClientSize = new System.Drawing.Size(367, 106);
             this.ControlBox = false;
             this.Controls.Add(this.warningLabel);
             this.Controls.Add(this.motionNameLabel);

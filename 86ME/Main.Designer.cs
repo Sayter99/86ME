@@ -39,6 +39,8 @@
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.commandsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.variablesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.preferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.languageToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.englishToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -293,7 +295,9 @@
             // optionsToolStripMenuItem
             // 
             this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.editToolStripMenuItem});
+            this.editToolStripMenuItem,
+            this.commandsToolStripMenuItem,
+            this.variablesToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -304,6 +308,20 @@
             this.editToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
             this.editToolStripMenuItem.Text = "Robot Configuration";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.optionToolStripMenuItem_Click);
+            // 
+            // commandsToolStripMenuItem
+            // 
+            this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
+            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.commandsToolStripMenuItem.Text = "Trigger Commands";
+            this.commandsToolStripMenuItem.Click += new System.EventHandler(this.commandsToolStripMenuItem_Click);
+            // 
+            // variablesToolStripMenuItem
+            // 
+            this.variablesToolStripMenuItem.Name = "variablesToolStripMenuItem";
+            this.variablesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.variablesToolStripMenuItem.Text = "Variables";
+            this.variablesToolStripMenuItem.Click += new System.EventHandler(this.variablesToolStripMenuItem_Click);
             // 
             // preferenceToolStripMenuItem
             // 
@@ -568,6 +586,7 @@
             // 
             // hint_richTextBox
             // 
+            this.hint_richTextBox.BackColor = System.Drawing.SystemColors.Control;
             this.hint_richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.hint_richTextBox.Font = new System.Drawing.Font("Consolas", 9.75F);
             this.hint_richTextBox.ForeColor = System.Drawing.SystemColors.HotTrack;
@@ -767,6 +786,7 @@
             // 
             // EditMotion
             // 
+            this.EditMotion.FlatAppearance.BorderSize = 0;
             this.EditMotion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.EditMotion.Image = global::_86ME_ver2.Properties.Resources.gear;
             this.EditMotion.Location = new System.Drawing.Point(225, 40);
@@ -1994,6 +2014,8 @@
             // motion_stop
             // 
             this.motion_stop.Cursor = System.Windows.Forms.Cursors.Default;
+            this.motion_stop.FlatAppearance.BorderSize = 0;
+            this.motion_stop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.motion_stop.Image = global::_86ME_ver2.Properties.Resources.stop;
             this.motion_stop.Location = new System.Drawing.Point(166, 607);
             this.motion_stop.Name = "motion_stop";
@@ -2007,6 +2029,8 @@
             // motion_pause
             // 
             this.motion_pause.Cursor = System.Windows.Forms.Cursors.Default;
+            this.motion_pause.FlatAppearance.BorderSize = 0;
+            this.motion_pause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.motion_pause.Image = global::_86ME_ver2.Properties.Resources.pause;
             this.motion_pause.Location = new System.Drawing.Point(117, 607);
             this.motion_pause.Name = "motion_pause";
@@ -2021,6 +2045,8 @@
             // 
             this.move_down.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_down.Enabled = false;
+            this.move_down.FlatAppearance.BorderSize = 0;
+            this.move_down.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.move_down.Image = global::_86ME_ver2.Properties.Resources.down_arrow;
             this.move_down.Location = new System.Drawing.Point(258, 342);
             this.move_down.Name = "move_down";
@@ -2034,6 +2060,8 @@
             // 
             this.move_up.Cursor = System.Windows.Forms.Cursors.Default;
             this.move_up.Enabled = false;
+            this.move_up.FlatAppearance.BorderSize = 0;
+            this.move_up.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.move_up.Image = global::_86ME_ver2.Properties.Resources.up_arrow;
             this.move_up.Location = new System.Drawing.Point(258, 296);
             this.move_up.Name = "move_up";
@@ -2056,6 +2084,8 @@
             // MotionTest
             // 
             this.MotionTest.Cursor = System.Windows.Forms.Cursors.Default;
+            this.MotionTest.FlatAppearance.BorderSize = 0;
+            this.MotionTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MotionTest.Image = global::_86ME_ver2.Properties.Resources.play;
             this.MotionTest.Location = new System.Drawing.Point(68, 607);
             this.MotionTest.Name = "MotionTest";
@@ -2068,6 +2098,7 @@
             // NewMotion
             // 
             this.NewMotion.Cursor = System.Windows.Forms.Cursors.Default;
+            this.NewMotion.FlatAppearance.BorderSize = 0;
             this.NewMotion.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.NewMotion.Image = global::_86ME_ver2.Properties.Resources.add;
             this.NewMotion.Location = new System.Drawing.Point(196, 40);
@@ -2155,8 +2186,7 @@
             // 
             // Main
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1040, 755);
             this.Controls.Add(this.GenerateAllInOne);
@@ -2394,6 +2424,8 @@
         private System.Windows.Forms.ComboBox ESP8266CHPDCombo;
         private System.Windows.Forms.Label ESP8266CHPDLabel;
         private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem commandsToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem variablesToolStripMenuItem;
     }
 }
 

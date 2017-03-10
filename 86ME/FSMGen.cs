@@ -50,15 +50,16 @@ namespace _86ME_ver2
         private string esp8266_port;
         private string esp8266_chpd;
         private string wifi602_port;
-        private int opVar_num = 50;
+        private int opVar_num;
         private bool IMU_compensatory = false;
         private Quaternion invQ = new Quaternion();
         string[] ps2_vkeys = {"PSB_PAD_UP", "PSB_PAD_DOWN", "PSB_PAD_LEFT", "PSB_PAD_RIGHT", "PSB_L1", "PSB_L2",
                               "PSB_R1", "PSB_R2", "PSB_TRIANGLE", "PSB_CIRCLE", "PSB_CROSS", "PSB_SQUARE"};
 
-        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, GlobalSettings gs)
+        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, GlobalSettings gs, int opVar_num)
         {
             this.Motion = nMotion;
+            this.opVar_num = opVar_num;
             this.offset = off;
             this.ME_Motionlist = motionlist;
             gs.ps2pins.CopyTo(this.ps2_pins, 0);
@@ -373,7 +374,7 @@ namespace _86ME_ver2
                         }
                     }
                 }
-                else if (m.Events[i] is ME_Trigger)
+                else if (m.Events[i] is ME_GotoMotion)
                 {
                     writer.Write("MOTION_" + i.ToString() + ", " + "WAIT_MOTION_" + i.ToString());
                     m.states.Add("MOTION_" + i.ToString());
@@ -1099,9 +1100,9 @@ namespace _86ME_ver2
                         writer.WriteLine(space4 + "break;");
                     }
                 }
-                else if (m.Events[i] is ME_Trigger)
+                else if (m.Events[i] is ME_GotoMotion)
                 {
-                    ME_Trigger t = (ME_Trigger)m.Events[i];
+                    ME_GotoMotion t = (ME_GotoMotion)m.Events[i];
                     writer.WriteLine(space + "case " + m.name + "::MOTION_" + i + ":");
                     if (m.moton_layer == 1)
                     {
@@ -1362,7 +1363,8 @@ namespace _86ME_ver2
                 writer.WriteLine("#include <ESP8266.h>");
             writer.WriteLine();
 
-            writer.WriteLine("double _86ME_var[50] = {0};");
+            if (opVar_num > 0)
+                writer.WriteLine("double _86ME_var[" + opVar_num + "] = {0};");
             writer.WriteLine("double _roll = 0;");
             writer.WriteLine("double _pitch = 0;");
             writer.WriteLine("double _comp_range = 180;");
@@ -1620,9 +1622,9 @@ namespace _86ME_ver2
             writer.WriteLine();
             if (method_flag[4])
             {
-                writer.WriteLine("  if(_IMU_init_status == 0)\n  {\n    for(int i = 0; i < 10; i++)\n" +
+                writer.WriteLine("  if(_IMU_init_status == 0)\n  {\n    for(int i = 0; i < 5; i++)\n" +
                                  "    {\n      _IMU.getQ(_IMU_Q, _IMU_val);\n" +
-                                 "      delay(50);\n    }\n  }\n");
+                                 "      delay(20);\n    }\n  }\n");
             }
             writer.WriteLine("  _86ME_HOME.playPositions((unsigned long)0);");
 

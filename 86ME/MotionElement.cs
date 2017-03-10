@@ -8,7 +8,7 @@ namespace _86ME_ver2
     {
         public ArrayList Events;
         public List<string> states;
-        public List<string> goto_var; 
+        public List<string> goto_var;
         public List<int> used_servos;
         public string name;
         public int trigger_method;
@@ -74,8 +74,8 @@ namespace _86ME_ver2
                     ret.Events.Add(((ME_Flag)this.Events[i]).Copy());
                 else if (this.Events[i] is ME_Goto)
                     ret.Events.Add(((ME_Goto)this.Events[i]).Copy());
-                else if (this.Events[i] is ME_Trigger)
-                    ret.Events.Add(((ME_Trigger)this.Events[i]).Copy());
+                else if (this.Events[i] is ME_GotoMotion)
+                    ret.Events.Add(((ME_GotoMotion)this.Events[i]).Copy());
                 else if (this.Events[i] is ME_Release)
                     ret.Events.Add(((ME_Release)this.Events[i]).Copy());
                 else if (this.Events[i] is ME_If)
@@ -105,19 +105,19 @@ namespace _86ME_ver2
         }
     }
 
-    public class ME_Trigger
+    public class ME_GotoMotion
     {
         public string name;
         public int method;
-        public ME_Trigger()
+        public ME_GotoMotion()
         {
             this.name = "";
             this.method = 1;
         }
 
-        public ME_Trigger Copy()
+        public ME_GotoMotion Copy()
         {
-            ME_Trigger ret = new ME_Trigger();
+            ME_GotoMotion ret = new ME_GotoMotion();
             ret.name = this.name;
             ret.method = this.method;
             return ret;
@@ -310,6 +310,7 @@ namespace _86ME_ver2
         public string[] sgain;
         public string[] gainsrc1;
         public string[] gainsrc2;
+        public Dictionary<string, double> cmpvar;
         public ArrayList motions;
         public ME_RBM()
         {
@@ -326,6 +327,7 @@ namespace _86ME_ver2
             this.sgain = new string[45];
             this.gainsrc1 = new string[45];
             this.gainsrc2 = new string[45];
+            this.cmpvar = new Dictionary<string, double>();
         }
     }
 
@@ -336,6 +338,13 @@ namespace _86ME_ver2
         public ME_MOT()
         {
             this.version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        }
+    }
+
+    public class ME_Trigger
+    {
+        public ME_Trigger()
+        {
         }
     }
 }
