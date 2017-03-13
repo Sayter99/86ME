@@ -206,6 +206,9 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.separateLine4 = new System.Windows.Forms.Label();
+            this.TriggerCommand = new System.Windows.Forms.Label();
+            this.TriggerCommandCombo = new System.Windows.Forms.ComboBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -1811,6 +1814,9 @@
             // 
             // MotionProperty
             // 
+            this.MotionProperty.Controls.Add(this.TriggerCommandCombo);
+            this.MotionProperty.Controls.Add(this.TriggerCommand);
+            this.MotionProperty.Controls.Add(this.separateLine4);
             this.MotionProperty.Controls.Add(this.MotionControlLabel);
             this.MotionProperty.Controls.Add(this.MotionControlCombo);
             this.MotionProperty.Controls.Add(this.MotionControlExplanation);
@@ -1840,7 +1846,7 @@
             // 
             this.MotionControlLabel.AutoSize = true;
             this.MotionControlLabel.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MotionControlLabel.Location = new System.Drawing.Point(13, 293);
+            this.MotionControlLabel.Location = new System.Drawing.Point(13, 305);
             this.MotionControlLabel.Name = "MotionControlLabel";
             this.MotionControlLabel.Size = new System.Drawing.Size(67, 12);
             this.MotionControlLabel.TabIndex = 17;
@@ -1855,7 +1861,7 @@
             "Constrained Cubic",
             "Natural Cubic",
             "Catmull-Rom Spline"});
-            this.MotionControlCombo.Location = new System.Drawing.Point(86, 289);
+            this.MotionControlCombo.Location = new System.Drawing.Point(86, 301);
             this.MotionControlCombo.Name = "MotionControlCombo";
             this.MotionControlCombo.Size = new System.Drawing.Size(147, 21);
             this.MotionControlCombo.TabIndex = 16;
@@ -1864,7 +1870,7 @@
             // MotionControlExplanation
             // 
             this.MotionControlExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.MotionControlExplanation.Location = new System.Drawing.Point(15, 317);
+            this.MotionControlExplanation.Location = new System.Drawing.Point(15, 329);
             this.MotionControlExplanation.Name = "MotionControlExplanation";
             this.MotionControlExplanation.Size = new System.Drawing.Size(218, 44);
             this.MotionControlExplanation.TabIndex = 15;
@@ -1873,7 +1879,7 @@
             // separateLine3
             // 
             this.separateLine3.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine3.Location = new System.Drawing.Point(-2, 364);
+            this.separateLine3.Location = new System.Drawing.Point(-2, 374);
             this.separateLine3.Name = "separateLine3";
             this.separateLine3.Size = new System.Drawing.Size(243, 1);
             this.separateLine3.TabIndex = 13;
@@ -1881,9 +1887,9 @@
             // CompRangeExplanation
             // 
             this.CompRangeExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.CompRangeExplanation.Location = new System.Drawing.Point(15, 400);
+            this.CompRangeExplanation.Location = new System.Drawing.Point(15, 410);
             this.CompRangeExplanation.Name = "CompRangeExplanation";
-            this.CompRangeExplanation.Size = new System.Drawing.Size(218, 93);
+            this.CompRangeExplanation.Size = new System.Drawing.Size(218, 105);
             this.CompRangeExplanation.TabIndex = 12;
             this.CompRangeExplanation.Text = "Set the valid angle (0~180 degree, 0 means to close this function) of IMU compens" +
     "ating. The IMU compensating just can be enabled in this range (-setting angle ~ " +
@@ -1891,7 +1897,7 @@
             // 
             // CompRangeText
             // 
-            this.CompRangeText.Location = new System.Drawing.Point(175, 374);
+            this.CompRangeText.Location = new System.Drawing.Point(175, 383);
             this.CompRangeText.Name = "CompRangeText";
             this.CompRangeText.Size = new System.Drawing.Size(58, 20);
             this.CompRangeText.TabIndex = 11;
@@ -1903,7 +1909,7 @@
             // 
             this.CompRange.AutoSize = true;
             this.CompRange.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.CompRange.Location = new System.Drawing.Point(13, 377);
+            this.CompRange.Location = new System.Drawing.Point(13, 387);
             this.CompRange.Name = "CompRange";
             this.CompRange.Size = new System.Drawing.Size(156, 12);
             this.CompRange.TabIndex = 10;
@@ -1912,7 +1918,7 @@
             // separateLine2
             // 
             this.separateLine2.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine2.Location = new System.Drawing.Point(-2, 280);
+            this.separateLine2.Location = new System.Drawing.Point(-2, 292);
             this.separateLine2.Name = "separateLine2";
             this.separateLine2.Size = new System.Drawing.Size(243, 1);
             this.separateLine2.TabIndex = 9;
@@ -1920,17 +1926,17 @@
             // motionLayerExplanation
             // 
             this.motionLayerExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.motionLayerExplanation.Location = new System.Drawing.Point(15, 205);
+            this.motionLayerExplanation.Location = new System.Drawing.Point(15, 238);
             this.motionLayerExplanation.Name = "motionLayerExplanation";
             this.motionLayerExplanation.Size = new System.Drawing.Size(218, 78);
             this.motionLayerExplanation.TabIndex = 8;
-            this.motionLayerExplanation.Text = "This feature makes motions can be triggered parallelly in different layers. And L" +
-    "ayer 1\'s priority is higher than 0\'s.";
+            this.motionLayerExplanation.Text = "Make motions be triggered parallelly in different layers. 1\'s priority is higher " +
+    "than 0\'s.";
             // 
             // separateLine
             // 
             this.separateLine.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine.Location = new System.Drawing.Point(-2, 168);
+            this.separateLine.Location = new System.Drawing.Point(-2, 201);
             this.separateLine.Name = "separateLine";
             this.separateLine.Size = new System.Drawing.Size(243, 1);
             this.separateLine.TabIndex = 7;
@@ -1942,7 +1948,7 @@
             this.MotionLayerCombo.Items.AddRange(new object[] {
             "0",
             "1"});
-            this.MotionLayerCombo.Location = new System.Drawing.Point(104, 177);
+            this.MotionLayerCombo.Location = new System.Drawing.Point(104, 209);
             this.MotionLayerCombo.Name = "MotionLayerCombo";
             this.MotionLayerCombo.Size = new System.Drawing.Size(129, 21);
             this.MotionLayerCombo.TabIndex = 6;
@@ -1952,7 +1958,7 @@
             // 
             this.MotionLayer.AutoSize = true;
             this.MotionLayer.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.MotionLayer.Location = new System.Drawing.Point(13, 180);
+            this.MotionLayer.Location = new System.Drawing.Point(13, 213);
             this.MotionLayer.Name = "MotionLayer";
             this.MotionLayer.Size = new System.Drawing.Size(85, 12);
             this.MotionLayer.TabIndex = 5;
@@ -1961,7 +1967,7 @@
             // nonblockingExplanation
             // 
             this.nonblockingExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.nonblockingExplanation.Location = new System.Drawing.Point(15, 121);
+            this.nonblockingExplanation.Location = new System.Drawing.Point(15, 159);
             this.nonblockingExplanation.Name = "nonblockingExplanation";
             this.nonblockingExplanation.Size = new System.Drawing.Size(218, 59);
             this.nonblockingExplanation.TabIndex = 4;
@@ -1970,7 +1976,7 @@
             // blockingExplaination
             // 
             this.blockingExplaination.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.blockingExplaination.Location = new System.Drawing.Point(15, 49);
+            this.blockingExplaination.Location = new System.Drawing.Point(15, 94);
             this.blockingExplaination.Name = "blockingExplaination";
             this.blockingExplaination.Size = new System.Drawing.Size(218, 42);
             this.blockingExplaination.TabIndex = 3;
@@ -1980,7 +1986,7 @@
             // 
             this.NonBlocking.AutoSize = true;
             this.NonBlocking.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.NonBlocking.Location = new System.Drawing.Point(15, 98);
+            this.NonBlocking.Location = new System.Drawing.Point(15, 136);
             this.NonBlocking.Name = "NonBlocking";
             this.NonBlocking.Size = new System.Drawing.Size(100, 16);
             this.NonBlocking.TabIndex = 2;
@@ -1993,7 +1999,7 @@
             this.Blocking.AutoSize = true;
             this.Blocking.Checked = true;
             this.Blocking.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.Blocking.Location = new System.Drawing.Point(15, 25);
+            this.Blocking.Location = new System.Drawing.Point(15, 70);
             this.Blocking.Name = "Blocking";
             this.Blocking.Size = new System.Drawing.Size(74, 16);
             this.Blocking.TabIndex = 1;
@@ -2005,6 +2011,7 @@
             // MotionPropertyLabel
             // 
             this.MotionPropertyLabel.AutoSize = true;
+            this.MotionPropertyLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MotionPropertyLabel.Location = new System.Drawing.Point(7, 4);
             this.MotionPropertyLabel.Name = "MotionPropertyLabel";
             this.MotionPropertyLabel.Size = new System.Drawing.Size(204, 13);
@@ -2183,6 +2190,33 @@
             this.Setting_groupBox.TabIndex = 15;
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
+            // 
+            // separateLine4
+            // 
+            this.separateLine4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.separateLine4.Location = new System.Drawing.Point(-2, 60);
+            this.separateLine4.Name = "separateLine4";
+            this.separateLine4.Size = new System.Drawing.Size(243, 1);
+            this.separateLine4.TabIndex = 18;
+            // 
+            // TriggerCommand
+            // 
+            this.TriggerCommand.AutoSize = true;
+            this.TriggerCommand.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.TriggerCommand.Location = new System.Drawing.Point(13, 30);
+            this.TriggerCommand.Name = "TriggerCommand";
+            this.TriggerCommand.Size = new System.Drawing.Size(111, 12);
+            this.TriggerCommand.TabIndex = 19;
+            this.TriggerCommand.Text = "Trigger Command:";
+            // 
+            // TriggerCommandCombo
+            // 
+            this.TriggerCommandCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TriggerCommandCombo.FormattingEnabled = true;
+            this.TriggerCommandCombo.Location = new System.Drawing.Point(130, 26);
+            this.TriggerCommandCombo.Name = "TriggerCommandCombo";
+            this.TriggerCommandCombo.Size = new System.Drawing.Size(103, 21);
+            this.TriggerCommandCombo.TabIndex = 20;
             // 
             // Main
             // 
@@ -2426,6 +2460,9 @@
         private System.Windows.Forms.ToolStripMenuItem saveFileToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem commandsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem variablesToolStripMenuItem;
+        private System.Windows.Forms.ComboBox TriggerCommandCombo;
+        private System.Windows.Forms.Label TriggerCommand;
+        private System.Windows.Forms.Label separateLine4;
     }
 }
 

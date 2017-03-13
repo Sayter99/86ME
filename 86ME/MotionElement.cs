@@ -11,6 +11,7 @@ namespace _86ME_ver2
         public List<string> goto_var;
         public List<int> used_servos;
         public string name;
+        public int frames;
         public int trigger_method;
         public int auto_method;
         public int trigger_key;
@@ -18,7 +19,6 @@ namespace _86ME_ver2
         public string bt_key;
         public string bt_mode;
         public int wifi602_key;
-        public int frames;
         public string ps2_key;
         public int ps2_type;
         public int analog_pin;
@@ -35,6 +35,7 @@ namespace _86ME_ver2
         {
             this.name = null;
             this.Events = new ArrayList();
+            this.frames = 0;
             this.trigger_method = 0;
             this.auto_method = 0;
             this.trigger_key = 0;
@@ -42,7 +43,6 @@ namespace _86ME_ver2
             this.bt_key = "";
             this.bt_mode = "OneShot";
             this.wifi602_key = 0;
-            this.frames = 0;
             this.ps2_key = "PSB_SELECT";
             this.ps2_type = 1;
             this.analog_pin = 0;
@@ -50,11 +50,11 @@ namespace _86ME_ver2
             this.analog_value = 0;
             this.esp8266_key = "";
             this.esp8266_mode = "OneShot";
+            this.acc_Settings = new double[7];
             this.property = 0;
             this.moton_layer = 0;
             this.comp_range = 180;
             this.control_method = 0;
-            this.acc_Settings = new double[7];
             this.goto_var = new List<string>();
             this.states = new List<string>();
             this.used_servos = new List<int>();
@@ -83,25 +83,38 @@ namespace _86ME_ver2
                 else if (this.Events[i] is ME_Compute)
                     ret.Events.Add(((ME_Compute)this.Events[i]).Copy());
             }
+            ret.frames = this.frames;
             ret.trigger_method = this.trigger_method;
             ret.auto_method = this.auto_method;
             ret.trigger_key = this.trigger_key;
             ret.trigger_keyType = this.trigger_keyType;
             ret.bt_key = this.bt_key;
             ret.bt_mode = this.bt_mode;
-            ret.frames = this.frames;
+            ret.wifi602_key = this.wifi602_key;
             ret.ps2_key = this.ps2_key;
             ret.ps2_type = this.ps2_type;
+            ret.analog_pin = this.analog_pin;
+            ret.analog_cond = this.analog_cond;
+            ret.analog_value = this.analog_value;
+            ret.esp8266_key = this.esp8266_key;
+            ret.esp8266_mode = this.esp8266_mode;
+            for (int i = 0; i < this.acc_Settings.Length; i++)
+                ret.acc_Settings[i] = this.acc_Settings[i];
             ret.property = this.property;
             ret.moton_layer = this.moton_layer;
             ret.comp_range = this.comp_range;
             ret.control_method = this.control_method;
-            for (int i = 0; i < this.acc_Settings.Length; i++)
-                ret.acc_Settings[i] = this.acc_Settings[i];
             ret.goto_var = this.goto_var.ToList();
             ret.states = this.states.ToList();
             ret.used_servos = this.used_servos.ToList();
             return ret;
+        }
+    }
+
+    public class ME_Trigger
+    {
+        public ME_Trigger()
+        {
         }
     }
 
@@ -338,13 +351,6 @@ namespace _86ME_ver2
         public ME_MOT()
         {
             this.version = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
-        }
-    }
-
-    public class ME_Trigger
-    {
-        public ME_Trigger()
-        {
         }
     }
 }

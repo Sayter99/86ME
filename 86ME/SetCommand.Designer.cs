@@ -33,7 +33,7 @@
             // SetCommand
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
-            this.ClientSize = new System.Drawing.Size(284, 261);
+            this.ClientSize = new System.Drawing.Size(684, 611);
             this.MaximizeBox = false;
             this.Name = "SetCommand";
             this.ShowIcon = false;
