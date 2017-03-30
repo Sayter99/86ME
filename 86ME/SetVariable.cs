@@ -13,7 +13,9 @@ namespace _86ME_ver2
         ListViewItem last;
         ArrayList ME_Motionlist;
         ArrayList used_element = new ArrayList();
+        ArrayList tmp_element = new ArrayList();
         int var_num;
+
         public SetVariable(Dictionary<string, double> variables, Dictionary<string, string> lang_dic, ArrayList ME_List, List<string> used_var)
         {
             InitializeComponent();
@@ -38,23 +40,44 @@ namespace _86ME_ver2
                     {
                         ME_If mif = (ME_If)m.Events[j];
                         if (mif.left_var < variables.Count && !used_element.Contains(mif))
+                        {
                             used_element.Add(mif);
+                            tmp_element.Add(mif.Copy());
+                        }
                         if (mif.right_var < variables.Count && !used_element.Contains(mif))
+                        {
                             used_element.Add(mif);
+                            tmp_element.Add(mif.Copy());
+                        }
                     }
                     else if (m.Events[j] is ME_Compute)
                     {
                         ME_Compute op = (ME_Compute)m.Events[j];
                         if (op.left_var < variables.Count && !used_element.Contains(op))
+                        {
                             used_element.Add(op);
+                            tmp_element.Add(op.Copy());
+                        }
                         if (op.f1_var1 < variables.Count && !used_element.Contains(op))
+                        {
                             used_element.Add(op);
+                            tmp_element.Add(op.Copy());
+                        }
                         if (op.f1_var2 < variables.Count && !used_element.Contains(op))
+                        {
                             used_element.Add(op);
+                            tmp_element.Add(op.Copy());
+                        }
                         if (op.f2_var < variables.Count && !used_element.Contains(op))
+                        {
                             used_element.Add(op);
+                            tmp_element.Add(op.Copy());
+                        }
                         if (op.f3_var < variables.Count && !used_element.Contains(op))
+                        {
                             used_element.Add(op);
+                            tmp_element.Add(op.Copy());
+                        }
                     }
                 }
             }
@@ -68,6 +91,22 @@ namespace _86ME_ver2
             {
                 foreach (ListViewItem item in VarListView.Items)
                     global_var.Add(item.SubItems[1].Text, i++);
+            }
+            for (int j = 0; j < used_element.Count; j++)
+            {
+                if (used_element[j] is ME_If)
+                {
+                    ((ME_If)used_element[j]).left_var = ((ME_If)(tmp_element[j])).left_var;
+                    ((ME_If)used_element[j]).right_var = ((ME_If)(tmp_element[j])).right_var;
+                }
+                else if (used_element[j] is ME_Compute)
+                {
+                    ((ME_Compute)used_element[j]).left_var = ((ME_Compute)(tmp_element[j])).left_var;
+                    ((ME_Compute)used_element[j]).f1_var1 = ((ME_Compute)(tmp_element[j])).f1_var1;
+                    ((ME_Compute)used_element[j]).f1_var2 = ((ME_Compute)(tmp_element[j])).f1_var2;
+                    ((ME_Compute)used_element[j]).f2_var = ((ME_Compute)(tmp_element[j])).f2_var;
+                    ((ME_Compute)used_element[j]).f3_var = ((ME_Compute)(tmp_element[j])).f3_var;
+                }
             }
             this.DialogResult = DialogResult.OK;
         }
@@ -140,20 +179,20 @@ namespace _86ME_ver2
                 {
                     int origin_num = int.Parse(VarListView.Items[i].SubItems[0].Text);
                     VarListView.Items[i].SubItems[0].Text = (origin_num - 1).ToString();
-                    for (int j = 0; j < used_element.Count; j++)
+                    for (int j = 0; j < tmp_element.Count; j++)
                     {
                         int prev_num = global_var.Count;
-                        if (used_element[j] is ME_If)
+                        if (tmp_element[j] is ME_If)
                         {
-                            ME_If mif = (ME_If)used_element[j];
+                            ME_If mif = (ME_If)tmp_element[j];
                             if (mif.left_var == i && mif.left_var < prev_num)
                                 mif.left_var = mif.left_var - 1;
-                            if (mif.right_var == i && mif.right_const < prev_num)
+                            if (mif.right_var == i && mif.right_var < prev_num)
                                 mif.right_var = mif.right_var - 1;
                         }
-                        else if (used_element[j] is ME_Compute)
+                        else if (tmp_element[j] is ME_Compute)
                         {
-                            ME_Compute op = (ME_Compute)used_element[j];
+                            ME_Compute op = (ME_Compute)tmp_element[j];
                             if (op.left_var == i && op.left_var < prev_num)
                                 op.left_var = op.left_var - 1;
                             if (op.f1_var1 == i && op.f1_var1 < prev_num)
@@ -176,6 +215,7 @@ namespace _86ME_ver2
 
         private void VarListView_SelectedIndexChanged(object senderm, System.EventArgs e)
         {
+            warningLabel.Text = "";
             if (VarListView.SelectedItems.Count != 0)
             {
                 VarListView.SelectedItems[0].BackColor = Color.SkyBlue;

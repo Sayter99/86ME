@@ -175,6 +175,9 @@
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.MotionProperty = new System.Windows.Forms.TabPage();
+            this.TriggerCommandCombo = new System.Windows.Forms.ComboBox();
+            this.TriggerCommand = new System.Windows.Forms.Label();
+            this.separateLine4 = new System.Windows.Forms.Label();
             this.MotionControlLabel = new System.Windows.Forms.Label();
             this.MotionControlCombo = new System.Windows.Forms.ComboBox();
             this.MotionControlExplanation = new System.Windows.Forms.RichTextBox();
@@ -206,9 +209,6 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
-            this.separateLine4 = new System.Windows.Forms.Label();
-            this.TriggerCommand = new System.Windows.Forms.Label();
-            this.TriggerCommandCombo = new System.Windows.Forms.ComboBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -348,28 +348,28 @@
             // englishToolStripMenuItem
             // 
             this.englishToolStripMenuItem.Name = "englishToolStripMenuItem";
-            this.englishToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.englishToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.englishToolStripMenuItem.Text = "English";
             this.englishToolStripMenuItem.Click += new System.EventHandler(this.englishToolStripMenuItem_Click);
             // 
             // zhToolStripMenuItem
             // 
             this.zhToolStripMenuItem.Name = "zhToolStripMenuItem";
-            this.zhToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.zhToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.zhToolStripMenuItem.Text = "繁體中文";
             this.zhToolStripMenuItem.Click += new System.EventHandler(this.zhToolStripMenuItem_Click);
             // 
             // zhSToolStripMenuItem
             // 
             this.zhSToolStripMenuItem.Name = "zhSToolStripMenuItem";
-            this.zhSToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.zhSToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.zhSToolStripMenuItem.Text = "简体中文";
             this.zhSToolStripMenuItem.Click += new System.EventHandler(this.zhHToolStripMenuItem_Click);
             // 
             // jaToolStripMenuItem
             // 
             this.jaToolStripMenuItem.Name = "jaToolStripMenuItem";
-            this.jaToolStripMenuItem.Size = new System.Drawing.Size(123, 22);
+            this.jaToolStripMenuItem.Size = new System.Drawing.Size(126, 22);
             this.jaToolStripMenuItem.Text = "日本語";
             this.jaToolStripMenuItem.Click += new System.EventHandler(this.jaToolStripMenuItem_Click);
             // 
@@ -1842,6 +1842,34 @@
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
             // 
+            // TriggerCommandCombo
+            // 
+            this.TriggerCommandCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.TriggerCommandCombo.FormattingEnabled = true;
+            this.TriggerCommandCombo.Location = new System.Drawing.Point(130, 26);
+            this.TriggerCommandCombo.Name = "TriggerCommandCombo";
+            this.TriggerCommandCombo.Size = new System.Drawing.Size(103, 21);
+            this.TriggerCommandCombo.TabIndex = 20;
+            this.TriggerCommandCombo.SelectedIndexChanged += new System.EventHandler(this.TriggerCommandCombo_SelectedIndexChanged);
+            // 
+            // TriggerCommand
+            // 
+            this.TriggerCommand.AutoSize = true;
+            this.TriggerCommand.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
+            this.TriggerCommand.Location = new System.Drawing.Point(13, 30);
+            this.TriggerCommand.Name = "TriggerCommand";
+            this.TriggerCommand.Size = new System.Drawing.Size(111, 12);
+            this.TriggerCommand.TabIndex = 19;
+            this.TriggerCommand.Text = "Trigger Command:";
+            // 
+            // separateLine4
+            // 
+            this.separateLine4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.separateLine4.Location = new System.Drawing.Point(-2, 60);
+            this.separateLine4.Name = "separateLine4";
+            this.separateLine4.Size = new System.Drawing.Size(243, 1);
+            this.separateLine4.TabIndex = 18;
+            // 
             // MotionControlLabel
             // 
             this.MotionControlLabel.AutoSize = true;
@@ -2191,33 +2219,6 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
-            // separateLine4
-            // 
-            this.separateLine4.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.separateLine4.Location = new System.Drawing.Point(-2, 60);
-            this.separateLine4.Name = "separateLine4";
-            this.separateLine4.Size = new System.Drawing.Size(243, 1);
-            this.separateLine4.TabIndex = 18;
-            // 
-            // TriggerCommand
-            // 
-            this.TriggerCommand.AutoSize = true;
-            this.TriggerCommand.Font = new System.Drawing.Font("PMingLiU", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(136)));
-            this.TriggerCommand.Location = new System.Drawing.Point(13, 30);
-            this.TriggerCommand.Name = "TriggerCommand";
-            this.TriggerCommand.Size = new System.Drawing.Size(111, 12);
-            this.TriggerCommand.TabIndex = 19;
-            this.TriggerCommand.Text = "Trigger Command:";
-            // 
-            // TriggerCommandCombo
-            // 
-            this.TriggerCommandCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.TriggerCommandCombo.FormattingEnabled = true;
-            this.TriggerCommandCombo.Location = new System.Drawing.Point(130, 26);
-            this.TriggerCommandCombo.Name = "TriggerCommandCombo";
-            this.TriggerCommandCombo.Size = new System.Drawing.Size(103, 21);
-            this.TriggerCommandCombo.TabIndex = 20;
-            // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
@@ -2232,6 +2233,7 @@
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.Main_menuStrip;
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1056, 794);
             this.MinimumSize = new System.Drawing.Size(1056, 794);
             this.Name = "Main";

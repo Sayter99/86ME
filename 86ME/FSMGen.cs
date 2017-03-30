@@ -1529,11 +1529,11 @@ namespace _86ME_ver2
             if (method_flag[4]) // acc
             {
                 if (Motion.comboBox2.SelectedIndex == 1) //LSM330DLC of One
-                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(0);\n  delay(5);\n");
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(0, true);\n  delay(5);\n");
                 else if (Motion.comboBox2.SelectedIndex == 2) //RM-G146
-                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(2);\n  delay(5);\n");
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(2, true);\n  delay(5);\n");
                 else if (Motion.comboBox2.SelectedIndex == 3) //LSM330DLC of AI
-                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(3);\n  delay(5);\n");
+                    writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU_init_status = _IMU.initEX(3, true);\n  delay(5);\n");
                 else // NONE
                     writer.WriteLine("  Wire.begin();\n  delay(5);\n  _IMU.init();\n  delay(5);\n");
             }

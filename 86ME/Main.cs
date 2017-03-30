@@ -23,16 +23,15 @@ namespace _86ME_ver2
 {
     public partial class Main : Form
     {
+        public string com_port;
         Dictionary<string, string> Main_lang_dic;
-        int[] virtual_key = new int[12] {-1, -1, -1, -1 , -1, -1, -1, -1, -1, -1, -1, -1};
-        string[] vkeys = {"VKeyUp", "VKeyDown", "VKeyLeft", "VKeyRight", "VKeyL1", "VKeyL2",
-                          "VKeyR1", "VKeyR2", "VKeyTriangle", "VKeyCircle", "VKeyCross", "VKeySquare"};
+        List<ME_Trigger> trigger_cmd = new List<ME_Trigger>();
         ulong servo_onOff = ~0UL;
         double[] operand_var = new double[50];
-        public Dictionary<string, double> compute_var = new Dictionary<string, double>();
+        Dictionary<string, double> compute_var = new Dictionary<string, double>();
         GlobalSettings gs = new GlobalSettings();
         bool change_board = false;
-        public string init_load_file = "";
+        string init_load_file = "";
         int offset_Max = 255;
         int offset_min = -256;
         List<int> mtest_flag_goto = new List<int>();
@@ -42,7 +41,6 @@ namespace _86ME_ver2
         int default_delay = 1000;
         int current_motionlist_idx = -1;
         int last_motionlist_idx = -1;
-        public string com_port;
         Arduino arduino;
         Panel[] fpanel = new Panel[45];
         Label[] flabel = new Label[45];
@@ -51,7 +49,7 @@ namespace _86ME_ver2
         CheckBox[] fonoff = new CheckBox[45];
         HScrollBar[] fbar = new HScrollBar[45];
         NewMotion Motion;
-        public ArrayList ME_Motionlist;
+        ArrayList ME_Motionlist;
         int framecount = 0;
         int homecount = 0;
         string load_filename = "";
@@ -132,7 +130,7 @@ namespace _86ME_ver2
             accHYText.Name = "3";
             accLZText.Name = "4";
             accHZText.Name = "5";
-            accDurationText.Text = "6";
+            accDurationText.Name = "6";
             Main_lang_dic = lang_dic;
             json_settings = new JsonSerializerSettings
             {
@@ -155,7 +153,7 @@ namespace _86ME_ver2
 
         private void Update_framelist()  //set framelist
         {
-            if (ME_Motionlist.Count == 0)
+            if (ME_Motionlist == null || ME_Motionlist.Count == 0)
                 return;
             Framelist.Controls.Clear();
 
@@ -484,6 +482,8 @@ namespace _86ME_ver2
 
         public void Text_Changed(object sender, EventArgs e) //Text event
         {
+            if (ME_Motionlist.Count == 0)
+                return;
             int n;
             if ((((MaskedTextBox)sender).Text) == "")
             {
@@ -838,6 +838,8 @@ namespace _86ME_ver2
                 servo_onOff = ~0UL;
                 autocheck.Checked = false;
                 compute_var.Clear();
+                trigger_cmd.Clear();
+                TriggerCommandCombo.Items.Clear();
 
                 update_newMotionParams(nMotion);
 
@@ -960,8 +962,7 @@ namespace _86ME_ver2
                     }
                     else if (board_ver86 == 3)
                     {
-                        Motion.create_panel(0, 26, 0);
-                        Motion.create_panel(34, 36, 26);
+                        Motion.create_panel(0, 36, 0);
                     }
                 }
                 if (used_imu != Motion.comboBox2.SelectedIndex)
@@ -1113,6 +1114,7 @@ namespace _86ME_ver2
             }
             rbm.motions = ME_Motionlist;
             rbm.cmpvar = compute_var;
+            rbm.trcmd = trigger_cmd;
 
             string json = JsonConvert.SerializeObject(rbm, json_settings);
             writer.Write(json);
@@ -1174,6 +1176,7 @@ namespace _86ME_ver2
 
         private void load_project(string filename)
         {
+            Framelist.Controls.Clear();
             mirror_name = null;
             picture_name = null;
             bool picmode = false;
@@ -1429,6 +1432,10 @@ namespace _86ME_ver2
             compute_var = rbm.cmpvar;
             if (compute_var.Count > operand_var.Length)
                 operand_var = new double[compute_var.Count];
+            //Commands
+            trigger_cmd = rbm.trcmd;
+            for (int i = 0; i < trigger_cmd.Count; i++)
+                TriggerCommandCombo.Items.Add(trigger_cmd[i]);
 
             nMotion.write_back();
 
@@ -1582,6 +1589,7 @@ namespace _86ME_ver2
             MotionLayerCombo.SelectedIndex = m.moton_layer;
             CompRangeText.Text = m.comp_range.ToString();
             MotionControlCombo.SelectedIndex = m.control_method;
+            TriggerCommandCombo.SelectedIndex = m.trigger_index;
             Framelist.Controls.Clear();
             current_motionlist_idx = -1;
             last_motionlist_idx = -1;
@@ -1787,9 +1795,9 @@ namespace _86ME_ver2
                     }
                 }
             }
-            else if (index < opVar_num + 70 && index >= opVar_num + 58)
+            else if (index >= opVar_num + 58)
             {
-                return virtual_key[index - opVar_num - 58];
+                return 0;
             }
             return 0;
         }
@@ -1915,6 +1923,7 @@ namespace _86ME_ver2
                     break;
                 case "i0":
                     mif.left_var = ((ComboBox)sender).SelectedIndex;
+                    updateUsedTrigger();
                     if (mif.form == 0)
                         Motionlist.Items[current_motionlist_idx] = "[If] " + convertIndex2Str(mif.left_var, 0) + convertIndex2Str(mif.method, 3) +
                                                                     convertIndex2Str(mif.right_var, 0) + " goto " + mif.name;
@@ -2035,8 +2044,8 @@ namespace _86ME_ver2
                 mif = (ME_If)((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events[Motionlist.SelectedIndex];
                 if (name == "i0")
                 {
-                    for (int i = 0; i < vkeys.Length; i++)
-                        cb.Items.Add(vkeys[i]);
+                    for (int i = 0; i < trigger_cmd.Count; i++)
+                        cb.Items.Add(trigger_cmd[i].name);
                 }
             }
 
@@ -2117,8 +2126,8 @@ namespace _86ME_ver2
                     return "Pitch";
                 else if (n > opVar_num + 12 && n <= opVar_num + 57)
                     return "GPIO" + (n - opVar_num - 13);
-                else if (n > opVar_num + 57 && n <= opVar_num + 69)
-                    return vkeys[n - opVar_num - 58];
+                else if (n > opVar_num + 57)
+                    return trigger_cmd[n - opVar_num - 58].name;
             }
             else if (type == 1)
             {
@@ -4737,15 +4746,48 @@ namespace _86ME_ver2
             }
         }
 
+        private void TriggerCommandCombo_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ME_Motion m = (ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex];
+            m.trigger_index = TriggerCommandCombo.SelectedIndex;
+            updateUsedTrigger();
+        }
+
+        private void updateUsedTrigger()
+        {
+            for (int i = 0; i < trigger_cmd.Count; i++)
+                trigger_cmd[i].used = false;
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (m.trigger_index != -1)
+                    trigger_cmd[m.trigger_index].used = true;
+                for (int j = 0; j < m.Events.Count; j++)
+                {
+                    if (m.Events[j] is ME_If mif)
+                    {
+                        if (mif.left_var >= compute_var.Count + 58)
+                        {
+                            trigger_cmd[mif.left_var - compute_var.Count - 58].used = true;
+                        }
+                    }
+                }
+            }
+        }
+
         private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetCommand sc = new SetCommand();
+            SetCommand sc = new SetCommand(trigger_cmd, Main_lang_dic, ME_Motionlist, gs, arduino, com_port, Motion, compute_var.Count);
             sc.ShowDialog();
             if (sc.DialogResult == DialogResult.OK)
             {
-            }
-            else
-            {
+                TriggerCommandCombo.Items.Clear();
+                for (int i = 0; i < trigger_cmd.Count; i++)
+                    TriggerCommandCombo.Items.Add(trigger_cmd[i].name);
+                TriggerCommandCombo.SelectedIndex = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_index;
+                int ms = Motionlist.SelectedIndex;
+                update_motionlist();
+                Motionlist.SelectedIndex = ms;
             }
         }
 

@@ -10,6 +10,7 @@ namespace _86ME_ver2
         public List<string> states;
         public List<string> goto_var;
         public List<int> used_servos;
+        public int trigger_index;
         public string name;
         public int frames;
         public int trigger_method;
@@ -55,6 +56,7 @@ namespace _86ME_ver2
             this.moton_layer = 0;
             this.comp_range = 180;
             this.control_method = 0;
+            this.trigger_index = -1;
             this.goto_var = new List<string>();
             this.states = new List<string>();
             this.used_servos = new List<int>();
@@ -104,6 +106,7 @@ namespace _86ME_ver2
             ret.moton_layer = this.moton_layer;
             ret.comp_range = this.comp_range;
             ret.control_method = this.control_method;
+            ret.trigger_index = this.trigger_index;
             ret.goto_var = this.goto_var.ToList();
             ret.states = this.states.ToList();
             ret.used_servos = this.used_servos.ToList();
@@ -113,8 +116,88 @@ namespace _86ME_ver2
 
     public class ME_Trigger
     {
+        public string name;
+        public bool used;
+        public int trigger_method;
+        public int auto_method;
+        public int keyboard_key;
+        public int keyboard_Type;
+        public string bt_key;
+        public string bt_mode;
+        public int wifi602_key;
+        public string ps2_key;
+        public int ps2_type;
+        public int analog_pin;
+        public int analog_cond;
+        public int analog_value;
+        public string esp8266_key;
+        public string esp8266_mode;
+        public double[] acc_Settings; //LX, HX, LY, HY, LZ, HZ, D
+
         public ME_Trigger()
         {
+            this.used = false;
+            this.trigger_method = 0;
+            this.auto_method = 0;
+            this.keyboard_key = 0;
+            this.keyboard_Type = 1;
+            this.bt_key = "";
+            this.bt_mode = "OneShot";
+            this.wifi602_key = 0;
+            this.ps2_key = "PSB_SELECT";
+            this.ps2_type = 1;
+            this.analog_pin = 0;
+            this.analog_cond = 0;
+            this.analog_value = 0;
+            this.esp8266_key = "";
+            this.esp8266_mode = "OneShot";
+            this.acc_Settings = new double[7];
+        }
+
+        public ME_Trigger Copy()
+        {
+            ME_Trigger ret = new ME_Trigger();
+            ret.name = this.name;
+            ret.used = this.used;
+            ret.trigger_method = this.trigger_method;
+            ret.auto_method = this.auto_method;
+            ret.keyboard_key = this.keyboard_key;
+            ret.keyboard_Type = this.keyboard_Type;
+            ret.bt_key = this.bt_key;
+            ret.bt_mode = this.bt_mode;
+            ret.wifi602_key = this.wifi602_key;
+            ret.ps2_key = this.ps2_key;
+            ret.ps2_type = this.ps2_type;
+            ret.analog_pin = this.analog_pin;
+            ret.analog_cond = this.analog_cond;
+            ret.analog_value = this.analog_value;
+            ret.esp8266_key = this.esp8266_key;
+            ret.esp8266_mode = this.esp8266_mode;
+            for (int i = 0; i < this.acc_Settings.Length; i++)
+                ret.acc_Settings[i] = this.acc_Settings[i];
+            return ret;
+        }
+
+        public void SetAttrBy(ME_Trigger tr)
+        {
+            this.name = tr.name;
+            this.used = tr.used;
+            this.trigger_method = tr.trigger_method;
+            this.auto_method = tr.auto_method;
+            this.keyboard_key = tr.keyboard_key;
+            this.keyboard_Type = tr.keyboard_Type;
+            this.bt_key = tr.bt_key;
+            this.bt_mode = tr.bt_mode;
+            this.wifi602_key = tr.wifi602_key;
+            this.ps2_key = tr.ps2_key;
+            this.ps2_type = tr.ps2_type;
+            this.analog_pin = tr.analog_pin;
+            this.analog_cond = tr.analog_cond;
+            this.analog_value = tr.analog_value;
+            this.esp8266_key = tr.esp8266_key;
+            this.esp8266_mode = tr.esp8266_mode;
+            for (int i = 0; i < this.acc_Settings.Length; i++)
+                this.acc_Settings[i] = tr.acc_Settings[i];
         }
     }
 
@@ -324,6 +407,7 @@ namespace _86ME_ver2
         public string[] gainsrc1;
         public string[] gainsrc2;
         public Dictionary<string, double> cmpvar;
+        public List<ME_Trigger> trcmd;
         public ArrayList motions;
         public ME_RBM()
         {
@@ -341,6 +425,7 @@ namespace _86ME_ver2
             this.gainsrc1 = new string[45];
             this.gainsrc2 = new string[45];
             this.cmpvar = new Dictionary<string, double>();
+            this.trcmd = new List<ME_Trigger>();
         }
     }
 
