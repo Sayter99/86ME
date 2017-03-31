@@ -10,7 +10,6 @@ namespace _86ME_ver2
         public List<string> states;
         public List<string> goto_var;
         public List<int> used_servos;
-        public int trigger_index;
         public string name;
         public int frames;
         public int trigger_method;
@@ -28,6 +27,7 @@ namespace _86ME_ver2
         public string esp8266_key;
         public string esp8266_mode;
         public int property;
+        public int trigger_index;
         public int moton_layer;
         public int comp_range;
         public int control_method;

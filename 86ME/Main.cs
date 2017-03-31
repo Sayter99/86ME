@@ -1068,12 +1068,15 @@ namespace _86ME_ver2
             rbm.board = Motion.comboBox1.SelectedItem.ToString();
             if (Motion.mirrorfilename != null)
                 rbm.mirror = Motion.mirrorfilename;
+            if (Motion.picfilename != null)
+                rbm.picture[0] = Motion.picfilename;
             rbm.sync = sync_speed.Value;
             rbm.imu[0] = Motion.comboBox2.SelectedItem.ToString();
             rbm.imu[1] = Motion.q.w.ToString();
             rbm.imu[2] = Motion.q.x.ToString();
             rbm.imu[3] = Motion.q.y.ToString();
             rbm.imu[4] = Motion.q.z.ToString();
+            rbm.gs = gs;
             for (int i = 0; i < 45; i++)
             {
                 rbm.servos[i] = Motion.fbox[i].Text;
@@ -1096,7 +1099,6 @@ namespace _86ME_ver2
 
                 if (Motion.picfilename != null)
                 {
-                    rbm.picture[0] = Motion.picfilename;
                     rbm.picture[i + 1] = Motion.channelx[i].ToString();
                     rbm.picture[i + 45 + 1] = Motion.channely[i].ToString();
                 }
@@ -1428,6 +1430,8 @@ namespace _86ME_ver2
                 ME_Motionlist.Add((ME_Motion)(rbm.motions[i]));
                 MotionCombo.Items.Add(((ME_Motion)(rbm.motions[i])).name);
             }
+            //Global Settings
+            gs = rbm.gs;
             //Variables
             compute_var = rbm.cmpvar;
             if (compute_var.Count > operand_var.Length)
@@ -1435,7 +1439,7 @@ namespace _86ME_ver2
             //Commands
             trigger_cmd = rbm.trcmd;
             for (int i = 0; i < trigger_cmd.Count; i++)
-                TriggerCommandCombo.Items.Add(trigger_cmd[i]);
+                TriggerCommandCombo.Items.Add(trigger_cmd[i].name);
 
             nMotion.write_back();
 
@@ -4777,7 +4781,7 @@ namespace _86ME_ver2
 
         private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            SetCommand sc = new SetCommand(trigger_cmd, Main_lang_dic, ME_Motionlist, gs, arduino, com_port, Motion, compute_var.Count);
+            SetCommand sc = new SetCommand(trigger_cmd, Main_lang_dic, ME_Motionlist, gs, arduino, com_port, Motion, compute_var.Count, board_ver86);
             sc.ShowDialog();
             if (sc.DialogResult == DialogResult.OK)
             {

@@ -22,9 +22,10 @@ namespace _86ME_ver2
         NewMotion Motion;
         int cmd_num;
         int var_num;
+        int board_ver86;
 
         public SetCommand(List<ME_Trigger> commands, Dictionary<string, string> lang_dic, ArrayList ME_List, GlobalSettings gs,
-                          Arduino arduino, string com_port, NewMotion Motion, int var_num)
+                          Arduino arduino, string com_port, NewMotion Motion, int var_num, int board_ver86)
         {
             InitializeComponent();
             this.cmd_lang_dic = lang_dic;
@@ -35,6 +36,7 @@ namespace _86ME_ver2
             this.com_port = com_port;
             this.Motion = Motion;
             this.var_num = var_num;
+            this.board_ver86 = board_ver86;
             for (int i = 0; i < commands.Count; i++)
             {
                 local_cmd.Add(commands[i].Copy());
@@ -55,6 +57,14 @@ namespace _86ME_ver2
             accLZText.Name = "4";
             accHZText.Name = "5";
             accDurationText.Name = "6";
+
+            initGSpins();
+            initAnalog();
+            ps2DATCombo.Text = gs.ps2pins[0];
+            ps2CMDCombo.Text = gs.ps2pins[1];
+            ps2ATTCombo.Text = gs.ps2pins[2];
+            ps2CLKCombo.Text = gs.ps2pins[3];
+            ESP8266CHPDCombo.Text = gs.esp8266_chpd;
 
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
@@ -604,6 +614,86 @@ namespace _86ME_ver2
             if (current_trigger != null)
                 if (AlwaysOn.Checked == true)
                     current_trigger.auto_method = (int)auto_method.on;
+        }
+
+        private void initAnalog()
+        {
+            if (board_ver86 == 0) //one
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 7; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
+            else if (board_ver86 == 1) //zero
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 6; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
+            else if (board_ver86 == 2) //edu
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 6; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
+            else if (board_ver86 == 3) //ai
+            {
+                analogPinCombo.Items.Clear();
+                for (int i = 0; i < 2; i++)
+                    analogPinCombo.Items.Add("A" + i.ToString());
+            }
+        }
+
+        private void clearGSpins()
+        {
+            ps2DATCombo.Items.Clear();
+            ps2CMDCombo.Items.Clear();
+            ps2ATTCombo.Items.Clear();
+            ps2CLKCombo.Items.Clear();
+            ESP8266CHPDCombo.Items.Clear();
+        }
+
+        private void createGSpins(int i)
+        {
+            ps2DATCombo.Items.Add(i.ToString());
+            ps2CMDCombo.Items.Add(i.ToString());
+            ps2ATTCombo.Items.Add(i.ToString());
+            ps2CLKCombo.Items.Add(i.ToString());
+            ESP8266CHPDCombo.Items.Add(i.ToString());
+        }
+
+        private void initGSpins()
+        {
+            if (board_ver86 == 0) //one
+            {
+                clearGSpins();
+                for (int i = 0; i < 45; i++)
+                    createGSpins(i);
+            }
+            else if (board_ver86 == 1) //zero
+            {
+                clearGSpins();
+                for (int i = 0; i < 14; i++)
+                    createGSpins(i);
+                for (int i = 42; i < 45; i++)
+                    createGSpins(i);
+            }
+            else if (board_ver86 == 2) //edu
+            {
+                clearGSpins();
+                for (int i = 0; i < 21; i++)
+                    createGSpins(i);
+                for (int i = 31; i < 33; i++)
+                    createGSpins(i);
+                for (int i = 42; i < 45; i++)
+                    createGSpins(i);
+            }
+            else if (board_ver86 == 3) //ai
+            {
+                clearGSpins();
+                for (int i = 0; i < 36; i++)
+                    createGSpins(i);
+            }
         }
 
         private void enableTriggerGroup(GroupBox gb)

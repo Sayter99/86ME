@@ -289,10 +289,6 @@
             // 
             this.ESP8266CHPDCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ESP8266CHPDCombo.FormattingEnabled = true;
-            this.ESP8266CHPDCombo.Items.AddRange(new object[] {
-            "Serial1",
-            "Serial2",
-            "Serial3"});
             this.ESP8266CHPDCombo.Location = new System.Drawing.Point(81, 88);
             this.ESP8266CHPDCombo.Name = "ESP8266CHPDCombo";
             this.ESP8266CHPDCombo.Size = new System.Drawing.Size(78, 21);
