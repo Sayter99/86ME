@@ -86,6 +86,36 @@ namespace _86ME_ver2
                     }
                 }
             }
+            applyLang();
+        }
+
+        public void applyLang()
+        {
+            acc_groupBox.Text = cmd_lang_dic["acc_groupBox_Text"];
+            analog_groupBox.Text = cmd_lang_dic["analog_groupBox_Text"];
+            bt_groupBox.Text = cmd_lang_dic["bt_groupBox_Text"];
+            getAccData.Text = cmd_lang_dic["getAccData_Text"];
+            Keyboard_groupBox.Text = cmd_lang_dic["Keyboard_groupBox_Text"];
+            MotionTrigger.Text = cmd_lang_dic["MotionTrigger_Text"];
+            ps2_groupBox.Text = cmd_lang_dic["ps2_groupBox_Text"];
+
+            ttp.SetToolTip(AlwaysOff, cmd_lang_dic["AlwaysOff_ToolTip"]);
+            ttp.SetToolTip(AlwaysOn, cmd_lang_dic["AlwaysOn_ToolTip"]);
+            ttp.SetToolTip(btBaudCombo, cmd_lang_dic["btBaudCombo_ToolTip"]);
+            ttp.SetToolTip(btKeyText, cmd_lang_dic["btKeyText_ToolTip"]);
+            ttp.SetToolTip(btModeCombo, cmd_lang_dic["btModeCombo_ToolTip"]);
+            ttp.SetToolTip(btPortCombo, cmd_lang_dic["btPortCombo_ToolTip"]);
+            ttp.SetToolTip(ESP8266BaudCombo, cmd_lang_dic["ESP8266BaudCombo_ToolTip"]);
+            ttp.SetToolTip(ESP8266KeyText, cmd_lang_dic["ESP8266KeyText_ToolTip"]);
+            ttp.SetToolTip(ESP8266PortCombo, cmd_lang_dic["ESP8266PortCombo_ToolTip"]);
+            ttp.SetToolTip(KeyboardTypeCombo, cmd_lang_dic["KeyboardTypeCombo_ToolTip"]);
+            ttp.SetToolTip(ps2ATTCombo, cmd_lang_dic["ps2ATTCombo_Text"]);
+            ttp.SetToolTip(ps2CLKCombo, cmd_lang_dic["ps2CLKCombo_Text"]);
+            ttp.SetToolTip(ps2CMDCombo, cmd_lang_dic["ps2CMDCombo_Text"]);
+            ttp.SetToolTip(ps2DATCombo, cmd_lang_dic["ps2DATCombo_Text"]);
+            ttp.SetToolTip(ps2TypeCombo, cmd_lang_dic["ps2TypeCombo_ToolTip"]);
+            ttp.SetToolTip(TitleMotion, cmd_lang_dic["TitleMotion_ToolTip"]);
+            ttp.SetToolTip(wifi602PortCombo, cmd_lang_dic["wifi602PortCombo_ToolTip"]);
         }
 
         private bool checkName()

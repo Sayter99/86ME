@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.removeButton = new System.Windows.Forms.Button();
             this.modifyButton = new System.Windows.Forms.Button();
             this.addButton = new System.Windows.Forms.Button();
@@ -119,6 +120,7 @@
             this.AlwaysOff = new System.Windows.Forms.RadioButton();
             this.AlwaysOn = new System.Windows.Forms.RadioButton();
             this.warningLabel = new System.Windows.Forms.Label();
+            this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.MotionConfig.SuspendLayout();
             this.MotionTrigger.SuspendLayout();
             this.ESP8266_groupBox.SuspendLayout();
@@ -1340,5 +1342,6 @@
         private System.Windows.Forms.RadioButton AlwaysOff;
         private System.Windows.Forms.RadioButton AlwaysOn;
         private System.Windows.Forms.Label warningLabel;
+        private System.Windows.Forms.ToolTip ttp;
     }
 }

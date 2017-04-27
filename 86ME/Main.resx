@@ -123,16 +123,6 @@
   <metadata name="ttp.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>442, 17</value>
   </metadata>
-  <data name="ps2TypeCombo.ToolTip" xml:space="preserve">
-    <value>First Press: Perform the selected motion while pressing the choosed key first time.
-Pressed: Perform the selected motion if the choosed key is pressed continuosly.
-Release: Perform the selected motion after the choosed key is released.</value>
-  </data>
-  <data name="KeyboardTypeCombo.ToolTip" xml:space="preserve">
-    <value>First Press: Perform the selected motion while pressing the choosed key first time.
-Pressed: Perform the selected motion if the choosed key is pressed continuosly.
-Release: Perform the selected motion after the choosed key is released.</value>
-  </data>
   <metadata name="Motionlist_contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>657, 17</value>
   </metadata>

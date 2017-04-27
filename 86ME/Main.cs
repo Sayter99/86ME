@@ -93,13 +93,6 @@ namespace _86ME_ver2
             commandsToolStripMenuItem.Enabled = false;
             variablesToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
-            accLXText.Name = "0";
-            accHXText.Name = "1";
-            accLYText.Name = "2";
-            accHYText.Name = "3";
-            accLZText.Name = "4";
-            accHZText.Name = "5";
-            accDurationText.Name = "6";
             Main_lang_dic = lang_dic;
             json_settings = new JsonSerializerSettings
             {
@@ -124,13 +117,6 @@ namespace _86ME_ver2
             commandsToolStripMenuItem.Enabled = false;
             variablesToolStripMenuItem.Enabled = false;
             CheckForIllegalCrossThreadCalls = false;// dangerous
-            accLXText.Name = "0";
-            accHXText.Name = "1";
-            accLYText.Name = "2";
-            accHYText.Name = "3";
-            accLZText.Name = "4";
-            accHZText.Name = "5";
-            accDurationText.Name = "6";
             Main_lang_dic = lang_dic;
             json_settings = new JsonSerializerSettings
             {
@@ -563,53 +549,6 @@ namespace _86ME_ver2
             }
         }
 
-        private void accXYZText_Changed(object sender, EventArgs e)
-        {
-            double output;
-            if (double.TryParse(((MaskedTextBox)sender).Text, out output))
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[int.Parse(((MaskedTextBox)sender).Name)] = output;
-            else if (((MaskedTextBox)sender).Text == "-" || ((MaskedTextBox)sender).Text == "" ||
-                     ((MaskedTextBox)sender).Text == "-." || ((MaskedTextBox)sender).Text == ".")
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[int.Parse(((MaskedTextBox)sender).Name)] = 0;
-            else
-            {
-                MessageBox.Show(Main_lang_dic["errorMsg19"]);
-                ((MaskedTextBox)sender).SelectAll();
-            }
-        }
-
-        private void accDurationText_Changed(object sender, EventArgs e)
-        {
-            int output;
-            if (ME_Motionlist != null)
-            {
-                if (int.TryParse(((MaskedTextBox)sender).Text, out output))
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = output;
-                else
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).acc_Settings[6] = 0;
-            }
-        }
-
-        public void analogValueText_Changed(object sender, EventArgs e)
-        {
-            int output;
-            if (ME_Motionlist != null)
-            {
-                if (int.TryParse(((MaskedTextBox)sender).Text, out output))
-                {
-                    if (output >= 1024)
-                    {
-                        output = 1023;
-                        ((MaskedTextBox)sender).Text = "1023";
-                        ((MaskedTextBox)sender).SelectionStart = ((MaskedTextBox)sender).Text.Length;
-                    }
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_value = output;
-                }
-                else
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_value = 0;
-            }
-        }
-
         private bool needToSave()
         {
             bool need_to_save = false;
@@ -643,86 +582,6 @@ namespace _86ME_ver2
             else if(Motion != null)
                 return true;
             return need_to_save;
-        }
-
-        private void initAnalog()
-        {
-            if (board_ver86 == 0) //one
-            {
-                analogPinCombo.Items.Clear();
-                for (int i = 0; i < 7; i++)
-                    analogPinCombo.Items.Add("A" + i.ToString());
-            }
-            else if (board_ver86 == 1) //zero
-            {
-                analogPinCombo.Items.Clear();
-                for (int i = 0; i < 6; i++)
-                    analogPinCombo.Items.Add("A" + i.ToString());
-            }
-            else if (board_ver86 == 2) //edu
-            {
-                analogPinCombo.Items.Clear();
-                for (int i = 0; i < 6; i++)
-                    analogPinCombo.Items.Add("A" + i.ToString());
-            }
-            else if (board_ver86 == 3) //ai
-            {
-                analogPinCombo.Items.Clear();
-                for (int i = 0; i < 2; i++)
-                    analogPinCombo.Items.Add("A" + i.ToString());
-            }
-        }
-
-        private void clearGSpins()
-        {
-            ps2DATCombo.Items.Clear();
-            ps2CMDCombo.Items.Clear();
-            ps2ATTCombo.Items.Clear();
-            ps2CLKCombo.Items.Clear();
-            ESP8266CHPDCombo.Items.Clear();
-        }
-
-        private void createGSpins(int i)
-        {
-            ps2DATCombo.Items.Add(i.ToString());
-            ps2CMDCombo.Items.Add(i.ToString());
-            ps2ATTCombo.Items.Add(i.ToString());
-            ps2CLKCombo.Items.Add(i.ToString());
-            ESP8266CHPDCombo.Items.Add(i.ToString());
-        }
-
-        private void initGSpins()
-        {
-            if (board_ver86 == 0) //one
-            {
-                clearGSpins();
-                for (int i = 0; i < 45; i++)
-                    createGSpins(i);
-            }
-            else if (board_ver86 == 1) //zero
-            {
-                clearGSpins();
-                for (int i = 0; i < 14; i++)
-                    createGSpins(i);
-                for (int i = 42; i < 45; i++)
-                    createGSpins(i);
-            }
-            else if (board_ver86 == 2) //edu
-            {
-                clearGSpins();
-                for (int i = 0; i < 21; i++)
-                    createGSpins(i);
-                for (int i = 31; i < 33; i++)
-                    createGSpins(i);
-                for (int i = 42; i < 45; i++)
-                    createGSpins(i);
-            }
-            else if (board_ver86 == 3) //ai
-            {
-                clearGSpins();
-                for (int i = 0; i < 36; i++)
-                    createGSpins(i);
-            }
         }
 
         private void update_newMotionParams(NewMotion nMotion)
@@ -843,8 +702,6 @@ namespace _86ME_ver2
 
                 update_newMotionParams(nMotion);
 
-                initAnalog();
-                initGSpins();
                 gs.ps2pins[0] = "0";
                 gs.ps2pins[1] = "0";
                 gs.ps2pins[2] = "0";
@@ -1026,8 +883,7 @@ namespace _86ME_ver2
             if (ME_Motionlist.Count > 0)
                 if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
                     Motionlist.SelectedIndex = 0;
-            initAnalog();
-            initGSpins();
+
             if (change_board)
             {
                 gs.ps2pins[0] = "0";
@@ -1170,10 +1026,15 @@ namespace _86ME_ver2
             autocheck.Checked = false;
             load_project(filename);
             MotionConfig.SelectedIndex = 0;
-            if (ME_Motionlist != null)
-                if (ME_Motionlist.Count > 0)
-                    if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
-                        Motionlist.SelectedIndex = 0;
+            if (ME_Motionlist != null && ME_Motionlist.Count > 0)
+            {
+                if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
+                    Motionlist.SelectedIndex = 0;
+            }
+            else
+            {
+                this.MotionConfig.Enabled = false;
+            }
         }
 
         private void load_project(string filename)
@@ -1471,9 +1332,6 @@ namespace _86ME_ver2
                 mirror_name = null;
             }
 
-            initAnalog();
-            initGSpins();
-
             Hint_groupBox.Enabled = true;
             Motion_groupBox.Enabled = true;
             editToolStripMenuItem.Enabled = true;
@@ -1501,86 +1359,12 @@ namespace _86ME_ver2
             motion_stop.Enabled = false;
         }
 
-        private void update_triggers()
-        {
-            Always_radioButton.Enabled = true;
-            Keyboard_radioButton.Enabled = true;
-            bt_radioButton.Enabled = true;
-            ps2_radioButton.Enabled = true;
-            acc_radioButton.Enabled = true;
-            analog_radioButton.Enabled = true;
-            ESP8266_radioButton.Enabled = true;
-
-            ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
-            if (m.trigger_method == (int)mtest_method.always)
-                Always_radioButton.Checked = true;
-            else if (m.trigger_method == (int)mtest_method.keyboard)
-                Keyboard_radioButton.Checked = true;
-            else if (m.trigger_method == (int)mtest_method.bluetooth)
-                bt_radioButton.Checked = true;
-            else if (m.trigger_method == (int)mtest_method.ps2)
-                ps2_radioButton.Checked = true;
-            else if (m.trigger_method == (int)mtest_method.acc)
-                acc_radioButton.Checked = true;
-            else if (m.trigger_method == (int)mtest_method.wifi602)
-                wifi602_radioButton.Checked = true;
-            else if (m.trigger_method == (int)mtest_method.analog)
-                analog_radioButton.Checked = true;
-            else if (m.trigger_method == (int)mtest_method.esp8266)
-                ESP8266_radioButton.Checked = true;
-
-            if (m.auto_method == (int)auto_method.on)
-                AlwaysOn.Checked = true;
-            else if (m.auto_method == (int)auto_method.off)
-                AlwaysOff.Checked = true;
-            else if (m.auto_method == (int)auto_method.title)
-                TitleMotion.Checked = true;
-
-            KeyboardCombo.SelectedIndex = m.trigger_key;
-            KeyboardTypeCombo.SelectedIndex = m.trigger_keyType;
-
-            btKeyText.Text = m.bt_key;
-            btModeCombo.Text = m.bt_mode;
-            btPortCombo.Text = gs.bt_port;
-            btBaudCombo.Text = gs.bt_baud;
-
-            wifi602PortCombo.Text = gs.wifi602_port;
-            wifi602KeyCombo.SelectedIndex = m.wifi602_key;
-
-            ps2DATCombo.Text = gs.ps2pins[0];
-            ps2CMDCombo.Text = gs.ps2pins[1];
-            ps2ATTCombo.Text = gs.ps2pins[2];
-            ps2CLKCombo.Text = gs.ps2pins[3];
-            ps2KeyCombo.Text = m.ps2_key;
-            ps2TypeCombo.SelectedIndex = m.ps2_type;
-
-            accLXText.Text = m.acc_Settings[0].ToString();
-            accHXText.Text = m.acc_Settings[1].ToString();
-            accLYText.Text = m.acc_Settings[2].ToString();
-            accHYText.Text = m.acc_Settings[3].ToString();
-            accLZText.Text = m.acc_Settings[4].ToString();
-            accHZText.Text = m.acc_Settings[5].ToString();
-            accDurationText.Text = m.acc_Settings[6].ToString();
-
-            analogCondCombo.SelectedIndex = m.analog_cond;
-            analogPinCombo.SelectedIndex = m.analog_pin;
-            analogValueText.Text = m.analog_value.ToString();
-
-            ESP8266KeyText.Text = m.esp8266_key;
-            ESP8266ModeCombo.Text = m.esp8266_mode;
-            ESP8266BaudCombo.Text = gs.esp8266_baud;
-            ESP8266PortCombo.Text = gs.esp8266_port;
-            ESP8266CHPDCombo.Text = gs.esp8266_chpd;
-        }
-
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
             MotionConfig.Enabled = true;
             update_motionlist();
             move_up.Enabled = false;
             move_down.Enabled = false;
-
-            update_triggers();
 
             // Motion Properties
             ME_Motion m = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]);
@@ -3293,6 +3077,7 @@ namespace _86ME_ver2
             else
                 return;
 
+            im.motion.trigger_index = -1;
             ME_Motionlist.Add(im.motion);
             MotionCombo.Items.Add(im.motion.name);
             MotionCombo.SelectedIndex = MotionCombo.Items.Count - 1;
@@ -3879,6 +3664,24 @@ namespace _86ME_ver2
             a.ShowDialog();
         }
 
+        private void clearTmpData()
+        {
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                m.goto_var.Clear();
+                m.states.Clear();
+                m.frames = 0;
+                for (int j = 0; j < m.Events.Count; j++)
+                {
+                    if (m.Events[j] is ME_Flag flag)
+                        flag.var = null;
+                    else if (m.Events[j] is ME_Frame frame)
+                        frame.num = 0;
+                }
+            }
+        }
+
         private void Generate_Click(object sender, EventArgs e)
         {
             if (ME_Motionlist == null)
@@ -3888,8 +3691,9 @@ namespace _86ME_ver2
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
             g.generate_withFiles();
+            clearTmpData();
         }
 
         private void GenerateAllInOne_Click(object sender, EventArgs e)
@@ -3901,8 +3705,9 @@ namespace _86ME_ver2
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
             g.generate_AllinOne();
+            clearTmpData();
         }
 
         private void draw_background()
@@ -4048,19 +3853,6 @@ namespace _86ME_ver2
             Motionlist.SelectedIndex = n + 1;
         }
 
-        private void enableTriggerGroup(GroupBox gb)
-        {
-            Always_groupBox.Enabled = false;
-            Keyboard_groupBox.Enabled = false;
-            bt_groupBox.Enabled = false;
-            ps2_groupBox.Enabled = false;
-            acc_groupBox.Enabled = false;
-            wifi602_groupBox.Enabled = false;
-            analog_groupBox.Enabled = false;
-            ESP8266_groupBox.Enabled = false;
-            gb.Enabled = true;
-        }
-
         private void MotionConfig_SelectedIndexChanged(object sender, EventArgs e)
         {
             if(MotionConfig.SelectedIndex == 0)
@@ -4108,75 +3900,6 @@ namespace _86ME_ver2
                 delaytext.Enabled = false;
                 if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
                 {
-                    Always_radioButton.Enabled = false;
-                    Keyboard_radioButton.Enabled = false;
-                    bt_radioButton.Enabled = false;
-                    ps2_radioButton.Enabled = false;
-                    acc_groupBox.Enabled = false;
-                    Always_groupBox.Enabled = false;
-                    Keyboard_groupBox.Enabled = false;
-                    bt_groupBox.Enabled = false;
-                    ps2_groupBox.Enabled = false;
-                    acc_groupBox.Enabled = false;
-                    wifi602_groupBox.Enabled = false;
-                    wifi602_radioButton.Enabled = false;
-                    analog_groupBox.Enabled = false;
-                    analog_radioButton.Enabled = false;
-                }
-                else
-                {
-                    if (Always_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(Always_groupBox);
-                    }
-                    else if (Keyboard_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(Keyboard_groupBox);
-                    }
-                    else if (bt_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(bt_groupBox);
-                    }
-                    else if (ps2_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(ps2_groupBox);
-                    }
-                    else if (acc_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(acc_groupBox);
-                    }
-                    else if (wifi602_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(wifi602_groupBox);
-                    }
-                    else if (analog_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(analog_groupBox);
-                    }
-                    else if (ESP8266_radioButton.Checked == true)
-                    {
-                        enableTriggerGroup(ESP8266_groupBox);
-                    }
-                    ps2DATCombo.Text = gs.ps2pins[0];
-                    ps2CMDCombo.Text = gs.ps2pins[1];
-                    ps2ATTCombo.Text = gs.ps2pins[2];
-                    ps2CLKCombo.Text = gs.ps2pins[3];
-                    ESP8266CHPDCombo.Text = gs.esp8266_chpd;
-                }
-                this.hint_richTextBox.Text = Main_lang_dic["hint9"];
-            }
-            else if(MotionConfig.SelectedIndex == 2)
-            {
-                saveFrame.Visible = false;
-                loadFrame.Visible = false;
-                move_down.Enabled = false;
-                move_up.Enabled = false;
-                Framelist.Enabled = false;
-                autocheck.Enabled = false;
-                capturebutton.Enabled = false;
-                delaytext.Enabled = false;
-                if (ME_Motionlist == null || MotionCombo.SelectedItem == null)
-                {
                     Blocking.Enabled = false;
                     NonBlocking.Enabled = false;
                 }
@@ -4196,242 +3919,6 @@ namespace _86ME_ver2
             if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
                 if (Blocking.Checked == true)
                     ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).property = (int)motion_property.blocking;
-        }
-
-        private void Always_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (Always_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.always;
-                    enableTriggerGroup(Always_groupBox);
-                }
-            }
-        }
-
-        private void Keyboard_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (Keyboard_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.keyboard;
-                    enableTriggerGroup(Keyboard_groupBox);
-                }
-            }
-        }
-
-        private void bt_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (bt_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.bluetooth;
-                    enableTriggerGroup(bt_groupBox);
-                }
-            }
-        }
-
-        private void ps2_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (ps2_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.ps2;
-                    enableTriggerGroup(ps2_groupBox);
-                }
-            }
-        }
-
-        private void acc_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (acc_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.acc;
-                    enableTriggerGroup(acc_groupBox);
-                }
-            }
-        }
-
-        private void wifi602_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (wifi602_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.wifi602;
-                    enableTriggerGroup(wifi602_groupBox);
-                }
-            }
-        }
-
-        private void analog_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (analog_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.analog;
-                    enableTriggerGroup(analog_groupBox);
-                }
-            }
-        }
-
-        private void ESP8266_radioButton_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                if (ESP8266_radioButton.Checked == true)
-                {
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_method = (int)mtest_method.esp8266;
-                    enableTriggerGroup(ESP8266_groupBox);
-                }
-            }
-        }
-
-        private void AlwaysOn_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                if(AlwaysOn.Checked == true)
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.on;
-        }
-
-        private void AlwaysOff_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                if (AlwaysOff.Checked == true)
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.off;
-        }
-
-        private void TitleMotion_CheckedChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                if (TitleMotion.Checked == true)
-                    ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).auto_method = (int)auto_method.title;
-        }
-
-        private void KeyboardCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_key = KeyboardCombo.SelectedIndex;
-        }
-
-        private void KeyboardTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_keyType = KeyboardTypeCombo.SelectedIndex;
-        }
-
-        private void btKeyText_TextChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-            {
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_key = btKeyText.Text;
-                btKeyLabel.Text = "Key: " + btKeyText.Text;
-            }
-        }
-
-        private void btTypeCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).bt_mode = btModeCombo.Text;
-        }
-
-        private void btPortCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.bt_port = btPortCombo.Text;
-        }
-
-        private void btBaudCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.bt_baud = btBaudCombo.Text;
-        }
-
-        private void ESP8266KeyText_TextChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).esp8266_key = ESP8266KeyText.Text;
-        }
-
-        private void ESP8266ModeCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).esp8266_mode = ESP8266ModeCombo.Text;
-        }
-
-        private void ESP8266BaudCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.esp8266_baud = ESP8266BaudCombo.Text;
-        }
-
-        private void ESP8266PortCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.esp8266_port = ESP8266PortCombo.Text;
-        }
-
-        private void wifi602PortCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.wifi602_port = wifi602PortCombo.Text;
-        }
-
-        private void ESP8266CHPDCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.esp8266_chpd = ESP8266CHPDCombo.Text;
-        }
-
-        private void wifi602KeyCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).wifi602_key = wifi602KeyCombo.SelectedIndex;
-        }
-
-        private void analogPinCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_pin = analogPinCombo.SelectedIndex;
-        }
-
-        private void analogCondCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).analog_cond = analogCondCombo.SelectedIndex;
-        }
-
-        private void ps2DATCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.ps2pins[0] = ps2DATCombo.Text;
-        }
-
-        private void ps2CMDCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.ps2pins[1] = ps2CMDCombo.Text;
-        }
-
-        private void ps2ATTCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.ps2pins[2] = ps2ATTCombo.Text;
-        }
-
-        private void ps2CLKCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            gs.ps2pins[3] = ps2CLKCombo.Text;
-        }
-
-        private void ps2KeyCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).ps2_key = ps2KeyCombo.Text;
-        }
-
-        private void ps2TypeCombo_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            if (ME_Motionlist != null && MotionCombo.SelectedItem != null)
-                ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).ps2_type = ps2TypeCombo.SelectedIndex;
         }
 
         private void MotionLayerCombo_SelectedIndexChanged(object sender, EventArgs e)
@@ -4560,14 +4047,11 @@ namespace _86ME_ver2
             motionevent[7] = Main_lang_dic["InsertIntermediateFrame"];
 
             aboutToolStripMenuItem.Text = Main_lang_dic["aboutToolStripMenuItem_Text"];
-            acc_groupBox.Text = Main_lang_dic["acc_groupBox_Text"];
             Action_groupBox.Text = Main_lang_dic["Action_groupBox_Text"];
             ActionList.Text = Main_lang_dic["ActionList_Text"];
             actionToolStripMenuItem.Text = Main_lang_dic["actionToolStripMenuItem_Text"];
-            analog_groupBox.Text = Main_lang_dic["analog_groupBox_Text"];
             autocheck.Text = Main_lang_dic["autocheck_Text"];         
             blockingExplaination.Text = Main_lang_dic["blockingExplaination_Text"];
-            bt_groupBox.Text = Main_lang_dic["bt_groupBox_Text"];
             capturebutton.Text = Main_lang_dic["capturebutton_Text"];
             commandsToolStripMenuItem.Text = Main_lang_dic["commandsToolStripMenuItem_Text"];
             CompRangeExplanation.Text = Main_lang_dic["CompRangeExplanation_Text"];
@@ -4578,11 +4062,9 @@ namespace _86ME_ver2
             fileToolStripMenuItem.Text = Main_lang_dic["fileToolStripMenuItem_Text"];
             Generate.Text = Main_lang_dic["Generate_Text"];
             GenerateAllInOne.Text = Main_lang_dic["GenerateAllInOne_Text"];
-            getAccData.Text = Main_lang_dic["getAccData_Text"];
             helpToolStripMenuItem.Text = Main_lang_dic["helpToolStripMenuItem_Text"];
             Hint_groupBox.Text = Main_lang_dic["Hint_groupBox_Text"];
             howToUseToolStripMenuItem.Text = Main_lang_dic["howToUseToolStripMenuItem_Text"];
-            Keyboard_groupBox.Text = Main_lang_dic["Keyboard_groupBox_Text"];
             DelayLabel.Text = Main_lang_dic["Main_label2_Text"];
             languageToolStripMenuItem.Text = Main_lang_dic["languageToolStripMenuItem_Text"];
             Motion_groupBox.Text = Main_lang_dic["Motion_groupBox_Text"];
@@ -4590,40 +4072,27 @@ namespace _86ME_ver2
             MotionNameLabel.Text = Main_lang_dic["MotionNameLabel_Text"];
             MotionProperty.Text = Main_lang_dic["MotionProperty_Text"];
             MotionPropertyLabel.Text = Main_lang_dic["MotionPropertyLabel_Text"];
-            MotionTrigger.Text = Main_lang_dic["MotionTrigger_Text"];
             motorRelease.Text = Main_lang_dic["motorRelease_Text"];
             newToolStripMenuItem.Text = Main_lang_dic["newToolStripMenuItem_Text"];
             nonblockingExplanation.Text = Main_lang_dic["nonblockinExplanation_Text"];
             optionsToolStripMenuItem.Text = Main_lang_dic["optionsToolStripMenuItem_Text"];
             preferenceToolStripMenuItem.Text = Main_lang_dic["preferenceToolStripMenuItem_Text"];
-            ps2_groupBox.Text = Main_lang_dic["ps2_groupBox_Text"];
             saveAsFileToolStripMenuItem.Text = Main_lang_dic["saveAsFileToolStripMenuItem_Text"];
             saveFileToolStripMenuItem.Text = Main_lang_dic["saveFileToolStripMenuItem_Text"];
             Setting_groupBox.Text = Main_lang_dic["Setting_groupBox_Text"];
             slow.Text = Main_lang_dic["slow_Text"];
             variablesToolStripMenuItem.Text = Main_lang_dic["variablesToolStripMenuItem_Text"];
-
             DuplicateMotionToolStripMenuItem.Text = Main_lang_dic["DuplicateMotion"];
             DeleteMotionToolStripMenuItem.Text = Main_lang_dic["DeleteMotion"];
             RenameMotionToolStripMenuItem.Text = Main_lang_dic["RenameMotion"];
             ImportMotionToolStripMenuItem.Text = Main_lang_dic["ImportMotion"];
             ExportMotionToolStripMenuItem.Text = Main_lang_dic["ExportMotion"];
 
-            ttp.SetToolTip(AlwaysOff, Main_lang_dic["AlwaysOff_ToolTip"]);
-            ttp.SetToolTip(AlwaysOn, Main_lang_dic["AlwaysOn_ToolTip"]);
             ttp.SetToolTip(autocheck, Main_lang_dic["autocheck_ToolTip"]);
-            ttp.SetToolTip(btBaudCombo, Main_lang_dic["btBaudCombo_ToolTip"]);
-            ttp.SetToolTip(btKeyText, Main_lang_dic["btKeyText_ToolTip"]);
-            ttp.SetToolTip(btModeCombo, Main_lang_dic["btModeCombo_ToolTip"]);
-            ttp.SetToolTip(btPortCombo, Main_lang_dic["btPortCombo_ToolTip"]);
             ttp.SetToolTip(capturebutton, Main_lang_dic["capturebutton_ToolTip"]);
             ttp.SetToolTip(EditMotion, Main_lang_dic["EditMotion_ToolTip"]);
-            ttp.SetToolTip(ESP8266BaudCombo, Main_lang_dic["ESP8266BaudCombo_ToolTip"]);
-            ttp.SetToolTip(ESP8266KeyText, Main_lang_dic["ESP8266KeyText_ToolTip"]);
-            ttp.SetToolTip(ESP8266PortCombo, Main_lang_dic["ESP8266PortCombo_ToolTip"]);
             ttp.SetToolTip(Generate, Main_lang_dic["Generate_ToolTip"]);
             ttp.SetToolTip(GenerateAllInOne, Main_lang_dic["GenerateAllInOne_ToolTip"]);
-            ttp.SetToolTip(KeyboardTypeCombo, Main_lang_dic["KeyboardTypeCombo_ToolTip"]);
             ttp.SetToolTip(loadFrame, Main_lang_dic["loadFrame_ToolTip"]);
             ttp.SetToolTip(motion_pause, Main_lang_dic["motion_pause_ToolTip"]);
             ttp.SetToolTip(motion_stop, Main_lang_dic["motion_stop_ToolTip"]);
@@ -4632,15 +4101,8 @@ namespace _86ME_ver2
             ttp.SetToolTip(move_down, Main_lang_dic["move_down_ToolTip"]);
             ttp.SetToolTip(move_up, Main_lang_dic["move_up_ToolTip"]);
             ttp.SetToolTip(NewMotion, Main_lang_dic["NewMotion_ToolTip"]);
-            ttp.SetToolTip(ps2ATTCombo, Main_lang_dic["ps2ATTCombo_Text"]);
-            ttp.SetToolTip(ps2CLKCombo, Main_lang_dic["ps2CLKCombo_Text"]);
-            ttp.SetToolTip(ps2CMDCombo, Main_lang_dic["ps2CMDCombo_Text"]);
-            ttp.SetToolTip(ps2DATCombo, Main_lang_dic["ps2DATCombo_Text"]);
-            ttp.SetToolTip(ps2TypeCombo, Main_lang_dic["ps2TypeCombo_ToolTip"]);
             ttp.SetToolTip(saveFrame, Main_lang_dic["saveFrame_ToolTip"]);
             ttp.SetToolTip(sync_speed, Main_lang_dic["sync_speed_ToolTip"]);
-            ttp.SetToolTip(TitleMotion, Main_lang_dic["TitleMotion_ToolTip"]);
-            ttp.SetToolTip(wifi602PortCombo, Main_lang_dic["wifi602PortCombo_ToolTip"]);
 
             if (Motionlist != null)
             {
@@ -4715,40 +4177,6 @@ namespace _86ME_ver2
                 applyLang();
             }
         }
-        
-        private void getAccData_Click(object sender, EventArgs e)
-        {
-            if (string.Compare(com_port, "OFF") != 0 && Motion.getQ.Enabled == true)
-            {
-                double tolerance = 2.25;
-                float x, y, z;
-                arduino.pin_capture(8);
-                DateTime time_start = DateTime.Now;
-                while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
-                arduino.dataRecieved = false;
-                x = arduino.captured_float;
-                arduino.pin_capture(9);
-                time_start = DateTime.Now;
-                while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
-                arduino.dataRecieved = false;
-                y = arduino.captured_float;
-                arduino.pin_capture(10);
-                time_start = DateTime.Now;
-                while (!arduino.dataRecieved && (DateTime.Now - time_start).TotalMilliseconds < 100) ;
-                arduino.dataRecieved = false;
-                z = arduino.captured_float;
-                accLXText.Text = (x - tolerance).ToString();
-                accHXText.Text = (x + tolerance).ToString();
-                accLYText.Text = (y - tolerance).ToString();
-                accHYText.Text = (y + tolerance).ToString();
-                accLZText.Text = (z - tolerance).ToString();
-                accHZText.Text = (z + tolerance).ToString();
-            }
-            else
-            {
-                MessageBox.Show(Main_lang_dic["errorMsg20"]);
-            }
-        }
 
         private void TriggerCommandCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -4782,6 +4210,7 @@ namespace _86ME_ver2
         private void commandsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             SetCommand sc = new SetCommand(trigger_cmd, Main_lang_dic, ME_Motionlist, gs, arduino, com_port, Motion, compute_var.Count, board_ver86);
+            sc.applyLang();
             sc.ShowDialog();
             if (sc.DialogResult == DialogResult.OK)
             {
