@@ -54,8 +54,6 @@ namespace _86ME_ver2
         private int opVar_num;
         private bool IMU_compensatory = false;
         private Quaternion invQ = new Quaternion();
-        string[] ps2_vkeys = {"PSB_PAD_UP", "PSB_PAD_DOWN", "PSB_PAD_LEFT", "PSB_PAD_RIGHT", "PSB_L1", "PSB_L2",
-                              "PSB_R1", "PSB_R2", "PSB_TRIANGLE", "PSB_CIRCLE", "PSB_CROSS", "PSB_SQUARE"};
 
         public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, GlobalSettings gs, int opVar_num, List<ME_Trigger> trigger_cmd)
         {
@@ -299,16 +297,8 @@ namespace _86ME_ver2
                 return "_pitch";
             else if (n < opVar_num + 58 && n >= opVar_num + 13)
                 return "digitalRead(" + (n - opVar_num - 13) + ")";
-            else if (n < opVar_num + 70 && n >= opVar_num + 58)
-            {
-                string _vkey = "(0";
-                if (method_flag[3])
-                {
-                    _vkey += " || ps2x.Button(" + ps2_vkeys[n - opVar_num - 58] + ")";
-                }
-                _vkey += ")";
-                return _vkey;
-            }
+            else if (n < opVar_num + commands.Count + 58 && n >= opVar_num + 58)
+                return "_86ME_cmd[" + (n - opVar_num - 58) + "]";
             else
                 return "_86ME_var[" + n + "]";
         }
