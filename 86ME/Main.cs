@@ -1039,11 +1039,6 @@ namespace _86ME_ver2
 
         private void load_project(string filename)
         {
-            Framelist.Controls.Clear();
-            mirror_name = null;
-            picture_name = null;
-            bool picmode = false;
-            NewMotion nMotion = new NewMotion(Main_lang_dic);
             string[] boards = new string[] { "86Duino_One",
                                              "86Duino_Zero",
                                              "86Duino_EduCake",
@@ -1092,12 +1087,18 @@ namespace _86ME_ver2
                 return;
             }
 
+            Framelist.Controls.Clear();
+            mirror_name = null;
+            picture_name = null;
+            bool picmode = false;
+            NewMotion nMotion = new NewMotion(Main_lang_dic);
             load_filename = filename;
             ME_Motionlist = new ArrayList();
             MotionCombo.Items.Clear();
             MotionCombo.Text = "";
             Motionlist.Items.Clear();
             delaytext.Text = default_delay.ToString();
+
             for (int i = 0; i < boards.Length; i++)
             {
                 if (string.Compare(rbm.board, boards[i]) == 0)
