@@ -101,10 +101,6 @@
             this.separateLine4 = new System.Windows.Forms.Label();
             this.MotionControlLabel = new System.Windows.Forms.Label();
             this.MotionControlCombo = new System.Windows.Forms.ComboBox();
-            this.MotionControlExplanation = new System.Windows.Forms.RichTextBox();
-            this.CompRangeExplanation = new System.Windows.Forms.RichTextBox();
-            this.motionLayerExplanation = new System.Windows.Forms.RichTextBox();
-            this.nonblockingExplanation = new System.Windows.Forms.RichTextBox();
             this.blockingExplaination = new System.Windows.Forms.RichTextBox();
             this.separateLine3 = new System.Windows.Forms.Label();
             this.CompRangeText = new System.Windows.Forms.MaskedTextBox();
@@ -116,6 +112,10 @@
             this.NonBlocking = new System.Windows.Forms.RadioButton();
             this.Blocking = new System.Windows.Forms.RadioButton();
             this.MotionPropertyLabel = new System.Windows.Forms.Label();
+            this.nonblockingExplanation = new System.Windows.Forms.RichTextBox();
+            this.motionLayerExplanation = new System.Windows.Forms.RichTextBox();
+            this.CompRangeExplanation = new System.Windows.Forms.RichTextBox();
+            this.MotionControlExplanation = new System.Windows.Forms.RichTextBox();
             this.motion_stop = new System.Windows.Forms.Button();
             this.motion_pause = new System.Windows.Forms.Button();
             this.move_down = new System.Windows.Forms.Button();
@@ -220,22 +220,22 @@
             // editToolStripMenuItem
             // 
             this.editToolStripMenuItem.Name = "editToolStripMenuItem";
-            this.editToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
+            this.editToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.editToolStripMenuItem.Text = "Robot Configuration";
             this.editToolStripMenuItem.Click += new System.EventHandler(this.optionToolStripMenuItem_Click);
             // 
             // commandsToolStripMenuItem
             // 
             this.commandsToolStripMenuItem.Name = "commandsToolStripMenuItem";
-            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.commandsToolStripMenuItem.Text = "Trigger Commands";
+            this.commandsToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.commandsToolStripMenuItem.Text = "Edit Trigger Commands";
             this.commandsToolStripMenuItem.Click += new System.EventHandler(this.commandsToolStripMenuItem_Click);
             // 
             // variablesToolStripMenuItem
             // 
             this.variablesToolStripMenuItem.Name = "variablesToolStripMenuItem";
-            this.variablesToolStripMenuItem.Size = new System.Drawing.Size(183, 22);
-            this.variablesToolStripMenuItem.Text = "Variables";
+            this.variablesToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
+            this.variablesToolStripMenuItem.Text = "Edit Variables";
             this.variablesToolStripMenuItem.Click += new System.EventHandler(this.variablesToolStripMenuItem_Click);
             // 
             // preferenceToolStripMenuItem
@@ -832,45 +832,6 @@
             this.MotionControlCombo.TabIndex = 16;
             this.MotionControlCombo.SelectedIndexChanged += new System.EventHandler(this.MotionControlCombo_SelectedIndexChanged);
             // 
-            // MotionControlExplanation
-            // 
-            this.MotionControlExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.MotionControlExplanation.Location = new System.Drawing.Point(15, 329);
-            this.MotionControlExplanation.Name = "MotionControlExplanation";
-            this.MotionControlExplanation.Size = new System.Drawing.Size(218, 44);
-            this.MotionControlExplanation.TabIndex = 15;
-            this.MotionControlExplanation.Text = "Choose the motion\'s trajectory planning method.";
-            // 
-            // CompRangeExplanation
-            // 
-            this.CompRangeExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.CompRangeExplanation.Location = new System.Drawing.Point(15, 410);
-            this.CompRangeExplanation.Name = "CompRangeExplanation";
-            this.CompRangeExplanation.Size = new System.Drawing.Size(218, 105);
-            this.CompRangeExplanation.TabIndex = 12;
-            this.CompRangeExplanation.Text = "Set the valid angle (0~180 degree, 0 means to close this function) of IMU compens" +
-    "ating. The IMU compensating just can be enabled in this range (-setting angle ~ " +
-    "+setting angle).";
-            // 
-            // motionLayerExplanation
-            // 
-            this.motionLayerExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.motionLayerExplanation.Location = new System.Drawing.Point(15, 238);
-            this.motionLayerExplanation.Name = "motionLayerExplanation";
-            this.motionLayerExplanation.Size = new System.Drawing.Size(218, 78);
-            this.motionLayerExplanation.TabIndex = 8;
-            this.motionLayerExplanation.Text = "Make motions be triggered parallelly in different layers. 1\'s priority is higher " +
-    "than 0\'s.";
-            // 
-            // nonblockingExplanation
-            // 
-            this.nonblockingExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.nonblockingExplanation.Location = new System.Drawing.Point(15, 159);
-            this.nonblockingExplanation.Name = "nonblockingExplanation";
-            this.nonblockingExplanation.Size = new System.Drawing.Size(218, 59);
-            this.nonblockingExplanation.TabIndex = 4;
-            this.nonblockingExplanation.Text = "This motion can be interrupted while another motion is triggered.";
-            // 
             // blockingExplaination
             // 
             this.blockingExplaination.BorderStyle = System.Windows.Forms.BorderStyle.None;
@@ -982,6 +943,45 @@
             this.MotionPropertyLabel.Size = new System.Drawing.Size(204, 13);
             this.MotionPropertyLabel.TabIndex = 0;
             this.MotionPropertyLabel.Text = "Set the properties of the choosed motion :";
+            // 
+            // nonblockingExplanation
+            // 
+            this.nonblockingExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.nonblockingExplanation.Location = new System.Drawing.Point(15, 159);
+            this.nonblockingExplanation.Name = "nonblockingExplanation";
+            this.nonblockingExplanation.Size = new System.Drawing.Size(218, 59);
+            this.nonblockingExplanation.TabIndex = 4;
+            this.nonblockingExplanation.Text = "This motion can be interrupted while another motion is triggered.";
+            // 
+            // motionLayerExplanation
+            // 
+            this.motionLayerExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.motionLayerExplanation.Location = new System.Drawing.Point(15, 238);
+            this.motionLayerExplanation.Name = "motionLayerExplanation";
+            this.motionLayerExplanation.Size = new System.Drawing.Size(218, 78);
+            this.motionLayerExplanation.TabIndex = 8;
+            this.motionLayerExplanation.Text = "Make motions be triggered parallelly in different layers. 1\'s priority is higher " +
+    "than 0\'s.";
+            // 
+            // CompRangeExplanation
+            // 
+            this.CompRangeExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.CompRangeExplanation.Location = new System.Drawing.Point(15, 410);
+            this.CompRangeExplanation.Name = "CompRangeExplanation";
+            this.CompRangeExplanation.Size = new System.Drawing.Size(218, 105);
+            this.CompRangeExplanation.TabIndex = 12;
+            this.CompRangeExplanation.Text = "Set the valid angle (0~180 degree, 0 means to close this function) of IMU compens" +
+    "ating. The IMU compensating just can be enabled in this range (-setting angle ~ " +
+    "+setting angle).";
+            // 
+            // MotionControlExplanation
+            // 
+            this.MotionControlExplanation.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.MotionControlExplanation.Location = new System.Drawing.Point(15, 329);
+            this.MotionControlExplanation.Name = "MotionControlExplanation";
+            this.MotionControlExplanation.Size = new System.Drawing.Size(218, 44);
+            this.MotionControlExplanation.TabIndex = 15;
+            this.MotionControlExplanation.Text = "Choose the motion\'s trajectory planning method.";
             // 
             // motion_stop
             // 

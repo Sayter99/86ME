@@ -138,7 +138,7 @@
             this.removeButton.FlatAppearance.BorderSize = 0;
             this.removeButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.removeButton.Image = global::_86ME_ver2.Properties.Resources.remove;
-            this.removeButton.Location = new System.Drawing.Point(704, 12);
+            this.removeButton.Location = new System.Drawing.Point(330, 13);
             this.removeButton.Name = "removeButton";
             this.removeButton.Size = new System.Drawing.Size(28, 28);
             this.removeButton.TabIndex = 17;
@@ -150,7 +150,7 @@
             this.modifyButton.FlatAppearance.BorderSize = 0;
             this.modifyButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.modifyButton.Image = global::_86ME_ver2.Properties.Resources.modify;
-            this.modifyButton.Location = new System.Drawing.Point(670, 12);
+            this.modifyButton.Location = new System.Drawing.Point(296, 13);
             this.modifyButton.Name = "modifyButton";
             this.modifyButton.Size = new System.Drawing.Size(28, 28);
             this.modifyButton.TabIndex = 16;
@@ -162,7 +162,7 @@
             this.addButton.FlatAppearance.BorderSize = 0;
             this.addButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.addButton.Image = global::_86ME_ver2.Properties.Resources.add2;
-            this.addButton.Location = new System.Drawing.Point(636, 12);
+            this.addButton.Location = new System.Drawing.Point(262, 13);
             this.addButton.Name = "addButton";
             this.addButton.Size = new System.Drawing.Size(28, 28);
             this.addButton.TabIndex = 15;
@@ -192,7 +192,7 @@
             // nameLabel
             // 
             this.nameLabel.AutoSize = true;
-            this.nameLabel.Location = new System.Drawing.Point(386, 20);
+            this.nameLabel.Location = new System.Drawing.Point(12, 21);
             this.nameLabel.Name = "nameLabel";
             this.nameLabel.Size = new System.Drawing.Size(59, 13);
             this.nameLabel.TabIndex = 12;
@@ -200,7 +200,7 @@
             // 
             // nameMaskedTextBox
             // 
-            this.nameMaskedTextBox.Location = new System.Drawing.Point(445, 17);
+            this.nameMaskedTextBox.Location = new System.Drawing.Point(71, 18);
             this.nameMaskedTextBox.Name = "nameMaskedTextBox";
             this.nameMaskedTextBox.Size = new System.Drawing.Size(185, 20);
             this.nameMaskedTextBox.TabIndex = 11;
@@ -212,10 +212,10 @@
             this.NameColumnHeader});
             this.CmdListView.FullRowSelect = true;
             this.CmdListView.GridLines = true;
-            this.CmdListView.Location = new System.Drawing.Point(389, 72);
+            this.CmdListView.Location = new System.Drawing.Point(15, 73);
             this.CmdListView.MultiSelect = false;
             this.CmdListView.Name = "CmdListView";
-            this.CmdListView.Size = new System.Drawing.Size(343, 558);
+            this.CmdListView.Size = new System.Drawing.Size(343, 555);
             this.CmdListView.TabIndex = 10;
             this.CmdListView.UseCompatibleStateImageBehavior = false;
             this.CmdListView.View = System.Windows.Forms.View.Details;
@@ -235,7 +235,7 @@
             // MotionConfig
             // 
             this.MotionConfig.Controls.Add(this.MotionTrigger);
-            this.MotionConfig.Location = new System.Drawing.Point(12, 17);
+            this.MotionConfig.Location = new System.Drawing.Point(365, 12);
             this.MotionConfig.Name = "MotionConfig";
             this.MotionConfig.SelectedIndex = 0;
             this.MotionConfig.Size = new System.Drawing.Size(367, 617);
@@ -1198,7 +1198,7 @@
             // 
             this.warningLabel.AutoSize = true;
             this.warningLabel.ForeColor = System.Drawing.Color.Red;
-            this.warningLabel.Location = new System.Drawing.Point(386, 47);
+            this.warningLabel.Location = new System.Drawing.Point(12, 48);
             this.warningLabel.Name = "warningLabel";
             this.warningLabel.Size = new System.Drawing.Size(0, 13);
             this.warningLabel.TabIndex = 19;
