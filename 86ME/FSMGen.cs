@@ -137,7 +137,7 @@ namespace _86ME_ver2
                     else if (m.auto_method == (int)auto_method.off)
                         return "0";
                     else //title
-                        return m.name + "_title == 1";
+                        return m.name.Substring(2) + "_title == 1";
                 case (int)mtest_method.keyboard:
                     if (m.keyboard_Type == (int)keyboard_method.first)
                         return "keys_state[" + convert_keynum(m.keyboard_key) + "] == 2";
@@ -158,7 +158,7 @@ namespace _86ME_ver2
                     else
                         return "ps2x.ButtonReleased(" + m.ps2_key + ")";
                 case (int)mtest_method.acc:
-                    return m.name + "::acc_state == 2";
+                    return m.name.Substring(2) + "::acc_state == 2";
                 case (int)mtest_method.wifi602:
                     if (m.wifi602_key == 0)
                         return "abs(wifi602_data[2]) <= abs(wifi602_data[3]) && wifi602_data[3] > 0";
