@@ -1098,7 +1098,7 @@
             this.Generate.Name = "Generate";
             this.Generate.Size = new System.Drawing.Size(267, 25);
             this.Generate.TabIndex = 4;
-            this.Generate.Text = "Generate 86Duino Sketch (with Frame Files)";
+            this.Generate.Text = "Generate Robot Library";
             this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will b" +
         "e stored in files out of the sketch.");
             this.Generate.UseVisualStyleBackColor = true;
@@ -1127,7 +1127,7 @@
             this.GenerateAllInOne.Name = "GenerateAllInOne";
             this.GenerateAllInOne.Size = new System.Drawing.Size(267, 25);
             this.GenerateAllInOne.TabIndex = 5;
-            this.GenerateAllInOne.Text = "Generate 86Duino Sketch (All in One)";
+            this.GenerateAllInOne.Text = "Generate 86Duino Sketch";
             this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in " +
         "the generated sketch.");
             this.GenerateAllInOne.UseVisualStyleBackColor = true;

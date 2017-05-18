@@ -1012,10 +1012,10 @@ namespace _86ME_ver2
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Filter = "rbm files (*.rbm)|*.rbm";
             dialog.Title = "Open File";
-            String filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : null;
-            if (filename == null)
+            string filename = (dialog.ShowDialog() == DialogResult.OK) ? dialog.FileName : "";
+            if (filename == null || string.Compare(filename, "") == 0)
                 return;
-            if( String.Compare(Path.GetExtension(filename), ".rbm") != 0 )
+            if( string.Compare(Path.GetExtension(filename), ".rbm") != 0 )
             {
                 MessageBox.Show(Main_lang_dic["errorMsg4"]);
                 return;
@@ -3693,7 +3693,12 @@ namespace _86ME_ver2
                 return;
             }
             FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
-            g.generate_withFiles();
+            string lib_dir = Path.GetFileNameWithoutExtension(load_filename);
+            //if ((new System.Text.RegularExpressions.Regex("^[a-zA-Z0-9_]{1,20}$")).IsMatch(lib_dir))
+            //    g.generate_Library("\\" + lib_dir);
+            //else
+            //    g.generate_Library();
+            g.generate_Library();
             clearTmpData();
         }
 
