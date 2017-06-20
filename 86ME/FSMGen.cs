@@ -1459,11 +1459,12 @@ namespace _86ME_ver2
             writer.WriteLine("}");
         }
 
-        private void generate_include_headers(TextWriter writer)
+        private void generate_include_headers(TextWriter writer, bool include_arduino)
         {
             writer.WriteLine("#include <time.h>");
             writer.WriteLine("#include <math.h>");
-            writer.WriteLine("#include <Arduino.h>");
+            if (include_arduino)
+                writer.WriteLine("#include <Arduino.h>");
             writer.WriteLine("#include <Servo86.h>");
             if (method_flag[1]) // keyboard
                 writer.WriteLine("#include <KeyboardController.h>");
@@ -2082,7 +2083,7 @@ namespace _86ME_ver2
                 
                 string class_name = "Robot86ME";
 
-                generate_include_headers(writer);
+                generate_include_headers(writer, false);
                 generate_global_var(writer);
                 generate_class(writer, class_name, channels);
                 
@@ -2155,7 +2156,7 @@ namespace _86ME_ver2
             writerh.WriteLine("#ifndef __" + class_name.ToUpper() + "_h");
             writerh.WriteLine("#define __" + class_name.ToUpper() + "_h");
             writerh.WriteLine();
-            generate_include_headers(writerh);
+            generate_include_headers(writerh, true);
             generate_global_var(writerh);
             generate_class(writerh, class_name, channels);
             writerh.WriteLine("\n#endif");
