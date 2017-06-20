@@ -91,6 +91,30 @@ namespace _86ME_ver2.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to 
+        ////*
+        /// * Firmata is a generic protocol for communicating with microcontrollers
+        /// * from software on a host computer. It is intended to work with
+        /// * any host computer software package.
+        /// *
+        /// * To download a host software package, please clink on the following link
+        /// * to open the download page in your default browser.ser
+        /// *
+        /// * http://firmata.org/wiki/Download
+        /// */
+        ///
+        ////*
+        /// Copyright (C) 2006-2008 Hans-Christoph Steiner.  All rights reserved.
+        /// Copyright (C) 2010-2011 Paul Stoffregen.  All rights reserved.
+        /// Copyright (C) [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string FirmataPlus {
+            get {
+                return ResourceManager.GetString("FirmataPlus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap gear {
@@ -217,6 +241,30 @@ namespace _86ME_ver2.Properties {
             get {
                 object obj = ResourceManager.GetObject("save_frame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to # -*- coding: utf-8 -*-
+        ///
+        ///&quot;&quot;&quot;
+        ///Created on Wed Nov  25 13:17:15 2013
+        ///
+        ///@author: Alan Yorinks
+        ///Copyright (c) 2013-14 Alan Yorinks All right reserved.
+        ///
+        ///@co-author: Sjoerd Dirk Meijer, fromScratchEd.nl (language support)
+        ///
+        ///This program is free software; you can redistribute it and/or
+        ///modify it under the terms of the GNU Lesser General Public
+        ///License as published by the Free Software Foundation; either
+        ///version 2.1 of the License, or (at your option) any later version.
+        ///
+        ///This library is distributed in the hope that it  [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string scratch_command_handlers {
+            get {
+                return ResourceManager.GetString("scratch_command_handlers", resourceCulture);
             }
         }
         

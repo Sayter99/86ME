@@ -213,6 +213,7 @@
   <ItemGroup>
     <Content Include="icons\86Duino.ico" />
     <Content Include="icons\add.png" />
+    <None Include="Resources\scratch_command_handlers.py" />
     <None Include="icons\add2.png" />
     <Content Include="icons\gear.png" />
     <None Include="icons\modify.png" />
@@ -223,6 +224,7 @@
     <Content Include="icons\s.png" />
     <None Include="icons\load_frame.png" />
     <None Include="icons\save_frame.png" />
+    <None Include="Resources\FirmataPlus.ino" />
     <None Include="Resources\hand_open.cur" />
     <None Include="Resources\hand_close.cur" />
     <None Include="icons\stop.png" />

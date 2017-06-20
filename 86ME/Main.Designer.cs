@@ -130,6 +130,7 @@
             this.GenerateAllInOne = new System.Windows.Forms.Button();
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
+            this.GenerateScratch = new System.Windows.Forms.Button();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -694,7 +695,7 @@
             this.Motion_groupBox.Controls.Add(this.MotionCombo);
             this.Motion_groupBox.Location = new System.Drawing.Point(739, 30);
             this.Motion_groupBox.Name = "Motion_groupBox";
-            this.Motion_groupBox.Size = new System.Drawing.Size(289, 651);
+            this.Motion_groupBox.Size = new System.Drawing.Size(289, 627);
             this.Motion_groupBox.TabIndex = 3;
             this.Motion_groupBox.TabStop = false;
             this.Motion_groupBox.Text = "Motion";
@@ -718,7 +719,7 @@
             this.MotionConfig.Location = new System.Drawing.Point(7, 72);
             this.MotionConfig.Name = "MotionConfig";
             this.MotionConfig.SelectedIndex = 0;
-            this.MotionConfig.Size = new System.Drawing.Size(247, 529);
+            this.MotionConfig.Size = new System.Drawing.Size(247, 508);
             this.MotionConfig.TabIndex = 10;
             this.MotionConfig.SelectedIndexChanged += new System.EventHandler(this.MotionConfig_SelectedIndexChanged);
             // 
@@ -728,7 +729,7 @@
             this.ActionList.Location = new System.Drawing.Point(4, 22);
             this.ActionList.Name = "ActionList";
             this.ActionList.Padding = new System.Windows.Forms.Padding(3);
-            this.ActionList.Size = new System.Drawing.Size(239, 503);
+            this.ActionList.Size = new System.Drawing.Size(239, 482);
             this.ActionList.TabIndex = 0;
             this.ActionList.Text = "Action List";
             this.ActionList.UseVisualStyleBackColor = true;
@@ -743,7 +744,7 @@
             this.Motionlist.Location = new System.Drawing.Point(1, 3);
             this.Motionlist.Name = "Motionlist";
             this.Motionlist.ScrollAlwaysVisible = true;
-            this.Motionlist.Size = new System.Drawing.Size(235, 494);
+            this.Motionlist.Size = new System.Drawing.Size(235, 474);
             this.Motionlist.TabIndex = 1;
             this.Motionlist.SelectedIndexChanged += new System.EventHandler(this.Motionlist_SelectedIndexChanged);
             this.Motionlist.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Motionlist_KeyDown);
@@ -989,7 +990,7 @@
             this.motion_stop.FlatAppearance.BorderSize = 0;
             this.motion_stop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.motion_stop.Image = global::_86ME_ver2.Properties.Resources.stop;
-            this.motion_stop.Location = new System.Drawing.Point(166, 607);
+            this.motion_stop.Location = new System.Drawing.Point(162, 582);
             this.motion_stop.Name = "motion_stop";
             this.motion_stop.Size = new System.Drawing.Size(43, 38);
             this.motion_stop.TabIndex = 9;
@@ -1004,7 +1005,7 @@
             this.motion_pause.FlatAppearance.BorderSize = 0;
             this.motion_pause.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.motion_pause.Image = global::_86ME_ver2.Properties.Resources.pause;
-            this.motion_pause.Location = new System.Drawing.Point(117, 607);
+            this.motion_pause.Location = new System.Drawing.Point(113, 582);
             this.motion_pause.Name = "motion_pause";
             this.motion_pause.Size = new System.Drawing.Size(43, 38);
             this.motion_pause.TabIndex = 8;
@@ -1020,7 +1021,7 @@
             this.move_down.FlatAppearance.BorderSize = 0;
             this.move_down.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.move_down.Image = global::_86ME_ver2.Properties.Resources.down_arrow;
-            this.move_down.Location = new System.Drawing.Point(258, 342);
+            this.move_down.Location = new System.Drawing.Point(258, 325);
             this.move_down.Name = "move_down";
             this.move_down.Size = new System.Drawing.Size(25, 40);
             this.move_down.TabIndex = 7;
@@ -1035,7 +1036,7 @@
             this.move_up.FlatAppearance.BorderSize = 0;
             this.move_up.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.move_up.Image = global::_86ME_ver2.Properties.Resources.up_arrow;
-            this.move_up.Location = new System.Drawing.Point(258, 296);
+            this.move_up.Location = new System.Drawing.Point(258, 279);
             this.move_up.Name = "move_up";
             this.move_up.Size = new System.Drawing.Size(25, 40);
             this.move_up.TabIndex = 6;
@@ -1059,7 +1060,7 @@
             this.MotionTest.FlatAppearance.BorderSize = 0;
             this.MotionTest.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.MotionTest.Image = global::_86ME_ver2.Properties.Resources.play;
-            this.MotionTest.Location = new System.Drawing.Point(68, 607);
+            this.MotionTest.Location = new System.Drawing.Point(64, 582);
             this.MotionTest.Name = "MotionTest";
             this.MotionTest.Size = new System.Drawing.Size(43, 38);
             this.MotionTest.TabIndex = 3;
@@ -1094,13 +1095,11 @@
             // Generate
             // 
             this.Generate.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Generate.Location = new System.Drawing.Point(746, 688);
+            this.Generate.Location = new System.Drawing.Point(746, 693);
             this.Generate.Name = "Generate";
             this.Generate.Size = new System.Drawing.Size(267, 25);
             this.Generate.TabIndex = 4;
             this.Generate.Text = "Generate Robot Library";
-            this.ttp.SetToolTip(this.Generate, "Generate a sketch of selected motion list.\nThe value of frames and offsets will b" +
-        "e stored in files out of the sketch.");
             this.Generate.UseVisualStyleBackColor = true;
             this.Generate.Click += new System.EventHandler(this.Generate_Click);
             // 
@@ -1123,13 +1122,11 @@
             // GenerateAllInOne
             // 
             this.GenerateAllInOne.Cursor = System.Windows.Forms.Cursors.Default;
-            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 720);
+            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 662);
             this.GenerateAllInOne.Name = "GenerateAllInOne";
             this.GenerateAllInOne.Size = new System.Drawing.Size(267, 25);
             this.GenerateAllInOne.TabIndex = 5;
             this.GenerateAllInOne.Text = "Generate 86Duino Sketch";
-            this.ttp.SetToolTip(this.GenerateAllInOne, "Generate a sketch of selected motion list.\nAll of the settings will be stored in " +
-        "the generated sketch.");
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
             // 
@@ -1156,11 +1153,23 @@
             this.Setting_groupBox.TabStop = false;
             this.Setting_groupBox.Text = "Edit Settings";
             // 
+            // GenerateScratch
+            // 
+            this.GenerateScratch.Cursor = System.Windows.Forms.Cursors.Default;
+            this.GenerateScratch.Location = new System.Drawing.Point(746, 724);
+            this.GenerateScratch.Name = "GenerateScratch";
+            this.GenerateScratch.Size = new System.Drawing.Size(267, 25);
+            this.GenerateScratch.TabIndex = 16;
+            this.GenerateScratch.Text = "Generate Scratch Project";
+            this.GenerateScratch.UseVisualStyleBackColor = true;
+            this.GenerateScratch.Click += new System.EventHandler(this.GenerateScratch_Click);
+            // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1040, 755);
+            this.Controls.Add(this.GenerateScratch);
             this.Controls.Add(this.GenerateAllInOne);
             this.Controls.Add(this.Generate);
             this.Controls.Add(this.Main_menuStrip);
@@ -1305,6 +1314,7 @@
         private System.Windows.Forms.RadioButton NonBlocking;
         private System.Windows.Forms.RadioButton Blocking;
         private System.Windows.Forms.Label MotionPropertyLabel;
+        private System.Windows.Forms.Button GenerateScratch;
     }
 }
 

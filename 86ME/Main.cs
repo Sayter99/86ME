@@ -3716,6 +3716,20 @@ namespace _86ME_ver2
             clearTmpData();
         }
 
+        private void GenerateScratch_Click(object sender, EventArgs e)
+        {
+            if (ME_Motionlist == null)
+                return;
+            if (ME_Motionlist.Count == 0)
+            {
+                MessageBox.Show(Main_lang_dic["errorMsg16"]);
+                return;
+            }
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
+            g.generate_ScratchProject();
+            clearTmpData();
+        }
+
         private void draw_background()
         {
             if(Motion.picfilename != null)
@@ -4068,6 +4082,7 @@ namespace _86ME_ver2
             fileToolStripMenuItem.Text = Main_lang_dic["fileToolStripMenuItem_Text"];
             Generate.Text = Main_lang_dic["Generate_Text"];
             GenerateAllInOne.Text = Main_lang_dic["GenerateAllInOne_Text"];
+            GenerateScratch.Text = Main_lang_dic["GenerateScratch_Text"];
             helpToolStripMenuItem.Text = Main_lang_dic["helpToolStripMenuItem_Text"];
             Hint_groupBox.Text = Main_lang_dic["Hint_groupBox_Text"];
             howToUseToolStripMenuItem.Text = Main_lang_dic["howToUseToolStripMenuItem_Text"];
@@ -4097,8 +4112,6 @@ namespace _86ME_ver2
             ttp.SetToolTip(autocheck, Main_lang_dic["autocheck_ToolTip"]);
             ttp.SetToolTip(capturebutton, Main_lang_dic["capturebutton_ToolTip"]);
             ttp.SetToolTip(EditMotion, Main_lang_dic["EditMotion_ToolTip"]);
-            ttp.SetToolTip(Generate, Main_lang_dic["Generate_ToolTip"]);
-            ttp.SetToolTip(GenerateAllInOne, Main_lang_dic["GenerateAllInOne_ToolTip"]);
             ttp.SetToolTip(loadFrame, Main_lang_dic["loadFrame_ToolTip"]);
             ttp.SetToolTip(motion_pause, Main_lang_dic["motion_pause_ToolTip"]);
             ttp.SetToolTip(motion_stop, Main_lang_dic["motion_stop_ToolTip"]);

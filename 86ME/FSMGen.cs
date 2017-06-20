@@ -1145,12 +1145,14 @@ namespace _86ME_ver2
                     state_counter++;
                     if (g.is_goto)
                     {
+                        bool has_flag = false;
                         for (int k = 0; k < m.Events.Count; k++)
                         {
                             if (m.Events[k] is ME_Flag)
                             {
                                 if (String.Compare(g.name, ((ME_Flag)m.Events[k]).name) == 0)
                                 {
+                                    has_flag = true;
                                     string for_var = ((ME_Flag)m.Events[k]).var;
                                     if (((ME_Goto)m.Events[i]).infinite == false)
                                     {
@@ -1166,14 +1168,19 @@ namespace _86ME_ver2
                                 }
                             }
                         }
-                        if (i != m.Events.Count - 1)
+                        if (i != m.Events.Count - 1 && has_flag)
                         {
                             next_action = m.name + "::" + m.states[state_counter];
                             if (g.infinite == false)
                                 writer.WriteLine(space + "    " + m.name + "::" + g.name + "_" + i + " = 0;");
                             writer.WriteLine(space + "    " + m.name + "::state = " + next_action + ";");
                         }
-                        else
+                        else if (i != m.Events.Count - 1 && !has_flag)
+                        {
+                            next_action = m.name + "::" + m.states[state_counter];
+                            writer.WriteLine(space + "    " + m.name + "::state = " + next_action + ";");
+                        }
+                        else if (i == m.Events.Count - 1 && has_flag)
                         {
                             writer.WriteLine(space + "    else\n    {");
                             next_action = m.name + "::IDLE";
@@ -1183,6 +1190,15 @@ namespace _86ME_ver2
                             writer.WriteLine(space + "      external_trigger[_" + m.name.ToUpper() + "] = false;");
                             writer.WriteLine(space + "      " + m.name + "::state = " + next_action + ";");
                             writer.WriteLine(space + "    }");
+                        }
+                        else
+                        {
+                            next_action = m.name + "::IDLE";
+                            for (int j = 0; j < m.goto_var.Count; j++)
+                                writer.WriteLine(space + "    " + m.name + "::" + m.goto_var[j] + " = 0;");
+                            writer.WriteLine(space + "    internal_trigger[_" + m.name.ToUpper() + "] = false;");
+                            writer.WriteLine(space + "    external_trigger[_" + m.name.ToUpper() + "] = false;");
+                            writer.WriteLine(space + "    " + m.name + "::state = " + next_action + ";");
                         }
                         writer.WriteLine(space + "    break;");
                     }
@@ -1434,10 +1450,20 @@ namespace _86ME_ver2
             writer.WriteLine(space + "}");
         }
 
+        private void generate_reset(TextWriter writer, List<int> channels, string class_name)
+        {
+            writer.WriteLine("void " + class_name + "::reset(bool initIMU)\n{");
+            for (int i = 0; i < channels.Count; i++)
+                writer.WriteLine("  used_servos[" + i.ToString() + "].detach();");
+            writer.WriteLine("  begin(initIMU);");
+            writer.WriteLine("}");
+        }
+
         private void generate_include_headers(TextWriter writer)
         {
             writer.WriteLine("#include <time.h>");
             writer.WriteLine("#include <math.h>");
+            writer.WriteLine("#include <Arduino.h>");
             writer.WriteLine("#include <Servo86.h>");
             if (method_flag[1]) // keyboard
                 writer.WriteLine("#include <KeyboardController.h>");
@@ -1455,9 +1481,15 @@ namespace _86ME_ver2
             string frm_name;
             int processed = 0;
             if (string.Compare(class_name, "") == 0)
+            {
                 writer.WriteLine("void setup()\n{");
+            }
             else
+            {
+                generate_reset(writer, channels, class_name);
                 writer.WriteLine("void " + class_name + "::begin(bool initIMU)\n{");
+            }
+
             writer.WriteLine("  srand(time(NULL));");
 
             if (method_flag[2]) // bt
@@ -1751,11 +1783,12 @@ namespace _86ME_ver2
             writer.WriteLine("public:");
             writer.WriteLine(space + class_name + "();");
             writer.WriteLine(space + "void begin(bool initIMU);");
+            writer.WriteLine(space + "void reset(bool initIMU);");
             writer.WriteLine(space + "void update(void);");
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                writer.WriteLine(space + "void " + m.name + "(void);");
+                writer.WriteLine(space + "void " + m.name + "(int times = 1);");
             }
             writer.WriteLine("};");
         }
@@ -1831,13 +1864,16 @@ namespace _86ME_ver2
 
         private void generate_simple_motion(TextWriter writer, ME_Motion m, string class_name)
         {
-            writer.WriteLine("void " + class_name + "::" + m.name + "()\n" +
+            writer.WriteLine("void " + class_name + "::" + m.name + "(int times)\n" +
                              "{\n" +
                              "  _86ME_cmd[" + m.trigger_index + "] = true;\n" +
-                             "  do\n" +
+                             "  for(int i = 0; i < times; i++)\n" +
                              "  {\n" +
-                             "    update_S();\n" +
-                             "  } while (!isNoMotion());\n" +
+                             "    do\n" +
+                             "    {\n" +
+                             "      update_S();\n" +
+                             "    } while (!isNoMotion());\n" +
+                             "  }\n" +
                              "  _86ME_cmd[" + m.trigger_index + "] = false;\n" +
                              "}");
         }
@@ -2026,10 +2062,6 @@ namespace _86ME_ver2
         {
             FolderBrowserDialog path = new FolderBrowserDialog();
             var dialogResult = path.ShowDialog();
-            string txtPath = path.SelectedPath;
-            List<int> channels = new List<int>();
-            List<int> angle = new List<int>();
-            List<uint> home = new List<uint>();
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
             {
@@ -2038,16 +2070,16 @@ namespace _86ME_ver2
                     MessageBox.Show("The selected directory does not exist, please try again.");
                     return;
                 }
+                List<int> channels = new List<int>();
+                List<int> angle = new List<int>();
+                List<uint> home = new List<uint>();
                 string motion_sketch_name = "\\AllinOne_Motion_Sketch";
                 Directory.CreateDirectory(path.SelectedPath + motion_sketch_name);
                 nfilename = path.SelectedPath + motion_sketch_name + motion_sketch_name + ".ino";
                 TextWriter writer = new StreamWriter(nfilename);
 
                 get_positions(channels, angle, home);
-
-                //generate_declaration(writer, channels, home, true);
-                //generate_setup(writer, channels, home, true, angle);
-                //generate_loop(writer);
+                
                 string class_name = "Robot86ME";
 
                 generate_include_headers(writer);
@@ -2080,10 +2112,6 @@ namespace _86ME_ver2
         {
             FolderBrowserDialog path = new FolderBrowserDialog();
             var dialogResult = path.ShowDialog();
-            string txtPath = path.SelectedPath;
-            List<int> channels = new List<int>();
-            List<int> angle = new List<int>();
-            List<uint> home = new List<uint>();
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
             {
@@ -2092,63 +2120,165 @@ namespace _86ME_ver2
                     MessageBox.Show("The selected directory does not exist, please try again.");
                     return;
                 }
-                if (string.Compare(library_dir, "") == 0)
-                    library_dir = "\\Robot86ME";
-                Directory.CreateDirectory(path.SelectedPath + library_dir);
-                nfilename = path.SelectedPath + library_dir + library_dir + ".h";
-                TextWriter writerh = new StreamWriter(nfilename);
-                nfilename = path.SelectedPath + library_dir + library_dir + ".cpp";
-                TextWriter writer = new StreamWriter(nfilename);
-                nfilename = path.SelectedPath + library_dir + "\\keywords.txt";
-                TextWriter writerk = new StreamWriter(nfilename);
-                nfilename = path.SelectedPath + library_dir + "\\library.properties";
-                TextWriter writerl = new StreamWriter(nfilename);
-                Directory.CreateDirectory(path.SelectedPath + library_dir + "\\examples");
-                Directory.CreateDirectory(path.SelectedPath + library_dir + "\\examples\\RobotControlSample");
-                nfilename = path.SelectedPath + library_dir + "\\examples\\RobotControlSample\\RobotControlSample.ino";
-                TextWriter writer_ex1 = new StreamWriter(nfilename);
-                Directory.CreateDirectory(path.SelectedPath + library_dir + "\\examples\\SingleMotion");
-                nfilename = path.SelectedPath + library_dir + "\\examples\\SingleMotion\\SingleMotion.ino";
-                TextWriter writer_ex2 = new StreamWriter(nfilename);
+                generate_LibrarayWithPath(path.SelectedPath);
+                MessageBox.Show("The library is generated in " + path.SelectedPath + library_dir + "\\Robot86ME\\");
+            }
+        }
 
-                get_positions(channels, angle, home);
+        private void generate_LibrarayWithPath(string path, string library_dir = "")
+        {
+            List<int> channels = new List<int>();
+            List<int> angle = new List<int>();
+            List<uint> home = new List<uint>();
+            if (string.Compare(library_dir, "") == 0)
+                library_dir = "\\Robot86ME";
+            Directory.CreateDirectory(path + library_dir);
+            nfilename = path + library_dir + library_dir + ".h";
+            TextWriter writerh = new StreamWriter(nfilename);
+            nfilename = path + library_dir + library_dir + ".cpp";
+            TextWriter writer = new StreamWriter(nfilename);
+            nfilename = path + library_dir + "\\keywords.txt";
+            TextWriter writerk = new StreamWriter(nfilename);
+            nfilename = path + library_dir + "\\library.properties";
+            TextWriter writerl = new StreamWriter(nfilename);
+            Directory.CreateDirectory(path + library_dir + "\\examples");
+            Directory.CreateDirectory(path + library_dir + "\\examples\\RobotControlSample");
+            nfilename = path + library_dir + "\\examples\\RobotControlSample\\RobotControlSample.ino";
+            TextWriter writer_ex1 = new StreamWriter(nfilename);
+            Directory.CreateDirectory(path + library_dir + "\\examples\\SingleMotion");
+            nfilename = path + library_dir + "\\examples\\SingleMotion\\SingleMotion.ino";
+            TextWriter writer_ex2 = new StreamWriter(nfilename);
 
-                string class_name = library_dir.Substring(1);
-                writerh.WriteLine("#ifndef __" + class_name.ToUpper() + "_h");
-                writerh.WriteLine("#define __" + class_name.ToUpper() + "_h");
-                writerh.WriteLine();
-                generate_include_headers(writerh);
-                generate_global_var(writerh);
-                generate_class(writerh, class_name, channels);
-                writerh.WriteLine("\n#endif");
+            get_positions(channels, angle, home);
 
-                writer.WriteLine("#include <" + class_name + ".h>\n");
-                for (int i = 0; i < ME_Motionlist.Count; i++)
-                    generate_namespace((ME_Motion)ME_Motionlist[i], writer, channels);
-                writerh.WriteLine();
-                generate_constructor(writer, class_name, channels, home);
-                generate_functions(writer, class_name, channels);
-                generate_setup(writer, channels, home, true, angle, class_name);
-                generate_loop(writer, class_name);
+            string class_name = library_dir.Substring(1);
+            writerh.WriteLine("#ifndef __" + class_name.ToUpper() + "_h");
+            writerh.WriteLine("#define __" + class_name.ToUpper() + "_h");
+            writerh.WriteLine();
+            generate_include_headers(writerh);
+            generate_global_var(writerh);
+            generate_class(writerh, class_name, channels);
+            writerh.WriteLine("\n#endif");
 
-                generate_lib_properties(writerl, class_name);
-                generate_keywords(writerk, class_name);
-                generate_example1(writer_ex1, class_name);
-                generate_example2(writer_ex2, class_name);
+            writer.WriteLine("#include <" + class_name + ".h>\n");
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+                generate_namespace((ME_Motion)ME_Motionlist[i], writer, channels);
+            writerh.WriteLine();
+            generate_constructor(writer, class_name, channels, home);
+            generate_functions(writer, class_name, channels);
+            generate_setup(writer, channels, home, true, angle, class_name);
+            generate_loop(writer, class_name);
 
-                MessageBox.Show("The sketch is generated in " + path.SelectedPath + library_dir + "\\");
-                writerh.Dispose();
-                writerh.Close();
-                writer.Dispose();
-                writer.Close();
-                writerk.Dispose();
-                writerk.Close();
-                writerl.Dispose();
-                writerl.Close();
-                writer_ex1.Dispose();
-                writer_ex1.Close();
-                writer_ex2.Dispose();
-                writer_ex2.Close();
+            generate_lib_properties(writerl, class_name);
+            generate_keywords(writerk, class_name);
+            generate_example1(writer_ex1, class_name);
+            generate_example2(writer_ex2, class_name);
+
+            writerh.Dispose();
+            writerh.Close();
+            writer.Dispose();
+            writer.Close();
+            writerk.Dispose();
+            writerk.Close();
+            writerl.Dispose();
+            writerl.Close();
+            writer_ex1.Dispose();
+            writer_ex1.Close();
+            writer_ex2.Dispose();
+            writer_ex2.Close();
+        }
+
+        private void generate_blocks(string path)
+        {
+            TextWriter writer = new StreamWriter(path + "\\s2r_fm.s2e");
+            string port = "50209";
+            string url = "\"https://github.com/MrYsLab/PyMata\"";
+            writer.WriteLine("{");
+            writer.WriteLine("\t\"extensionName\": \"s2r_fm - Scratch to Robot\",");
+            writer.WriteLine("\t\"extensionPort\": " + port + ",");
+            writer.WriteLine("\t\"url\": " + url + ",");
+            writer.WriteLine("\t\"blockSpecs\": [");
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                writer.WriteLine("\t\t[\n");
+                writer.WriteLine("\t\t\t\"w\",");
+                writer.WriteLine("\t\t\t\"Perfrom " + m.name + " %n times\",");
+                writer.WriteLine("\t\t\t\"perform_" + m.name + "\",");
+                writer.WriteLine("\t\t\t\"1\"");
+                writer.Write("\t\t]");
+                if (i != ME_Motionlist.Count - 1)
+                    writer.WriteLine(",");
+                else
+                    writer.WriteLine();
+            }
+            writer.WriteLine("\t]");
+            writer.WriteLine("}");
+            writer.Dispose();
+            writer.Close();
+        }
+
+        private void generate_FirmataPlus(string path)
+        {
+            TextWriter writer = new StreamWriter(path + "\\FirmataPlus.ino");
+            string template = Properties.Resources.FirmataPlus;
+            string insert = "";
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                if (i == 0)
+                    insert += "      if (motion_id == " + i + ") robot." + m.name + "(motion_times);";
+                else
+                    insert += "\n      else if (motion_id == " + i + ") robot." + m.name + "(motion_times);";
+            }
+            writer.Write(template.Replace("      // call motions here", insert));
+            writer.Dispose();
+            writer.Close();
+        }
+
+        private void generate_handler(string path)
+        {
+            TextWriter writer = new StreamWriter(path + "\\scratch_command_handlers.py");
+            string template = Properties.Resources.scratch_command_handlers;
+            string insert_function = "";
+            string insert_command = "";
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                insert_function += "    def perform_" + m.name + "(self, command):\n" +
+                                   "        id = int(command[1])\n" +
+                                   "        motion = " + i + "\n" +
+                                   "        times = int(command[2])\n" +
+                                   "        self.firmata.perform_motion(id, motion, times)\n" +
+                                   "        if id not in self.busy_ID:\n" +
+                                   "            self.busy_ID.append(id)\n" +
+                                   "        return \'okay\'\n\n";
+                insert_command += ",\n                    \'perform_" + m.name + "\': perform_" + m.name;
+            }
+            template = template.Replace("    # Define functions to perform motions here", insert_function);
+            writer.Write(template.Replace("# insert motion commands here", insert_command));
+            writer.Dispose();
+            writer.Close();
+        }
+
+        public void generate_ScratchProject()
+        {
+            FolderBrowserDialog path = new FolderBrowserDialog();
+            var dialogResult = path.ShowDialog();
+
+            if (dialogResult == DialogResult.OK && path.SelectedPath != null)
+            {
+                if (!Directory.Exists(path.SelectedPath))
+                {
+                    MessageBox.Show("The selected directory does not exist, please try again.");
+                    return;
+                }
+                Directory.CreateDirectory(path.SelectedPath + "\\ScratchProject");
+                generate_LibrarayWithPath(path.SelectedPath + "\\ScratchProject");
+                generate_blocks(path.SelectedPath + "\\ScratchProject");
+                generate_FirmataPlus(path.SelectedPath + "\\ScratchProject");
+                generate_handler(path.SelectedPath + "\\ScratchProject");
+                MessageBox.Show("The project is generated in " + path.SelectedPath + "\\ScratchProject\\");
             }
         }
     }
