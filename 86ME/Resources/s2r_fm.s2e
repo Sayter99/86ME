@@ -1,0 +1,62 @@
+﻿{
+    "extensionName": "s2r_fm - Scratch to Robot",
+    "extensionPort": 50209,
+    "url": "https://github.com/MrYsLab/PyMata",
+    "blockSpecs": [
+        // separate
+        [
+            " ",
+            "%m.pin_state : Digital Pin %m.digital_pins for %m.digital_pin_mode",
+            "digital_pin_mode",
+            "Enable",
+            "PIN",
+            "INPUT"
+        ],
+        // separate
+        [
+            " ",
+            "%m.pin_state : Analog Pin (A) %n for Input",
+            "analog_pin_mode",
+            "Enable",
+            "PIN"
+        ],
+        // separate
+        [
+            "",
+            "DigitalWrite: Set Pin %m.digital_pins to %m.high_low",
+            "digital_write",
+            "PIN",
+            0
+        ],
+        [
+            "r",
+            "Read Digital Pin %m.digital_pins",
+            "digital_read",
+            "PIN"
+        ],
+        // separate
+        [
+            "r",
+            "Read Analog Pin (A) %n",
+            "analog_read",
+            "PIN"
+        ]// insert blocks
+    ],
+    "menus": {
+        "pin_state": [
+            "Enable",
+            "Disable"
+        ],
+        "digital_pin_mode": [
+            "Input",
+            "Output"
+        ],
+        "high_low": [
+            "0",
+            "1"
+        ],
+        "digital_pins": [
+            // insert digital pins
+        ]
+    }
+}

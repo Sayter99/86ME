@@ -178,4 +178,13 @@
   <data name="scratch_command_handlers" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\scratch_command_handlers.py;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="s2r_fm" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\s2r_fm.s2e;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
+  <data name="sb2" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sb2.sb2;System.Byte[], mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </data>
+  <data name="sb2ProjectJson" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\project.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
+  </data>
 </root>

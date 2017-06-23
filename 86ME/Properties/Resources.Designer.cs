@@ -91,8 +91,7 @@ namespace _86ME_ver2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 
-        ////*
+        ///   Looks up a localized string similar to /*
         /// * Firmata is a generic protocol for communicating with microcontrollers
         /// * from software on a host computer. It is intended to work with
         /// * any host computer software package.
@@ -106,7 +105,7 @@ namespace _86ME_ver2.Properties {
         ////*
         /// Copyright (C) 2006-2008 Hans-Christoph Steiner.  All rights reserved.
         /// Copyright (C) 2010-2011 Paul Stoffregen.  All rights reserved.
-        /// Copyright (C) [rest of string was truncated]&quot;;.
+        /// Copyright (C)  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string FirmataPlus {
             get {
@@ -235,12 +234,79 @@ namespace _86ME_ver2.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to {
+        ///    &quot;extensionName&quot;: &quot;s2r_fm - Scratch to Robot&quot;,
+        ///    &quot;extensionPort&quot;: 50209,
+        ///    &quot;url&quot;: &quot;https://github.com/MrYsLab/PyMata&quot;,
+        ///    &quot;blockSpecs&quot;: [
+        ///        // separate
+        ///        [
+        ///            &quot; &quot;,
+        ///            &quot;%m.pin_state : Digital Pin %m.digital_pins for %m.digital_pin_mode&quot;,
+        ///            &quot;digital_pin_mode&quot;,
+        ///            &quot;Enable&quot;,
+        ///            &quot;PIN&quot;,
+        ///            &quot;INPUT&quot;
+        ///        ],
+        ///        // separate
+        ///        [
+        ///            &quot; &quot;,
+        ///            &quot;%m.pin_state : Analog Pin (A) %n for Input&quot;,
+        ///            &quot;analog_pin_mo [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string s2r_fm {
+            get {
+                return ResourceManager.GetString("s2r_fm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap save_frame {
             get {
                 object obj = ResourceManager.GetObject("save_frame", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Byte[].
+        /// </summary>
+        internal static byte[] sb2 {
+            get {
+                object obj = ResourceManager.GetObject("sb2", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {
+        ///	&quot;objName&quot;: &quot;Stage&quot;,
+        ///	&quot;sounds&quot;: [{
+        ///			&quot;soundName&quot;: &quot;pop&quot;,
+        ///			&quot;soundID&quot;: 1,
+        ///			&quot;md5&quot;: &quot;83a9787d4cb6f3b7632b4ddfebf74367.wav&quot;,
+        ///			&quot;sampleCount&quot;: 258,
+        ///			&quot;rate&quot;: 11025,
+        ///			&quot;format&quot;: &quot;&quot;
+        ///		}],
+        ///	&quot;costumes&quot;: [{
+        ///			&quot;costumeName&quot;: &quot;backdrop1&quot;,
+        ///			&quot;baseLayerID&quot;: 3,
+        ///			&quot;baseLayerMD5&quot;: &quot;739b5e2a2435f6e1ec2993791b423146.png&quot;,
+        ///			&quot;bitmapResolution&quot;: 1,
+        ///			&quot;rotationCenterX&quot;: 240,
+        ///			&quot;rotationCenterY&quot;: 180
+        ///		}],
+        ///	&quot;currentCostumeIndex&quot;: 0,
+        ///	&quot;penLayerMD5&quot;: &quot;5c81a336fab8be57adc039a8a2b33ca9.png&quot;,
+        ///	&quot;penLayerID&quot;: 0,
+        ///	&quot;tempoBP [rest of string was truncated]&quot;;.
+        /// </summary>
+        internal static string sb2ProjectJson {
+            get {
+                return ResourceManager.GetString("sb2ProjectJson", resourceCulture);
             }
         }
         

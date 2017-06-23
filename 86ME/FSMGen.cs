@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections;
 using System.Windows.Forms;
 using System.IO;
+using System.IO.Compression;
 
 namespace _86ME_ver2
 {
@@ -2188,41 +2189,58 @@ namespace _86ME_ver2
             writer_ex2.Dispose();
             writer_ex2.Close();
         }
-
-        private void generate_blocks(string path)
+        
+        private void generate_avalable_pins(TextWriter writer, List<int> channels)
         {
-            TextWriter writer = new StreamWriter(path + "\\s2r_fm.s2e");
-            string port = "50209";
-            string url = "\"https://github.com/MrYsLab/PyMata\"";
-            writer.WriteLine("{");
-            writer.WriteLine("\t\"extensionName\": \"s2r_fm - Scratch to Robot\",");
-            writer.WriteLine("\t\"extensionPort\": " + port + ",");
-            writer.WriteLine("\t\"url\": " + url + ",");
-            writer.WriteLine("\t\"blockSpecs\": [");
-            for (int i = 0; i < ME_Motionlist.Count; i++)
+            bool first = true;
+            if (channels.Count != 45)
             {
-                ME_Motion m = (ME_Motion)ME_Motionlist[i];
-                writer.WriteLine("\t\t[\n");
-                writer.WriteLine("\t\t\t\"w\",");
-                writer.WriteLine("\t\t\t\"Perfrom " + m.name + " %n times\",");
-                writer.WriteLine("\t\t\t\"perform_" + m.name + "\",");
-                writer.WriteLine("\t\t\t\"1\"");
-                writer.Write("\t\t]");
-                if (i != ME_Motionlist.Count - 1)
-                    writer.WriteLine(",");
-                else
-                    writer.WriteLine();
+                writer.Write("int available_digital_pins[" + (45 - channels.Count) + "] = {");
+                for (int i = 0; i < 45; i++)
+                {
+                    if (!channels.Contains(i))
+                    {
+                        if (first)
+                        {
+                            writer.Write(i);
+                            first = false;
+                        }
+                        else
+                            writer.Write(", " + i);
+                    }
+                }
+                writer.WriteLine("};");
             }
-            writer.WriteLine("\t]");
-            writer.WriteLine("}");
-            writer.Dispose();
-            writer.Close();
         }
 
         private void generate_FirmataPlus(string path)
         {
-            TextWriter writer = new StreamWriter(path + "\\FirmataPlus.ino");
+            List<int> channels = new List<int>();
+            List<int> angle = new List<int>();
+            List<uint> home = new List<uint>();
+            get_positions(channels, angle, home);
+            string class_name = "Robot86ME";
+            TextWriter writer = new StreamWriter(path + "\\ScratchProject.ino");
             string template = Properties.Resources.FirmataPlus;
+            string[] FirmataPlus = template.Split(new string[] { "// 86ME include lib" }, StringSplitOptions.None);
+            writer.WriteLine(FirmataPlus[0]);
+            generate_include_headers(writer, false);
+            FirmataPlus = FirmataPlus[1].Split(new string[] { "// 86ME global variable" }, StringSplitOptions.None);
+            writer.WriteLine(FirmataPlus[0]);
+            generate_global_var(writer);
+            generate_avalable_pins(writer, channels);
+            FirmataPlus = FirmataPlus[1].Split(new string[] { "// 86ME class" }, StringSplitOptions.None);
+            writer.WriteLine(FirmataPlus[0]);
+            generate_class(writer, class_name, channels);
+            FirmataPlus = FirmataPlus[1].Split(new string[] { "// 86ME namespace" }, StringSplitOptions.None);
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+                generate_namespace((ME_Motion)ME_Motionlist[i], writer, channels);
+            FirmataPlus = FirmataPlus[1].Split(new string[] { "// 86ME functions" }, StringSplitOptions.None);
+            writer.WriteLine(FirmataPlus[0]);
+            generate_constructor(writer, class_name, channels, home);
+            generate_functions(writer, class_name, channels);
+            generate_setup(writer, channels, home, true, angle, class_name);
+            generate_loop(writer, class_name);
             string insert = "";
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
@@ -2232,7 +2250,18 @@ namespace _86ME_ver2
                 else
                     insert += "\n      else if (motion_id == " + i + ") robot." + m.name + "(motion_times);";
             }
-            writer.Write(template.Replace("      // call motions here", insert));
+            FirmataPlus[1] = FirmataPlus[1].Replace("      // call motions here", insert);
+            insert = "";
+            if (channels.Count != 45)
+            {
+                insert += "  for (byte i = 0; i < " + (45 - channels.Count) + "; i++) {\n" +
+                          "    if (!IS_PIN_ANALOG(available_digital_pins[i])) {\n" +
+                          "      // sets the output to 0, configures portConfigInputs\n" +
+                          "      setPinModeCallback(available_digital_pins[i], OUTPUT);\n" +
+                          "    }\n" +
+                          "  }";
+            }
+            writer.WriteLine(FirmataPlus[1].Replace("  // 86ME reset digital pins", insert));
             writer.Dispose();
             writer.Close();
         }
@@ -2262,6 +2291,78 @@ namespace _86ME_ver2
             writer.Close();
         }
 
+        private void generate_sb2(string path)
+        {
+            // generate sb2 template first
+            using (MemoryStream zipToOpen = new MemoryStream(Properties.Resources.sb2))
+            {
+                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Read))
+                {
+                    using (var fileStream = new FileStream(path + "\\Robot86ME.sb2", FileMode.Create))
+                    {
+                        zipToOpen.Seek(0, SeekOrigin.Begin);
+                        zipToOpen.CopyTo(fileStream);
+                    }
+                }
+            }
+            // insert project.json to Robot86ME.sb2
+            using (FileStream zipToOpen = new FileStream(path + "\\Robot86ME.sb2", FileMode.Open))
+            {
+                using (ZipArchive archive = new ZipArchive(zipToOpen, ZipArchiveMode.Update))
+                {
+                    ZipArchiveEntry readmeEntry = archive.CreateEntry("project.json");
+                    using (StreamWriter writer = new StreamWriter(readmeEntry.Open()))
+                    {
+                        List<int> channels = new List<int>();
+                        List<int> angle = new List<int>();
+                        List<uint> home = new List<uint>();
+                        get_positions(channels, angle, home);
+                        string template = Properties.Resources.sb2ProjectJson;
+                        string[] s2b = template.Split(new string[] { "          // separate\n" }, StringSplitOptions.None);
+                        string insert = "";
+                        for (int i = 0; i < ME_Motionlist.Count; i++)
+                        {
+                            ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                            insert += ",\n          [\"w\", \"Do " + m.name + " %n times\", \"perform_" + m.name + "\", \"1\"]";
+                        }
+                        s2b[4] = s2b[4].Replace("// insert blocks", insert);
+                        insert = "";
+                        bool first = true;
+                        for (int i = 0; i < 45; i++)
+                        {
+                            if (!channels.Contains(i))
+                            {
+                                if (first)
+                                {
+                                    insert += "            \"" + i + "\"";
+                                    first = false;
+                                }
+                                else
+                                {
+                                    insert += ",\n            \"" + i + "\"";
+                                }
+                            }
+                        }
+                        s2b[4] = s2b[4].Replace("            // insert digital pins", insert);
+                        if (channels.Count == 45)
+                        {
+                            writer.Write(s2b[0]);
+                            writer.Write(s2b[2]);
+                            writer.Write(s2b[4]);
+                        }
+                        else
+                        {
+                            writer.Write(s2b[0]);
+                            writer.Write(s2b[1]);
+                            writer.Write(s2b[2]);
+                            writer.Write(s2b[3]);
+                            writer.Write(s2b[4]);
+                        }
+                    }
+                }
+            }
+        }
+
         public void generate_ScratchProject()
         {
             FolderBrowserDialog path = new FolderBrowserDialog();
@@ -2275,10 +2376,9 @@ namespace _86ME_ver2
                     return;
                 }
                 Directory.CreateDirectory(path.SelectedPath + "\\ScratchProject");
-                generate_LibrarayWithPath(path.SelectedPath + "\\ScratchProject");
-                generate_blocks(path.SelectedPath + "\\ScratchProject");
                 generate_FirmataPlus(path.SelectedPath + "\\ScratchProject");
                 generate_handler(path.SelectedPath + "\\ScratchProject");
+                generate_sb2(path.SelectedPath + "\\ScratchProject");
                 MessageBox.Show("The project is generated in " + path.SelectedPath + "\\ScratchProject\\");
             }
         }

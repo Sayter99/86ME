@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>_86ME_ver2</RootNamespace>
     <AssemblyName>86ME</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationIcon>icons\86Duino.ico</ApplicationIcon>
@@ -61,12 +61,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=10.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.10.0.2\lib\net40\Newtonsoft.Json.dll</HintPath>
+      <HintPath>..\packages\Newtonsoft.Json.10.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.IO.Compression" />
     <Reference Include="System.Management" />
     <Reference Include="System.Messaging" />
     <Reference Include="System.Windows.Forms" />
@@ -213,6 +214,9 @@
   <ItemGroup>
     <Content Include="icons\86Duino.ico" />
     <Content Include="icons\add.png" />
+    <None Include="Resources\project.json" />
+    <None Include="Resources\s2r_fm.s2e" />
+    <None Include="Resources\sb2.sb2" />
     <None Include="Resources\scratch_command_handlers.py" />
     <None Include="icons\add2.png" />
     <Content Include="icons\gear.png" />

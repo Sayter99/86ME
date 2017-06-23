@@ -1,4 +1,3 @@
-
 /*
  * Firmata is a generic protocol for communicating with microcontrollers
  * from software on a host computer. It is intended to work with
@@ -40,51 +39,22 @@
  * TODO: use Program Control to load stored profiles from EEPROM
  */
 
-#include <Servo86.h>
-#include <Wire.h>
-#include <FirmataPlus.h>
-#include <NewPing.h>
-#include <Stepper.h>
 #include <ooPinChangeInt.h>
-#include <AdaEncoder.h> //https://code.google.com/p/adaencoder/downloads/detail?name=adaencoder-v0.7beta.zip
+#include <AdaEncoder.h>
+#include <FirmataPlus.h>
 #include <avr/wdt.h>
-#include <Robot86ME.h>
-
-#define I2C_WRITE                   B00000000
-#define I2C_READ                    B00001000
-#define I2C_READ_CONTINUOUSLY       B00010000
-#define I2C_STOP_READING            B00011000
-#define I2C_READ_WRITE_MODE_MASK    B00011000
-#define I2C_10BIT_ADDRESS_MODE_MASK B00100000
-#define I2C_END_TX_MASK             B01000000
-#define I2C_STOP_TX                 1
-#define I2C_RESTART_TX              0
-#define I2C_MAX_QUERIES             8
-#define I2C_REGISTER_NOT_SPECIFIED  -1
+// 86ME include lib
 
 // the minimum interval for sampling analog input
 #define MINIMUM_SAMPLING_INTERVAL 1
 
 #define REGISTER_NOT_SPECIFIED -1
 
-#define ENCODER_NOT_PRESENT 0
-#define ENCODER_IS_PRESENT  1
-
 #define INTER_PING_INTERVAL 40 // 40 ms.
-
-// SYSEX command sub specifiers
-#define TONE_TONE 0
-#define TONE_NO_TONE 1
-
-#define STEPPER_CONFIGURE 0
-#define STEPPER_STEP 1
-#define STEPPER_LIBRARY_VERSION 2
-
 
 /*==============================================================================
  * GLOBAL VARIABLES
  *============================================================================*/
-Robot86ME robot;
 bool test_data_start = false;
  
 /* analog inputs */
@@ -106,67 +76,13 @@ unsigned int samplingInterval = 19; // how often to run the main loop (in ms)
 unsigned long previousKeepAliveMillis = 0;
 unsigned int keepAliveInterval = 0;
 
-/* i2c data */
-struct i2c_device_info {
-  byte addr;
-  int reg;
-  byte bytes;
-  byte stopTX;
-};
-
-/* for i2c read continuous more */
-i2c_device_info query[I2C_MAX_QUERIES];
-
-byte i2cRxData[64];
-boolean isI2CEnabled = false;
-signed char queryIndex = -1;
-// default delay time between i2c read request and Wire.requestFrom()
-unsigned int i2cReadDelayTime = 0;
-
 boolean isResetting = false;
 
 // test for "w" command to waiting
 boolean test_waiting_start = false;
 int waiting_id;
 int waiting_time;
-int busy_id;
-int motion_id;
-int motion_times;
 unsigned long start_waiting_time;
-  
-/* utility functions */
-void wireWrite(byte data)
-{
-#if ARDUINO >= 100
-  Wire.write((byte)data);
-#else
-  Wire.send(data);
-#endif
-}
-
-byte wireRead(void)
-{
-#if ARDUINO >= 100
-  return Wire.read();
-#else
-  return Wire.receive();
-#endif
-}
-
-
-// Servos
-Servo servos[MAX_SERVOS];
-byte servoPinMap[TOTAL_PINS];
-byte detachedServos[MAX_SERVOS];
-byte detachedServoCount = 0;
-byte servoCount = 0;
-
-/* Rotary Encoder Support */
-byte  encoderMSB, encoderLSB ;     // sysex data registers
-uint8_t encoderPin1, encoderPin2 ; // user specified encoder pins
-int encoderPostion = 0;            // current position of encoder
-int8_t clicks = 0 ;                // encoder click counter
-boolean encoderPresent = false ;   // encoder installed flag
 
 // Ping variables
 
@@ -177,9 +93,6 @@ int numActiveSonars = 0 ; // number of sonars attached
 uint8_t sonarPinNumbers[MAX_SONARS] ;
 int nextSonar = 0 ; // index into sonars[] for next device
 
-// array to hold up to 6 instances of sonar devices
-NewPing *sonars[MAX_SONARS] ;
-
 uint8_t sonarTriggerPin;
 uint8_t sonarEchoPin ;
 uint8_t currentSonar = 0;            // Keeps track of which sensor is active.
@@ -188,93 +101,34 @@ uint8_t pingInterval = 33 ;  // Milliseconds between sensor pings (29ms is about
 // cross- sensor echo).
 byte sonarMSB, sonarLSB ;
 
-
-// Stepper Motor
-
-Stepper *stepper = NULL;
-
 #ifdef FIRMATA_SERIAL_FEATURE
 SerialFirmata serialFeature;
 #endif
+
+// 86ME global variable
+int busy_id;
+int motion_id;
+int motion_times;
+
+/*==============================================================================
+ * CLASSES
+ *============================================================================*/
+
+// 86ME class
+
+/*==============================================================================
+ * NAMESPACES
+ *============================================================================*/
+
+// 86ME namespace
 
 /*==============================================================================
  * FUNCTIONS
  *============================================================================*/
 
-void attachServo(byte pin, int minPulse, int maxPulse)
-{
-  if (servoCount < MAX_SERVOS) {
-    // reuse indexes of detached servos until all have been reallocated
-    if (detachedServoCount > 0) {
-      servoPinMap[pin] = detachedServos[detachedServoCount - 1];
-      if (detachedServoCount > 0) detachedServoCount--;
-    } else {
-      servoPinMap[pin] = servoCount;
-      servoCount++;
-    }
-    if (minPulse > 0 && maxPulse > 0) {
-      servos[servoPinMap[pin]].attach(PIN_TO_DIGITAL(pin), minPulse, maxPulse);
-    } else {
-      servos[servoPinMap[pin]].attach(PIN_TO_DIGITAL(pin));
-    }
-  } else {
-    Firmata.sendString("Max servos attached");
-  }
-}
+// 86ME functions
 
-void detachServo(byte pin)
-{
-  servos[servoPinMap[pin]].detach();
-  // if we're detaching the last servo, decrement the count
-  // otherwise store the index of the detached servo
-  if (servoPinMap[pin] == servoCount && servoCount > 0) {
-    servoCount--;
-  } else if (servoCount > 0) {
-    // keep track of detached servos because we want to reuse their indexes
-    // before incrementing the count of attached servos
-    detachedServoCount++;
-    detachedServos[detachedServoCount - 1] = servoPinMap[pin];
-  }
-
-  servoPinMap[pin] = 255;
-}
-
-void readAndReportData(byte address, int theRegister, byte numBytes, byte stopTX) {
-  // allow I2C requests that don't require a register read
-  // for example, some devices using an interrupt pin to signify new data available
-  // do not always require the register read so upon interrupt you call Wire.requestFrom()
-  if (theRegister != I2C_REGISTER_NOT_SPECIFIED) {
-    Wire.beginTransmission(address);
-    wireWrite((byte)theRegister);
-    Wire.endTransmission(stopTX); // default = true
-    // do not set a value of 0
-    if (i2cReadDelayTime > 0) {
-      // delay is necessary for some devices such as WiiNunchuck
-      delayMicroseconds(i2cReadDelayTime);
-    }
-  } else {
-    theRegister = 0;  // fill the register with a dummy value
-  }
-
-  Wire.requestFrom(address, numBytes);  // all bytes are returned in requestFrom
-
-  // check to be sure correct number of bytes were returned by slave
-  if (numBytes < Wire.available()) {
-    Firmata.sendString("I2C: Too many bytes received");
-  } else if (numBytes > Wire.available()) {
-    Firmata.sendString("I2C: Too few bytes received");
-  }
-
-  i2cRxData[0] = address;
-  i2cRxData[1] = theRegister;
-
-  for (int i = 0; i < numBytes && Wire.available(); i++) {
-    i2cRxData[2 + i] = wireRead();
-  }
-
-  // send slave address, register and received bytes
-  Firmata.sendSysex(SYSEX_I2C_REPLY, numBytes + 2, i2cRxData);
-}
+Robot86ME robot;
 
 void outputPort(byte portNumber, byte portValue, byte forceSend)
 {
@@ -322,16 +176,6 @@ void setPinModeCallback(byte pin, int mode)
   if (Firmata.getPinMode(pin) == PIN_MODE_IGNORE)
     return;
 
-  if (Firmata.getPinMode(pin) == PIN_MODE_I2C && isI2CEnabled && mode != PIN_MODE_I2C) {
-    // disable i2c so pins can be used for other functions
-    // the following if statements should reconfigure the pins properly
-    disableI2CPins();
-  }
-  if (IS_PIN_DIGITAL(pin) && mode != PIN_MODE_SERVO) {
-    if (servoPinMap[pin] < MAX_SERVOS && servos[servoPinMap[pin]].attached()) {
-      detachServo(pin);
-    }
-  }
   if (IS_PIN_ANALOG(pin)) {
     reportAnalogCallback(PIN_TO_ANALOG(pin), mode == PIN_MODE_ANALOG ? 1 : 0); // turn on/off reporting
   }
@@ -380,47 +224,11 @@ void setPinModeCallback(byte pin, int mode)
         Firmata.setPinMode(pin, OUTPUT);
       }
       break;
-    case PIN_MODE_PWM:
-      if (IS_PIN_PWM(pin)) {
-        pinMode(PIN_TO_PWM(pin), OUTPUT);
-        analogWrite(PIN_TO_PWM(pin), 0);
-        Firmata.setPinMode(pin, PIN_MODE_PWM);
-      }
-      break;
-    case PIN_MODE_SERVO:
-      if (IS_PIN_DIGITAL(pin)) {
-        Firmata.setPinMode(pin, PIN_MODE_SERVO);
-        if (servoPinMap[pin] == 255 || !servos[servoPinMap[pin]].attached()) {
-          // pass -1 for min and max pulse values to use default values set
-          // by Servo library
-          attachServo(pin, -1, -1);
-        }
-      }
-      break;
-    case PIN_MODE_I2C:
-      if (IS_PIN_I2C(pin)) {
-        // mark the pin as i2c
-        // the user must call I2C_CONFIG to enable I2C for a device
-        Firmata.setPinMode(pin, PIN_MODE_I2C);
-      }
-      break;
     case PIN_MODE_SERIAL:
 #ifdef FIRMATA_SERIAL_FEATURE
       serialFeature.handlePinMode(pin, PIN_MODE_SERIAL);
 #endif
       break;
-    case PIN_MODE_TONE:
-      Firmata.setPinMode(pin, PIN_MODE_TONE);
-      //pinConfig[pin] = TONE ;
-      break ;
-    case PIN_MODE_SONAR:
-      Firmata.setPinMode(pin, PIN_MODE_SONAR);
-      //pinConfig[pin] = SONAR ;
-      break ;
-    case PIN_MODE_STEPPER:
-      Firmata.setPinMode(pin, PIN_MODE_STEPPER);
-      //pinConfig[pin] = STEPPER ;
-      break ;
     default:
       Firmata.sendString("Unknown pin mode"); // TODO: put error msgs in EEPROM
       break ;
@@ -440,24 +248,6 @@ void setPinValueCallback(byte pin, int value)
     if (Firmata.getPinMode(pin) == OUTPUT) {
       Firmata.setPinState(pin, value);
       digitalWrite(PIN_TO_DIGITAL(pin), value);
-    }
-  }
-}
-
-void analogWriteCallback(byte pin, int value)
-{
-  if (pin < TOTAL_PINS) {
-    switch (Firmata.getPinMode(pin)) {
-      case PIN_MODE_SERVO:
-        if (IS_PIN_DIGITAL(pin))
-          servos[servoPinMap[pin]].write(value);
-        Firmata.setPinState(pin, value);
-        break;
-      case PIN_MODE_PWM:
-        if (IS_PIN_PWM(pin))
-          analogWrite(PIN_TO_PWM(pin), value);
-        Firmata.setPinState(pin, value);
-        break;
     }
   }
 }
@@ -553,7 +343,6 @@ void sysexCallback(byte command, byte argc, byte *argv)
   byte data;
   int slaveRegister;
   unsigned int delayTime;
-  byte pin ;// used for tone
   int frequency ;
   int duration ;
   
@@ -561,134 +350,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
   long msec;
 
   switch (command) {
-    case I2C_REQUEST:
-      mode = argv[1] & I2C_READ_WRITE_MODE_MASK;
-      if (argv[1] & I2C_10BIT_ADDRESS_MODE_MASK) {
-        Firmata.sendString("10-bit addressing not supported");
-        return;
-      }
-      else {
-        slaveAddress = argv[0];
-      }
-
-
-      // need to invert the logic here since 0 will be default for client
-      // libraries that have not updated to add support for restart tx
-      if (argv[1] & I2C_END_TX_MASK) {
-        stopTX = I2C_RESTART_TX;
-      }
-      else {
-        stopTX = I2C_STOP_TX; // default
-      }
-
-      switch (mode) {
-        case I2C_WRITE:
-          Wire.beginTransmission(slaveAddress);
-          for (byte i = 2; i < argc; i += 2) {
-            data = argv[i] + (argv[i + 1] << 7);
-            wireWrite(data);
-          }
-          Wire.endTransmission();
-          delayMicroseconds(70);
-          break;
-        case I2C_READ:
-          if (argc == 6) {
-            // a slave register is specified
-            slaveRegister = argv[2] + (argv[3] << 7);
-            data = argv[4] + (argv[5] << 7);  // bytes to read
-            //readAndReportData(slaveAddress, (int)slaveRegister, data);
-          }
-          else {
-            // a slave register is NOT specified
-            slaveRegister = I2C_REGISTER_NOT_SPECIFIED;
-            data = argv[2] + (argv[3] << 7);  // bytes to read
-            //readAndReportData(slaveAddress, (int)REGISTER_NOT_SPECIFIED, data);
-          }
-          readAndReportData(slaveAddress, (int)slaveRegister, data, stopTX);
-          break;
-        case I2C_READ_CONTINUOUSLY:
-          if ((queryIndex + 1) >= I2C_MAX_QUERIES) {
-            // too many queries, just ignore
-            Firmata.sendString("too many queries");
-            break;
-          }
-          if (argc == 6) {
-            // a slave register is specified
-            slaveRegister = argv[2] + (argv[3] << 7);
-            data = argv[4] + (argv[5] << 7);  // bytes to read
-          }
-          else {
-            // a slave register is NOT specified
-            slaveRegister = (int)I2C_REGISTER_NOT_SPECIFIED;
-            data = argv[2] + (argv[3] << 7);  // bytes to read
-          }
-          queryIndex++;
-          query[queryIndex].addr = slaveAddress;
-          query[queryIndex].reg = slaveRegister;
-          query[queryIndex].bytes = data;
-          query[queryIndex].stopTX = stopTX;
-          break;
-        case I2C_STOP_READING:
-          byte queryIndexToSkip;
-          // if read continuous mode is enabled for only 1 i2c device, disable
-          // read continuous reporting for that device
-          if (queryIndex <= 0) {
-            queryIndex = -1;
-          } else {
-            queryIndexToSkip = 0;
-            // if read continuous mode is enabled for multiple devices,
-            // determine which device to stop reading and remove it's data from
-            // the array, shifiting other array data to fill the space
-            for (byte i = 0; i < queryIndex + 1; i++) {
-              if (query[i].addr == slaveAddress) {
-                queryIndexToSkip = i;
-                break;
-              }
-            }
-
-            for (byte i = queryIndexToSkip; i < queryIndex + 1; i++) {
-              if (i < I2C_MAX_QUERIES) {
-                query[i].addr = query[i + 1].addr;
-                query[i].reg = query[i + 1].reg;
-                query[i].bytes = query[i + 1].bytes;
-                query[i].stopTX = query[i + 1].stopTX;
-              }
-            }
-            queryIndex--;
-          }
-          break;
-        default:
-          break;
-      }
-      break;
-    case I2C_CONFIG:
-      delayTime = (argv[0] + (argv[1] << 7));
-
-      if (delayTime > 0) {
-        i2cReadDelayTime = delayTime;
-      }
-
-      if (!isI2CEnabled) {
-        enableI2CPins();
-      }
-
-      break;
-    case SERVO_CONFIG:
-      if (argc > 4) {
-        // these vars are here for clarity, they'll optimized away by the compiler
-        byte pin = argv[0];
-        int minPulse = argv[1] + (argv[2] << 7);
-        int maxPulse = argv[3] + (argv[4] << 7);
-
-        if (IS_PIN_DIGITAL(pin)) {
-          if (servoPinMap[pin] < MAX_SERVOS && servos[servoPinMap[pin]].attached()) {
-            detachServo(pin);
-          }
-          attachServo(pin, minPulse, maxPulse);
-          setPinModeCallback(pin, PIN_MODE_SERVO);
-        }
-      }
-      break;
+    
     case KEEP_ALIVE:
       keepAliveInterval = argv[0] + (argv[1] << 7);
       previousKeepAliveMillis = millis();
@@ -705,14 +367,6 @@ void sysexCallback(byte command, byte argc, byte *argv)
       }
       else {
         //Firmata.sendString("Not enough data");
-      }
-      break;
-    case EXTENDED_ANALOG:
-      if (argc > 1) {
-        int val = argv[1];
-        if (argc > 2) val |= (argv[2] << 7);
-        if (argc > 3) val |= (argv[3] << 14);
-        analogWriteCallback(argv[0], val);
       }
       break;
     case CAPABILITY_QUERY:
@@ -738,10 +392,6 @@ void sysexCallback(byte command, byte argc, byte *argv)
         if (IS_PIN_DIGITAL(pin)) {
           Firmata.write(PIN_MODE_SERVO);
           Firmata.write(14);
-        }
-        if (IS_PIN_I2C(pin)) {
-          Firmata.write(PIN_MODE_I2C);
-          Firmata.write(1);  // TODO: could assign a number to map to SCL or SDA
         }
 #ifdef FIRMATA_SERIAL_FEATURE
         serialFeature.handleCapability(pin);
@@ -773,16 +423,6 @@ void sysexCallback(byte command, byte argc, byte *argv)
       }
       Firmata.write(END_SYSEX);
       break;
-  case ENCODER_CONFIG:
-    // instantiate an encoder object with user's
-    // requested pin designators
-    encoderPin1 = argv[0] ;
-    encoderPin2 = argv[1] ;
-    static AdaEncoder encoder = 
-      AdaEncoder('a', encoderPin1, encoderPin2) ;
-    //thisEncoder = &encoder ;
-    encoderPresent = true ;
-    break ; 
 
   case SERIAL_MESSAGE:
 #ifdef FIRMATA_SERIAL_FEATURE
@@ -790,189 +430,20 @@ void sysexCallback(byte command, byte argc, byte *argv)
 #endif
       break;
 
-    case TONE_DATA:
-      byte toneCommand, pin;
-      int frequency, duration;
-
-      toneCommand = argv[0];
-      pin = argv[1];
-
-      if (toneCommand == TONE_TONE) {
-        frequency = argv[2] + (argv[3] << 7);
-        // duration is currently limited to 16,383 ms
-        duration = argv[4] + (argv[5] << 7);
-        tone(pin, frequency, duration);
-      }
-      else if (toneCommand == TONE_NO_TONE) {
-        noTone(pin);
-      }
-      break ;
-
-      // arg0 = trigger pin
-      // arg1 = echo pin
-      // arg2 = ping interval in milliseconds if 0, then set to 33
-      // arg3 = maxdistance lsb
-      // arg4 = maxdistance msb
-    case SONAR_CONFIG :
-      int max_distance ;
-      if ( numActiveSonars < MAX_SONARS)
-      {
-        sonarTriggerPin = argv[0] ;
-        sonarEchoPin = argv[1] ;
-        // set interval to a minium of 33 ms.
-        if ( argv[2] >= 33 ) {
-          pingInterval = argv[2] ;
-        }
-        else {
-          pingInterval = 33 ;
-        }
-        max_distance = argv[3] + (argv[4] << 7 ) ;
-        sonarPinNumbers[numActiveSonars] = sonarTriggerPin ;
-
-        setPinModeCallback(sonarTriggerPin, PIN_MODE_SONAR);
-        setPinModeCallback(sonarEchoPin, PIN_MODE_SONAR);
-        sonars[numActiveSonars] = new NewPing(sonarTriggerPin, sonarEchoPin, max_distance) ;
-        numActiveSonars++ ;
-      }
-      else {
-        Firmata.sendString("PING_CONFIG Error: Exceeded number of supported ping devices");
-      }
-      break ;
-
-    case STEPPER_DATA:
-      // determine if this a STEPPER_CONFIGURE command or STEPPER_OPERATE command
-      if (argv[0] == STEPPER_CONFIGURE)
-      {
-        int numSteps = argv[1] + (argv[2] << 7);
-        int pin1 = argv[3] ;
-        int pin2 = argv[4] ;
-        if ( argc == 5 )
-        {
-          // two pin motor
-          stepper = new Stepper(numSteps, pin1, pin2) ;
-        }
-        else if (argc == 7 ) // 4 wire motor
-        {
-          int pin3 = argv[5] ;
-          int pin4 = argv[6] ;
-          stepper =  new Stepper(numSteps, pin1, pin2, pin3, pin4) ;
-        }
-        else
-        {
-          Firmata.sendString("STEPPER CONFIG Error: Wrong Number of arguments");
-          printData("argc = ", argc) ;
-        }
-      }
-      else if ( argv[0] == STEPPER_STEP )
-      {
-        long speed = (long)argv[1] | ((long)argv[2] << 7) | ((long)argv[3] << 14);
-        int numSteps = argv[4] + (argv[5] << 7);
-        int direction = argv[6] ;
-        if (stepper != NULL )
-        {
-          stepper->setSpeed(speed) ;
-          if (direction == 0 )
-          {
-            numSteps *= -1 ;
-          }
-          stepper->step(numSteps) ;
-        }
-        else
-        {
-          Firmata.sendString("STEPPER OPERATE Error: MOTOR NOT CONFIGURED");
-        }
-      }
-      else if ( argv[0] == STEPPER_LIBRARY_VERSION )
-      {
-        if ( stepper != NULL )
-        {
-          int version = stepper->version() ;
-          Firmata.write(START_SYSEX);
-          Firmata.write(STEPPER_DATA);
-          Firmata.write(version & 0x7F);
-          Firmata.write(version >> 7);
-          Firmata.write(END_SYSEX);
-        }
-        else
-        {
-          // did not find a configured stepper
-          Firmata.sendString("STEPPER FIRMWARE VERSION Error: NO MOTORS CONFIGURED");
-        }
-        break ;
-      }
-      else
-      {
-        Firmata.sendString("STEPPER CONFIG Error: UNKNOWN STEPPER COMMAND");
-      }
-      break ;
-    case SERVO_MOVING_ALL:
-      servoMultiRun();
-      break ;
-      
-	case SERVO_CONFIG_EX:
-	  pin = (int)argv[0];
-	  angle = (long)argv[1] | ((long)argv[2] << 7);
-	  msec = (long)argv[3] | ((long)argv[4] << 7);
-      
-      servos[servoPinMap[pin]].setPosition(angle, msec);
-      
-	  break ;
-    case TEST_DATA_QUERY:
-      test_data_start = true;
-      break;
-      
-    case TEST_WAITING:
-      test_waiting_start = true;
-      waiting_id = (int)argv[0] | ((int)argv[1] << 7);
-      waiting_time = (int)argv[2] | ((int)argv[3] << 7);
-      start_waiting_time = millis();
-      break ;
-
     case PERFORM_MOTION:
       busy_id = (int)argv[0] | ((int)argv[1] << 7);
       motion_id = (int)argv[2] | ((int)argv[3] << 7);
       motion_times = (int)argv[4] | ((int)argv[5] << 7);
       // call motions here
       Firmata.write(START_SYSEX);
-      Firmata.write(PERFORM_MOTION_RESPONSE) ;
-      Firmata.write(busy_id & 0x7F) ;
-      Firmata.write((busy_id >> 7) & 0x7F) ;
-      Firmata.write(99) ;
+      Firmata.write(PERFORM_MOTION_RESPONSE);
+      Firmata.write(busy_id & 0x7F);
+      Firmata.write((busy_id >> 7) & 0x7F);
+      Firmata.write(99);
       Firmata.write(END_SYSEX);
-      break;
+    break;
   }
 }
-
-void enableI2CPins()
-{
-  byte i;
-  // is there a faster way to do this? would probaby require importing
-  // Arduino.h to get SCL and SDA pins
-  for (i = 0; i < TOTAL_PINS; i++) {
-    if (IS_PIN_I2C(i)) {
-      // mark pins as i2c so they are ignore in non i2c data requests
-      setPinModeCallback(i, PIN_MODE_I2C);
-    }
-  }
-
-  isI2CEnabled = true;
-
-  // is there enough time before the first I2C request to call this here?
-  Wire.begin();
-}
-
-/* disable the i2c pins so they can be used for other functions */
-void disableI2CPins() {
-  isI2CEnabled = false;
-  // disable read continuous mode for all devices
-  queryIndex = -1;
-  // uncomment the following if or when the end() method is added to Wire library
-  // Wire.end();
-}
-
-/*==============================================================================
- * SETUP()
- *============================================================================*/
 
 void systemResetCallback()
 {
@@ -984,9 +455,6 @@ void systemResetCallback()
   serialFeature.reset();
 #endif
 
-  if (isI2CEnabled) {
-    disableI2CPins();
-  }
   for (byte i = 0; i < TOTAL_PORTS; i++) {
     reportPINs[i] = false;    // by default, reporting off
     portConfigInputs[i] = 0;  // until activated
@@ -994,38 +462,17 @@ void systemResetCallback()
   }
   // pins with analog capability default to analog input
   // otherwise, pins default to digital output
+
+  // 86ME reset digital pins
   for (byte i = 0; i < TOTAL_PINS; i++) {
     if (IS_PIN_ANALOG(i)) {
       // turns off pullup, configures everything
       setPinModeCallback(i, PIN_MODE_ANALOG);
     }
-    else if ( IS_PIN_TONE(i)) {
-      noTone(i) ;
-    }
-    else {
-      // sets the output to 0, configures portConfigInputs
-      setPinModeCallback(i, OUTPUT);
-    }
-    servoPinMap[i] = 255;
   }
-  // stop pinging
-  numActiveSonars = 0 ;
-  for (int i = 0; i < MAX_SONARS; i++) {
-    sonarPinNumbers[i] = PIN_MODE_IGNORE ;
-    if ( sonars[i] ) {
-      sonars[i] = NULL ;
-    }
-  }
-  numActiveSonars = 0 ;
 
   // by default, do not report any analog inputs
   analogInputsToReport = 0;
-
-  detachedServoCount = 0;
-  servoCount = 0;
-
-  // clear stepper pointer
-  stepper = NULL ;
 
   /* send digital inputs to set the initial state on the host computer,
    * since once in the loop(), this firmware will only send on change */
@@ -1039,18 +486,16 @@ void systemResetCallback()
   isResetting = false;
   
   test_data_start = false;
-  robot.reset(false);
 }
 
-void servo86callback() {
-	
-}
+/*==============================================================================
+ * SETUP()
+ *============================================================================*/
 
 void setup()
 {
   Firmata.setFirmwareVersion(FIRMATA_FIRMWARE_MAJOR_VERSION, FIRMATA_FIRMWARE_MINOR_VERSION);
 
-  Firmata.attach(ANALOG_MESSAGE, analogWriteCallback);
   Firmata.attach(DIGITAL_MESSAGE, digitalWriteCallback);
   Firmata.attach(REPORT_ANALOG, reportAnalogCallback);
   Firmata.attach(REPORT_DIGITAL, reportDigitalCallback);
@@ -1066,6 +511,7 @@ void setup()
   // However do not do this if you are using SERIAL_MESSAGE
 
   Firmata.begin(57600);
+  robot.begin(false);
   while (!Serial) {
     ; // wait for serial port to connect. Needed for ATmega32u4-based boards and Arduino 101
   }
@@ -1096,33 +542,6 @@ void loop()
   if (currentMillis - previousMillis > samplingInterval) {
     previousMillis += samplingInterval;
 
-    if ( pingLoopCounter++ > numLoops)
-    {
-      pingLoopCounter = 0 ;
-      if (numActiveSonars)
-      {
-        unsigned int uS = sonars[nextSonar]->ping();
-        // Convert ping time to distance in cm and print
-        pingResult = uS / US_ROUNDTRIP_CM ;
-        currentSonar = nextSonar ;
-        if ( nextSonar++ >= numActiveSonars - 1)
-        {
-          nextSonar = 0 ;
-        }
-        sonarLSB = pingResult & 0x7f ;
-        sonarMSB = pingResult >> 7 & 0x7f ;
-
-        printf("sonarPinNumbers[currentSonar]=%d\n", sonarPinNumbers[currentSonar]);
-        Firmata.write(START_SYSEX);
-        Firmata.write(SONAR_DATA) ;
-        Firmata.write(sonarPinNumbers[currentSonar]) ;
-        Firmata.write(sonarLSB) ;
-        Firmata.write(sonarMSB) ;
-        Firmata.write(END_SYSEX);
-      }
-    }
-
-
     // ANALOGREAD - do all analogReads() at the configured sampling interval 
     for (pin = 0; pin < TOTAL_PINS; pin++) {
       if (IS_PIN_ANALOG(pin) && Firmata.getPinMode(pin) == PIN_MODE_ANALOG) {
@@ -1131,42 +550,6 @@ void loop()
           Firmata.sendAnalog(analogPin, analogRead(analogPin));
         }
       }
-    }
-    // report i2c data for all device with read continuous mode enabled
-    if (queryIndex > -1) {
-      for (byte i = 0; i < queryIndex + 1; i++) {
-        readAndReportData(query[i].addr, query[i].reg, query[i].bytes, query[i].stopTX);
-      }
-    }
-    // if encoder was installed, return its data
-    if ( encoderPresent == true)
-    {
-      // read encoder data and return it
-      encoderMSB = 0 ;
-      encoderLSB = 0 ;
-      clicks = 0 ;
-
-      AdaEncoder *encoder = NULL;
-      encoder = AdaEncoder::genie() ;
-      if ( encoder != NULL) {
-        clicks = encoder->query() ;
-        if (clicks > 0) {
-          encoderPostion += clicks ;
-        }
-        if (clicks < 0) {
-          encoderPostion += clicks ;
-        }
-      }
-
-      encoderLSB = encoderPostion & 0x7f ;
-      encoderMSB = (encoderPostion >> 7) & 0x7f ;
-
-      Firmata.write(START_SYSEX);
-      Firmata.write(ENCODER_DATA) ;
-      Firmata.write(encoderPin1) ;
-      Firmata.write(encoderLSB) ;
-      Firmata.write(encoderMSB) ;
-      Firmata.write(END_SYSEX);
     }
     if( keepAliveInterval ) {
        currentMillis = millis();
@@ -1179,39 +562,8 @@ void loop()
             ;
       }
     }
-    if(test_data_start) {
-      unsigned short data = 0x15AA;
-      Firmata.write(START_SYSEX);
-      Firmata.write(TEST_DATA_RESPONSE) ;
-      Firmata.write(data & 0x7F) ;
-      Firmata.write((data >> 7) & 0x7F) ;
-      Firmata.write(END_SYSEX);
-    }
-    if(test_waiting_start) {
-        if ( (millis() - start_waiting_time) < waiting_time)
-        {
-            Firmata.write(START_SYSEX);
-            Firmata.write(TEST_WAIITNG_RESPONSE) ;
-            Firmata.write(waiting_id & 0x7F) ;
-            Firmata.write((waiting_id >> 7) & 0x7F) ;
-            Firmata.write(1) ;
-            Firmata.write(END_SYSEX);
-        }
-        else
-        {
-            Firmata.write(START_SYSEX);
-            Firmata.write(TEST_WAIITNG_RESPONSE) ;
-            Firmata.write(waiting_id & 0x7F) ;
-            Firmata.write((waiting_id >> 7) & 0x7F) ;
-            Firmata.write(99) ;
-            Firmata.write(END_SYSEX);
-            test_waiting_start = false;
-        }
-    }
   }
 }
-
-
 
 void printData(char * id,  long data)
 {
@@ -1222,6 +574,3 @@ void printData(char * id,  long data)
   Firmata.sendString(id) ;
   Firmata.sendString(myArray);
 }
-
-
-
