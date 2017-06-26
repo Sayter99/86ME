@@ -234,33 +234,6 @@ namespace _86ME_ver2.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {
-        ///    &quot;extensionName&quot;: &quot;s2r_fm - Scratch to Robot&quot;,
-        ///    &quot;extensionPort&quot;: 50209,
-        ///    &quot;url&quot;: &quot;https://github.com/MrYsLab/PyMata&quot;,
-        ///    &quot;blockSpecs&quot;: [
-        ///        // separate
-        ///        [
-        ///            &quot; &quot;,
-        ///            &quot;%m.pin_state : Digital Pin %m.digital_pins for %m.digital_pin_mode&quot;,
-        ///            &quot;digital_pin_mode&quot;,
-        ///            &quot;Enable&quot;,
-        ///            &quot;PIN&quot;,
-        ///            &quot;INPUT&quot;
-        ///        ],
-        ///        // separate
-        ///        [
-        ///            &quot; &quot;,
-        ///            &quot;%m.pin_state : Analog Pin (A) %n for Input&quot;,
-        ///            &quot;analog_pin_mo [rest of string was truncated]&quot;;.
-        /// </summary>
-        internal static string s2r_fm {
-            get {
-                return ResourceManager.GetString("s2r_fm", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap save_frame {

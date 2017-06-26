@@ -87,6 +87,7 @@ namespace _86ME_ver2
             Hint_groupBox.Enabled = false;
             Motion_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
+            CodeGen_groupBox.Enabled = false;
             saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
@@ -111,6 +112,7 @@ namespace _86ME_ver2
             Hint_groupBox.Enabled = false;
             Motion_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
+            CodeGen_groupBox.Enabled = false;
             saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
@@ -734,6 +736,7 @@ namespace _86ME_ver2
                 this.MotionConfig.SelectedIndex = 0;
                 this.hint_richTextBox.Text = Main_lang_dic["hint1"];
                 this.MotionConfig.Enabled = false;
+                this.CodeGen_groupBox.Enabled = false;
             }
         }
 
@@ -1028,11 +1031,13 @@ namespace _86ME_ver2
             MotionConfig.SelectedIndex = 0;
             if (ME_Motionlist != null && ME_Motionlist.Count > 0)
             {
+                this.CodeGen_groupBox.Enabled = true;
                 if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
                     Motionlist.SelectedIndex = 0;
             }
             else
             {
+                this.CodeGen_groupBox.Enabled = false;
                 this.MotionConfig.Enabled = false;
             }
         }
@@ -1362,6 +1367,7 @@ namespace _86ME_ver2
 
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
+            CodeGen_groupBox.Enabled = true;
             MotionConfig.Enabled = true;
             update_motionlist();
             move_up.Enabled = false;
@@ -3030,6 +3036,7 @@ namespace _86ME_ver2
                 move_up.Enabled = false;
                 move_down.Enabled = false;
                 MotionConfig.Enabled = true;
+                CodeGen_groupBox.Enabled = true;
                 draw_background();
                 MotionConfig.SelectedIndex = 0;
                 Motionlist.Focus();
@@ -3320,6 +3327,7 @@ namespace _86ME_ver2
             move_down.Enabled = false;
             move_up.Enabled = false;
             MotionConfig.Enabled = false;
+            CodeGen_groupBox.Enabled = false;
             MotionCombo.Enabled = false;
             MotionTest.Enabled = false;
             motion_pause.Enabled = true;
@@ -3513,6 +3521,7 @@ namespace _86ME_ver2
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
             MotionConfig.Enabled = true;
+            CodeGen_groupBox.Enabled = true;
             MotionTest.Enabled = true;
             MotionCombo.Enabled = true;
             NewMotion.Enabled = true;
@@ -3579,6 +3588,7 @@ namespace _86ME_ver2
                 Framelist.Enabled = false;
                 MotionCombo.Enabled = true;
                 MotionConfig.Enabled = true;
+                CodeGen_groupBox.Enabled = true;
                 NewMotion.Enabled = true;
                 EditMotion.Enabled = true;
                 this.hint_richTextBox.Text =

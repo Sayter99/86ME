@@ -215,7 +215,6 @@
     <Content Include="icons\86Duino.ico" />
     <Content Include="icons\add.png" />
     <None Include="Resources\project.json" />
-    <None Include="Resources\s2r_fm.s2e" />
     <None Include="Resources\sb2.sb2" />
     <None Include="Resources\scratch_command_handlers.py" />
     <None Include="icons\add2.png" />

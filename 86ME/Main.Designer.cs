@@ -131,6 +131,7 @@
             this.ttp = new System.Windows.Forms.ToolTip(this.components);
             this.Setting_groupBox = new System.Windows.Forms.GroupBox();
             this.GenerateScratch = new System.Windows.Forms.Button();
+            this.CodeGen_groupBox = new System.Windows.Forms.GroupBox();
             this.Main_menuStrip.SuspendLayout();
             this.Action_groupBox.SuspendLayout();
             this.Hint_groupBox.SuspendLayout();
@@ -145,6 +146,7 @@
             this.MotionProperty.SuspendLayout();
             this.EditMotion_contextMenuStrip.SuspendLayout();
             this.Setting_groupBox.SuspendLayout();
+            this.CodeGen_groupBox.SuspendLayout();
             this.SuspendLayout();
             // 
             // Main_menuStrip
@@ -775,7 +777,7 @@
             this.MotionProperty.Location = new System.Drawing.Point(4, 22);
             this.MotionProperty.Name = "MotionProperty";
             this.MotionProperty.Padding = new System.Windows.Forms.Padding(3);
-            this.MotionProperty.Size = new System.Drawing.Size(239, 503);
+            this.MotionProperty.Size = new System.Drawing.Size(239, 482);
             this.MotionProperty.TabIndex = 2;
             this.MotionProperty.Text = "Property";
             this.MotionProperty.UseVisualStyleBackColor = true;
@@ -1095,11 +1097,11 @@
             // Generate
             // 
             this.Generate.Cursor = System.Windows.Forms.Cursors.Default;
-            this.Generate.Location = new System.Drawing.Point(746, 693);
+            this.Generate.Location = new System.Drawing.Point(104, 20);
             this.Generate.Name = "Generate";
-            this.Generate.Size = new System.Drawing.Size(267, 25);
+            this.Generate.Size = new System.Drawing.Size(80, 53);
             this.Generate.TabIndex = 4;
-            this.Generate.Text = "Generate Robot Library";
+            this.Generate.Text = "Robot Motion Library";
             this.Generate.UseVisualStyleBackColor = true;
             this.Generate.Click += new System.EventHandler(this.Generate_Click);
             // 
@@ -1122,11 +1124,11 @@
             // GenerateAllInOne
             // 
             this.GenerateAllInOne.Cursor = System.Windows.Forms.Cursors.Default;
-            this.GenerateAllInOne.Location = new System.Drawing.Point(746, 662);
+            this.GenerateAllInOne.Location = new System.Drawing.Point(9, 20);
             this.GenerateAllInOne.Name = "GenerateAllInOne";
-            this.GenerateAllInOne.Size = new System.Drawing.Size(267, 25);
+            this.GenerateAllInOne.Size = new System.Drawing.Size(80, 53);
             this.GenerateAllInOne.TabIndex = 5;
-            this.GenerateAllInOne.Text = "Generate 86Duino Sketch";
+            this.GenerateAllInOne.Text = "All-In-One Sketch";
             this.GenerateAllInOne.UseVisualStyleBackColor = true;
             this.GenerateAllInOne.Click += new System.EventHandler(this.GenerateAllInOne_Click);
             // 
@@ -1156,26 +1158,36 @@
             // GenerateScratch
             // 
             this.GenerateScratch.Cursor = System.Windows.Forms.Cursors.Default;
-            this.GenerateScratch.Location = new System.Drawing.Point(746, 724);
+            this.GenerateScratch.Location = new System.Drawing.Point(200, 20);
             this.GenerateScratch.Name = "GenerateScratch";
-            this.GenerateScratch.Size = new System.Drawing.Size(267, 25);
+            this.GenerateScratch.Size = new System.Drawing.Size(80, 53);
             this.GenerateScratch.TabIndex = 16;
-            this.GenerateScratch.Text = "Generate Scratch Project";
+            this.GenerateScratch.Text = "Scratch2.0 Project";
             this.GenerateScratch.UseVisualStyleBackColor = true;
             this.GenerateScratch.Click += new System.EventHandler(this.GenerateScratch_Click);
+            // 
+            // CodeGen_groupBox
+            // 
+            this.CodeGen_groupBox.Controls.Add(this.Generate);
+            this.CodeGen_groupBox.Controls.Add(this.GenerateAllInOne);
+            this.CodeGen_groupBox.Controls.Add(this.GenerateScratch);
+            this.CodeGen_groupBox.Location = new System.Drawing.Point(739, 663);
+            this.CodeGen_groupBox.Name = "CodeGen_groupBox";
+            this.CodeGen_groupBox.Size = new System.Drawing.Size(289, 83);
+            this.CodeGen_groupBox.TabIndex = 17;
+            this.CodeGen_groupBox.TabStop = false;
+            this.CodeGen_groupBox.Text = "Code Generation";
             // 
             // Main
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1040, 755);
-            this.Controls.Add(this.GenerateScratch);
-            this.Controls.Add(this.GenerateAllInOne);
-            this.Controls.Add(this.Generate);
             this.Controls.Add(this.Main_menuStrip);
             this.Controls.Add(this.Motion_groupBox);
             this.Controls.Add(this.Action_groupBox);
             this.Controls.Add(this.Setting_groupBox);
+            this.Controls.Add(this.CodeGen_groupBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.MainMenuStrip = this.Main_menuStrip;
@@ -1207,6 +1219,7 @@
             this.EditMotion_contextMenuStrip.ResumeLayout(false);
             this.Setting_groupBox.ResumeLayout(false);
             this.Setting_groupBox.PerformLayout();
+            this.CodeGen_groupBox.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1315,6 +1328,7 @@
         private System.Windows.Forms.RadioButton Blocking;
         private System.Windows.Forms.Label MotionPropertyLabel;
         private System.Windows.Forms.Button GenerateScratch;
+        private System.Windows.Forms.GroupBox CodeGen_groupBox;
     }
 }
 
