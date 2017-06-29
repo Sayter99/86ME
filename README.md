@@ -2,6 +2,17 @@
 ---------
 #### CHANGELOG ####
 
+_VERSION_: v2.0
+
+* Add a new form for editing variables in "Option->Edit Variables"
+* Change the project format to JSON.
+* Code Generation
+    * add a new button for generating robot motion library.
+    * add a new button for generating Scratch 2.0 project.
+    * remove the button "Generate 86Duino Sketch (with Frame Files)".
+* Move "Trigger" to "Options->Edit Trigger Commands".
+* Upgrade .NET Framework from 4.0 to 4.5.
+
 _VERSION_: v1.95
 
 * Add a new trigger for ESP8266.
@@ -95,15 +106,16 @@ _VERSION_: v1.0
 
 #### INSTALLATION ####
 
-1. System reqirement: Windows XP/Vista/7/8/8.1/10 with .NET framework 4.
-2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v1.95.zip).
+1. System reqirement: Windows XP/Vista/7/8/8.1/10 with .NET framework 4.5.
+2. Download [86ME](https://github.com/Sayter99/86ME/releases/download/86ME/86ME_v2.0.zip).
 3. Unzip 86ME and execute 86ME.exe to start.
 
 #### DOCUMENTS ####
 
 The 86ME tutorial pages for installation instructions and usage.
 
-* [Current Ver](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Current Version (2.0)](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Version 1.95](http://www.86duino.com/index.php?p=17740&lang=TW)
 * [Version 1.9](http://www.86duino.com/index.php?p=17180&lang=TW)
 * [Version 1.7](http://www.86duino.com/index.php?p=15750&lang=TW)
 * [Version 1.6](http://www.86duino.com/index.php?p=14738&lang=TW)

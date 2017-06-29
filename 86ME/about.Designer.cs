@@ -112,7 +112,7 @@
             this.version_label.Name = "version_label";
             this.version_label.Size = new System.Drawing.Size(216, 17);
             this.version_label.TabIndex = 7;
-            this.version_label.Text = "Version: 2.0.0, 2017/03/06";
+            this.version_label.Text = "Version: 2.0.0, 2017/06/29";
             // 
             // about
             // 
