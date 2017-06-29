@@ -114,7 +114,7 @@ _VERSION_: v1.0
 
 The 86ME tutorial pages for installation instructions and usage.
 
-* [Current Version (2.0)](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Version 2.0 (Current)](http://www.86duino.com/index.php?p=11544&lang=TW)
 * [Version 1.95](http://www.86duino.com/index.php?p=17740&lang=TW)
 * [Version 1.9](http://www.86duino.com/index.php?p=17180&lang=TW)
 * [Version 1.7](http://www.86duino.com/index.php?p=15750&lang=TW)
