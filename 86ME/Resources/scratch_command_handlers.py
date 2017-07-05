@@ -71,14 +71,12 @@ class ScratchCommandHandlers:
     # debug state - 0 == off and 1 == on
     debug = 0
 
-    busy_ID = []
+    motion_busy_ID = []
 
     # base report string to be modified in response to a poll command
     # PIN and VALUE will be replaced with pin number and the current value for the pin
     digital_reporter_base = 'digital_read/PIN VALUE'
     analog_reporter_base = 'analog_read/PIN VALUE'
-    test_data_reporter_base = 'test_data_response VALUE'
-    test_waiting_reporter_base = '_busy ID'
     perform_motion_reporter_base = '_busy ID'
 
     # convenience definition for cr + lf
@@ -190,8 +188,6 @@ class ScratchCommandHandlers:
         # first get the current digital and analog pin values from firmata
         digital_response_table = self.firmata.get_digital_response_table()
         analog_response_table = self.firmata.get_analog_response_table()
-        test_data_response_value = self.firmata.get_test_data_response_value()
-        test_waiting_response_table = self.firmata.get_test_waiting_response_table()
         perform_motion_response_table = self.firmata.get_perform_motion_response_table()
         
         # for each pin in the poll list that is set as an INPUT,
@@ -222,23 +218,15 @@ class ScratchCommandHandlers:
                 report_entry = report_entry.replace("VALUE", value)
                 responses += report_entry
                 responses += self.end_of_line
-                
-        # for Acen test
-        # value = str(test_data_response_value)
-        # report_entry = self.test_data_reporter_base
-        # report_entry = report_entry.replace("VALUE", value)
-        # responses += report_entry
-        # responses += self.end_of_line
-        
-        # for Acen test
-        if self.busy_ID:
+
+        if self.motion_busy_ID:
             ids = ''
-            for i, id in enumerate(self.busy_ID):
+            for i, id in enumerate(self.motion_busy_ID):
                 if id in perform_motion_response_table:
                     if perform_motion_response_table[id] != 99:
                         ids += str(id) + ' '
                     else:
-                        self.busy_ID.remove(id)
+                        self.motion_busy_ID.remove(id)
                         perform_motion_response_table[id] = 0
                 else:
                     ids += str(id) + ' '
@@ -518,57 +506,6 @@ class ScratchCommandHandlers:
             logging.debug('analog_write: Pin %d must be enabled before writing to it.' % pin)
             return '_problem Pin must be enabled before writing to it.'
 
-    def play_tone(self, command):
-        # check to make sure pin was configured for tone
-        """
-        This method will play a tone for the specified pin in command
-        @param command: Command and all possible parameters in list form
-        @return: okay or _problem
-        """
-
-        if not command[self.CMD_PIN].isdigit():
-            logging.debug('play_tome: The pin number must be set to a numerical value')
-            print 'play_tone: The pin number must be set to a numerical value'
-            return 'okay'
-
-        pin = int(command[self.CMD_PIN])
-
-        if self.digital_poll_list[pin] == self.firmata.TONE_TONE:
-            #noinspection PyUnusedLocal
-            value = command[1]
-            self.firmata.play_tone(pin, self.firmata.TONE_TONE, int(command[self.CMD_TONE_FREQ]),
-                                   int(command[self.CMD_TONE_DURATION]))
-            return 'okay'
-        else:
-            print 'play_tone: Pin %d was not enabled as TONE.' % pin
-            logging.debug('play_tone: Pin %d was not enabled as TONE.' % pin)
-            return 'okay'
-
-    def tone_off(self, command):
-       # check to make sure pin was configured for tone
-        """
-        This method will force tone to be off.
-        @param command: Command and all possible parameters in list form
-        @return: okay
-        """
-
-        if not command[self.CMD_PIN].isdigit():
-            logging.debug('tone_off: The pin number must be set to a numerical value')
-            print 'tone_off: The pin number must be set to a numerical value'
-            return 'okay'
-
-        pin = int(command[self.CMD_PIN])
-
-        if self.digital_poll_list[pin] == self.firmata.TONE_TONE:
-            #noinspection PyUnusedLocal
-            value = command[1]
-            self.firmata.play_tone(pin, self.firmata.TONE_NO_TONE, 0, 0)  
-            return 'okay'
-        else:
-            print 'tone_off: Pin %d was not enabled as TONE.' % pin
-            logging.debug('tone_off: Pin %d was not enabled as TONE.' % pin)
-            return 'okay'
-
     def debug_control(self, command):
         """
         This method controls command block debug logging
@@ -639,50 +576,7 @@ class ScratchCommandHandlers:
             report_entry = value
             report_entry += self.end_of_line
             return report_entry
-
-    def servo_config_ex(self, command):
-        """
-        This method is added for 86Duino Servo library by Acen.
-        """
         
-        pin = int(command[1])
-        angle = int(command[2])
-        msec = int(command[3])
-        
-        self.firmata.servo_config_ex(pin, angle, msec)
-        
-        return 'okay'
-        
-    def move_servo_all(self, command):
-        """
-        This method is added for 86Duino Servo library by Acen.
-        """
-        
-        self.firmata.move_servo_all()
-        
-        return 'okay'
-        
-    def test_data_query(self, command):
-        
-        self.firmata.test_data_query()
-        
-        return 'okay'
-        
-    def test_data_waiting(self, command):
-        """
-        This method is added for 86Duino Servo library by Acen.
-        """
-        
-        id = int(command[1])
-        sec = int(command[2])
-        
-        self.firmata.test_data_waiting(id, sec)
-        
-        if id not in self.busy_ID:
-            self.busy_ID.append(id)
-        
-        return 'okay'
-    
     # Define functions to perform motions here
     # This table must be at the bottom of the file because Python does not provide forward referencing for
     # the methods defined above.
@@ -691,9 +585,6 @@ class ScratchCommandHandlers:
                     'digital_pin_mode_ja': digital_pin_mode_ja,
                     'analog_pin_mode_ja': analog_pin_mode_ja,
                     'digital_write': digital_write, 'analog_write': analog_write,
-                    'play_tone': play_tone, 'tone_off': tone_off,
                     'set_servo_position': set_servo_position, 'poll': poll,
-                    'debugger': debug_control,  'digital_read': digital_read, 'analog_read': analog_read,
-                    'servo_config_ex': servo_config_ex, 'move_servo_all': move_servo_all,
-                    'test_data_query': test_data_query, 'test_data_waiting': test_data_waiting# insert motion commands here
+                    'debugger': debug_control,  'digital_read': digital_read, 'analog_read': analog_read# insert motion commands here
                     }

@@ -40,8 +40,7 @@
  */
 
 #include <ooPinChangeInt.h>
-#include <AdaEncoder.h>
-#include <FirmataPlus.h>
+#include <FirmataPlus86.h>
 #include <avr/wdt.h>
 // 86ME include lib
 

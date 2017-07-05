@@ -2280,8 +2280,8 @@ namespace _86ME_ver2
                                    "        motion = " + i + "\n" +
                                    "        times = int(command[2])\n" +
                                    "        self.firmata.perform_motion(id, motion, times)\n" +
-                                   "        if id not in self.busy_ID:\n" +
-                                   "            self.busy_ID.append(id)\n" +
+                                   "        if id not in self.motion_busy_ID:\n" +
+                                   "            self.motion_busy_ID.append(id)\n" +
                                    "        return \'okay\'\n\n";
                 insert_command += ",\n                    \'perform_" + m.name + "\': perform_" + m.name;
             }
