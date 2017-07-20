@@ -3559,9 +3559,12 @@ namespace _86ME_ver2
             freshflag[1] = false;
             last_motionlist_idx = -1;
             motiontest_state = (int)mtest_states.start;
-            Thread t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
-            t.IsBackground = true;
-            t.Start();
+            if (MotionCombo.SelectedItem != null)
+            {
+                Thread t = new Thread(() => MotionOnTest(((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex])));
+                t.IsBackground = true;
+                t.Start();
+            }
             draw_background();
         }
 
@@ -3758,6 +3761,8 @@ namespace _86ME_ver2
 
         private void update_motionlist()
         {
+            if (ME_Motionlist.Count == 0)
+                return;
             Action_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
             Motionlist.Items.Clear();
@@ -4246,7 +4251,8 @@ namespace _86ME_ver2
                 TriggerCommandCombo.Items.Clear();
                 for (int i = 0; i < trigger_cmd.Count; i++)
                     TriggerCommandCombo.Items.Add(trigger_cmd[i].name);
-                TriggerCommandCombo.SelectedIndex = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_index;
+                if (MotionCombo.SelectedItem != null)
+                    TriggerCommandCombo.SelectedIndex = ((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).trigger_index;
                 int ms = Motionlist.SelectedIndex;
                 update_motionlist();
                 Motionlist.SelectedIndex = ms;
@@ -4301,6 +4307,8 @@ namespace _86ME_ver2
 
         private void RenewIfCompute(Dictionary<string, double> prev, Dictionary<string, double> curr)
         {
+            if (ME_Motionlist.Count == 0)
+                return;
             for (int i = 0; i < ME_Motionlist.Count; i++)
             {
                 ME_Motion m = (ME_Motion)ME_Motionlist[i];
