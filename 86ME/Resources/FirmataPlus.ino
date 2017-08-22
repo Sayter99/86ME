@@ -446,6 +446,7 @@ void sysexCallback(byte command, byte argc, byte *argv)
 
 void systemResetCallback()
 {
+  if (isResetting) return;
   isResetting = true;
 
   // initialize a defalt state
