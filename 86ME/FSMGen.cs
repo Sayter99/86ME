@@ -82,10 +82,15 @@ namespace _86ME_ver2
                 {
                     ME_Trigger tr = commands[m.trigger_index];
                     int method = tr.trigger_method;
-                    method_flag[method] = true;
                     if (method == (int)mtest_method.keyboard && !keyboard_keys.Contains(tr.keyboard_key))
                         keyboard_keys.Add(tr.keyboard_key);
                 }
+            }
+            for (int i = 0; i < commands.Count; i++)
+            {
+                ME_Trigger tr = commands[i];
+                int method = tr.trigger_method;
+                method_flag[method] = true;
             }
             if (Motion.comboBox2.SelectedIndex != 0)
             {
@@ -695,7 +700,7 @@ namespace _86ME_ver2
             if (method_flag[7])
             {
                 writer.WriteLine(space + "  uint8_t robot_name[13] = \"86DuinoROBOT\";");
-                writer.WriteLine(space + "  wifi.send_nb(2, robot_name, 12);");
+                writer.WriteLine(space + "  wifi.send(2, robot_name, 12);");
                 writer.WriteLine(space + "  uint32_t wifi_recvlen = wifi.recv_nb(&wifi_mux_id, wifi_buffer, sizeof(wifi_buffer));");
                 writer.WriteLine(space + "  if (wifi_recvlen > 0){ strncpy(wifi_cmd, (char*)wifi_buffer, wifi_recvlen);" +
                                  " wifi_cmd[wifi_recvlen] = \'\\0\';}");
@@ -1531,6 +1536,7 @@ namespace _86ME_ver2
                 writer.WriteLine("  wifi.enableMUX();");
                 writer.WriteLine("  wifi.startTCPServer(23);");
                 writer.WriteLine("  wifi.registerUDP(2, \"255.255.255.255\", 6000);");
+                writer.WriteLine("  wifi.disableEcho();");
             }
 
             for (int i = 0; i < channels.Count; i++)
@@ -2063,6 +2069,7 @@ namespace _86ME_ver2
         public void generate_AllinOne()
         {
             FolderBrowserDialog path = new FolderBrowserDialog();
+            path.Description = Motion.NewMotion_lang_dic["GenerateAllInOne_Description"];
             var dialogResult = path.ShowDialog();
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
@@ -2113,6 +2120,7 @@ namespace _86ME_ver2
         public void generate_Library(string library_dir = "")
         {
             FolderBrowserDialog path = new FolderBrowserDialog();
+            path.Description = Motion.NewMotion_lang_dic["Generate_Description"];
             var dialogResult = path.ShowDialog();
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
@@ -2213,7 +2221,7 @@ namespace _86ME_ver2
             }
         }
 
-        private void generate_FirmataPlus(string path)
+        private void generate_FirmataPlus(string path, ScratchProperty properties)
         {
             List<int> channels = new List<int>();
             List<int> angle = new List<int>();
@@ -2221,7 +2229,19 @@ namespace _86ME_ver2
             get_positions(channels, angle, home);
             string class_name = "Robot86ME";
             TextWriter writer = new StreamWriter(path + "\\ScratchProject.ino");
-            string template = Properties.Resources.FirmataPlus;
+
+            string template = "";
+            if (properties.method == (int)firmata_method.serial)
+            {
+                template = Properties.Resources.FirmataPlus;
+            }
+            else if (properties.method == (int)firmata_method.bluetooth)
+            {
+                template = Properties.Resources.FirmataPlusBluetooth86;
+                template = template.Replace("Serial1", properties.bt_serial);
+                template = template.Replace("9600", properties.bt_baud);
+            }
+
             string[] FirmataPlus = template.Split(new string[] { "// 86ME include lib" }, StringSplitOptions.None);
             writer.WriteLine(FirmataPlus[0]);
             generate_include_headers(writer, false);
@@ -2266,8 +2286,9 @@ namespace _86ME_ver2
             writer.Close();
         }
 
-        private void generate_handler(string path)
+        private void generate_handler(string path, string port)
         {
+            // scratch_command_handlers.py
             TextWriter writer = new StreamWriter(path + "\\scratch_command_handlers.py");
             string template = Properties.Resources.scratch_command_handlers;
             string insert_function = "";
@@ -2289,9 +2310,15 @@ namespace _86ME_ver2
             writer.Write(template.Replace("# insert motion commands here", insert_command));
             writer.Dispose();
             writer.Close();
+            // scratch_http_server.py
+            writer = new StreamWriter(path + "\\scratch_http_server.py");
+            template = Properties.Resources.scratch_http_server;
+            writer.Write(template.Replace("50209", port));
+            writer.Dispose();
+            writer.Close();
         }
 
-        private void generate_sb2(string path)
+        private void generate_sb2(string path, string port)
         {
             // generate sb2 template first
             using (MemoryStream zipToOpen = new MemoryStream(Properties.Resources.sb2))
@@ -2318,6 +2345,7 @@ namespace _86ME_ver2
                         List<uint> home = new List<uint>();
                         get_positions(channels, angle, home);
                         string template = Properties.Resources.sb2ProjectJson;
+                        template = template.Replace("50209", port);
                         string[] s2b = template.Split(new string[] { "          // separate\n" }, StringSplitOptions.None);
                         string insert = "";
                         for (int i = 0; i < ME_Motionlist.Count; i++)
@@ -2363,23 +2391,49 @@ namespace _86ME_ver2
             }
         }
 
+        private void generate_s2e(string path, string port)
+        {
+            TextWriter writer = new StreamWriter(path + "\\s2r_fm.s2e");
+            string url = "\"https://github.com/MrYsLab/PyMata\"";
+            writer.WriteLine("{");
+            writer.WriteLine("\t\"extensionName\": \"s2r_fm - Scratch to Robot\",");
+            writer.WriteLine("\t\"extensionPort\": " + port + ",");
+            writer.WriteLine("\t\"url\": " + url + ",");
+            writer.WriteLine("\t\"blockSpecs\": [");
+            for (int i = 0; i < ME_Motionlist.Count; i++)
+            {
+                ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                writer.WriteLine("\t\t[\n");
+                writer.WriteLine("\t\t\t\"w\",");
+                writer.WriteLine("\t\t\t\"Perfrom " + m.name + " %n times\",");
+                writer.WriteLine("\t\t\t\"perform_" + m.name + "\",");
+                writer.WriteLine("\t\t\t\"1\"");
+                writer.Write("\t\t]");
+                if (i != ME_Motionlist.Count - 1)
+                    writer.WriteLine(",");
+                else
+                    writer.WriteLine();
+            }
+            writer.WriteLine("\t]");
+            writer.WriteLine("}");
+            writer.Dispose();
+            writer.Close();
+        }
+
         public void generate_ScratchProject()
         {
-            FolderBrowserDialog path = new FolderBrowserDialog();
-            var dialogResult = path.ShowDialog();
-
-            if (dialogResult == DialogResult.OK && path.SelectedPath != null)
+            ScratchProperty properties = new ScratchProperty(Motion.NewMotion_lang_dic);
+            var dialogResult = properties.ShowDialog();
+            string path = properties.path;
+            if (dialogResult == DialogResult.OK)
             {
-                if (!Directory.Exists(path.SelectedPath))
-                {
-                    MessageBox.Show("The selected directory does not exist, please try again.");
-                    return;
-                }
-                Directory.CreateDirectory(path.SelectedPath + "\\ScratchProject");
-                generate_FirmataPlus(path.SelectedPath + "\\ScratchProject");
-                generate_handler(path.SelectedPath + "\\ScratchProject");
-                generate_sb2(path.SelectedPath + "\\ScratchProject");
-                MessageBox.Show("The project is generated in " + path.SelectedPath + "\\ScratchProject\\");
+                string folderName = "86MEScratchProject";
+                Directory.CreateDirectory(path + "\\" + folderName);
+                generate_FirmataPlus(path + "\\" + folderName, properties);
+                generate_handler(path + "\\" + folderName, properties.port);
+                generate_sb2(path + "\\" + folderName, properties.port);
+                generate_s2e(path + "\\" + folderName, properties.port);
+                MessageBox.Show("The project is generated in " + path + "\\" + folderName + "\\");
             }
         }
     }

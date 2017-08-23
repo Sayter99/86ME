@@ -87,7 +87,7 @@ namespace _86ME_ver2
             Hint_groupBox.Enabled = false;
             Motion_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
-            CodeGen_groupBox.Enabled = false;
+            GenerationTab.Enabled = false;
             saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
@@ -112,7 +112,7 @@ namespace _86ME_ver2
             Hint_groupBox.Enabled = false;
             Motion_groupBox.Enabled = false;
             Setting_groupBox.Enabled = false;
-            CodeGen_groupBox.Enabled = false;
+            GenerationTab.Enabled = false;
             saveAsFileToolStripMenuItem.Enabled = false;
             saveFileToolStripMenuItem.Enabled = false;
             editToolStripMenuItem.Enabled = false;
@@ -736,7 +736,7 @@ namespace _86ME_ver2
                 this.MotionConfig.SelectedIndex = 0;
                 this.hint_richTextBox.Text = Main_lang_dic["hint1"];
                 this.MotionConfig.Enabled = false;
-                this.CodeGen_groupBox.Enabled = false;
+                this.GenerationTab.Enabled = false;
             }
         }
 
@@ -1031,13 +1031,13 @@ namespace _86ME_ver2
             MotionConfig.SelectedIndex = 0;
             if (ME_Motionlist != null && ME_Motionlist.Count > 0)
             {
-                this.CodeGen_groupBox.Enabled = true;
+                this.GenerationTab.Enabled = true;
                 if (((ME_Motion)ME_Motionlist[MotionCombo.SelectedIndex]).Events.Count > 0)
                     Motionlist.SelectedIndex = 0;
             }
             else
             {
-                this.CodeGen_groupBox.Enabled = false;
+                this.GenerationTab.Enabled = false;
                 this.MotionConfig.Enabled = false;
             }
         }
@@ -1367,7 +1367,7 @@ namespace _86ME_ver2
 
         private void MotionCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            CodeGen_groupBox.Enabled = true;
+            GenerationTab.Enabled = true;
             MotionConfig.Enabled = true;
             update_motionlist();
             move_up.Enabled = false;
@@ -3036,7 +3036,7 @@ namespace _86ME_ver2
                 move_up.Enabled = false;
                 move_down.Enabled = false;
                 MotionConfig.Enabled = true;
-                CodeGen_groupBox.Enabled = true;
+                GenerationTab.Enabled = true;
                 draw_background();
                 MotionConfig.SelectedIndex = 0;
                 Motionlist.Focus();
@@ -3327,7 +3327,7 @@ namespace _86ME_ver2
             move_down.Enabled = false;
             move_up.Enabled = false;
             MotionConfig.Enabled = false;
-            CodeGen_groupBox.Enabled = false;
+            GenerationTab.Enabled = false;
             MotionCombo.Enabled = false;
             MotionTest.Enabled = false;
             motion_pause.Enabled = true;
@@ -3521,7 +3521,7 @@ namespace _86ME_ver2
             motion_pause.Enabled = false;
             motion_stop.Enabled = false;
             MotionConfig.Enabled = true;
-            CodeGen_groupBox.Enabled = true;
+            GenerationTab.Enabled = true;
             MotionTest.Enabled = true;
             MotionCombo.Enabled = true;
             NewMotion.Enabled = true;
@@ -3591,7 +3591,7 @@ namespace _86ME_ver2
                 Framelist.Enabled = false;
                 MotionCombo.Enabled = true;
                 MotionConfig.Enabled = true;
-                CodeGen_groupBox.Enabled = true;
+                GenerationTab.Enabled = true;
                 NewMotion.Enabled = true;
                 EditMotion.Enabled = true;
                 this.hint_richTextBox.Text =
@@ -3740,6 +3740,87 @@ namespace _86ME_ver2
             }
             FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
             g.generate_ScratchProject();
+            clearTmpData();
+        }
+
+        private void GenerateFrame_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog path = new FolderBrowserDialog();
+            path.Description = Main_lang_dic["GenerateFrame_Description"];
+            var dialogResult = path.ShowDialog();
+            List<int> channels = new List<int>();
+            List<uint> home = new List<uint>();
+            int count = 0;
+            bool add_channel = true;
+            TextWriter writer;
+            string current_motion_name = "";
+            string nfilename;
+
+            if (dialogResult == DialogResult.OK && path.SelectedPath != null)
+            {
+                string txtPath = path.SelectedPath;
+                if (!Directory.Exists(path.SelectedPath))
+                {
+                    MessageBox.Show("The selected directory does not exist, please try again.");
+                    return;
+                }
+                string frameFilesDir = "\\RobotFrameFiles";
+                Directory.CreateDirectory(txtPath + frameFilesDir);
+                for (int i = 0; i < ME_Motionlist.Count; i++)
+                {
+                    ME_Motion m = (ME_Motion)ME_Motionlist[i];
+                    current_motion_name = ((ME_Motion)ME_Motionlist[i]).name;
+                    count = 0;
+                    for (int j = 0; j < m.Events.Count; j++)
+                    {
+                        if (m.Events[j] is ME_Frame)
+                        {
+                            int ch_count = 0;
+                            nfilename = txtPath + frameFilesDir + "\\" +
+                                               current_motion_name + "_frm" + count.ToString() + ".txt";
+                            writer = new StreamWriter(nfilename);
+                            ME_Frame f = (ME_Frame)m.Events[j];
+                            for (int k = 0; k < 45; k++)
+                            {
+                                if (String.Compare(Motion.fbox[k].Text, "---noServo---") != 0)
+                                {
+                                    writer.Write("channel");
+                                    writer.Write(ch_count.ToString() + "=");
+                                    if (f.type == 1)
+                                        writer.WriteLine(f.frame[k].ToString());
+                                    else if (f.type == 0)
+                                        writer.WriteLine(Motion.ftext2[k].Text.ToString());
+                                    home.Add(uint.Parse(Motion.ftext2[k].Text));
+                                    if (add_channel)
+                                        channels.Add(k);
+                                    ch_count++;
+                                }
+                            }
+                            ((ME_Frame)m.Events[j]).num = count;
+                            add_channel = false;
+                            writer.Dispose();
+                            writer.Close();
+                            count++;
+                        }
+                    }
+                    m.frames = count;
+                }
+                nfilename = txtPath + frameFilesDir + "\\86offset" + ".txt";
+                writer = new StreamWriter(nfilename);
+                int offset_count = 0;
+                for (int i = 0; i < 45; i++)
+                {
+                    if (offset[i] != 0 && String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        writer.WriteLine("channel" + offset_count.ToString() + "=" + offset[i].ToString());
+                    if (String.Compare(Motion.fbox[i].Text, "---noServo---") != 0)
+                        offset_count++;
+                }
+
+                writer.Dispose();
+                writer.Close();
+                MessageBox.Show("The frame files are generated in " +
+                                txtPath + frameFilesDir + "\\");
+            }
             clearTmpData();
         }
 
@@ -4085,9 +4166,11 @@ namespace _86ME_ver2
             Action_groupBox.Text = Main_lang_dic["Action_groupBox_Text"];
             ActionList.Text = Main_lang_dic["ActionList_Text"];
             actionToolStripMenuItem.Text = Main_lang_dic["actionToolStripMenuItem_Text"];
+            AdvanceTab.Text = Main_lang_dic["AdvanceTab_Text"];
             autocheck.Text = Main_lang_dic["autocheck_Text"];         
             blockingExplaination.Text = Main_lang_dic["blockingExplaination_Text"];
             capturebutton.Text = Main_lang_dic["capturebutton_Text"];
+            CodeGenTab.Text = Main_lang_dic["CodeGenTab_Text"];
             commandsToolStripMenuItem.Text = Main_lang_dic["commandsToolStripMenuItem_Text"];
             CompRangeExplanation.Text = Main_lang_dic["CompRangeExplanation_Text"];
             MotionControlExplanation.Text = Main_lang_dic["MotionControlExplanation_Text"];
@@ -4097,6 +4180,7 @@ namespace _86ME_ver2
             fileToolStripMenuItem.Text = Main_lang_dic["fileToolStripMenuItem_Text"];
             Generate.Text = Main_lang_dic["Generate_Text"];
             GenerateAllInOne.Text = Main_lang_dic["GenerateAllInOne_Text"];
+            GenerateFrame.Text = Main_lang_dic["GenerateFrame_Text"];
             GenerateScratch.Text = Main_lang_dic["GenerateScratch_Text"];
             helpToolStripMenuItem.Text = Main_lang_dic["helpToolStripMenuItem_Text"];
             Hint_groupBox.Text = Main_lang_dic["Hint_groupBox_Text"];

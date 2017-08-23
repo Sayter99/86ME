@@ -250,7 +250,8 @@ namespace _86ME_ver2
 
         private void CmdListView_KeyDown(object sender, KeyEventArgs e)
         {
-            removeSelectedItem();
+            if (e.KeyCode == Keys.Delete)
+                removeSelectedItem();
         }
 
         private void removeSelectedItem()

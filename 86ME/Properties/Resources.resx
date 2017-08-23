@@ -184,4 +184,10 @@
   <data name="sb2ProjectJson" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\project.json;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;utf-8</value>
   </data>
+  <data name="FirmataPlusBluetooth86" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\FirmataPlusBluetooth86.ino;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;big5</value>
+  </data>
+  <data name="scratch_http_server" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\scratch_http_server.py;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;big5</value>
+  </data>
 </root>

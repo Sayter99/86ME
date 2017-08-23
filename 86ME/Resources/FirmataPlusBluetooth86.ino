@@ -44,6 +44,7 @@
 // 86ME include lib
 
 // the minimum interval for sampling analog input
+#define BT_Serial Serial1
 #define MINIMUM_SAMPLING_INTERVAL 1
 
 #define REGISTER_NOT_SPECIFIED -1
@@ -500,17 +501,9 @@ void setup()
   Firmata.attach(START_SYSEX, sysexCallback);
   Firmata.attach(SYSTEM_RESET, systemResetCallback);
 
-  // to use a port other than Serial, such as Serial1 on an Arduino Leonardo or Mega,
-  // Call begin(baud) on the alternate serial port and pass it to Firmata to begin like this:
-  // Serial1.begin(57600);
-  // Firmata.begin(Serial1);
-  // However do not do this if you are using SERIAL_MESSAGE
-
-  Firmata.begin(57600);
   robot.begin(false);
-  while (!Serial) {
-    ; // wait for serial port to connect. Needed for ATmega32u4-based boards and Arduino 101
-  }
+  BT_Serial.begin(9600);
+  Firmata.begin(BT_Serial);
 
   systemResetCallback();  // reset to default config
 }

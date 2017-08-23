@@ -80,6 +80,12 @@
     <Compile Include="about.Designer.cs">
       <DependentUpon>about.cs</DependentUpon>
     </Compile>
+    <Compile Include="ScratchProperty.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ScratchProperty.Designer.cs">
+      <DependentUpon>ScratchProperty.cs</DependentUpon>
+    </Compile>
     <Compile Include="FSMGen.cs" />
     <Compile Include="firmata.cs" />
     <Compile Include="MotionName.cs">
@@ -125,6 +131,9 @@
     </Compile>
     <EmbeddedResource Include="about.resx">
       <DependentUpon>about.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="ScratchProperty.resx">
+      <DependentUpon>ScratchProperty.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
@@ -214,6 +223,8 @@
   <ItemGroup>
     <Content Include="icons\86Duino.ico" />
     <Content Include="icons\add.png" />
+    <None Include="Resources\scratch_http_server.py" />
+    <None Include="Resources\FirmataPlusBluetooth86.ino" />
     <None Include="Resources\project.json" />
     <None Include="Resources\sb2.sb2" />
     <None Include="Resources\scratch_command_handlers.py" />
