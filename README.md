@@ -9,7 +9,7 @@ _VERSION_: v2.0
 * Code Generation
     * add a new button for generating robot motion library.
     * add a new button for generating Scratch 2.0 project.
-    * remove the button "Generate 86Duino Sketch (with Frame Files)".
+    * replace the button "Generate 86Duino Sketch (with Frame Files)" to "Frame Files" in advance part
 * Move "Trigger" to "Options->Edit Trigger Commands".
 * Upgrade .NET Framework from 4.0 to 4.5.
 
