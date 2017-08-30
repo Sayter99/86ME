@@ -27,7 +27,7 @@ namespace _86ME_ver2
             InitializeComponent();
             this.btBaudComboBox.SelectedIndex = 0;
             this.btPortComboBox.SelectedIndex = 0;
-            this.pathMaskedTextBox.Text = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            this.pathMaskedTextBox.Text = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
             this.bt_groupBox.Enabled = false;
             this.sp_lang_dic = lang_dic;
         }
