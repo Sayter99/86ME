@@ -3705,7 +3705,7 @@ namespace _86ME_ver2
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd, Main_lang_dic);
             string lib_dir = Path.GetFileNameWithoutExtension(load_filename);
             //if ((new System.Text.RegularExpressions.Regex("^[a-zA-Z0-9_]{1,20}$")).IsMatch(lib_dir))
             //    g.generate_Library("\\" + lib_dir);
@@ -3724,7 +3724,7 @@ namespace _86ME_ver2
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd, Main_lang_dic);
             g.generate_AllinOne();
             clearTmpData();
         }
@@ -3738,7 +3738,7 @@ namespace _86ME_ver2
                 MessageBox.Show(Main_lang_dic["errorMsg16"]);
                 return;
             }
-            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd);
+            FSMGen g = new FSMGen(Motion, offset, ME_Motionlist, gs, compute_var.Count, trigger_cmd, Main_lang_dic);
             g.generate_ScratchProject();
             clearTmpData();
         }

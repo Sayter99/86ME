@@ -43,6 +43,7 @@ namespace _86ME_ver2
         private List<int> keyboard_keys = new List<int>();
         private List<ME_Trigger> commands;
         private NewMotion Motion;
+        private Dictionary<string, string> FSMGen_lang_dic;
         private bool[] method_flag = new bool[16];
         private int[] offset = new int[45];
         private string[] ps2_pins = new string[4];
@@ -56,8 +57,10 @@ namespace _86ME_ver2
         private bool IMU_compensatory = false;
         private Quaternion invQ = new Quaternion();
 
-        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, GlobalSettings gs, int opVar_num, List<ME_Trigger> trigger_cmd)
+        public FSMGen(NewMotion nMotion, int[] off, ArrayList motionlist, GlobalSettings gs,
+                      int opVar_num, List<ME_Trigger> trigger_cmd, Dictionary<string, string> lang_dic)
         {
+            this.FSMGen_lang_dic = lang_dic;
             this.Motion = nMotion;
             this.opVar_num = opVar_num;
             this.offset = off;
@@ -2069,7 +2072,7 @@ namespace _86ME_ver2
         public void generate_AllinOne()
         {
             FolderBrowserDialog path = new FolderBrowserDialog();
-            path.Description = Motion.NewMotion_lang_dic["GenerateAllInOne_Description"];
+            path.Description = FSMGen_lang_dic["GenerateAllInOne_Description"];
             var dialogResult = path.ShowDialog();
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
@@ -2120,7 +2123,7 @@ namespace _86ME_ver2
         public void generate_Library(string library_dir = "")
         {
             FolderBrowserDialog path = new FolderBrowserDialog();
-            path.Description = Motion.NewMotion_lang_dic["Generate_Description"];
+            path.Description = FSMGen_lang_dic["Generate_Description"];
             var dialogResult = path.ShowDialog();
 
             if (dialogResult == DialogResult.OK && path.SelectedPath != null)
@@ -2422,7 +2425,7 @@ namespace _86ME_ver2
 
         public void generate_ScratchProject()
         {
-            ScratchProperty properties = new ScratchProperty(Motion.NewMotion_lang_dic);
+            ScratchProperty properties = new ScratchProperty(FSMGen_lang_dic);
             var dialogResult = properties.ShowDialog();
             string path = properties.path;
             if (dialogResult == DialogResult.OK)
