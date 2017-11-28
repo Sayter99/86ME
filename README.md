@@ -1,108 +1,23 @@
 86ME (86Duino Motion Editor)
 ---------
-#### CHANGELOG ####
+#### [86Duino](https://github.com/roboard/86Duino) ####
 
-_VERSION_: v2.0
+embedded platforms employing the Vortex86EX SoC.It integrates PCIE bus, DDR3, ROM controller, xISA, I2C, SPI, Motor/Motion Controller, IPC, Fast Ethernet, FIFO UART, USB2.0 and SD/SATA controller within a single packages.
 
-* Add a new form for editing variables in "Option->Edit Variables"
-* Change the project format to JSON.
-* Code Generation
-    * add a new button for generating robot motion library.
-    * add a new button for generating Scratch 2.0 project.
-    * replace the button "Generate 86Duino Sketch (with Frame Files)" to "Frame Files" in advance part
-* Move "Trigger" to "Options->Edit Trigger Commands".
-* Upgrade .NET Framework from 4.0 to 4.5.
+#### 86ME ####
 
-_VERSION_: v1.95
+86Duino Motion Editor, or 86ME, is a versatile desktop application for editing motions of robots which are manipulating by 86Duino.Integrating with trajectory planning, on-board IMU sensor, logical control, and code generation functions, 86ME is absolutely a powerful motion editor.
 
-* Add a new trigger for ESP8266.
-* Add a new trigger for analog pins.
-* Add a new function "Mirror" that can interchange or copy values between pairs of servos.
-* Add keys of a virtual keyboard in "If".
-* Add a new control method "Catmull-Rom Spline"
-* Action "Compute" supports GPIO now.
+#### DEMO ####
 
-_VERSION_: v1.9
-
-* Add a new trigger for LEADIY-WiFi Camera (WiFi602).
-* Add a new property for setting compensating range of motions.
-* Add a new property for setting a method to control servos.
-* Add a new button to duplicate/rename/delete/import/export motions.
-* Add a new function that actions can be deleted by keyboard's "Delete" key. 
-
-_VERSION_: v1.8
-
-* Add three new actions "Release", "Compute" and "If".
-* Add a new trigger "Accelerometer".
-* Add a new button on framelist that it can release a single servo.
-* Support two IMUs including RM-G146 and LSM330DLC for the gyro-gain function.
-
-_VERSION_: v1.7
-
-* Add a new property named "Motion Layer". This feature makes motions can be triggered parallelly in different layers. And Layer 1's priority is higher than 0's.
-* Support Japanese now.
-
-_VERSION_: v1.6
-
-* Will not check Windows Device Manager if users choose COM port by them self.
-* Upgrade .NET Framework from 3.5 to 4.0.
-* Add a tabpage for setting properties of the choosed motion.
-* Can insert Motion in action list now! It will be effective after sketch generation.
-* Change the method of generating sketches for controlling robots more smoothly.
-* Make the controlling method by bluetooth can be choosen.
-* Support for multiple language(English, Chinese Traditional and Chinese Simplified) now.
-
-_VERSION_: v1.5
-
-* A new button to save 86Duino Frame Files.
-* A new button to load 86Duino Frame Files.
-
-_VERSION_: v1.4
-
-* Refine UIs of Motion Group.
-* Add a ComboBox for setting bluetooth buad rate.
-* Make saving existing projects more convenient.
-* Add TOWERPRO_SG90 to servo list.
-* Fix bugs that changing tabpage MotionConfig may enable some controls unexpectedly.
-
-_VERSION_: v1.3
-
-* Move sketch generation functions to MotionElement.cs.
-* Add a tabpage named MotionTrigger for setting the condition to trigger the selected motion.
-* Add three methods(auto, keyboard, bluetooth, ps2 controller) to trigger motions.
-* Integrate all motions and triggers into generated sketches now.
-* Add a function to insert intermediate frame.
-* 86ME can check whether a project needs to be saved now.
-* Update content of tool tips.
-
-_VERSION_: v1.2
-
-* Change the checkbox "Auto Play" to "Sync", and add a tracebar for tuning the speed of synchronizing motors.
-* Some UIs move to the new groupbox called global settings.
-* The method of adding new actions is more instinctive that users can choose action type in the same area.
-* Add some captions to contorls. They will apear when the mouse move on them.
-* After loading a picture of robot, the file name of the picture will be shown.
-* Support infinite loop now.
-* Support generating sketches containing nested loops now.
-* For loading rbm files more conveniently, users can drag a rbm file into 86ME.exe and it will be loaded automatically.
-
-_VERSION_: v1.1b
-
-* Fix bugs that the generated files contain space in their names.
-* Fix bugs that 86ME cannot load pictures containing space in file names. 
-
-_VERSION_: v1.1
-
-* Refine UIs of "Robot Configuration", "Motion List", "Motion Test".
-* Replace the button "MotionTest" to Play, Pause, Stop buttons.
-* Generate loop functions while generating 86Duino programs if there are flag-goto objects in the motionlist.
-* Add a new action type "HomeFrame".
-* Update information of Help->About.
-
-_VERSION_: v1.0
-
-* This is the Robot Motion Editor of the open-source 86Duino electronic platforms.
-* The motion editor is designed to edit servo motions and generate 86Duino programs for controlling RC servos through Servo86 library of 86Duino.
+* [Introduction](https://www.youtube.com/watch?time_continue=2&v=eAsOgOB40Cw)
+* [Humanoid Robot](https://www.youtube.com/watch?v=6u4SSbwz0WE&feature=youtu.be)
+* [Hexapod](https://www.youtube.com/watch?v=tW_QmSS2TaY)
+* [Scratch 2.0](https://www.youtube.com/watch?v=uGZNbWfPGBg&feature=youtu.be)
+* [Monsters' Exercise](https://www.youtube.com/watch?v=s26viFUi5i0&t=)
+* [Inertia Compensation](https://www.youtube.com/watch?v=t7VN1pwLyjQ&feature=youtu.be)
+* [Spline Trajectory Planning](https://www.youtube.com/watch?v=GgaTg-OY0ag&feature=youtu.be)
+* [Motion Layer](https://www.youtube.com/watch?v=RAspvzgU_ZE&feature=youtu.be)
 
 #### INSTALLATION ####
 
