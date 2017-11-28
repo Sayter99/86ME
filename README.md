@@ -10,7 +10,7 @@ embedded platforms employing the Vortex86EX SoC.It integrates PCIE bus, DDR3, RO
 
 #### DEMO ####
 
-* [Introduction](https://www.youtube.com/watch?time_continue=2&v=eAsOgOB40Cw)
+* [Introduction](https://www.youtube.com/watch?v=ggjHh-q0hHE&feature=youtu.be)
 * [Humanoid Robot](https://www.youtube.com/watch?v=6u4SSbwz0WE&feature=youtu.be)
 * [Hexapod](https://www.youtube.com/watch?v=tW_QmSS2TaY)
 * [Scratch 2.0](https://www.youtube.com/watch?v=uGZNbWfPGBg&feature=youtu.be)
