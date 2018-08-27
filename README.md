@@ -2,11 +2,13 @@
 ---------
 #### [86Duino](https://github.com/roboard/86Duino) ####
 
-embedded platforms employing the Vortex86EX SoC.It integrates PCIE bus, DDR3, ROM controller, xISA, I2C, SPI, Motor/Motion Controller, IPC, Fast Ethernet, FIFO UART, USB2.0 and SD/SATA controller within a single packages.
+An embedded platforms employing the Vortex86EX SoC. It integrates PCIE bus, DDR3, ROM controller, xISA, I2C, SPI, Motor/Motion Controller, IPC, Fast Ethernet, FIFO UART, USB2.0 and SD/SATA controller within a single packages.
 
 #### 86ME ####
 
-86Duino Motion Editor, or 86ME, is a versatile desktop application for editing motions of robots which are manipulating by 86Duino.Integrating with trajectory planning, on-board IMU sensor, logical control, and code generation functions, 86ME is absolutely a powerful motion editor.
+86Duino Motion Editor, or 86ME, is a versatile desktop application for editing motions of robots which are manipulating by 86Duino. Integrating with trajectory planning, on-board IMU sensor, logical control, and code generation functions, 86ME is absolutely a powerful motion editor.
+
+If you are finding the latest version of 86ME, please refer to [Mk-II](https://github.com/RoBoardGod/86ME_Mk-II).
 
 #### DEMO ####
 
