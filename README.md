@@ -10,14 +10,15 @@ embedded platforms employing the Vortex86EX SoC.It integrates PCIE bus, DDR3, RO
 
 #### DEMO ####
 
-* [Introduction](https://www.youtube.com/watch?v=ggjHh-q0hHE&feature=youtu.be)
-* [Humanoid Robot](https://www.youtube.com/watch?v=6u4SSbwz0WE&feature=youtu.be)
-* [Hexapod](https://www.youtube.com/watch?v=tW_QmSS2TaY)
-* [Scratch 2.0](https://www.youtube.com/watch?v=uGZNbWfPGBg&feature=youtu.be)
-* [Monsters' Exercise](https://www.youtube.com/watch?v=s26viFUi5i0&t=)
-* [Inertia Compensation](https://www.youtube.com/watch?v=t7VN1pwLyjQ&feature=youtu.be)
-* [Spline Trajectory Planning](https://www.youtube.com/watch?v=GgaTg-OY0ag&feature=youtu.be)
-* [Motion Layer](https://www.youtube.com/watch?v=RAspvzgU_ZE&feature=youtu.be)
+* [Introduction to Mk-II](https://www.youtube.com/watch?v=o0l0DPf_5qw)
+* [Introduction to 86ME 1.x](https://www.youtube.com/watch?v=ggjHh-q0hHE&feature=youtu.be)
+* [3D-printable Humanoid Robot](https://www.youtube.com/watch?v=6u4SSbwz0WE&feature=youtu.be)
+* [3D-printable Hexapod](https://www.youtube.com/watch?v=tW_QmSS2TaY)
+* [Scratch 2.0 Integration](https://www.youtube.com/watch?v=uGZNbWfPGBg&feature=youtu.be)
+* [Swarm Robots: Monsters' Exercise](https://www.youtube.com/watch?v=s26viFUi5i0&t=)
+* [86ME Features: Inertia Compensation](https://www.youtube.com/watch?v=t7VN1pwLyjQ&feature=youtu.be)
+* [86ME Features: Spline Trajectory Planning](https://www.youtube.com/watch?v=GgaTg-OY0ag&feature=youtu.be)
+* [86ME Features: Motion Layer](https://www.youtube.com/watch?v=RAspvzgU_ZE&feature=youtu.be)
 
 #### INSTALLATION ####
 
@@ -29,7 +30,7 @@ embedded platforms employing the Vortex86EX SoC.It integrates PCIE bus, DDR3, RO
 
 The 86ME tutorial pages for installation instructions and usage.
 
-* [Version 2.0 (Current)](http://www.86duino.com/index.php?p=11544&lang=TW)
+* [Version 2.0](http://www.86duino.com/index.php?p=11544&lang=TW)
 * [Version 1.95](http://www.86duino.com/index.php?p=17740&lang=TW)
 * [Version 1.9](http://www.86duino.com/index.php?p=17180&lang=TW)
 * [Version 1.7](http://www.86duino.com/index.php?p=15750&lang=TW)
